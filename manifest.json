@@ -1,0 +1,116 @@
+{
+    "name": "11 Avatar SMEs CRM",
+    "short_name": "11 Avatar CRM",
+    "description": "India's Most Affordable Revenue Operating System for Small Businesses",
+    "start_url": "/11Avatar-SMEs-CRM/",
+    "scope": "/11Avatar-SMEs-CRM/",
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#0A0A0A",
+    "theme_color": "#0A0A0A",
+    "categories": ["business", "productivity", "finance"],
+    "lang": "en-IN",
+    "dir": "ltr",
+    "icons": [
+        {
+            "src": "assets/icons/icon-72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "assets/icons/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "any maskable"
+        }
+    ],
+    "screenshots": [
+        {
+            "src": "assets/images/screenshot-dashboard.png",
+            "sizes": "1280x720",
+            "type": "image/png",
+            "form_factor": "wide",
+            "label": "Dashboard"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "New Lead",
+            "short_name": "Lead",
+            "description": "Create a new lead",
+            "url": "/11Avatar-SMEs-CRM/app.html#leads?action=new",
+            "icons": [{"src": "assets/icons/shortcut-lead.png", "sizes": "96x96"}]
+        },
+        {
+            "name": "Tasks",
+            "short_name": "Tasks",
+            "description": "View today's tasks",
+            "url": "/11Avatar-SMEs-CRM/app.html#tasks",
+            "icons": [{"src": "assets/icons/shortcut-tasks.png", "sizes": "96x96"}]
+        },
+        {
+            "name": "Revenue",
+            "short_name": "Revenue",
+            "description": "View revenue reports",
+            "url": "/11Avatar-SMEs-CRM/app.html#reports?type=revenue",
+            "icons": [{"src": "assets/icons/shortcut-revenue.png", "sizes": "96x96"}]
+        },
+        {
+            "name": "WhatsApp",
+            "short_name": "WhatsApp",
+            "description": "Open WhatsApp messages",
+            "url": "/11Avatar-SMEs-CRM/app.html#whatsapp",
+            "icons": [{"src": "assets/icons/shortcut-wa.png", "sizes": "96x96"}]
+        }
+    ],
+    "share_target": {
+        "action": "/11Avatar-SMEs-CRM/app.html#share",
+        "method": "POST",
+        "enctype": "multipart/form-data",
+        "params": {
+            "title": "name",
+            "text": "description",
+            "url": "link",
+            "files": [
+                {
+                    "name": "attachments",
+                    "accept": ["image/*", "application/pdf", ".csv", ".xlsx"]
+                }
+            ]
+        }
+    },
+    "related_applications": [],
+    "prefer_related_applications": false,
+    "iarc_rating_id": "",
+    "edge_side_panel": {}
+}
