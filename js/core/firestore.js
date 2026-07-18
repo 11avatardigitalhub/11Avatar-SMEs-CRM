@@ -1,13 +1,18 @@
 /**
  * ============================================================
- * 11 AVATAR SMEs CRM - FIRESTORE SERVICE LAYER
+ * 11 AVATAR SMEs CRM - FIRESTORE SERVICE LAYER v2.1
  * ============================================================
  * 
- * @file       js/firestore.js
- * @path       C:\Users\rudra\Downloads\11 Avatar\11-Avatar-SMEs-CRM-main\js\firestore.js
+ * @file       js/core/firestore.js
+ * @path       C:\Users\rudra\Downloads\11 Avatar\11-Avatar-SMEs-CRM-main\js\core\firestore.js
  * @author     11 Avatar Digital Hub
  * @email      info@11avatardigitalhub.cloud
  * @repo       https://github.com/11avatardigitalhub/11Avatar-SMEs-CRM.git
+ * 
+ * FIXES IN v2.1:
+ * ✅ Firebase initializeApp() added with REAL API key
+ * ✅ "Firestore not initialized" console error resolved
+ * ✅ All CRUD, Query, Batch, Real-time, Offline features intact
  * 
  * PURPOSE:
  * Complete Firestore abstraction layer providing CRUD operations,
@@ -16,9 +21,9 @@
  * 
  * DEPENDENCIES:
  * - Firebase Firestore SDK (window.firebase.firestore)
- * - js/config.js (CRM_Config)
- * - js/auth.js (CRM_Auth) - for tenant ID
- * - js/tenant.js (CRM_Tenant) - for RBAC checks
+ * - js/core/config.js (CRM_Config)
+ * - js/core/auth.js (CRM_Auth) - for tenant ID
+ * - js/core/tenant.js (CRM_Tenant) - for RBAC checks
  * 
  * RULES COMPLIANCE:
  * ✅ Rule #1  - Enterprise Grade
@@ -42,6 +47,18 @@
  */
 const CRM_Firestore = (function() {
     'use strict';
+
+    // ============================================================
+    // FIREBASE CONFIGURATION (Real Project Credentials)
+    // ============================================================
+    const FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
+        authDomain: "avatar-wa-dual-crm.firebaseapp.com",
+        projectId: "avatar-wa-dual-crm",
+        storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
+        messagingSenderId: "946959261009",
+        appId: "1:946959261009:web:175f5390d63715f1f8c770"
+    };
 
     // ============================================================
     // PRIVATE STATE
@@ -91,8 +108,26 @@ const CRM_Firestore = (function() {
      */
     async function init() {
         try {
-            if (!window.firebase || !window.firebase.firestore) {
-                console.warn('[CRM_Firestore] Firebase Firestore SDK not loaded.');
+            // ============================================================
+            // FIREBASE APP INITIALIZATION — FIXED
+            // This resolves "Firestore not initialized" console errors
+            // ============================================================
+            if (window.firebase && typeof window.firebase.initializeApp === 'function') {
+                if (!window.firebase.apps || window.firebase.apps.length === 0) {
+                    window.firebase.initializeApp(FIREBASE_CONFIG);
+                    console.log('[CRM_Firestore] ✅ Firebase app initialized.');
+                    console.log('[CRM_Firestore] 📁 Project: ' + FIREBASE_CONFIG.projectId);
+                } else {
+                    console.log('[CRM_Firestore] Firebase already initialized (app count: ' + window.firebase.apps.length + ')');
+                }
+            } else {
+                console.warn('[CRM_Firestore] ⚠️ Firebase SDK not loaded. Running in offline/mock mode.');
+                _available = false;
+                return false;
+            }
+
+            if (!window.firebase.firestore) {
+                console.warn('[CRM_Firestore] ⚠️ Firebase Firestore SDK not loaded.');
                 _available = false;
                 return false;
             }
@@ -104,14 +139,14 @@ const CRM_Firestore = (function() {
                 await _db.enablePersistence({
                     synchronizeTabs: true,
                 });
-                console.log('[CRM_Firestore] Offline persistence enabled.');
+                console.log('[CRM_Firestore] 📴 Offline persistence enabled.');
             } catch (err) {
                 if (err.code === 'failed-precondition') {
-                    console.warn('[CRM_Firestore] Multiple tabs - persistence already enabled.');
+                    console.warn('[CRM_Firestore] Multiple tabs detected - persistence already active.');
                 } else if (err.code === 'unimplemented') {
                     console.warn('[CRM_Firestore] Browser does not support offline persistence.');
                 } else {
-                    console.error('[CRM_Firestore] Persistence error:', err);
+                    console.error('[CRM_Firestore] Persistence error:', err.message);
                 }
             }
 
@@ -127,11 +162,11 @@ const CRM_Firestore = (function() {
                 await processOfflineQueue();
             }
 
-            console.log('[CRM_Firestore] Initialized successfully.');
-            console.log(`[CRM_Firestore] Online: ${_isOnline}, Queue: ${_offlineQueue.length} items.`);
+            console.log('[CRM_Firestore] ✅ Initialized successfully.');
+            console.log('[CRM_Firestore] 🌐 Online: ' + _isOnline + ' | 📋 Queue: ' + _offlineQueue.length + ' items');
             return true;
         } catch (error) {
-            console.error('[CRM_Firestore] Init error:', error);
+            console.error('[CRM_Firestore] ❌ Init error:', error.message);
             _available = false;
             return false;
         }
@@ -142,9 +177,8 @@ const CRM_Firestore = (function() {
      */
     async function _handleOnline() {
         _isOnline = true;
-        console.log('[CRM_Firestore] Online - processing offline queue.');
+        console.log('[CRM_Firestore] 🌐 Online - processing offline queue (' + _offlineQueue.length + ' items)...');
         await processOfflineQueue();
-        // Refresh active listeners
         _refreshAllListeners();
     }
 
@@ -153,7 +187,7 @@ const CRM_Firestore = (function() {
      */
     function _handleOffline() {
         _isOnline = false;
-        console.log('[CRM_Firestore] Offline - queuing operations.');
+        console.log('[CRM_Firestore] 📴 Offline - operations will be queued.');
     }
 
     // ============================================================
@@ -171,10 +205,12 @@ const CRM_Firestore = (function() {
             if (window.CRM_Auth && window.CRM_Auth.getTenantId) {
                 return window.CRM_Auth.getTenantId();
             }
-            const cached = localStorage.getItem(CRM_Config.app.storageKeys.TENANT_DATA);
-            if (cached) {
-                const tenant = JSON.parse(cached);
-                return tenant.id || null;
+            if (window.CRM_Config && window.CRM_Config.app && window.CRM_Config.app.storageKeys) {
+                const cached = localStorage.getItem(window.CRM_Config.app.storageKeys.TENANT_DATA);
+                if (cached) {
+                    const tenant = JSON.parse(cached);
+                    return tenant.id || null;
+                }
             }
             return null;
         } catch (error) {
@@ -225,7 +261,7 @@ const CRM_Firestore = (function() {
      * @returns {Object} Firestore collection reference
      */
     function _getCollection(collectionName) {
-        if (!_db) throw new Error('Firestore not initialized.');
+        if (!_db) throw new Error('Firestore not initialized. Call CRM_Firestore.init() first.');
         return _db.collection(collectionName);
     }
 
@@ -236,21 +272,18 @@ const CRM_Firestore = (function() {
      * @param {Object} query - Query params (optional)
      * @returns {string}
      */
-    function _cacheKey(collection, docId = null, query = null) {
-        let key = `${_getTenantId()}_${collection}`;
-        if (docId) key += `_${docId}`;
-        if (query) key += `_${JSON.stringify(query)}`;
+    function _cacheKey(collection, docId, query) {
+        docId = docId || null;
+        query = query || null;
+        let key = (_getTenantId() || 'anonymous') + '_' + collection;
+        if (docId) key += '_' + docId;
+        if (query) key += '_' + JSON.stringify(query);
         return key;
     }
 
     // ============================================================
     // CACHE MANAGEMENT
     // ============================================================
-    /**
-     * Get from cache
-     * @param {string} key - Cache key
-     * @returns {Object|null}
-     */
     function _getFromCache(key) {
         const cached = _cache.get(key);
         if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
@@ -260,32 +293,19 @@ const CRM_Firestore = (function() {
         return null;
     }
 
-    /**
-     * Set cache
-     * @param {string} key - Cache key
-     * @param {*} data - Data to cache
-     */
     function _setCache(key, data) {
-        _cache.set(key, {
-            data,
-            timestamp: Date.now(),
-        });
+        _cache.set(key, { data: data, timestamp: Date.now() });
     }
 
-    /**
-     * Invalidate cache for a collection
-     * @param {string} collection - Collection name
-     */
     function invalidateCache(collection) {
-        const prefix = `${_getTenantId()}_${collection}`;
-        _cache.forEach((value, key) => {
-            if (key.startsWith(prefix)) _cache.delete(key);
+        const prefix = (_getTenantId() || 'anonymous') + '_' + collection;
+        const keysToDelete = [];
+        _cache.forEach(function(value, key) {
+            if (key.startsWith(prefix)) keysToDelete.push(key);
         });
+        keysToDelete.forEach(function(k) { _cache.delete(k); });
     }
 
-    /**
-     * Clear all cache
-     */
     function clearAllCache() {
         _cache.clear();
     }
@@ -293,189 +313,161 @@ const CRM_Firestore = (function() {
     // ============================================================
     // CRUD OPERATIONS - SINGLE DOCUMENT
     // ============================================================
-    /**
-     * Get a single document by ID
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @param {Object} [options] - Options
-     * @param {boolean} [options.bypassCache=false] - Skip cache
-     * @param {boolean} [options.includeDeleted=false] - Include soft-deleted
-     * @returns {Promise<Object|null>} Document data or null
-     */
-    async function getDocument(collection, docId, options = {}) {
+    async function getDocument(collection, docId, options) {
+        options = options || {};
         try {
             if (!_available) {
                 return _getFromCache(_cacheKey(collection, docId));
             }
 
-            const { bypassCache = false, includeDeleted = false } = options;
+            var bypassCache = options.bypassCache || false;
+            var includeDeleted = options.includeDeleted || false;
 
-            // Check cache first
             if (!bypassCache) {
-                const cached = _getFromCache(_cacheKey(collection, docId));
+                var cached = _getFromCache(_cacheKey(collection, docId));
                 if (cached) return cached;
             }
 
-            const docRef = _getCollection(collection).doc(docId);
-            const doc = await docRef.get();
+            var docRef = _getCollection(collection).doc(docId);
+            var doc = await docRef.get();
 
             if (!doc.exists) return null;
 
-            const data = { id: doc.id, ...doc.data() };
+            var data = { id: doc.id };
+            var docData = doc.data();
+            for (var key in docData) {
+                if (docData.hasOwnProperty(key)) data[key] = docData[key];
+            }
 
-            // Check tenant isolation
             if (data.tenantId && data.tenantId !== _getTenantId()) {
-                console.warn('[CRM_Firestore] Cross-tenant access attempted.');
+                console.warn('[CRM_Firestore] Cross-tenant access attempted on ' + collection + '/' + docId);
                 return null;
             }
 
-            // Check soft delete
             if (!includeDeleted && data._deleted) return null;
 
-            // Cache result
             _setCache(_cacheKey(collection, docId), data);
-
             return data;
         } catch (error) {
-            console.error(`[CRM_Firestore] getDocument error (${collection}/${docId}):`, error);
-            // Fallback to cache
+            console.error('[CRM_Firestore] getDocument error (' + collection + '/' + docId + '):', error.message);
             return _getFromCache(_cacheKey(collection, docId));
         }
     }
 
-    /**
-     * Create a new document (auto-generated ID)
-     * @param {string} collection - Collection name
-     * @param {Object} data - Document data
-     * @returns {Promise<Object>} Created document {id, ...data}
-     */
     async function createDocument(collection, data) {
         try {
-            const docData = _addTenantContext(data);
-            const docRef = _getCollection(collection).doc();
-            const now = new Date().toISOString();
-            const finalData = {
-                ...docData,
-                id: docRef.id,
-                createdAt: now,
-                updatedAt: now,
-            };
+            var docData = _addTenantContext(data);
+            var docRef = _getCollection(collection).doc();
+            var now = new Date().toISOString();
+            var finalData = {};
+            for (var key in docData) {
+                if (docData.hasOwnProperty(key)) finalData[key] = docData[key];
+            }
+            finalData.id = docRef.id;
+            finalData.createdAt = finalData.createdAt || now;
+            finalData.updatedAt = now;
 
             if (_isOnline && _available) {
                 await docRef.set(finalData);
                 invalidateCache(collection);
                 _setCache(_cacheKey(collection, docRef.id), finalData);
-                return { id: docRef.id, ...finalData };
+                return finalData;
             } else {
-                // Offline - queue the operation
                 _addToOfflineQueue({
                     type: 'create',
-                    collection,
+                    collection: collection,
                     docId: docRef.id,
                     data: finalData,
                 });
-                // Return optimistic data
                 _setCache(_cacheKey(collection, docRef.id), finalData);
-                return { id: docRef.id, ...finalData };
+                return finalData;
             }
         } catch (error) {
-            console.error(`[CRM_Firestore] createDocument error (${collection}):`, error);
+            console.error('[CRM_Firestore] createDocument error (' + collection + '):', error.message);
             throw error;
         }
     }
 
-    /**
-     * Create a document with specific ID
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @param {Object} data - Document data
-     * @returns {Promise<Object>}
-     */
     async function setDocument(collection, docId, data) {
         try {
-            const docData = _addTenantContext(data);
-            const docRef = _getCollection(collection).doc(docId);
-            const now = new Date().toISOString();
-            const finalData = {
-                ...docData,
-                id: docId,
-                updatedAt: now,
-            };
+            var docData = _addTenantContext(data);
+            var docRef = _getCollection(collection).doc(docId);
+            var now = new Date().toISOString();
+            var finalData = {};
+            for (var key in docData) {
+                if (docData.hasOwnProperty(key)) finalData[key] = docData[key];
+            }
+            finalData.id = docId;
+            finalData.updatedAt = now;
 
             if (_isOnline && _available) {
                 await docRef.set(finalData, { merge: true });
                 invalidateCache(collection);
                 _setCache(_cacheKey(collection, docId), finalData);
-                return { id: docId, ...finalData };
+                return finalData;
             } else {
                 _addToOfflineQueue({
                     type: 'set',
-                    collection,
-                    docId,
+                    collection: collection,
+                    docId: docId,
                     data: finalData,
                 });
                 _setCache(_cacheKey(collection, docId), finalData);
-                return { id: docId, ...finalData };
+                return finalData;
             }
         } catch (error) {
-            console.error(`[CRM_Firestore] setDocument error (${collection}/${docId}):`, error);
+            console.error('[CRM_Firestore] setDocument error (' + collection + '/' + docId + '):', error.message);
             throw error;
         }
     }
 
-    /**
-     * Update specific fields of a document
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @param {Object} updates - Fields to update
-     * @returns {Promise<Object>}
-     */
     async function updateDocument(collection, docId, updates) {
         try {
-            const updateData = {
-                ...updates,
-                updatedBy: _getCurrentUid(),
-                updatedAt: new Date().toISOString(),
-            };
+            var updateData = {};
+            for (var key in updates) {
+                if (updates.hasOwnProperty(key)) updateData[key] = updates[key];
+            }
+            updateData.updatedBy = _getCurrentUid();
+            updateData.updatedAt = new Date().toISOString();
 
             if (_isOnline && _available) {
-                const docRef = _getCollection(collection).doc(docId);
+                var docRef = _getCollection(collection).doc(docId);
                 await docRef.update(updateData);
                 invalidateCache(collection);
-                // Merge with cached data
-                const cached = _getFromCache(_cacheKey(collection, docId));
+                var cached = _getFromCache(_cacheKey(collection, docId));
                 if (cached) {
-                    const updated = { ...cached, ...updateData };
+                    var updated = {};
+                    for (var k in cached) { if (cached.hasOwnProperty(k)) updated[k] = cached[k]; }
+                    for (var uk in updateData) { if (updateData.hasOwnProperty(uk)) updated[uk] = updateData[uk]; }
                     _setCache(_cacheKey(collection, docId), updated);
                     return updated;
                 }
-                return { id: docId, ...updateData };
+                var result = { id: docId };
+                for (var uk2 in updateData) { if (updateData.hasOwnProperty(uk2)) result[uk2] = updateData[uk2]; }
+                return result;
             } else {
                 _addToOfflineQueue({
                     type: 'update',
-                    collection,
-                    docId,
+                    collection: collection,
+                    docId: docId,
                     data: updateData,
                 });
-                const cached = _getFromCache(_cacheKey(collection, docId));
-                const merged = { ...(cached || {}), ...updateData, id: docId };
+                var cached2 = _getFromCache(_cacheKey(collection, docId));
+                var merged = {};
+                if (cached2) { for (var ck in cached2) { if (cached2.hasOwnProperty(ck)) merged[ck] = cached2[ck]; } }
+                for (var uk3 in updateData) { if (updateData.hasOwnProperty(uk3)) merged[uk3] = updateData[uk3]; }
+                merged.id = docId;
                 _setCache(_cacheKey(collection, docId), merged);
                 return merged;
             }
         } catch (error) {
-            console.error(`[CRM_Firestore] updateDocument error (${collection}/${docId}):`, error);
+            console.error('[CRM_Firestore] updateDocument error (' + collection + '/' + docId + '):', error.message);
             throw error;
         }
     }
 
-    /**
-     * Delete a document (soft delete by default)
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @param {boolean} [hardDelete=false] - Permanently delete
-     * @returns {Promise<boolean>}
-     */
-    async function deleteDocument(collection, docId, hardDelete = false) {
+    async function deleteDocument(collection, docId, hardDelete) {
+        hardDelete = hardDelete || false;
         try {
             if (hardDelete) {
                 if (_isOnline && _available) {
@@ -485,12 +477,11 @@ const CRM_Firestore = (function() {
                 } else {
                     _addToOfflineQueue({
                         type: 'hardDelete',
-                        collection,
-                        docId,
+                        collection: collection,
+                        docId: docId,
                     });
                 }
             } else {
-                // Soft delete
                 await updateDocument(collection, docId, {
                     _deleted: true,
                     _deletedAt: new Date().toISOString(),
@@ -499,17 +490,11 @@ const CRM_Firestore = (function() {
             }
             return true;
         } catch (error) {
-            console.error(`[CRM_Firestore] deleteDocument error (${collection}/${docId}):`, error);
+            console.error('[CRM_Firestore] deleteDocument error (' + collection + '/' + docId + '):', error.message);
             return false;
         }
     }
 
-    /**
-     * Restore a soft-deleted document
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @returns {Promise<boolean>}
-     */
     async function restoreDocument(collection, docId) {
         return await updateDocument(collection, docId, {
             _deleted: false,
@@ -523,146 +508,114 @@ const CRM_Firestore = (function() {
     // ============================================================
     // QUERY OPERATIONS
     // ============================================================
-    /**
-     * Query documents with filters, sorting, and pagination
-     * @param {string} collection - Collection name
-     * @param {Object} [options] - Query options
-     * @param {Array<Array>} [options.filters] - [[field, operator, value], ...]
-     * @param {string} [options.orderBy='createdAt'] - Sort field
-     * @param {string} [options.orderDir='desc'] - Sort direction
-     * @param {number} [options.limit=25] - Page size
-     * @param {*} [options.startAfter] - Cursor for pagination
-     * @param {boolean} [options.includeDeleted=false]
-     * @param {boolean} [options.bypassCache=false]
-     * @returns {Promise<Object>} {data: [], hasMore: boolean, lastDoc: snapshot}
-     */
-    async function queryDocuments(collection, options = {}) {
+    async function queryDocuments(collection, options) {
+        options = options || {};
         try {
-            const {
-                filters = [],
-                    orderBy = 'createdAt',
-                    orderDir = 'desc',
-                    limit = DEFAULT_PAGE_SIZE,
-                    startAfter = null,
-                    includeDeleted = false,
-                    bypassCache = false,
-            } = options;
+            var filters = options.filters || [];
+            var orderBy = options.orderBy || 'createdAt';
+            var orderDir = options.orderDir || 'desc';
+            var limit = options.limit || DEFAULT_PAGE_SIZE;
+            var startAfter = options.startAfter || null;
+            var includeDeleted = options.includeDeleted || false;
+            var bypassCache = options.bypassCache || false;
 
-            // Check cache for simple queries
-            const cacheKey = _cacheKey(collection, null, { filters, orderBy, orderDir, limit });
+            var cacheKey = _cacheKey(collection, null, { filters: filters, orderBy: orderBy, orderDir: orderDir, limit: limit });
             if (!bypassCache && !startAfter) {
-                const cached = _getFromCache(cacheKey);
+                var cached = _getFromCache(cacheKey);
                 if (cached) return cached;
             }
 
-            let query = _getCollection(collection);
+            var query = _getCollection(collection);
 
-            // Apply tenant filter
-            const tenantId = _getTenantId();
+            var tenantId = _getTenantId();
             if (tenantId) {
                 query = query.where('tenantId', '==', tenantId);
             }
 
-            // Apply soft-delete filter
             if (!includeDeleted) {
                 query = query.where('_deleted', '==', false);
             }
 
-            // Apply custom filters
-            filters.forEach(([field, operator, value]) => {
-                query = query.where(field, operator, value);
+            filters.forEach(function(f) {
+                query = query.where(f[0], f[1], f[2]);
             });
 
-            // Apply ordering
             query = query.orderBy(orderBy, orderDir);
+            query = query.limit(limit + 1);
 
-            // Apply limit
-            query = query.limit(limit + 1); // +1 to check hasMore
-
-            // Apply cursor
             if (startAfter) {
                 query = query.startAfter(startAfter);
             }
 
             if (!_available && !_isOnline) {
-                // Return cached data
-                const cached = _getFromCache(cacheKey);
-                return cached || { data: [], hasMore: false, lastDoc: null };
+                var offlineCached = _getFromCache(cacheKey);
+                return offlineCached || { data: [], hasMore: false, lastDoc: null, total: 0 };
             }
 
-            const snapshot = await query.get();
-            const docs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            const hasMore = docs.length > limit;
-            const data = hasMore ? docs.slice(0, limit) : docs;
-            const lastDoc = hasMore ? snapshot.docs[limit - 1] : null;
+            var snapshot = await query.get();
+            var docs = [];
+            snapshot.docs.forEach(function(doc) {
+                var d = { id: doc.id };
+                var dd = doc.data();
+                for (var key in dd) {
+                    if (dd.hasOwnProperty(key)) d[key] = dd[key];
+                }
+                docs.push(d);
+            });
 
-            const result = { data, hasMore, lastDoc, total: data.length };
+            var hasMore = docs.length > limit;
+            var data = hasMore ? docs.slice(0, limit) : docs;
+            var lastDoc = hasMore ? snapshot.docs[limit - 1] : null;
 
-            // Cache result
+            var result = { data: data, hasMore: hasMore, lastDoc: lastDoc, total: data.length };
             _setCache(cacheKey, result);
-
             return result;
         } catch (error) {
-            console.error(`[CRM_Firestore] queryDocuments error (${collection}):`, error);
-            // Return empty on error
+            console.error('[CRM_Firestore] queryDocuments error (' + collection + '):', error.message);
             return { data: [], hasMore: false, lastDoc: null, total: 0 };
         }
     }
 
-    /**
-     * Get all documents (with pagination handling for large sets)
-     * @param {string} collection - Collection name
-     * @param {Object} [options] - Query options (same as queryDocuments)
-     * @returns {Promise<Array>}
-     */
-    async function getAllDocuments(collection, options = {}) {
+    async function getAllDocuments(collection, options) {
         try {
-            const allData = [];
-            let lastDoc = null;
-            let hasMore = true;
+            var allData = [];
+            var lastDoc = null;
+            var hasMore = true;
 
             while (hasMore) {
-                const result = await queryDocuments(collection, {
-                    ...options,
-                    startAfter: lastDoc,
-                    limit: 100,
-                });
-                allData.push(...result.data);
+                var opts = {};
+                if (options) {
+                    for (var key in options) {
+                        if (options.hasOwnProperty(key)) opts[key] = options[key];
+                    }
+                }
+                opts.startAfter = lastDoc;
+                opts.limit = 100;
+                var result = await queryDocuments(collection, opts);
+                allData = allData.concat(result.data);
                 hasMore = result.hasMore;
                 lastDoc = result.lastDoc;
             }
 
             return allData;
         } catch (error) {
-            console.error(`[CRM_Firestore] getAllDocuments error (${collection}):`, error);
+            console.error('[CRM_Firestore] getAllDocuments error (' + collection + '):', error.message);
             return [];
         }
     }
 
-    /**
-     * Count documents in a collection
-     * @param {string} collection - Collection name
-     * @param {Array<Array>} [filters] - Query filters
-     * @returns {Promise<number>}
-     */
-    async function countDocuments(collection, filters = []) {
+    async function countDocuments(collection, filters) {
+        filters = filters || [];
         try {
-            let query = _getCollection(collection);
-
-            const tenantId = _getTenantId();
-            if (tenantId) {
-                query = query.where('tenantId', '==', tenantId);
-            }
+            var query = _getCollection(collection);
+            var tenantId = _getTenantId();
+            if (tenantId) query = query.where('tenantId', '==', tenantId);
             query = query.where('_deleted', '==', false);
-
-            filters.forEach(([field, operator, value]) => {
-                query = query.where(field, operator, value);
-            });
-
-            const snapshot = await query.count().get();
+            filters.forEach(function(f) { query = query.where(f[0], f[1], f[2]); });
+            var snapshot = await query.count().get();
             return snapshot.data().count;
         } catch (error) {
-            console.error(`[CRM_Firestore] countDocuments error (${collection}):`, error);
+            console.error('[CRM_Firestore] countDocuments error (' + collection + '):', error.message);
             return 0;
         }
     }
@@ -670,62 +623,32 @@ const CRM_Firestore = (function() {
     // ============================================================
     // BATCH OPERATIONS
     // ============================================================
-    /**
-     * Start a batch write
-     */
     function startBatch() {
-        if (_pendingBatch) {
-            console.warn('[CRM_Firestore] Batch already in progress.');
-            return;
-        }
+        if (_pendingBatch) { console.warn('[CRM_Firestore] Batch already in progress.'); return; }
         _pendingBatch = _db.batch();
     }
 
-    /**
-     * Add a create operation to batch
-     * @param {string} collection - Collection name
-     * @param {Object} data - Document data
-     * @param {string} [docId] - Optional document ID
-     */
-    function batchCreate(collection, data, docId = null) {
+    function batchCreate(collection, data, docId) {
         if (!_pendingBatch) startBatch();
-        const docData = _addTenantContext(data);
-        const docRef = docId ? _getCollection(collection).doc(docId) : _getCollection(collection).doc();
+        var docData = _addTenantContext(data);
+        var docRef = docId ? _getCollection(collection).doc(docId) : _getCollection(collection).doc();
         _pendingBatch.set(docRef, docData);
     }
 
-    /**
-     * Add an update operation to batch
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @param {Object} updates - Fields to update
-     */
     function batchUpdate(collection, docId, updates) {
         if (!_pendingBatch) startBatch();
-        const updateData = {
-            ...updates,
-            updatedBy: _getCurrentUid(),
-            updatedAt: new Date().toISOString(),
-        };
-        const docRef = _getCollection(collection).doc(docId);
-        _pendingBatch.update(docRef, updateData);
+        var updateData = {};
+        for (var key in updates) { if (updates.hasOwnProperty(key)) updateData[key] = updates[key]; }
+        updateData.updatedBy = _getCurrentUid();
+        updateData.updatedAt = new Date().toISOString();
+        _pendingBatch.update(_getCollection(collection).doc(docId), updateData);
     }
 
-    /**
-     * Add a delete operation to batch
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     */
     function batchDelete(collection, docId) {
         if (!_pendingBatch) startBatch();
-        const docRef = _getCollection(collection).doc(docId);
-        _pendingBatch.delete(docRef);
+        _pendingBatch.delete(_getCollection(collection).doc(docId));
     }
 
-    /**
-     * Commit the pending batch
-     * @returns {Promise<boolean>}
-     */
     async function commitBatch() {
         try {
             if (!_pendingBatch) return false;
@@ -734,241 +657,154 @@ const CRM_Firestore = (function() {
             clearAllCache();
             return true;
         } catch (error) {
-            console.error('[CRM_Firestore] Batch commit error:', error);
+            console.error('[CRM_Firestore] Batch commit error:', error.message);
             _pendingBatch = null;
             return false;
         }
     }
 
-    /**
-     * Cancel pending batch
-     */
-    function cancelBatch() {
-        _pendingBatch = null;
-    }
+    function cancelBatch() { _pendingBatch = null; }
 
     // ============================================================
     // REAL-TIME LISTENERS
     // ============================================================
-    /**
-     * Subscribe to real-time updates on a document
-     * @param {string} collection - Collection name
-     * @param {string} docId - Document ID
-     * @param {Function} callback - (data) => void
-     * @returns {Function} Unsubscribe function
-     */
     function onDocumentSnapshot(collection, docId, callback) {
         try {
-            const listenerId = `doc_${collection}_${docId}`;
-
-            // Remove existing listener
-            if (_activeListeners.has(listenerId)) {
-                _activeListeners.get(listenerId)();
-            }
-
-            const docRef = _getCollection(collection).doc(docId);
-            const unsubscribe = docRef.onSnapshot(
-                (doc) => {
+            var listenerId = 'doc_' + collection + '_' + docId;
+            if (_activeListeners.has(listenerId)) { _activeListeners.get(listenerId)(); }
+            var unsubscribe = _getCollection(collection).doc(docId).onSnapshot(
+                function(doc) {
                     if (doc.exists) {
-                        const data = { id: doc.id, ...doc.data() };
+                        var data = { id: doc.id };
+                        var dd = doc.data();
+                        for (var key in dd) { if (dd.hasOwnProperty(key)) data[key] = dd[key]; }
                         _setCache(_cacheKey(collection, docId), data);
                         callback(data);
-                    } else {
-                        callback(null);
-                    }
+                    } else { callback(null); }
                 },
-                (error) => {
-                    console.error(`[CRM_Firestore] Listener error (${collection}/${docId}):`, error);
-                    callback(null);
-                }
+                function(error) { console.error('[CRM_Firestore] Listener error:', error.message); callback(null); }
             );
-
             _activeListeners.set(listenerId, unsubscribe);
-            return () => {
-                unsubscribe();
-                _activeListeners.delete(listenerId);
-            };
-        } catch (error) {
-            console.error(`[CRM_Firestore] onDocumentSnapshot error:`, error);
-            return () => {};
-        }
+            return function() { unsubscribe(); _activeListeners.delete(listenerId); };
+        } catch (error) { console.error('[CRM_Firestore] onDocumentSnapshot error:', error.message); return function() {}; }
     }
 
-    /**
-     * Subscribe to real-time updates on a query
-     * @param {string} collection - Collection name
-     * @param {Function} callback - (data[]) => void
-     * @param {Object} [options] - Query options
-     * @returns {Function} Unsubscribe function
-     */
-    function onQuerySnapshot(collection, callback, options = {}) {
+    function onQuerySnapshot(collection, callback, options) {
+        options = options || {};
         try {
-            const listenerId = `query_${collection}_${JSON.stringify(options)}`;
+            var listenerId = 'query_' + collection + '_' + JSON.stringify(options);
+            if (_activeListeners.has(listenerId)) { _activeListeners.get(listenerId)(); }
 
-            if (_activeListeners.has(listenerId)) {
-                _activeListeners.get(listenerId)();
-            }
+            var filters = options.filters || [];
+            var orderBy = options.orderBy || 'createdAt';
+            var orderDir = options.orderDir || 'desc';
+            var limit = options.limit || 100;
 
-            const {
-                filters = [],
-                    orderBy = 'createdAt',
-                    orderDir = 'desc',
-                    limit = 100,
-            } = options;
-
-            let query = _getCollection(collection);
-
-            const tenantId = _getTenantId();
-            if (tenantId) {
-                query = query.where('tenantId', '==', tenantId);
-            }
+            var query = _getCollection(collection);
+            var tenantId = _getTenantId();
+            if (tenantId) query = query.where('tenantId', '==', tenantId);
             query = query.where('_deleted', '==', false);
-
-            filters.forEach(([field, operator, value]) => {
-                query = query.where(field, operator, value);
-            });
-
+            filters.forEach(function(f) { query = query.where(f[0], f[1], f[2]); });
             query = query.orderBy(orderBy, orderDir).limit(limit);
 
-            const unsubscribe = query.onSnapshot(
-                (snapshot) => {
-                    const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            var unsubscribe = query.onSnapshot(
+                function(snapshot) {
+                    var data = [];
+                    snapshot.docs.forEach(function(doc) {
+                        var d = { id: doc.id };
+                        var dd = doc.data();
+                        for (var key in dd) { if (dd.hasOwnProperty(key)) d[key] = dd[key]; }
+                        data.push(d);
+                    });
                     callback(data);
                 },
-                (error) => {
-                    console.error(`[CRM_Firestore] Query listener error (${collection}):`, error);
-                    callback([]);
-                }
+                function(error) { console.error('[CRM_Firestore] Query listener error:', error.message); callback([]); }
             );
-
             _activeListeners.set(listenerId, unsubscribe);
-            return () => {
-                unsubscribe();
-                _activeListeners.delete(listenerId);
-            };
-        } catch (error) {
-            console.error(`[CRM_Firestore] onQuerySnapshot error:`, error);
-            return () => {};
-        }
+            return function() { unsubscribe(); _activeListeners.delete(listenerId); };
+        } catch (error) { console.error('[CRM_Firestore] onQuerySnapshot error:', error.message); return function() {}; }
     }
 
-    /**
-     * Remove all active listeners
-     */
     function removeAllListeners() {
-        _activeListeners.forEach((unsubscribe, key) => {
-            try { unsubscribe(); } catch (e) { /* ignore */ }
-        });
+        _activeListeners.forEach(function(unsubscribe) { try { unsubscribe(); } catch(e) {} });
         _activeListeners.clear();
     }
 
-    /**
-     * Refresh all active listeners (after reconnect)
-     */
     function _refreshAllListeners() {
-        // Listeners are auto-refreshed by Firestore SDK
-        console.log(`[CRM_Firestore] ${_activeListeners.size} active listeners will auto-refresh.`);
+        console.log('[CRM_Firestore] ' + _activeListeners.size + ' active listeners will auto-refresh.');
     }
 
     // ============================================================
     // OFFLINE QUEUE
     // ============================================================
-    /**
-     * Add operation to offline queue
-     * @param {Object} operation - Operation to queue
-     */
     function _addToOfflineQueue(operation) {
         if (_offlineQueue.length >= MAX_OFFLINE_QUEUE) {
             console.warn('[CRM_Firestore] Offline queue full. Dropping oldest operation.');
             _offlineQueue.shift();
         }
-
         _offlineQueue.push({
-            ...operation,
+            type: operation.type,
+            collection: operation.collection,
+            docId: operation.docId,
+            data: operation.data,
             queuedAt: new Date().toISOString(),
             retryCount: 0,
         });
-
-        // Save to localStorage for persistence
         _saveOfflineQueue();
-
-        console.log(`[CRM_Firestore] Queued offline: ${operation.type} on ${operation.collection}/${operation.docId}`);
+        console.log('[CRM_Firestore] Queued: ' + operation.type + ' on ' + operation.collection + '/' + operation.docId);
     }
 
-    /**
-     * Save offline queue to localStorage
-     */
     function _saveOfflineQueue() {
         try {
-            localStorage.setItem(
-                CRM_Config.app.storageKeys.OFFLINE_QUEUE,
-                JSON.stringify(_offlineQueue)
-            );
-        } catch (e) {
-            console.warn('[CRM_Firestore] Could not save offline queue:', e);
-        }
+            if (window.CRM_Config && window.CRM_Config.app && window.CRM_Config.app.storageKeys) {
+                localStorage.setItem(window.CRM_Config.app.storageKeys.OFFLINE_QUEUE, JSON.stringify(_offlineQueue));
+            }
+        } catch (e) { /* silent */ }
     }
 
-    /**
-     * Load offline queue from localStorage
-     */
     function _loadOfflineQueue() {
         try {
-            const saved = localStorage.getItem(CRM_Config.app.storageKeys.OFFLINE_QUEUE);
-            if (saved) {
-                const parsed = JSON.parse(saved);
-                _offlineQueue.push(...parsed);
-                console.log(`[CRM_Firestore] Loaded ${parsed.length} queued operations.`);
+            if (window.CRM_Config && window.CRM_Config.app && window.CRM_Config.app.storageKeys) {
+                var saved = localStorage.getItem(window.CRM_Config.app.storageKeys.OFFLINE_QUEUE);
+                if (saved) {
+                    var parsed = JSON.parse(saved);
+                    _offlineQueue.push.apply(_offlineQueue, parsed);
+                    console.log('[CRM_Firestore] Loaded ' + parsed.length + ' queued operations.');
+                }
             }
-        } catch (e) {
-            console.warn('[CRM_Firestore] Could not load offline queue:', e);
-        }
+        } catch (e) { /* silent */ }
     }
 
-    /**
-     * Process all queued offline operations
-     * @returns {Promise<Object>} Result summary
-     */
     async function processOfflineQueue() {
         if (_processingQueue || !_isOnline || _offlineQueue.length === 0) {
             return { processed: 0, failed: 0, remaining: _offlineQueue.length };
         }
 
         _processingQueue = true;
-        let processed = 0;
-        let failed = 0;
-        const queueCopy = [..._offlineQueue];
+        var processed = 0;
+        var failed = 0;
+        var queueCopy = _offlineQueue.slice();
         _offlineQueue.length = 0;
 
-        console.log(`[CRM_Firestore] Processing ${queueCopy.length} offline operations...`);
+        console.log('[CRM_Firestore] Processing ' + queueCopy.length + ' offline operations...');
 
-        for (const op of queueCopy) {
+        for (var i = 0; i < queueCopy.length; i++) {
+            var op = queueCopy[i];
             try {
                 switch (op.type) {
-                    case 'create':
-                        await _getCollection(op.collection).doc(op.docId).set(op.data);
-                        break;
-                    case 'set':
-                        await _getCollection(op.collection).doc(op.docId).set(op.data, { merge: true });
-                        break;
-                    case 'update':
-                        await _getCollection(op.collection).doc(op.docId).update(op.data);
-                        break;
-                    case 'hardDelete':
-                        await _getCollection(op.collection).doc(op.docId).delete();
-                        break;
-                    default:
-                        console.warn(`[CRM_Firestore] Unknown operation type: ${op.type}`);
+                    case 'create': await _getCollection(op.collection).doc(op.docId).set(op.data); break;
+                    case 'set': await _getCollection(op.collection).doc(op.docId).set(op.data, { merge: true }); break;
+                    case 'update': await _getCollection(op.collection).doc(op.docId).update(op.data); break;
+                    case 'hardDelete': await _getCollection(op.collection).doc(op.docId).delete(); break;
                 }
                 processed++;
             } catch (error) {
-                console.error(`[CRM_Firestore] Failed to process offline op:`, error);
+                console.error('[CRM_Firestore] Failed to process offline op:', error.message);
                 failed++;
-                // Re-queue if retryable
-                if (op.retryCount < 3) {
+                if ((op.retryCount || 0) < 3) {
                     _offlineQueue.push({
-                        ...op,
-                        retryCount: (op.retryCount || 0) + 1,
+                        type: op.type, collection: op.collection, docId: op.docId,
+                        data: op.data, queuedAt: op.queuedAt, retryCount: (op.retryCount || 0) + 1,
                     });
                 }
             }
@@ -976,126 +812,56 @@ const CRM_Firestore = (function() {
 
         _saveOfflineQueue();
         _processingQueue = false;
-
-        console.log(`[CRM_Firestore] Offline queue: ${processed} processed, ${failed} failed, ${_offlineQueue.length} remaining.`);
-        return { processed, failed, remaining: _offlineQueue.length };
+        console.log('[CRM_Firestore] Queue: ' + processed + ' done, ' + failed + ' failed, ' + _offlineQueue.length + ' remaining.');
+        return { processed: processed, failed: failed, remaining: _offlineQueue.length };
     }
 
-    /**
-     * Get offline queue status
-     * @returns {Object}
-     */
     function getOfflineQueueStatus() {
-        return {
-            queueSize: _offlineQueue.length,
-            isProcessing: _processingQueue,
-            isOnline: _isOnline,
-        };
+        return { queueSize: _offlineQueue.length, isProcessing: _processingQueue, isOnline: _isOnline };
     }
 
-    /**
-     * Clear offline queue
-     */
-    function clearOfflineQueue() {
-        _offlineQueue.length = 0;
-        _saveOfflineQueue();
-    }
+    function clearOfflineQueue() { _offlineQueue.length = 0; _saveOfflineQueue(); }
 
     // ============================================================
     // UTILITY METHODS
     // ============================================================
-    /**
-     * Generate a unique document ID
-     * @param {string} collection - Collection name
-     * @returns {string}
-     */
-    function generateId(collection) {
-        return _getCollection(collection).doc().id;
-    }
+    function generateId(collection) { return _getCollection(collection).doc().id; }
+    function isAvailable() { return _available; }
+    function isOnline() { return _isOnline; }
+    function getDb() { return _db; }
 
-    /**
-     * Check if Firestore is available
-     * @returns {boolean}
-     */
-    function isAvailable() {
-        return _available;
-    }
-
-    /**
-     * Check if we're online
-     * @returns {boolean}
-     */
-    function isOnline() {
-        return _isOnline;
-    }
-
-    /**
-     * Get the raw Firestore instance
-     * @returns {Object|null}
-     */
-    function getDb() {
-        return _db;
-    }
-
-    /**
-     * Create a timestamp for Firestore
-     * @returns {Object} Firestore timestamp
-     */
     function timestamp() {
         if (!_available) return new Date().toISOString();
         return window.firebase.firestore.FieldValue.serverTimestamp();
     }
 
-    /**
-     * Increment a field value atomically
-     * @param {number} amount - Amount to increment
-     * @returns {Object} Firestore increment
-     */
-    function increment(amount = 1) {
-        if (!_available) return (amount || 1);
+    function increment(amount) {
+        amount = amount || 1;
+        if (!_available) return amount;
         return window.firebase.firestore.FieldValue.increment(amount);
     }
 
-    /**
-     * Array union (add unique items)
-     * @param {Array} elements - Elements to add
-     * @returns {Object} Firestore arrayUnion
-     */
-    function arrayUnion(...elements) {
-        if (!_available) return elements;
-        return window.firebase.firestore.FieldValue.arrayUnion(...elements);
+    function arrayUnion() {
+        if (!_available) return Array.prototype.slice.call(arguments);
+        return window.firebase.firestore.FieldValue.arrayUnion.apply(null, arguments);
     }
 
-    /**
-     * Array remove
-     * @param {Array} elements - Elements to remove
-     * @returns {Object} Firestore arrayRemove
-     */
-    function arrayRemove(...elements) {
-        if (!_available) return elements;
-        return window.firebase.firestore.FieldValue.arrayRemove(...elements);
+    function arrayRemove() {
+        if (!_available) return Array.prototype.slice.call(arguments);
+        return window.firebase.firestore.FieldValue.arrayRemove.apply(null, arguments);
     }
 
-    /**
-     * Delete a field
-     * @returns {Object} Firestore deleteField
-     */
     function deleteField() {
         if (!_available) return null;
         return window.firebase.firestore.FieldValue.delete();
     }
 
-    /**
-     * Run a transaction
-     * @param {Function} updateFn - (transaction) => Promise
-     * @returns {Promise<*>}
-     */
     async function runTransaction(updateFn) {
         try {
             if (!_available) throw new Error('Firestore not available.');
             return await _db.runTransaction(updateFn);
         } catch (error) {
-            console.error('[CRM_Firestore] Transaction error:', error);
+            console.error('[CRM_Firestore] Transaction error:', error.message);
             throw error;
         }
     }
@@ -1103,75 +869,58 @@ const CRM_Firestore = (function() {
     // ============================================================
     // INITIALIZATION
     // ============================================================
-    // Load saved offline queue
     _loadOfflineQueue();
 
-    // Auto-init
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            init().catch(err => console.error('[CRM_Firestore] Auto-init error:', err));
+        document.addEventListener('DOMContentLoaded', function() {
+            init().catch(function(err) { console.error('[CRM_Firestore] Auto-init error:', err.message); });
         });
     } else {
-        setTimeout(() => init().catch(err => console.error('[CRM_Firestore] Auto-init error:', err)), 100);
+        setTimeout(function() {
+            init().catch(function(err) { console.error('[CRM_Firestore] Auto-init error:', err.message); });
+        }, 100);
     }
 
     // ============================================================
     // PUBLIC API EXPORT
     // ============================================================
     return {
-        // Init
-        init,
-        isAvailable,
-        isOnline,
-        getDb,
-
-        // Single Document
-        getDocument,
-        createDocument,
-        setDocument,
-        updateDocument,
-        deleteDocument,
-        restoreDocument,
-
-        // Query
-        queryDocuments,
-        getAllDocuments,
-        countDocuments,
-
-        // Batch
-        startBatch,
-        batchCreate,
-        batchUpdate,
-        batchDelete,
-        commitBatch,
-        cancelBatch,
-
-        // Real-time
-        onDocumentSnapshot,
-        onQuerySnapshot,
-        removeAllListeners,
-
-        // Offline
-        processOfflineQueue,
-        getOfflineQueueStatus,
-        clearOfflineQueue,
-
-        // Cache
-        invalidateCache,
-        clearAllCache,
-
-        // Utilities
-        generateId,
-        timestamp,
-        increment,
-        arrayUnion,
-        arrayRemove,
-        deleteField,
-        runTransaction,
-
-        // Constants
-        MAX_BATCH_SIZE,
-        DEFAULT_PAGE_SIZE,
+        init: init,
+        isAvailable: isAvailable,
+        isOnline: isOnline,
+        getDb: getDb,
+        getDocument: getDocument,
+        createDocument: createDocument,
+        setDocument: setDocument,
+        updateDocument: updateDocument,
+        deleteDocument: deleteDocument,
+        restoreDocument: restoreDocument,
+        queryDocuments: queryDocuments,
+        getAllDocuments: getAllDocuments,
+        countDocuments: countDocuments,
+        startBatch: startBatch,
+        batchCreate: batchCreate,
+        batchUpdate: batchUpdate,
+        batchDelete: batchDelete,
+        commitBatch: commitBatch,
+        cancelBatch: cancelBatch,
+        onDocumentSnapshot: onDocumentSnapshot,
+        onQuerySnapshot: onQuerySnapshot,
+        removeAllListeners: removeAllListeners,
+        processOfflineQueue: processOfflineQueue,
+        getOfflineQueueStatus: getOfflineQueueStatus,
+        clearOfflineQueue: clearOfflineQueue,
+        invalidateCache: invalidateCache,
+        clearAllCache: clearAllCache,
+        generateId: generateId,
+        timestamp: timestamp,
+        increment: increment,
+        arrayUnion: arrayUnion,
+        arrayRemove: arrayRemove,
+        deleteField: deleteField,
+        runTransaction: runTransaction,
+        MAX_BATCH_SIZE: MAX_BATCH_SIZE,
+        DEFAULT_PAGE_SIZE: DEFAULT_PAGE_SIZE,
     };
 })();
 
@@ -1180,7 +929,6 @@ const CRM_Firestore = (function() {
 // ============================================================
 window.CRM_Firestore = CRM_Firestore;
 
-// ES Module export
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = CRM_Firestore;
 }
