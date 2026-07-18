@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F6F0" />
-    <title>Training - 11 Avatar Digital Hub</title>
+    <title>Pipeline - 11 Avatar Digital Hub</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -14,12 +14,9 @@
     
     <style>
         :root {
-            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
-            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
@@ -27,7 +24,7 @@
             min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
         }
         
-        .training-container { max-width: 1400px; margin: 0 auto; padding: 24px; padding-bottom: 100px; }
+        .pipeline-container { max-width: 100%; margin: 0; padding: 16px; padding-bottom: 90px; }
         
         .bottom-submenu {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
@@ -51,13 +48,12 @@
         
         .page-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            padding: 20px 24px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: var(--card-3d); margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 16px;
         }
-        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header h1 { font-size: 1.5rem; font-weight: 800; margin: 0; }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
         
         .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
@@ -69,177 +65,114 @@
         .btn-ghost { background: transparent; color: #666; }
         .btn-ghost:hover { background: #F5F5F5; }
         .btn-danger { background: #DC2626; color: #FFF; }
-        .btn-success { background: #10B981; color: #FFF; }
         
         .tab-content { display: none; animation: fadeIn 0.3s ease; }
         .tab-content.active { display: block; }
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
         
-        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
-        .stat-card {
-            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
-            padding: 16px 18px; cursor: pointer; transition: var(--transition);
+        .pipeline-stats { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        .pipe-stat {
+            background: #FFF; border-radius: 10px; padding: 10px 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); flex: 1; min-width: 90px;
+            text-align: center; border-left: 3px solid var(--s-color);
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
-        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
-        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pipe-stat .num { font-size: 18px; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        .pipe-stat .lbl { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
         
-        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
-        
-        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
-        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; }
-        .filter-row input:focus { border-color: var(--gold); outline: none; }
-        .filter-row select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; cursor: pointer; min-width: 140px; }
-        
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        table th { text-align: left; padding: 12px 14px; font-weight: 600; color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: #FAFAFA; border-bottom: 2px solid #F0EDE5; white-space: nowrap; }
-        table td { padding: 12px 14px; border-bottom: 1px solid #F5F5F5; color: #333; }
-        table tbody tr { transition: background 0.15s ease; cursor: pointer; }
-        table tbody tr:hover { background: rgba(212,175,55,0.03); }
-        
-        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
-        .badge-active { background: #ECFDF5; color: #059669; }
-        .badge-completed { background: #EFF6FF; color: #2563EB; }
-        .badge-pending { background: #FEF3C7; color: #D97706; }
-        
-        .tbl-actions { display: flex; gap: 3px; }
-        .tbl-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; transition: all 0.15s ease; }
-        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
-        
-        .course-card {
-            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
-            padding: 20px; transition: var(--transition); cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        .pipeline-board { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; min-height: 55vh; }
+        .pipeline-col {
+            background: #f0f2f5; border-radius: 12px; padding: 8px;
+            min-width: 230px; max-width: 280px; flex: 1; display: flex; flex-direction: column;
         }
-        .course-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
-        .course-card .cc-icon { font-size: 2rem; margin-bottom: 10px; }
-        .course-card .cc-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
-        .course-card .cc-meta { font-size: 0.78rem; color: #888; }
-        .course-card .cc-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #F5F5F5; }
+        .pipeline-col-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 6px; padding-bottom: 6px; border-bottom: 3px solid var(--col-color);
+        }
+        .pipeline-col-header h6 { font-size: 12px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 4px; }
+        .pipeline-col-header .count { font-size: 10px; background: #FFF; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
+        .pipeline-cards { flex: 1; min-height: 50px; display: flex; flex-direction: column; gap: 4px; }
         
-        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-        @media(max-width:480px){ .course-grid{grid-template-columns:1fr;} }
+        .pipe-card {
+            background: #FFF; border: 1px solid #e0e0e0; border-radius: 6px;
+            padding: 8px 10px; cursor: grab; transition: all 0.15s; font-size: 0.82rem;
+            user-select: none;
+        }
+        .pipe-card:active { cursor: grabbing; }
+        .pipe-card:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.06); border-color: #D4AF37; }
+        .pipe-card.dragging { opacity: 0.35; transform: rotate(1deg); background: #FFF3CD; }
+        .pipe-card .card-name { font-weight: 600; font-size: 0.85rem; }
+        .pipe-card .card-detail { font-size: 0.72rem; color: #888; margin-top: 2px; }
+        .pipe-card .card-badges { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 3px; }
+        .pipe-card .card-badge { font-size: 9px; padding: 1px 5px; border-radius: 6px; }
+        .card-badge.priority-high { background: #FEE2E2; color: #DC2626; }
+        .card-badge.priority-medium { background: #FEF3C7; color: #D97706; }
+        .card-badge.priority-low { background: #E0F2FE; color: #0284C7; }
+        .card-badge.followup { background: #DCFCE7; color: #166534; }
         
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: #333; margin-bottom: 4px; }
+        .drag-over { background: #E8F4FD !important; border: 2px dashed #D4AF37 !important; border-radius: 8px; }
+        
+        .quick-add-btn {
+            background: none; border: 1px dashed #c0c0c0; border-radius: 6px;
+            padding: 6px; width: 100%; cursor: pointer; font-size: 10px; color: #888;
+            text-align: center; margin-top: 3px;
+        }
+        .quick-add-btn:hover { background: #e7f3ff; border-color: #D4AF37; color: #B8960F; }
+        .quick-add-form { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
+        .quick-add-form input { flex: 1; padding: 4px 6px; border: 1px solid #dadde1; border-radius: 4px; font-size: 10px; min-width: 50px; }
+        
+        .detail-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2999; }
+        .detail-panel {
+            position: fixed; top: 0; right: 0; width: 420px; max-width: 95vw; height: 100vh;
+            background: #FFF; box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            z-index: 3000; overflow-y: auto; padding: 20px; animation: slideIn 0.2s ease;
+        }
+        @keyframes slideIn { from{transform:translateX(100%);} to{transform:translateX(0);} }
+        
+        .modal-overlay { position: fixed; inset: 0; z-index: 3100; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+        .modal-box { background: #FFF; border-radius: 16px; padding: 20px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        
+        .form-group { margin-bottom: 10px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.75rem; color: #333; margin-bottom: 3px; }
         .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5;
-            border-radius: 10px; font-size: 0.88rem; font-family: 'Inter',sans-serif;
+            width: 100%; padding: 8px 12px; border: 1.5px solid #E5E5E5; border-radius: 8px;
+            font-size: 0.85rem; font-family: 'Inter',sans-serif;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; }
-        .form-group textarea { resize: vertical; min-height: 70px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #D4AF37; outline: none; }
         
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
-        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
+        .toast { background: #FFF; border-radius: 12px; padding: 12px 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.85rem; font-weight: 500; animation: toastIn 0.3s ease; }
         .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
         @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
         
-        .empty-state { text-align: center; padding: 50px; color: #999; }
-        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
-        
-        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
-        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
-        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
+        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; }
         .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
-        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        .text-xs { font-size: 0.72rem; } .text-muted { color: #888; }
         
-        @media(max-width:768px){ .training-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} }
+        @media(max-width:768px){ .pipeline-board{flex-direction:column;} .pipeline-col{max-width:100%;min-width:100%;} .detail-panel{width:100%;} }
     </style>
 </head>
 <body>
 
-    <div class="training-container">
+    <div class="pipeline-container">
         
         <div class="page-header">
-            <div>
-                <h1>🎓 <span class="gold">Training</span> & LMS</h1>
-                <p id="trainingCountText">Manage courses, students, and certifications</p>
-            </div>
+            <div><h1>📈 <span class="gold">Pipeline</span> Kanban</h1></div>
             <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="Training.exportCSV()">📤 Export</button>
-                <button class="btn btn-primary" onclick="Training.openCourseForm()">➕ New Course</button>
+                <button class="btn btn-outline btn-sm" onclick="Pipeline.render()">🔄 Refresh</button>
+                <button class="btn btn-primary btn-sm" onclick="Pipeline.showAddForm()">➕ Add Deal</button>
             </div>
         </div>
         
-        <div class="stats-row">
-            <div class="stat-card"><div class="val" id="stat-courses">0</div><div class="lbl">Total Courses</div></div>
-            <div class="stat-card"><div class="val" id="stat-students">0</div><div class="lbl">👨‍🎓 Students</div></div>
-            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">0</div><div class="lbl">✅ Completed</div></div>
-            <div class="stat-card"><div class="val" id="stat-revenue" style="color:#D4AF37;">₹0</div><div class="lbl">💰 Revenue</div></div>
-        </div>
-        
-        <!-- TAB: Courses -->
-        <div id="tab-courses" class="tab-content active">
-            <div class="filter-row">
-                <input type="search" id="searchInput" placeholder="🔍 Search courses..." oninput="Training.search=this.value;Training.render()">
-                <select id="filterStatus" onchange="Training.filterStatus=this.value;Training.render()">
-                    <option value="">All Status</option><option value="Active">Active</option><option value="Completed">Completed</option><option value="Draft">Draft</option>
-                </select>
-                <button class="btn btn-ghost btn-sm" onclick="Training.clearFilters()">✕ Clear</button>
-            </div>
-            <div class="course-grid" id="courseGrid"></div>
-        </div>
-        
-        <!-- TAB: Students -->
-        <div id="tab-students" class="tab-content">
-            <div class="filter-row">
-                <input type="search" id="studentSearch" placeholder="🔍 Search students..." oninput="Training.studentSearch=this.value;Training.render()">
-                <button class="btn btn-outline btn-sm" onclick="Training.openEnrollForm()">➕ Enroll Student</button>
-            </div>
-            <div class="card" style="padding:0;overflow:hidden;">
-                <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Student</th><th>Mobile</th><th>Course</th><th>Enrolled</th><th>Progress</th><th>Status</th><th style="min-width:100px;">Actions</th></tr></thead>
-                        <tbody id="studentTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <!-- TAB: Add Course -->
-        <div id="tab-add" class="tab-content">
-            <div class="card" style="max-width:700px;">
-                <div class="card-header"><span class="card-title" id="formTitle">➕ New Course</span></div>
-                <form id="courseForm" onsubmit="Training.saveCourse(event)">
-                    <input type="hidden" id="editId">
-                    <div class="form-row">
-                        <div class="form-group"><label>Course Name *</label><input type="text" id="cName" required></div>
-                        <div class="form-group"><label>Instructor</label><input type="text" id="cInstructor"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Duration</label><input type="text" id="cDuration" placeholder="e.g., 4 Weeks"></div>
-                        <div class="form-group"><label>Fee (₹)</label><input type="number" id="cFee" min="0"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Status</label><select id="cStatus"><option value="Active">Active</option><option value="Draft">Draft</option><option value="Completed">Completed</option></select></div>
-                        <div class="form-group"><label>Start Date</label><input type="date" id="cStartDate"></div>
-                    </div>
-                    <div class="form-group"><label>Description</label><textarea id="cDesc" rows="3"></textarea></div>
-                    <div class="form-group"><label>Syllabus / Topics</label><textarea id="cSyllabus" rows="3" placeholder="Comma-separated topics"></textarea></div>
-                    <div class="flex gap-2 mt-2">
-                        <button type="submit" class="btn btn-primary">💾 Save Course</button>
-                        <button type="button" class="btn btn-outline" onclick="Training.currentTab='courses';Training.render()">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        <div class="pipeline-stats" id="pipelineStats"></div>
+        <div class="pipeline-board" id="kanbanBoard"></div>
+        <div id="modalContainer"></div>
+        <div id="detailPanel"></div>
         
     </div>
     
-    <!-- Enroll Modal Container -->
-    <div id="modalContainer"></div>
-    
-    <!-- Bottom Submenu -->
     <div class="bottom-submenu">
-        <div class="bottom-tab active" onclick="Training.currentTab='courses';Training.render()"><span class="tab-icon">📚</span> Courses</div>
-        <div class="bottom-tab" onclick="Training.currentTab='students';Training.render()"><span class="tab-icon">👨‍🎓</span> Students</div>
-        <div class="bottom-tab" onclick="Training.currentTab='add';Training.render()"><span class="tab-icon">➕</span> Add</div>
+        <div class="bottom-tab active" onclick="Pipeline.render()"><span class="tab-icon">📌</span> Kanban</div>
+        <div class="bottom-tab" onclick="Pipeline.showAddForm()"><span class="tab-icon">➕</span> Add Deal</div>
         <div class="bottom-tab" onclick="window.location.href='leads.html'"><span class="tab-icon">👥</span> Leads</div>
         <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
     </div>
@@ -249,239 +182,216 @@
     <script>
         'use strict';
         
-        var Training = {
-            currentTab: 'courses',
-            search: '',
-            filterStatus: '',
-            studentSearch: '',
+        var Pipeline = {
+            stages: [
+                { id:'new', name:'New Lead', color:'#6366f1', icon:'⭐' },
+                { id:'contacted', name:'Contacted', color:'#8b5cf6', icon:'📞' },
+                { id:'qualified', name:'Qualified', color:'#3b82f6', icon:'✅' },
+                { id:'proposal', name:'Proposal', color:'#f59e0b', icon:'📄' },
+                { id:'negotiation', name:'Negotiation', color:'#ef4444', icon:'🤝' },
+                { id:'won', name:'Won', color:'#10b981', icon:'🏆' },
+                { id:'lost', name:'Lost', color:'#6b7280', icon:'❌' }
+            ],
+            deals: [],
+            draggedId: null,
+            selectedCard: null,
             
             init: function() {
-                this.courses = JSON.parse(localStorage.getItem('crm_courses') || '[]');
-                this.students = JSON.parse(localStorage.getItem('crm_training_students') || '[]');
-                if (this.courses.length === 0) this.seedData();
+                this.deals = JSON.parse(localStorage.getItem('crm_deals') || '[]');
+                if (this.deals.length === 0) this.seedData();
                 this.render();
             },
             
             seedData: function() {
-                this.courses = [
-                    { id:'CRS001',name:'Digital Marketing Masterclass',instructor:'Admin',duration:'6 Weeks',fee:15000,status:'Active',startDate:'2025-02-01',desc:'Complete digital marketing course covering SEO, SMM, Google Ads',syllabus:'SEO Basics,Social Media Marketing,Google Ads,Analytics,Content Marketing',created:new Date().toISOString() },
-                    { id:'CRS002',name:'Website Development Bootcamp',instructor:'Developer',duration:'8 Weeks',fee:25000,status:'Active',startDate:'2025-01-15',desc:'Learn HTML, CSS, JavaScript and build real projects',syllabus:'HTML5,CSS3,JavaScript,React,Node.js,Project',created:new Date().toISOString() },
-                    { id:'CRS003',name:'Business Communication Skills',instructor:'Manager',duration:'2 Weeks',fee:5000,status:'Draft',startDate:'',desc:'Improve professional communication and presentation skills',syllabus:'Email Writing,Presentation,Client Communication,Negotiation',created:new Date().toISOString() }
-                ];
-                this.students = [
-                    { id:'STU001',name:'Rajesh Kumar',mobile:'9876543210',courseId:'CRS001',courseName:'Digital Marketing Masterclass',enrolled:'2025-02-01',progress:60,status:'Active',fee:15000 },
-                    { id:'STU002',name:'Priya Sharma',mobile:'8765432109',courseId:'CRS002',courseName:'Website Development Bootcamp',enrolled:'2025-01-20',progress:85,status:'Active',fee:25000 },
-                    { id:'STU003',name:'Amit Patel',mobile:'7654321098',courseId:'CRS001',courseName:'Digital Marketing Masterclass',enrolled:'2025-02-05',progress:100,status:'Completed',fee:15000 }
+                this.deals = [
+                    { id:'DL001',name:'Website Redesign',contact:'Rajesh Kumar',company:'Kumar Enterprises',stage:'proposal',value:150000,priority:'high',notes:'Complete redesign',followup:new Date(Date.now()+86400000*3).toISOString().split('T')[0],created:new Date().toISOString() },
+                    { id:'DL002',name:'SEO Package',contact:'Priya Sharma',company:'Sharma Textiles',stage:'qualified',value:80000,priority:'medium',notes:'6-month',followup:new Date().toISOString().split('T')[0],created:new Date().toISOString() },
+                    { id:'DL003',name:'Social Media',contact:'Amit Patel',company:'Patel Construction',stage:'new',value:45000,priority:'low',notes:'',followup:'',created:new Date().toISOString() },
+                    { id:'DL004',name:'Google Ads',contact:'Sunita Verma',company:'Verma Exports',stage:'negotiation',value:200000,priority:'high',notes:'Quarterly',followup:new Date(Date.now()+86400000).toISOString().split('T')[0],created:new Date().toISOString() },
+                    { id:'DL005',name:'Annual Maintenance',contact:'Vikram Singh',company:'ABC Corp',stage:'won',value:450000,priority:'high',notes:'Signed',followup:'',created:new Date(Date.now()-86400000*7).toISOString() }
                 ];
                 this.save();
             },
             
-            save: function() {
-                try { localStorage.setItem('crm_courses', JSON.stringify(this.courses)); } catch(e) {}
-                try { localStorage.setItem('crm_training_students', JSON.stringify(this.students)); } catch(e) {}
-            },
+            save: function() { try { localStorage.setItem('crm_deals', JSON.stringify(this.deals)); } catch(e) {} },
             
-            getFilteredCourses: function() {
-                var self = this;
-                return this.courses.filter(function(c) {
-                    if (self.search && !(c.name?.toLowerCase().includes(self.search)||c.instructor?.toLowerCase().includes(self.search))) return false;
-                    if (self.filterStatus && c.status !== self.filterStatus) return false;
-                    return true;
-                });
-            },
-            
-            getFilteredStudents: function() {
-                var s = this.studentSearch.toLowerCase();
-                return this.students.filter(function(st) {
-                    return !s || st.name?.toLowerCase().includes(s) || st.mobile?.includes(s) || st.courseName?.toLowerCase().includes(s);
-                });
+            totalValue: function() {
+                return this.deals.reduce(function(s,d){return s+(parseInt(d.value)||0);},0).toLocaleString('en-IN');
             },
             
             render: function() {
-                var tabs = ['courses','students','add'];
-                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
-                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Training.currentTab);
-                });
-                
-                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-                var tabEl = document.getElementById('tab-' + this.currentTab);
-                if (tabEl) tabEl.classList.add('active');
-                
-                var totalRevenue = this.students.reduce(function(s,st){return s+(parseInt(st.fee)||0);},0);
-                document.getElementById('stat-courses').textContent = this.courses.length;
-                document.getElementById('stat-students').textContent = this.students.length;
-                document.getElementById('stat-completed').textContent = this.students.filter(function(st){return st.status==='Completed';}).length;
-                document.getElementById('stat-revenue').textContent = '₹' + totalRevenue.toLocaleString('en-IN');
-                document.getElementById('trainingCountText').textContent = this.courses.length + ' courses · ' + this.students.length + ' students';
-                
-                if (this.currentTab === 'courses') this.renderCourses();
-                if (this.currentTab === 'students') this.renderStudents();
-            },
-            
-            renderCourses: function() {
-                var filtered = this.getFilteredCourses();
-                var grid = document.getElementById('courseGrid');
                 var self = this;
                 
-                grid.innerHTML = filtered.length === 0 ? '<div class="empty-state"><div class="empty-icon">📚</div><p>No courses found</p></div>' :
-                    filtered.map(function(c) {
-                        var studentCount = self.students.filter(function(st){return st.courseId===c.id;}).length;
-                        return '<div class="course-card" onclick="Training.openCourseDetail(\''+c.id+'\')">'+
-                            '<div class="cc-icon">📚</div>'+
-                            '<div class="cc-title">'+self.esc(c.name)+'</div>'+
-                            '<div class="cc-meta">👨‍🏫 '+self.esc(c.instructor)+' · ⏱️ '+self.esc(c.duration)+'</div>'+
-                            '<div class="cc-meta">👨‍🎓 '+studentCount+' students · 💰 ₹'+parseInt(c.fee||0).toLocaleString('en-IN')+'</div>'+
-                            '<div class="cc-footer"><span class="badge '+(c.status==='Active'?'badge-active':c.status==='Completed'?'badge-completed':'badge-pending')+'">'+c.status+'</span>'+
-                            '<div class="tbl-actions" onclick="event.stopPropagation();">'+
-                                '<button class="tbl-btn" onclick="Training.editCourse(\''+c.id+'\')" title="Edit">✏️</button>'+
-                                '<button class="tbl-btn" onclick="Training.deleteCourse(\''+c.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button>'+
-                            '</div></div></div>';
-                    }).join('');
-            },
-            
-            renderStudents: function() {
-                var filtered = this.getFilteredStudents();
-                var tbody = document.getElementById('studentTableBody');
-                var self = this;
+                document.getElementById('pipelineStats').innerHTML = 
+                    '<div class="pipe-stat" style="--s-color:#6366f1;"><div class="num">'+this.deals.length+'</div><div class="lbl">Total</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#3b82f6;"><div class="num">'+this.deals.filter(function(d){return ['new','contacted','qualified'].includes(d.stage);}).length+'</div><div class="lbl">Active</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#f59e0b;"><div class="num">'+this.deals.filter(function(d){return ['proposal','negotiation'].includes(d.stage);}).length+'</div><div class="lbl">Negotiating</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#10b981;"><div class="num">'+this.deals.filter(function(d){return d.stage==='won';}).length+'</div><div class="lbl">Won</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#ef4444;"><div class="num">₹'+this.totalValue()+'</div><div class="lbl">Value</div></div>';
                 
-                tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="7"><div class="empty-state"><p>No students found</p></div></td></tr>' :
-                    filtered.map(function(st) {
-                        return '<tr>'+
-                            '<td><strong>'+self.esc(st.name)+'</strong></td>'+
-                            '<td>'+self.esc(st.mobile||'-')+'</td>'+
-                            '<td>'+self.esc(st.courseName)+'</td>'+
-                            '<td>'+self.fd(st.enrolled)+'</td>'+
-                            '<td><div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:6px;background:#F0EDE5;border-radius:3px;overflow:hidden;"><div style="height:100%;background:'+(st.progress>=100?'#10B981':'#D4AF37')+';width:'+st.progress+'%;border-radius:3px;"></div></div><span class="text-xs">'+st.progress+'%</span></div></td>'+
-                            '<td><span class="badge '+(st.status==='Completed'?'badge-completed':'badge-active')+'">'+st.status+'</span></td>'+
-                            '<td><div class="tbl-actions"><button class="tbl-btn" onclick="Training.updateProgress(\''+st.id+'\')" title="Update">📊</button><button class="tbl-btn" onclick="Training.removeStudent(\''+st.id+'\')" style="color:#DC2626;" title="Remove">🗑️</button></div></td></tr>';
-                    }).join('');
-            },
-            
-            openCourseForm: function() { this.currentTab = 'add'; this.render(); },
-            
-            editCourse: function(id) {
-                this.currentTab = 'add'; this.render();
-                var c = this.courses.find(function(x){return x.id===id;});
-                if (c) {
-                    document.getElementById('editId').value = c.id;
-                    document.getElementById('formTitle').textContent = '✏️ Edit: '+c.name;
-                    document.getElementById('cName').value=c.name||''; document.getElementById('cInstructor').value=c.instructor||'';
-                    document.getElementById('cDuration').value=c.duration||''; document.getElementById('cFee').value=c.fee||'';
-                    document.getElementById('cStatus').value=c.status||'Active'; document.getElementById('cStartDate').value=c.startDate||'';
-                    document.getElementById('cDesc').value=c.desc||''; document.getElementById('cSyllabus').value=c.syllabus||'';
+                var board = document.getElementById('kanbanBoard');
+                board.innerHTML = this.stages.map(function(stage) {
+                    var items = self.deals.filter(function(d){return d.stage===stage.id;});
+                    return '<div class="pipeline-col" data-stage="'+stage.id+'" style="--col-color:'+stage.color+';">'+
+                        '<div class="pipeline-col-header"><h6><span style="color:'+stage.color+';">'+stage.icon+'</span> '+stage.name+'</h6><span class="count">'+items.length+'</span></div>'+
+                        '<div class="pipeline-cards" data-stage="'+stage.id+'">'+
+                            items.map(function(d){return self.renderCard(d);}).join('')+
+                        '</div>'+
+                        '<div class="quick-add-btn" onclick="Pipeline.showQuickAdd(\''+stage.id+'\',event)">+ Quick Add</div>'+
+                    '</div>';
+                }).join('');
+                
+                // BIND DRAG-DROP EVENTS DIRECTLY
+                setTimeout(function() {
+                    document.querySelectorAll('.pipe-card').forEach(function(card) {
+                        card.setAttribute('draggable', 'true');
+                        card.addEventListener('dragstart', function(e) {
+                            Pipeline.draggedId = this.dataset.id;
+                            this.classList.add('dragging');
+                            e.dataTransfer.effectAllowed = 'move';
+                            e.dataTransfer.setData('text/plain', this.dataset.id);
+                        });
+                        card.addEventListener('dragend', function() {
+                            this.classList.remove('dragging');
+                            document.querySelectorAll('.pipeline-cards').forEach(function(c){c.classList.remove('drag-over');});
+                        });
+                    });
+                    
+                    document.querySelectorAll('.pipeline-cards').forEach(function(container) {
+                        container.addEventListener('dragover', function(e) {
+                            e.preventDefault();
+                            e.dataTransfer.dropEffect = 'move';
+                            this.classList.add('drag-over');
+                        });
+                        container.addEventListener('dragleave', function(e) {
+                            if (!this.contains(e.relatedTarget)) this.classList.remove('drag-over');
+                        });
+                        container.addEventListener('drop', function(e) {
+                            e.preventDefault();
+                            this.classList.remove('drag-over');
+                            var stage = this.dataset.stage;
+                            var dealId = Pipeline.draggedId;
+                            if (stage && dealId) {
+                                var d = Pipeline.deals.find(function(x){return x.id===dealId;});
+                                if (d && d.stage !== stage) {
+                                    d.stage = stage;
+                                    Pipeline.save();
+                                    Pipeline.render();
+                                    Pipeline.toast('✅ Moved to '+stage,'success');
+                                }
+                            }
+                            Pipeline.draggedId = null;
+                        });
+                    });
+                }, 150);
+                
+                if (this.selectedCard) {
+                    var self2 = this;
+                    setTimeout(function(){ self2.openDetailPanel(self2.selectedCard); }, 200);
                 }
             },
             
-            saveCourse: function(e) {
-                e.preventDefault();
-                var id = document.getElementById('editId').value;
-                var d = {
-                    name:document.getElementById('cName').value.trim(),
-                    instructor:document.getElementById('cInstructor').value.trim(),
-                    duration:document.getElementById('cDuration').value.trim(),
-                    fee:parseInt(document.getElementById('cFee').value)||0,
-                    status:document.getElementById('cStatus').value,
-                    startDate:document.getElementById('cStartDate').value,
-                    desc:document.getElementById('cDesc').value.trim(),
-                    syllabus:document.getElementById('cSyllabus').value.trim()
-                };
-                if (!d.name) { this.toast('Course name required!','error'); return; }
+            renderCard: function(d) {
+                var badges = '';
+                if (d.priority==='high') badges += '<span class="card-badge priority-high">🔴 High</span>';
+                else if (d.priority==='low') badges += '<span class="card-badge priority-low">🔵 Low</span>';
+                if (d.followup) badges += '<span class="card-badge followup">📅</span>';
                 
-                if (id) {
-                    var i = this.courses.findIndex(function(x){return x.id===id;});
-                    if (i!==-1) { d.id=id; d.created=this.courses[i].created; this.courses[i]=d; this.toast('✅ Course updated!','success'); }
-                } else {
-                    d.id='CRS'+String(this.courses.length+1).padStart(3,'0'); d.created=new Date().toISOString();
-                    this.courses.unshift(d); this.toast('✅ Course created!','success');
-                }
-                this.save(); this.currentTab='courses'; this.render();
+                return '<div class="pipe-card" data-id="'+d.id+'">'+
+                    '<div class="card-name">'+this.esc(d.name)+'</div>'+
+                    '<div class="card-detail">'+this.esc(d.contact||'')+' · '+this.esc(d.company||'')+'</div>'+
+                    (d.value ? '<div class="card-detail"><strong>₹'+parseInt(d.value).toLocaleString('en-IN')+'</strong></div>' : '')+
+                    (badges ? '<div class="card-badges">'+badges+'</div>' : '')+
+                '</div>';
             },
             
-            deleteCourse: function(id) {
-                if (!confirm('Delete this course and all enrollments?')) return;
-                this.courses = this.courses.filter(function(c){return c.id!==id;});
-                this.students = this.students.filter(function(st){return st.courseId!==id;});
-                this.save(); this.render(); this.toast('🗑️ Course deleted','info');
-            },
+            openCardDetail: function(id) { this.selectedCard = {id:id}; this.render(); },
+            closeDetail: function() { this.selectedCard = null; document.getElementById('detailPanel').innerHTML = ''; this.render(); },
             
-            openEnrollForm: function() {
+            openDetailPanel: function(card) {
                 var self = this;
-                var courses = this.courses.filter(function(c){return c.status==='Active';});
-                var leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
-                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
-                var contacts = [].concat(leads, clients).filter(function(c){return c.mobile;});
+                var d = this.deals.find(function(x){return x.id===card.id;});
+                if (!d) return;
+                var stageOpts = this.stages.map(function(s){return '<option value="'+s.id+'" '+(d.stage===s.id?'selected':'')+'>'+s.name+'</option>';}).join('');
                 
-                var h = '<div style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><div class="card" style="width:480px;max-width:90vw;max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()"><div class="card-header"><span class="card-title">➕ Enroll Student</span><button class="btn btn-ghost btn-xs" onclick="this.closest(\'div[style]\').remove()">✕</button></div>'+
-                    '<div class="form-group"><label>Student Name *</label><select id="enStudent" style="width:100%;"><option value="">Select...</option>'+contacts.map(function(c){return '<option value="'+c.name+'|'+c.mobile+'">'+c.name+' - '+c.mobile+'</option>';}).join('')+'</select></div>'+
-                    '<div class="form-group"><label>Course *</label><select id="enCourse" style="width:100%;">'+courses.map(function(c){return '<option value="'+c.id+'|'+c.name+'|'+c.fee+'">'+c.name+' - ₹'+c.fee+'</option>';}).join('')+'</select></div>'+
-                    '<button class="btn btn-primary btn-sm" onclick="Training.enrollStudent()">💾 Enroll</button></div></div>';
+                var h = '<div class="detail-backdrop" onclick="Pipeline.closeDetail()"></div><div class="detail-panel">';
+                h += '<div class="flex-between mb-2"><h5 style="margin:0;">'+self.esc(d.name)+'</h5><div><button class="btn btn-danger btn-xs" onclick="Pipeline.deleteDeal(\''+d.id+'\')">🗑️</button> <button class="btn btn-ghost btn-xs" onclick="Pipeline.closeDetail()">✕</button></div></div>';
+                h += '<div class="form-group"><label>Status</label><select onchange="Pipeline.updateField(\''+d.id+'\',\'stage\',this.value)">'+stageOpts+'</select></div>';
+                h += '<div class="form-group"><label>Priority</label><select onchange="Pipeline.updateField(\''+d.id+'\',\'priority\',this.value)"><option value="high" '+(d.priority==='high'?'selected':'')+'>🔴 High</option><option value="medium" '+(d.priority==='medium'?'selected':'')+'>🟡 Medium</option><option value="low" '+(d.priority==='low'?'selected':'')+'>🔵 Low</option></select></div>';
+                h += '<div class="form-group"><label>Contact</label><input type="text" value="'+self.esc(d.contact||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'contact\',this.value)"></div>';
+                h += '<div class="form-group"><label>Company</label><input type="text" value="'+self.esc(d.company||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'company\',this.value)"></div>';
+                h += '<div class="form-group"><label>Deal Value (₹)</label><input type="number" value="'+(d.value||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'value\',this.value)"></div>';
+                h += '<div class="form-group"><label>📅 Follow-up Date</label><input type="date" value="'+(d.followup||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'followup\',this.value)"></div>';
+                h += '<div class="form-group"><label>📝 Notes</label><textarea rows="2" id="detailNotes">'+self.esc(d.notes||'')+'</textarea><button class="btn btn-outline btn-xs mt-1" onclick="Pipeline.saveNotes(\''+d.id+'\')">Save Notes</button></div>';
+                h += '</div>';
+                document.getElementById('detailPanel').innerHTML = h;
+            },
+            
+            updateField: function(id, field, value) {
+                var d = this.deals.find(function(x){return x.id===id;});
+                if (d) { d[field] = value; this.save(); if (field==='stage') this.render(); }
+            },
+            
+            saveNotes: function(id) {
+                var notes = document.getElementById('detailNotes')?.value || '';
+                var d = this.deals.find(function(x){return x.id===id;});
+                if (d) { d.notes = notes; this.save(); this.closeDetail(); this.toast('✅ Notes saved','success'); }
+            },
+            
+            deleteDeal: function(id) {
+                if (!confirm('Delete this deal?')) return;
+                this.deals = this.deals.filter(function(d){return d.id!==id;});
+                this.save(); this.closeDetail(); this.toast('🗑️ Deleted','info');
+            },
+            
+            showQuickAdd: function(stage, e) {
+                e.stopPropagation();
+                var btn = e.target.closest('.quick-add-btn');
+                if (!btn) return;
+                btn.outerHTML = '<div class="quick-add-form" onclick="event.stopPropagation()"><input type="text" id="qName_'+stage+'" placeholder="Name" onkeydown="if(event.key===\'Enter\')Pipeline.quickAdd(\''+stage+'\')"><button class="btn btn-primary btn-xs" onclick="Pipeline.quickAdd(\''+stage+'\')">+</button></div>';
+                setTimeout(function(){var inp=document.getElementById('qName_'+stage);if(inp)inp.focus();},100);
+            },
+            
+            quickAdd: function(stage) {
+                var inp = document.getElementById('qName_'+stage);
+                var name = inp?.value?.trim() || '';
+                if (!name) { this.toast('Name required!','error'); return; }
+                this.deals.unshift({id:'DL'+String(this.deals.length+1).padStart(3,'0'),name:name,contact:'',company:'',stage:stage,value:0,priority:'medium',notes:'',followup:'',created:new Date().toISOString()});
+                this.save(); this.render(); this.toast('✅ Added!','success');
+            },
+            
+            showAddForm: function() {
+                var h = '<div class="modal-overlay" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'"><div class="modal-box" onclick="event.stopPropagation()"><h5 style="margin-bottom:12px;">➕ Add New Deal</h5>';
+                h += '<div class="form-group"><label>Deal Name *</label><input type="text" id="kName"></div>';
+                h += '<div class="form-group"><label>Contact</label><input type="text" id="kContact"></div>';
+                h += '<div class="form-group"><label>Company</label><input type="text" id="kCompany"></div>';
+                h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="form-group"><label>Value (₹)</label><input type="number" id="kValue"></div><div class="form-group"><label>Stage</label><select id="kStage">'+this.stages.map(function(s){return'<option value="'+s.id+'">'+s.name+'</option>';}).join('')+'</select></div></div>';
+                h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="form-group"><label>Priority</label><select id="kPriority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🔵 Low</option></select></div><div class="form-group"><label>Follow-up</label><input type="date" id="kFollowup"></div></div>';
+                h += '<div style="display:flex;gap:8px;margin-top:10px;"><button class="btn btn-primary btn-sm" onclick="Pipeline.addDeal()">💾 Save</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'">Cancel</button></div></div></div>';
                 document.getElementById('modalContainer').innerHTML = h;
             },
             
-            enrollStudent: function() {
-                var studentVal = document.getElementById('enStudent')?.value;
-                var courseVal = document.getElementById('enCourse')?.value;
-                if (!studentVal || !courseVal) { this.toast('Select student and course!','error'); return; }
-                var studentParts = studentVal.split('|');
-                var courseParts = courseVal.split('|');
-                
-                this.students.unshift({
-                    id:'STU'+String(this.students.length+1).padStart(3,'0'),
-                    name:studentParts[0], mobile:studentParts[1],
-                    courseId:courseParts[0], courseName:courseParts[1],
-                    enrolled:new Date().toISOString().split('T')[0],
-                    progress:0, status:'Active', fee:parseInt(courseParts[2])||0
+            addDeal: function() {
+                var name = document.getElementById('kName')?.value?.trim();
+                if (!name) { this.toast('Name required!','error'); return; }
+                this.deals.unshift({
+                    id:'DL'+String(this.deals.length+1).padStart(3,'0'),name:name,
+                    contact:document.getElementById('kContact')?.value?.trim()||'',
+                    company:document.getElementById('kCompany')?.value?.trim()||'',
+                    value:parseInt(document.getElementById('kValue')?.value)||0,
+                    stage:document.getElementById('kStage')?.value||'new',
+                    priority:document.getElementById('kPriority')?.value||'medium',
+                    followup:document.getElementById('kFollowup')?.value||'',
+                    notes:'',created:new Date().toISOString()
                 });
-                this.save(); this.currentTab='students'; this.render();
-                document.getElementById('modalContainer').innerHTML = '';
-                this.toast('✅ Student enrolled!','success');
+                this.save();document.getElementById('modalContainer').innerHTML='';this.render();this.toast('✅ Added!','success');
             },
             
-            updateProgress: function(id) {
-                var st = this.students.find(function(x){return x.id===id;});
-                if (!st) return;
-                var prog = prompt('Enter progress (0-100):', st.progress);
-                if (prog === null) return;
-                prog = parseInt(prog) || 0;
-                st.progress = Math.min(100, Math.max(0, prog));
-                if (st.progress >= 100) st.status = 'Completed';
-                this.save(); this.render();
-                this.toast('✅ Progress updated to '+st.progress+'%','success');
-            },
-            
-            removeStudent: function(id) {
-                if (!confirm('Remove this student?')) return;
-                this.students = this.students.filter(function(st){return st.id!==id;});
-                this.save(); this.render(); this.toast('🗑️ Student removed','info');
-            },
-            
-            openCourseDetail: function(id) {
-                var c = this.courses.find(function(x){return x.id===id;});
-                if (!c) return;
-                var students = this.students.filter(function(st){return st.courseId===id;});
-                alert('📚 '+c.name+'\n\n👨‍🏫 Instructor: '+c.instructor+'\n⏱️ Duration: '+c.duration+'\n💰 Fee: ₹'+parseInt(c.fee||0).toLocaleString('en-IN')+'\n👨‍🎓 Students: '+students.length+'\n\n📝 '+c.desc+'\n\n📖 Syllabus: '+c.syllabus);
-            },
-            
-            clearFilters: function() {
-                this.search=''; this.filterStatus='';
-                document.getElementById('searchInput').value=''; document.getElementById('filterStatus').value='';
-                this.render();
-            },
-            
-            exportCSV: function() {
-                var csv='Type,ID,Name,Details\n';
-                this.courses.forEach(function(c){ csv+='Course,'+c.id+','+c.name+','+c.instructor+','+c.duration+','+c.fee+','+c.status+'\n'; });
-                this.students.forEach(function(st){ csv+='Student,'+st.id+','+st.name+','+st.courseName+','+st.progress+'%,'+st.status+'\n'; });
-                var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='training.csv'; a.click();
-                this.toast('📤 Exported!','success');
-            },
-            
-            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
-            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
-            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+            toast: function(m,t){t=t||'info';var d=document.createElement('div');d.className='toast toast-'+t;d.textContent=m;(document.getElementById('toastContainer')||document.body).appendChild(d);setTimeout(function(){d.remove();},3000);},
+            esc: function(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';}
         };
         
-        document.addEventListener('DOMContentLoaded', function() { Training.init(); });
+        document.addEventListener('DOMContentLoaded', function() { Pipeline.init(); });
     </script>
 </body>
 </html>
