@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="internal">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F6F0" />
+    <title>Invoices - 11 Avatar Digital Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/crm-design-system.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    
+    <style>
+        :root {
+            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
+            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+        }
+        
+        .invoices-container { max-width: 1400px; margin: 0 auto; padding: 24px; padding-bottom: 100px; }
+        
+        /* Bottom Submenu */
+        .bottom-submenu {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+            display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .bottom-submenu::-webkit-scrollbar { display: none; }
+        .bottom-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 10px 16px; border-radius: 12px; cursor: pointer;
+            font-size: 0.7rem; font-weight: 500; color: #777;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
+            border: 1.5px solid transparent; background: transparent;
+        }
+        .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
+        .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
+        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        
+        /* Page Header */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
+            box-shadow: var(--card-3d); margin-bottom: 20px;
+        }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
+        
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn-primary { background: var(--gold-gradient); color: #FFF; }
+        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
+        .btn-outline:hover { background: rgba(212,175,55,0.08); }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-ghost { background: transparent; color: #666; }
+        .btn-ghost:hover { background: #F5F5F5; }
+        .btn-danger { background: #DC2626; color: #FFF; }
+        .btn-success { background: #10B981; color: #FFF; }
+        
+        /* Tab Content */
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        
+        /* Stats */
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+        .stat-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 16px 18px; cursor: pointer; transition: var(--transition);
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Cards */
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        
+        /* Filters */
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; }
+        .filter-row input:focus { border-color: var(--gold); outline: none; }
+        .filter-row select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; cursor: pointer; min-width: 140px; }
+        
+        /* Table */
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        table th { text-align: left; padding: 12px 14px; font-weight: 600; color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: #FAFAFA; border-bottom: 2px solid #F0EDE5; white-space: nowrap; }
+        table td { padding: 12px 14px; border-bottom: 1px solid #F5F5F5; color: #333; }
+        table tbody tr { transition: background 0.15s ease; cursor: pointer; }
+        table tbody tr:hover { background: rgba(212,175,55,0.03); }
+        
+        /* Badges */
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+        .badge-paid { background: #ECFDF5; color: #059669; }
+        .badge-pending { background: #FEF3C7; color: #D97706; }
+        .badge-overdue { background: #FEE2E2; color: #DC2626; }
+        .badge-draft { background: #F5F5F5; color: #666; }
+        .badge-sent { background: #EFF6FF; color: #2563EB; }
+        
+        /* Tbl Actions */
+        .tbl-actions { display: flex; gap: 3px; }
+        .tbl-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; transition: all 0.15s ease; }
+        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
+        
+        /* Detail Panel */
+        .detail-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2999; }
+        .detail-panel {
+            position: fixed; top: 0; right: 0; width: 480px; max-width: 95vw; height: 100vh;
+            background: #FFF; box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            z-index: 3000; overflow-y: auto; padding: 24px; animation: slideIn 0.2s ease;
+        }
+        @keyframes slideIn { from{transform:translateX(100%);} to{transform:translateX(0);} }
+        
+        /* Invoice Preview */
+        .invoice-preview {
+            background: #FFF; border: 1px solid #E5E5E5; border-radius: 12px;
+            padding: 32px; max-width: 800px; margin: 0 auto;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+        }
+        .invoice-preview .inv-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
+        .invoice-preview .inv-title { font-size: 1.5rem; font-weight: 800; color: #B8960F; }
+        .invoice-preview table { margin: 16px 0; }
+        .invoice-preview .inv-total { text-align: right; font-size: 1.2rem; font-weight: 700; margin-top: 16px; }
+        
+        /* Forms */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: #333; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5;
+            border-radius: 10px; font-size: 0.88rem; font-family: 'Inter',sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        
+        /* Invoice Items */
+        .items-table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+        .items-table th { background: #FAFAFA; padding: 8px 10px; font-size: 0.72rem; border: 1px solid #E5E5E5; }
+        .items-table td { padding: 8px 10px; border: 1px solid #E5E5E5; }
+        .items-table input { width: 100%; border: 1px solid #E5E5E5; padding: 6px 8px; border-radius: 6px; font-size: 0.82rem; }
+        .items-table input:focus { border-color: #D4AF37; outline: none; }
+        
+        /* Toast */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        
+        .empty-state { text-align: center; padding: 50px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
+        .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
+        .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mb-2 { margin-bottom: 8px; } .mb-3 { margin-bottom: 12px; }
+        
+        @media(max-width:768px){ .invoices-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} .invoice-preview{padding:20px;} }
+    </style>
+</head>
+<body>
+
+    <div class="invoices-container">
+        
+        <!-- Page Header -->
+        <div class="page-header">
+            <div>
+                <h1>🧾 <span class="gold">Invoices</span> & Billing</h1>
+                <p id="invoiceCountText">Loading invoices...</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-outline btn-sm" onclick="Invoices.exportCSV()">📤 Export</button>
+                <button class="btn btn-primary" onclick="Invoices.openCreateForm()">➕ Create Invoice</button>
+            </div>
+        </div>
+        
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card" onclick="Invoices.filterStatus='';Invoices.currentTab='all';Invoices.render()"><div class="val" id="stat-total">0</div><div class="lbl">Total Invoices</div></div>
+            <div class="stat-card" onclick="Invoices.filterStatus='paid';Invoices.currentTab='all';Invoices.render()"><div class="val" id="stat-paid" style="color:#059669;">0</div><div class="lbl">✅ Paid</div></div>
+            <div class="stat-card" onclick="Invoices.filterStatus='pending';Invoices.currentTab='all';Invoices.render()"><div class="val" id="stat-pending" style="color:#D97706;">0</div><div class="lbl">⏳ Pending</div></div>
+            <div class="stat-card" onclick="Invoices.filterStatus='overdue';Invoices.currentTab='all';Invoices.render()"><div class="val" id="stat-overdue" style="color:#DC2626;">0</div><div class="lbl">⚠️ Overdue</div></div>
+        </div>
+        
+        <!-- Filter Bar -->
+        <div class="filter-row">
+            <input type="search" id="searchInput" placeholder="🔍 Search by invoice number, client name..." oninput="Invoices.search=this.value;Invoices.render()">
+            <select id="filterStatus" onchange="Invoices.filterStatus=this.value;Invoices.render()">
+                <option value="">All Status</option><option value="draft">Draft</option><option value="sent">Sent</option><option value="pending">Pending</option><option value="paid">Paid</option><option value="overdue">Overdue</option>
+            </select>
+            <button class="btn btn-ghost btn-sm" onclick="Invoices.clearFilters()">✕ Clear</button>
+        </div>
+        
+        <!-- TAB: All Invoices -->
+        <div id="tab-all" class="tab-content active">
+            <div class="card" style="padding:0;overflow:hidden;">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Invoice #</th><th>Client</th><th>Amount</th><th>GST</th><th>Total</th><th>Date</th><th>Due Date</th><th>Status</th><th style="min-width:140px;">Actions</th></tr></thead>
+                        <tbody id="invoiceTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB: Create Invoice -->
+        <div id="tab-create" class="tab-content">
+            <div class="card" style="max-width:900px;">
+                <div class="card-header"><span class="card-title">🧾 Create New Invoice</span></div>
+                <form id="invoiceForm" onsubmit="Invoices.saveInvoice(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label>Client *</label><select id="invClient" required><option value="">Select Client...</option></select></div>
+                        <div class="form-group"><label>Invoice Date *</label><input type="date" id="invDate" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Due Date</label><input type="date" id="invDueDate"></div>
+                        <div class="form-group"><label>Place of Supply</label><input type="text" id="invPlace" placeholder="State name"></div>
+                    </div>
+                    
+                    <!-- Invoice Items -->
+                    <div class="mb-2"><label class="font-semibold text-sm">Invoice Items</label></div>
+                    <div class="table-wrap">
+                        <table class="items-table">
+                            <thead><tr><th style="width:40%;">Description</th><th style="width:12%;">HSN/SAC</th><th style="width:12%;">Qty</th><th style="width:15%;">Rate (₹)</th><th style="width:8%;">GST%</th><th style="width:15%;">Amount</th><th style="width:30px;"></th></tr></thead>
+                            <tbody id="itemsBody">
+                                <tr>
+                                    <td><input type="text" class="item-desc" placeholder="Service/Product"></td>
+                                    <td><input type="text" class="item-hsn" placeholder="9983"></td>
+                                    <td><input type="number" class="item-qty" value="1" min="1" onchange="Invoices.calcItem(this)"></td>
+                                    <td><input type="number" class="item-rate" value="0" min="0" onchange="Invoices.calcItem(this)"></td>
+                                    <td><select class="item-gst" onchange="Invoices.calcItem(this)"><option value="0">0%</option><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select></td>
+                                    <td><span class="item-amount font-semibold">₹0</span></td>
+                                    <td><button type="button" class="tbl-btn" onclick="Invoices.removeItem(this)" style="color:#DC2626;">✕</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <button type="button" class="btn btn-ghost btn-sm mt-2" onclick="Invoices.addItem()">➕ Add Item</button>
+                    
+                    <!-- Totals -->
+                    <div style="background:#FAFAFA;border-radius:12px;padding:16px;margin-top:16px;max-width:350px;margin-left:auto;">
+                        <div class="flex-between text-sm"><span>Subtotal:</span><span id="subtotal">₹0.00</span></div>
+                        <div class="flex-between text-sm mt-1"><span>CGST <span id="cgstRate">9</span>%:</span><span id="cgstAmt">₹0.00</span></div>
+                        <div class="flex-between text-sm mt-1"><span>SGST <span id="sgstRate">9</span>%:</span><span id="sgstAmt">₹0.00</span></div>
+                        <div class="flex-between font-bold mt-2" style="font-size:1.1rem;border-top:2px solid #E5E5E5;padding-top:8px;"><span>Total:</span><span id="invTotal" style="color:#059669;">₹0.00</span></div>
+                    </div>
+                    
+                    <div class="form-group mt-3"><label>Notes / Terms</label><textarea id="invNotes" rows="2" placeholder="Payment terms, bank details..."></textarea></div>
+                    <div class="flex gap-2 mt-3">
+                        <button type="submit" class="btn btn-primary">💾 Save Invoice</button>
+                        <button type="button" class="btn btn-outline" onclick="Invoices.currentTab='all';Invoices.render()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- TAB: Preview Invoice -->
+        <div id="tab-preview" class="tab-content">
+            <div id="previewContent"></div>
+        </div>
+        
+    </div>
+    
+    <!-- Bottom Submenu -->
+    <div class="bottom-submenu">
+        <div class="bottom-tab active" onclick="Invoices.currentTab='all';Invoices.render()"><span class="tab-icon">📋</span> All</div>
+        <div class="bottom-tab" onclick="Invoices.currentTab='create';Invoices.render()"><span class="tab-icon">➕</span> Create</div>
+        <div class="bottom-tab" onclick="Invoices.filterStatus='paid';Invoices.currentTab='all';Invoices.render()"><span class="tab-icon">✅</span> Paid</div>
+        <div class="bottom-tab" onclick="Invoices.filterStatus='overdue';Invoices.currentTab='all';Invoices.render()"><span class="tab-icon">⚠️</span> Overdue</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        'use strict';
+        
+        var Invoices = {
+            currentTab: 'all',
+            search: '',
+            filterStatus: '',
+            items: [],
+            
+            init: function() {
+                this.data = JSON.parse(localStorage.getItem('crm_invoices') || '[]');
+                if (this.data.length === 0) this.seedData();
+                this.loadClients();
+                this.render();
+            },
+            
+            seedData: function() {
+                this.data = [
+                    { id:'INV001',client:'Rajesh Kumar',clientId:'CL001',date:'2025-01-15',dueDate:'2025-02-15',place:'Maharashtra',status:'paid',subtotal:45000,cgstRate:9,sgstRate:9,cgst:4050,sgst:4050,total:53100,items:[{desc:'SEO Services - Monthly',hsn:'9983',qty:1,rate:25000,gst:18},{desc:'Google Ads Management',hsn:'9983',qty:1,rate:20000,gst:18}],notes:'Net 30 payment terms',created:new Date().toISOString() },
+                    { id:'INV002',client:'Priya Sharma',clientId:'CL002',date:'2025-01-20',dueDate:'2025-02-20',place:'Gujarat',status:'pending',subtotal:30000,cgstRate:9,sgstRate:9,cgst:2700,sgst:2700,total:35400,items:[{desc:'Social Media Management',hsn:'9983',qty:1,rate:30000,gst:18}],notes:'',created:new Date().toISOString() },
+                    { id:'INV003',client:'Amit Patel',clientId:'CL003',date:'2025-01-01',dueDate:'2025-01-31',place:'Gujarat',status:'overdue',subtotal:50000,cgstRate:9,sgstRate:9,cgst:4500,sgst:4500,total:59000,items:[{desc:'Website Development',hsn:'9983',qty:1,rate:50000,gst:18}],notes:'Urgent payment required',created:new Date().toISOString() }
+                ];
+                this.save();
+            },
+            
+            save: function() { try { localStorage.setItem('crm_invoices', JSON.stringify(this.data)); } catch(e) {} },
+            
+            loadClients: function() {
+                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
+                var sel = document.getElementById('invClient');
+                if (sel) sel.innerHTML = '<option value="">Select Client...</option>' + clients.map(function(c){ return '<option value="'+c.id+'">'+c.name+' - '+c.business+'</option>'; }).join('');
+            },
+            
+            getFiltered: function() {
+                var self = this;
+                return this.data.filter(function(inv) {
+                    if (self.search && !(inv.id?.toLowerCase().includes(self.search)||inv.client?.toLowerCase().includes(self.search))) return false;
+                    if (self.filterStatus && inv.status !== self.filterStatus) return false;
+                    return true;
+                });
+            },
+            
+            render: function() {
+                var tabs = ['all','create','preview'];
+                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
+                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Invoices.currentTab);
+                });
+                
+                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+                var tabEl = document.getElementById('tab-' + this.currentTab);
+                if (tabEl) tabEl.classList.add('active');
+                
+                // Stats
+                document.getElementById('stat-total').textContent = this.data.length;
+                document.getElementById('stat-paid').textContent = this.data.filter(function(i){return i.status==='paid';}).length;
+                document.getElementById('stat-pending').textContent = this.data.filter(function(i){return i.status==='pending';}).length;
+                document.getElementById('stat-overdue').textContent = this.data.filter(function(i){return i.status==='overdue';}).length;
+                document.getElementById('invoiceCountText').textContent = this.getFiltered().length + ' invoices';
+                
+                if (this.currentTab === 'all') this.renderTable();
+                if (this.currentTab === 'create') this.loadClients();
+            },
+            
+            renderTable: function() {
+                var filtered = this.getFiltered();
+                var tbody = document.getElementById('invoiceTableBody');
+                var self = this;
+                var badges = {paid:'badge-paid',pending:'badge-pending',overdue:'badge-overdue',draft:'badge-draft',sent:'badge-sent'};
+                
+                tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="9"><div class="empty-state"><p>No invoices found</p></div></td></tr>' :
+                    filtered.map(function(inv) {
+                        return '<tr onclick="Invoices.preview(\''+inv.id+'\')">'+
+                            '<td><span style="background:#F5F5F5;padding:2px 8px;border-radius:6px;font-size:0.72rem;font-weight:600;">'+inv.id+'</span></td>'+
+                            '<td><strong>'+self.esc(inv.client)+'</strong></td>'+
+                            '<td>₹'+parseInt(inv.subtotal).toLocaleString('en-IN')+'</td>'+
+                            '<td class="text-xs text-muted">₹'+parseInt(inv.cgst+inv.sgst).toLocaleString('en-IN')+'</td>'+
+                            '<td><strong style="color:#059669;">₹'+parseInt(inv.total).toLocaleString('en-IN')+'</strong></td>'+
+                            '<td>'+self.fd(inv.date)+'</td><td>'+self.fd(inv.dueDate)+'</td>'+
+                            '<td><span class="badge '+badges[inv.status]+'">'+inv.status+'</span></td>'+
+                            '<td><div class="tbl-actions" onclick="event.stopPropagation();">'+
+                                '<button class="tbl-btn" onclick="Invoices.preview(\''+inv.id+'\')" title="View">👁️</button>'+
+                                '<button class="tbl-btn" onclick="Invoices.markPaid(\''+inv.id+'\')" title="Mark Paid">✅</button>'+
+                                '<button class="tbl-btn" onclick="Invoices.deleteInvoice(\''+inv.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button>'+
+                            '</div></td></tr>';
+                    }).join('');
+            },
+            
+            openCreateForm: function() { this.currentTab = 'create'; this.render(); },
+            
+            addItem: function() {
+                var row = '<tr><td><input type="text" class="item-desc" placeholder="Service/Product"></td><td><input type="text" class="item-hsn" placeholder="9983"></td><td><input type="number" class="item-qty" value="1" min="1" onchange="Invoices.calcItem(this)"></td><td><input type="number" class="item-rate" value="0" min="0" onchange="Invoices.calcItem(this)"></td><td><select class="item-gst" onchange="Invoices.calcItem(this)"><option value="0">0%</option><option value="5">5%</option><option value="12">12%</option><option value="18" selected>18%</option><option value="28">28%</option></select></td><td><span class="item-amount font-semibold">₹0</span></td><td><button type="button" class="tbl-btn" onclick="Invoices.removeItem(this)" style="color:#DC2626;">✕</button></td></tr>';
+                document.getElementById('itemsBody').insertAdjacentHTML('beforeend', row);
+            },
+            
+            removeItem: function(btn) { btn.closest('tr').remove(); this.calcAll(); },
+            
+            calcItem: function(el) {
+                var row = el.closest('tr');
+                var qty = parseInt(row.querySelector('.item-qty').value) || 0;
+                var rate = parseInt(row.querySelector('.item-rate').value) || 0;
+                row.querySelector('.item-amount').textContent = '₹' + (qty * rate).toLocaleString('en-IN');
+                this.calcAll();
+            },
+            
+            calcAll: function() {
+                var subtotal = 0, totalGst = 0;
+                document.querySelectorAll('#itemsBody tr').forEach(function(row) {
+                    var qty = parseInt(row.querySelector('.item-qty')?.value) || 0;
+                    var rate = parseInt(row.querySelector('.item-rate')?.value) || 0;
+                    subtotal += qty * rate;
+                });
+                
+                var gstRate = parseInt(document.querySelector('#itemsBody .item-gst')?.value) || 18;
+                var cgstRate = gstRate / 2;
+                var sgstRate = gstRate / 2;
+                var cgst = Math.round(subtotal * cgstRate / 100);
+                var sgst = Math.round(subtotal * sgstRate / 100);
+                var total = subtotal + cgst + sgst;
+                
+                document.getElementById('subtotal').textContent = '₹' + subtotal.toLocaleString('en-IN');
+                document.getElementById('cgstRate').textContent = cgstRate;
+                document.getElementById('sgstRate').textContent = sgstRate;
+                document.getElementById('cgstAmt').textContent = '₹' + cgst.toLocaleString('en-IN');
+                document.getElementById('sgstAmt').textContent = '₹' + sgst.toLocaleString('en-IN');
+                document.getElementById('invTotal').textContent = '₹' + total.toLocaleString('en-IN');
+            },
+            
+            saveInvoice: function(e) {
+                e.preventDefault();
+                var items = [];
+                document.querySelectorAll('#itemsBody tr').forEach(function(row) {
+                    items.push({
+                        desc: row.querySelector('.item-desc')?.value || '',
+                        hsn: row.querySelector('.item-hsn')?.value || '',
+                        qty: parseInt(row.querySelector('.item-qty')?.value) || 0,
+                        rate: parseInt(row.querySelector('.item-rate')?.value) || 0,
+                        gst: parseInt(row.querySelector('.item-gst')?.value) || 18
+                    });
+                });
+                
+                var subtotal = items.reduce(function(s,i){ return s + (i.qty * i.rate); }, 0);
+                var gstRate = items[0]?.gst || 18;
+                var cgst = Math.round(subtotal * gstRate / 200);
+                var sgst = Math.round(subtotal * gstRate / 200);
+                
+                var clientId = document.getElementById('invClient').value;
+                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
+                var client = clients.find(function(c){ return c.id === clientId; });
+                
+                var inv = {
+                    id: 'INV' + String(this.data.length + 1).padStart(3, '0'),
+                    client: client ? client.name : 'Unknown',
+                    clientId: clientId,
+                    date: document.getElementById('invDate').value,
+                    dueDate: document.getElementById('invDueDate').value,
+                    place: document.getElementById('invPlace').value,
+                    status: 'pending',
+                    subtotal: subtotal,
+                    cgstRate: gstRate/2, sgstRate: gstRate/2,
+                    cgst: cgst, sgst: sgst,
+                    total: subtotal + cgst + sgst,
+                    items: items,
+                    notes: document.getElementById('invNotes').value,
+                    created: new Date().toISOString()
+                };
+                
+                this.data.unshift(inv);
+                this.save();
+                this.currentTab = 'all'; this.render();
+                this.toast('✅ Invoice '+inv.id+' created!', 'success');
+            },
+            
+            markPaid: function(id) {
+                var inv = this.data.find(function(i){ return i.id === id; });
+                if (inv) { inv.status = 'paid'; this.save(); this.render(); this.toast('✅ '+id+' marked as paid','success'); }
+            },
+            
+            deleteInvoice: function(id) {
+                if (!confirm('Delete '+id+'?')) return;
+                this.data = this.data.filter(function(i){ return i.id !== id; });
+                this.save(); this.render(); this.toast('🗑️ Invoice deleted','info');
+            },
+            
+            preview: function(id) {
+                this.currentTab = 'preview'; this.render();
+                var inv = this.data.find(function(i){ return i.id === id; });
+                if (!inv) return;
+                var self = this;
+                var h = '<div class="invoice-preview">';
+                h += '<div class="inv-header"><div><div class="inv-title">TAX INVOICE</div><div>'+inv.id+'</div></div><div style="text-align:right;"><strong>11 Avatar Digital Hub</strong><br>Your Business Address<br>GSTIN: YOURGSTIN</div></div>';
+                h += '<div class="flex-between mb-3"><div><strong>Bill To:</strong><br>'+self.esc(inv.client)+'<br>'+self.esc(inv.place||'')+'</div><div style="text-align:right;"><strong>Date:</strong> '+self.fd(inv.date)+'<br><strong>Due:</strong> '+self.fd(inv.dueDate)+'</div></div>';
+                h += '<table><thead><tr><th>Description</th><th>HSN</th><th>Qty</th><th>Rate</th><th>GST</th><th>Amount</th></tr></thead><tbody>';
+                inv.items.forEach(function(item){ h += '<tr><td>'+self.esc(item.desc)+'</td><td>'+item.hsn+'</td><td>'+item.qty+'</td><td>₹'+item.rate+'</td><td>'+item.gst+'%</td><td>₹'+(item.qty*item.rate).toLocaleString('en-IN')+'</td></tr>'; });
+                h += '</tbody></table>';
+                h += '<div class="inv-total">Subtotal: ₹'+inv.subtotal.toLocaleString('en-IN')+'<br>CGST: ₹'+inv.cgst+' | SGST: ₹'+inv.sgst+'<br><strong>Total: ₹'+inv.total.toLocaleString('en-IN')+'</strong></div>';
+                if (inv.notes) h += '<div class="text-sm text-muted mt-3">'+self.esc(inv.notes)+'</div>';
+                h += '<div class="flex gap-2 mt-3"><button class="btn btn-outline btn-sm" onclick="Invoices.currentTab=\'all\';Invoices.render()">← Back</button><button class="btn btn-success btn-sm" onclick="Invoices.markPaid(\''+inv.id+'\');Invoices.preview(\''+inv.id+'\')">✅ Mark Paid</button></div>';
+                h += '</div>';
+                document.getElementById('previewContent').innerHTML = h;
+            },
+            
+            clearFilters: function() {
+                this.search=''; this.filterStatus='';
+                document.getElementById('searchInput').value=''; document.getElementById('filterStatus').value='';
+                this.render();
+            },
+            
+            exportCSV: function() {
+                var csv='Invoice#,Client,Subtotal,CGST,SGST,Total,Date,Due Date,Status\n';
+                csv+=this.data.map(function(i){return [i.id,i.client,i.subtotal,i.cgst,i.sgst,i.total,i.date,i.dueDate,i.status].map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
+                var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='invoices.csv'; a.click();
+                this.toast('📤 Exported!','success');
+            },
+            
+            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
+            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
+            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() { Invoices.init(); });
+    </script>
+</body>
+</html>
