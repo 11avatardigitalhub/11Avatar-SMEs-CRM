@@ -1608,6 +1608,24 @@ textarea {
         color: #000000 !important;
     }
 }
+/* ============================================================
+   RESPONSIVE HEADER FIXES
+   ============================================================ */
+@media (max-width: 1024px) {
+    .mobile-menu-btn { display: flex !important; }
+    .header-search { display: none !important; }
+    .header-spacer { display: block !important; }
+}
+
+@media (max-width: 768px) {
+    .app-header { padding: 0 12px !important; gap: 6px !important; }
+    .header-action-btn { width: 36px !important; height: 36px !important; font-size: 14px !important; }
+}
+
+@media (max-width: 480px) {
+    .app-header { padding: 0 8px !important; gap: 4px !important; }
+    .header-action-btn { width: 34px !important; height: 34px !important; font-size: 13px !important; }
+}
 
 /* ============================================================
    END OF APP.CSS v2.1
