@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="internal">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F6F0" />
+    <title>Retainers - 11 Avatar Digital Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/crm-design-system.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    
+    <style>
+        :root {
+            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
+            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+        }
+        
+        .retainers-container { max-width: 1400px; margin: 0 auto; padding: 24px; padding-bottom: 100px; }
+        
+        .bottom-submenu {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+            display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .bottom-submenu::-webkit-scrollbar { display: none; }
+        .bottom-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 10px 16px; border-radius: 12px; cursor: pointer;
+            font-size: 0.7rem; font-weight: 500; color: #777;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
+            border: 1.5px solid transparent; background: transparent;
+        }
+        .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
+        .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
+        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
+            box-shadow: var(--card-3d); margin-bottom: 20px;
+        }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn-primary { background: var(--gold-gradient); color: #FFF; }
+        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
+        .btn-outline:hover { background: rgba(212,175,55,0.08); }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-ghost { background: transparent; color: #666; }
+        .btn-ghost:hover { background: #F5F5F5; }
+        .btn-danger { background: #DC2626; color: #FFF; }
+        .btn-success { background: #10B981; color: #FFF; }
+        .btn-warning { background: #F59E0B; color: #FFF; }
+        
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+        .stat-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 16px 18px; cursor: pointer; transition: var(--transition);
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; }
+        .filter-row input:focus { border-color: var(--gold); outline: none; }
+        .filter-row select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; cursor: pointer; min-width: 140px; }
+        
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        table th { text-align: left; padding: 12px 14px; font-weight: 600; color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: #FAFAFA; border-bottom: 2px solid #F0EDE5; white-space: nowrap; }
+        table td { padding: 12px 14px; border-bottom: 1px solid #F5F5F5; color: #333; }
+        table tbody tr { transition: background 0.15s ease; cursor: pointer; }
+        table tbody tr:hover { background: rgba(212,175,55,0.03); }
+        
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+        .badge-active { background: #ECFDF5; color: #059669; }
+        .badge-expiring { background: #FEF3C7; color: #D97706; }
+        .badge-paused { background: #F5F5F5; color: #666; }
+        .badge-ended { background: #FEE2E2; color: #DC2626; }
+        
+        .tbl-actions { display: flex; gap: 3px; }
+        .tbl-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; transition: all 0.15s ease; }
+        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: #333; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5;
+            border-radius: 10px; font-size: 0.88rem; font-family: 'Inter',sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; }
+        .form-group textarea { resize: vertical; min-height: 70px; }
+        
+        .detail-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2999; }
+        .detail-panel {
+            position: fixed; top: 0; right: 0; width: 480px; max-width: 95vw; height: 100vh;
+            background: #FFF; box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            z-index: 3000; overflow-y: auto; padding: 24px; animation: slideIn 0.2s ease;
+        }
+        @keyframes slideIn { from{transform:translateX(100%);} to{transform:translateX(0);} }
+        
+        .retainer-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
+            padding: 20px; transition: var(--transition); cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .retainer-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .retainer-card .r-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+        .retainer-card .r-amount { font-size: 1.4rem; font-weight: 800; font-family: 'Poppins',sans-serif; color: #059669; }
+        .retainer-card .r-period { font-size: 0.78rem; color: #888; }
+        .retainer-card .r-info { font-size: 0.85rem; color: #555; margin: 8px 0; }
+        .retainer-card .r-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #F5F5F5; }
+        
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        
+        .empty-state { text-align: center; padding: 50px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
+        .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
+        .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mb-2 { margin-bottom: 8px; }
+        
+        @media(max-width:768px){ .retainers-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} .detail-panel{width:100%;} }
+    </style>
+</head>
+<body>
+
+    <div class="retainers-container">
+        
+        <div class="page-header">
+            <div>
+                <h1>🔄 <span class="gold">Retainers</span> & MRR</h1>
+                <p id="retainerCountText">Loading retainers...</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-outline btn-sm" onclick="Retainers.exportCSV()">📤 Export</button>
+                <button class="btn btn-primary" onclick="Retainers.openForm()">➕ New Retainer</button>
+            </div>
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">Total Retainers</div></div>
+            <div class="stat-card"><div class="val" id="stat-mrr" style="color:#059669;">₹0</div><div class="lbl">💰 MRR</div></div>
+            <div class="stat-card"><div class="val" id="stat-arr" style="color:#D4AF37;">₹0</div><div class="lbl">📊 ARR</div></div>
+            <div class="stat-card"><div class="val" id="stat-expiring" style="color:#D97706;">0</div><div class="lbl">⚠️ Expiring Soon</div></div>
+        </div>
+        
+        <!-- TAB: All Retainers -->
+        <div id="tab-all" class="tab-content active">
+            <div class="filter-row">
+                <input type="search" id="searchInput" placeholder="🔍 Search by client or service..." oninput="Retainers.search=this.value;Retainers.render()">
+                <select id="filterStatus" onchange="Retainers.filterStatus=this.value;Retainers.render()">
+                    <option value="">All Status</option><option value="Active">Active</option><option value="Expiring Soon">Expiring Soon</option><option value="Paused">Paused</option><option value="Ended">Ended</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" onclick="Retainers.clearFilters()">✕ Clear</button>
+            </div>
+            <div class="table-wrap">
+                <div class="card" style="padding:0;overflow:hidden;">
+                    <table>
+                        <thead><tr><th>Client</th><th>Service</th><th>Monthly Fee</th><th>Start Date</th><th>Next Billing</th><th>Status</th><th>Annual Value</th><th style="min-width:120px;">Actions</th></tr></thead>
+                        <tbody id="retainerTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB: Add Retainer -->
+        <div id="tab-add" class="tab-content">
+            <div class="card" style="max-width:700px;">
+                <div class="card-header"><span class="card-title" id="formTitle">➕ New Retainer</span></div>
+                <form id="retainerForm" onsubmit="Retainers.saveRetainer(event)">
+                    <input type="hidden" id="editId">
+                    <div class="form-row">
+                        <div class="form-group"><label>Client *</label><select id="rClient" required><option value="">Select Client...</option></select></div>
+                        <div class="form-group"><label>Service *</label><input type="text" id="rService" required placeholder="e.g., SEO Monthly"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Monthly Fee (₹) *</label><input type="number" id="rFee" required min="0"></div>
+                        <div class="form-group"><label>Billing Cycle</label><select id="rCycle"><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="annually">Annually</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Start Date</label><input type="date" id="rStartDate"></div>
+                        <div class="form-group"><label>Next Billing Date</label><input type="date" id="rNextBilling"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Status</label><select id="rStatus"><option value="Active">Active</option><option value="Paused">Paused</option><option value="Ended">Ended</option></select></div>
+                        <div class="form-group"><label>SLA Level</label><select id="rSla"><option value="Standard">Standard</option><option value="Priority">Priority</option><option value="Premium">Premium</option></select></div>
+                    </div>
+                    <div class="form-group"><label>Notes</label><textarea id="rNotes" rows="2"></textarea></div>
+                    <div class="flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-primary">💾 Save Retainer</button>
+                        <button type="button" class="btn btn-outline" onclick="Retainers.currentTab='all';Retainers.render()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Detail Panel -->
+    <div id="detailPanel"></div>
+    
+    <!-- Bottom Submenu -->
+    <div class="bottom-submenu">
+        <div class="bottom-tab active" onclick="Retainers.currentTab='all';Retainers.render()"><span class="tab-icon">📋</span> All</div>
+        <div class="bottom-tab" onclick="Retainers.currentTab='add';Retainers.render()"><span class="tab-icon">➕</span> Add</div>
+        <div class="bottom-tab" onclick="Retainers.filterStatus='Expiring Soon';Retainers.currentTab='all';Retainers.render()"><span class="tab-icon">⚠️</span> Expiring</div>
+        <div class="bottom-tab" onclick="window.location.href='invoices.html'"><span class="tab-icon">🧾</span> Invoices</div>
+        <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        'use strict';
+        
+        var Retainers = {
+            currentTab: 'all',
+            search: '',
+            filterStatus: '',
+            
+            init: function() {
+                this.data = JSON.parse(localStorage.getItem('crm_retainers') || '[]');
+                if (this.data.length === 0) this.seedData();
+                this.loadClients();
+                this.render();
+            },
+            
+            seedData: function() {
+                this.data = [
+                    { id:'RET001',client:'ABC Corporation',clientId:'CL004',service:'Full Digital Marketing',fee:75000,cycle:'monthly',startDate:'2025-01-01',nextBilling:'2025-02-01',status:'Active',sla:'Premium',annualValue:900000,notes:'All-inclusive package',created:new Date().toISOString() },
+                    { id:'RET002',client:'Kumar Enterprises',clientId:'CL001',service:'SEO Retainer',fee:25000,cycle:'monthly',startDate:'2024-06-01',nextBilling:'2025-01-28',status:'Expiring Soon',sla:'Standard',annualValue:300000,notes:'Renewal due',created:new Date().toISOString() },
+                    { id:'RET003',client:'Sharma Textiles',clientId:'CL002',service:'Social Media Management',fee:35000,cycle:'monthly',startDate:'2024-09-01',nextBilling:'2025-02-01',status:'Active',sla:'Priority',annualValue:420000,notes:'Quarterly review',created:new Date().toISOString() }
+                ];
+                this.save();
+            },
+            
+            save: function() { try { localStorage.setItem('crm_retainers', JSON.stringify(this.data)); } catch(e) {} },
+            
+            loadClients: function() {
+                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
+                var sel = document.getElementById('rClient');
+                if (sel) sel.innerHTML = '<option value="">Select Client...</option>' + clients.map(function(c){ return '<option value="'+c.name+'">'+c.name+' - '+c.business+'</option>'; }).join('');
+            },
+            
+            getFiltered: function() {
+                var self = this;
+                return this.data.filter(function(r) {
+                    if (self.search && !(r.client?.toLowerCase().includes(self.search)||r.service?.toLowerCase().includes(self.search))) return false;
+                    if (self.filterStatus && r.status !== self.filterStatus) return false;
+                    return true;
+                });
+            },
+            
+            getStatus: function(r) {
+                if (r.status === 'Ended') return 'Ended';
+                if (r.status === 'Paused') return 'Paused';
+                if (r.nextBilling && new Date(r.nextBilling) <= new Date(Date.now()+15*86400000)) return 'Expiring Soon';
+                return 'Active';
+            },
+            
+            render: function() {
+                var tabs = ['all','add'];
+                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
+                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Retainers.currentTab);
+                });
+                
+                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+                var tabEl = document.getElementById('tab-' + this.currentTab);
+                if (tabEl) tabEl.classList.add('active');
+                
+                var mrr = this.data.filter(function(r){return r.status==='Active'||r.status==='Expiring Soon';}).reduce(function(s,r){return s+(parseInt(r.fee)||0);},0);
+                var arr = mrr * 12;
+                
+                document.getElementById('stat-total').textContent = this.data.length;
+                document.getElementById('stat-mrr').textContent = '₹' + mrr.toLocaleString('en-IN');
+                document.getElementById('stat-arr').textContent = '₹' + arr.toLocaleString('en-IN');
+                document.getElementById('stat-expiring').textContent = this.data.filter(function(r){return Retainers.getStatus(r)==='Expiring Soon';}).length;
+                document.getElementById('retainerCountText').textContent = this.getFiltered().length + ' retainers · MRR: ₹' + mrr.toLocaleString('en-IN');
+                
+                if (this.currentTab === 'all') this.renderTable();
+                if (this.currentTab === 'add') this.loadClients();
+            },
+            
+            renderTable: function() {
+                var filtered = this.getFiltered();
+                var tbody = document.getElementById('retainerTableBody');
+                var self = this;
+                var badges = {Active:'badge-active','Expiring Soon':'badge-expiring',Paused:'badge-paused',Ended:'badge-ended'};
+                
+                tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="8"><div class="empty-state"><p>No retainers found</p></div></td></tr>' :
+                    filtered.map(function(r) {
+                        var status = self.getStatus(r);
+                        return '<tr onclick="Retainers.openDetail(\''+r.id+'\')">'+
+                            '<td><strong>'+self.esc(r.client)+'</strong></td>'+
+                            '<td>'+self.esc(r.service)+'</td>'+
+                            '<td><strong style="color:#059669;">₹'+parseInt(r.fee).toLocaleString('en-IN')+'</strong></td>'+
+                            '<td>'+self.fd(r.startDate)+'</td>'+
+                            '<td>'+self.fd(r.nextBilling)+'</td>'+
+                            '<td><span class="badge '+badges[status]+'">'+status+'</span></td>'+
+                            '<td><strong>₹'+parseInt(r.annualValue||r.fee*12).toLocaleString('en-IN')+'</strong></td>'+
+                            '<td><div class="tbl-actions" onclick="event.stopPropagation();">'+
+                                '<button class="tbl-btn" onclick="Retainers.generateInvoice(\''+r.id+'\')" title="Generate Invoice">🧾</button>'+
+                                '<button class="tbl-btn" onclick="Retainers.editRetainer(\''+r.id+'\')" title="Edit">✏️</button>'+
+                                '<button class="tbl-btn" onclick="Retainers.deleteRetainer(\''+r.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button>'+
+                            '</div></td></tr>';
+                    }).join('');
+            },
+            
+            openForm: function() { this.currentTab = 'add'; this.render(); },
+            
+            editRetainer: function(id) {
+                this.currentTab = 'add'; this.render();
+                var r = this.data.find(function(x){return x.id===id;});
+                if (r) {
+                    document.getElementById('editId').value = r.id;
+                    document.getElementById('formTitle').textContent = '✏️ Edit: '+r.client;
+                    document.getElementById('rClient').value=r.client||''; document.getElementById('rService').value=r.service||'';
+                    document.getElementById('rFee').value=r.fee||''; document.getElementById('rCycle').value=r.cycle||'monthly';
+                    document.getElementById('rStartDate').value=r.startDate||''; document.getElementById('rNextBilling').value=r.nextBilling||'';
+                    document.getElementById('rStatus').value=r.status||'Active'; document.getElementById('rSla').value=r.sla||'Standard';
+                    document.getElementById('rNotes').value=r.notes||'';
+                }
+            },
+            
+            saveRetainer: function(e) {
+                e.preventDefault();
+                var id = document.getElementById('editId').value;
+                var fee = parseInt(document.getElementById('rFee').value)||0;
+                var cycle = document.getElementById('rCycle').value;
+                var d = {
+                    client:document.getElementById('rClient').value,
+                    service:document.getElementById('rService').value.trim(),
+                    fee:fee, cycle:cycle,
+                    startDate:document.getElementById('rStartDate').value,
+                    nextBilling:document.getElementById('rNextBilling').value,
+                    status:document.getElementById('rStatus').value,
+                    sla:document.getElementById('rSla').value,
+                    annualValue: cycle==='monthly'?fee*12:cycle==='quarterly'?fee*4:fee,
+                    notes:document.getElementById('rNotes').value.trim()
+                };
+                if (!d.client||!d.service||!d.fee) { this.toast('Client, service, and fee required!','error'); return; }
+                
+                if (id) {
+                    var i = this.data.findIndex(function(x){return x.id===id;});
+                    if (i!==-1) { d.id=id; d.created=this.data[i].created; this.data[i]=d; this.toast('✅ Retainer updated!','success'); }
+                } else {
+                    d.id='RET'+String(this.data.length+1).padStart(3,'0'); d.created=new Date().toISOString();
+                    this.data.unshift(d); this.toast('✅ Retainer created!','success');
+                }
+                this.save(); this.currentTab='all'; this.render();
+            },
+            
+            deleteRetainer: function(id) {
+                if (!confirm('Delete this retainer?')) return;
+                this.data = this.data.filter(function(r){return r.id!==id;});
+                this.save(); this.render(); this.toast('🗑️ Retainer deleted','info');
+            },
+            
+            generateInvoice: function(id) {
+                var r = this.data.find(function(x){return x.id===id;});
+                if (!r) return;
+                var invoices = JSON.parse(localStorage.getItem('crm_invoices') || '[]');
+                var inv = {
+                    id:'INV'+String(invoices.length+1).padStart(3,'0'),
+                    client:r.client, clientId:r.clientId,
+                    date:new Date().toISOString().split('T')[0],
+                    dueDate:new Date(Date.now()+15*86400000).toISOString().split('T')[0],
+                    place:'', status:'pending',
+                    subtotal:r.fee, cgstRate:9, sgstRate:9,
+                    cgst:Math.round(r.fee*0.09), sgst:Math.round(r.fee*0.09),
+                    total:r.fee+Math.round(r.fee*0.18),
+                    items:[{desc:r.service+' - '+r.cycle,hsn:'9983',qty:1,rate:r.fee,gst:18}],
+                    notes:'Auto-generated from retainer #'+r.id,
+                    created:new Date().toISOString()
+                };
+                invoices.unshift(inv);
+                localStorage.setItem('crm_invoices', JSON.stringify(invoices));
+                this.toast('✅ Invoice '+inv.id+' generated!','success');
+            },
+            
+            openDetail: function(id) {
+                var r = this.data.find(function(x){return x.id===id;});
+                if (!r) return;
+                var self = this;
+                var status = this.getStatus(r);
+                var badges = {Active:'badge-active','Expiring Soon':'badge-expiring',Paused:'badge-paused',Ended:'badge-ended'};
+                
+                var h = '<div class="detail-backdrop" onclick="Retainers.closeDetail()"></div><div class="detail-panel">';
+                h += '<div class="flex-between mb-2"><h5 style="margin:0;">'+self.esc(r.client)+'</h5><div><button class="btn btn-danger btn-xs" onclick="Retainers.deleteRetainer(\''+r.id+'\')">🗑️</button> <button class="btn btn-ghost btn-xs" onclick="Retainers.closeDetail()">✕</button></div></div>';
+                h += '<span class="badge '+badges[status]+'">'+status+'</span>';
+                h += '<div class="text-sm mt-2"><strong>'+self.esc(r.service)+'</strong> · '+r.cycle+'</div>';
+                h += '<div class="font-bold mt-2" style="color:#059669;font-size:1.3rem;">₹'+parseInt(r.fee).toLocaleString('en-IN')+' / '+r.cycle+'</div>';
+                h += '<div class="text-sm mt-2">📅 Start: '+self.fd(r.startDate)+' · Next Billing: '+self.fd(r.nextBilling)+'</div>';
+                h += '<div class="text-sm mt-1">📊 Annual: ₹'+parseInt(r.annualValue||r.fee*12).toLocaleString('en-IN')+' · SLA: '+self.esc(r.sla)+'</div>';
+                if (r.notes) h += '<div class="text-sm text-muted mt-2">📝 '+self.esc(r.notes)+'</div>';
+                h += '<div class="flex gap-2 mt-3"><button class="btn btn-outline btn-sm" onclick="Retainers.editRetainer(\''+r.id+'\')">✏️ Edit</button><button class="btn btn-warning btn-sm" onclick="Retainers.generateInvoice(\''+r.id+'\')">🧾 Generate Invoice</button></div>';
+                h += '</div>';
+                document.getElementById('detailPanel').innerHTML = h;
+            },
+            
+            closeDetail: function() { document.getElementById('detailPanel').innerHTML = ''; },
+            
+            clearFilters: function() {
+                this.search=''; this.filterStatus='';
+                document.getElementById('searchInput').value=''; document.getElementById('filterStatus').value='';
+                this.render();
+            },
+            
+            exportCSV: function() {
+                var csv='ID,Client,Service,Monthly Fee,Cycle,Start,Next Billing,Status,SLA,Annual Value\n';
+                csv+=this.data.map(function(r){return [r.id,r.client,r.service,r.fee,r.cycle,r.startDate,r.nextBilling,r.status,r.sla,r.annualValue].map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
+                var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='retainers.csv'; a.click();
+                this.toast('📤 Exported!','success');
+            },
+            
+            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
+            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
+            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() { Retainers.init(); });
+    </script>
+</body>
+</html>
