@@ -3146,6 +3146,33 @@ body {
     .show-tablet { display: none !important; }
     .show-desktop { display: block !important; }
 }
+/* ============================================================
+   URGENT FIXES - UI/UX Improvements
+   ============================================================ */
+
+/* 1. Smaller Headings */
+h1, .section-title { font-size: clamp(1.8rem, 3.5vw, 2.5rem) !important; }
+h2 { font-size: clamp(1.4rem, 2.5vw, 1.8rem) !important; }
+h3 { font-size: 1.15rem !important; }
+
+/* 2. Kanban Scroll Fix */
+.kanban-board { overflow-x: auto !important; padding-bottom: 12px !important; }
+.kanban-board::-webkit-scrollbar { height: 6px; }
+.kanban-board::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 4px; }
+.kanban-col { min-width: 250px !important; max-width: 290px !important; }
+
+/* 3. Labels MUST be visible */
+label, .form-label { color: var(--text-primary) !important; font-size: 14px !important; font-weight: 500 !important; }
+
+/* 4. Input text visible */
+input, select, textarea { color: var(--text-primary) !important; background: var(--bg-secondary) !important; }
+input::placeholder, textarea::placeholder { color: #999 !important; }
+
+/* 5. Dark mode fixes */
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea { background: #1E1E1E !important; color: #FFF !important; border-color: rgba(255,255,255,0.15) !important; }
+[data-theme="dark"] label, [data-theme="dark"] .form-label { color: #CCC !important; }
+[data-theme="dark"] .card { background: #1A1A1A !important; }
+[data-theme="dark"] .app-header { background: rgba(10,10,10,0.9) !important; }
 
 /* ============================================================
    END OF DESIGN SYSTEM
