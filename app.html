@@ -800,27 +800,60 @@
             if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
             else init();
 
-            // Global API
-                        window.CRM = { navigateTo: navigateTo, showToast: showToast, toggleTheme: toggleTheme, toggleSidebar: toggleSidebar, STATE: S };
-                })();
-            </script>   <!-- ← INNER SCRIPT KHATAM -->
-        
-            <!-- MODULE FILES — OUTSIDE SCRIPT BLOCK -->
-            <script src="js/modules/dashboard.js"></script>
-            <script src="js/modules/leads.js"></script>
-            <script src="js/modules/pipeline.js"></script>
-            <script src="js/modules/clients.js"></script>
-            <script src="js/modules/invoices.js"></script>
-            <script src="js/modules/payments.js"></script>
-            <script src="js/modules/tasks.js"></script>
-            <script src="js/modules/projects.js"></script>
-            <script src="js/modules/retainers.js"></script>
-            <script src="js/modules/whatsapp.js"></script>
-            <script src="js/modules/training.js"></script>
-            <script src="js/modules/referrals.js"></script>
-            <script src="js/modules/reports.js"></script>
-            <script src="js/modules/notifications.js"></script>
-            <script src="js/modules/appointments.js"></script>
-            <script src="js/modules/settings.js"></script>
-        </body>
-        </html>
+                        // ============================================================
+                        // EXPOSE ALL FUNCTIONS TO GLOBAL SCOPE
+                        // ============================================================
+                        window.navigateTo = navigateTo;
+                        window.showToast = showToast;
+                        window.toggleTheme = toggleTheme;
+                        window.toggleSidebar = toggleSidebar;
+                        window.openProfile = openProfile;
+                        window.closeModal = closeModal;
+                        window.saveProfile = saveProfile;
+                        window.openChangePassword = openChangePassword;
+                        window.submitPassword = submitPassword;
+                        window.handleLogout = handleLogout;
+                        window.toggleDD = toggleDD;
+                        window.updateUserUI = updateUserUI;
+                        window.openLeadForm = openLeadForm;
+                        window.openDealForm = openDealForm;
+                        window.editLead = editLead;
+                        window.callLead = callLead;
+                        window.whatsappLead = whatsappLead;
+                        window.filterLeads = filterLeads;
+                        window.filterLeadsByStatus = filterLeadsByStatus;
+                        window.exportData = exportData;
+                        window.refreshDashboard = refreshDashboard;
+                        window.closeMobile = closeMobile;
+                        window.openMobile = openMobile;
+            
+                        window.CRM = { 
+                            navigateTo: navigateTo, 
+                            showToast: showToast, 
+                            toggleTheme: toggleTheme, 
+                            toggleSidebar: toggleSidebar, 
+                            STATE: S 
+                        };
+                        console.log('✅ All functions exposed to window scope');
+                    })();
+                </script>
+            
+                <!-- MODULE FILES -->
+                <script src="js/modules/dashboard.js"></script>
+                <script src="js/modules/leads.js"></script>
+                <script src="js/modules/pipeline.js"></script>
+                <script src="js/modules/clients.js"></script>
+                <script src="js/modules/invoices.js"></script>
+                <script src="js/modules/payments.js"></script>
+                <script src="js/modules/tasks.js"></script>
+                <script src="js/modules/projects.js"></script>
+                <script src="js/modules/retainers.js"></script>
+                <script src="js/modules/whatsapp.js"></script>
+                <script src="js/modules/training.js"></script>
+                <script src="js/modules/referrals.js"></script>
+                <script src="js/modules/reports.js"></script>
+                <script src="js/modules/notifications.js"></script>
+                <script src="js/modules/appointments.js"></script>
+                <script src="js/modules/settings.js"></script>
+            </body>
+            </html>
