@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="internal">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F6F0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="Leads Management - 11 Avatar Digital Hub" />
+    <meta name="robots" content="noindex, nofollow" />
+    
+    <title>Leads - 11 Avatar Digital Hub | Master Revenue CRM</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- ============================================================
+    CENTRALIZED CSS — Shared across all pages
+    ============================================================ -->
+    <link rel="stylesheet" href="../css/crm-design-system.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/components.css" />
+    
+    <!-- ============================================================
+    PAGE-SPECIFIC STYLES
+    ============================================================ -->
+    <style>
+        :root {
+            --card-3d-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            --card-3d-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
+            --gold-glow: 0 0 30px rgba(212,175,55,0.12), 0 0 60px rgba(212,175,55,0.06);
+            --transition-3d: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        body {
+            background: linear-gradient(135deg, #F8F6F0 0%, #F3F1EB 30%, #F0EDE5 60%, #F5F3ED 100%);
+            background-attachment: fixed;
+        }
+        
+        .leads-container { position: relative; z-index: 1; padding: 32px 24px; max-width: 1440px; margin: 0 auto; }
+        
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px; margin-bottom: 32px;
+            padding: 28px 32px;
+            background: linear-gradient(135deg, #FFFFFF 0%, #FFFDF7 50%, #FFFAEE 100%);
+            border: 1px solid rgba(212,175,55,0.15);
+            border-radius: 20px; box-shadow: var(--card-3d-shadow);
+        }
+        .page-header h1 { font-size: 1.8rem; font-weight: 800; color: #0A0A0A; margin: 0; }
+        .page-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+        
+        .leads-stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 28px; }
+        @media(min-width:768px){ .leads-stats{grid-template-columns:repeat(4,1fr);} }
+        
+        .lead-stat-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 16px; padding: 20px; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: var(--transition-3d);
+        }
+        .lead-stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-3d-hover); border-color: rgba(212,175,55,0.2); }
+        .lead-stat-value { font-size: 1.8rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
+        .lead-stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        
+        .filter-bar {
+            display: flex; gap: 12px; flex-wrap: wrap; align-items: center;
+            padding: 16px 20px; background: #FFF; border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 16px; margin-bottom: 24px;
+        }
+        .filter-bar input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.9rem; }
+        .filter-bar input:focus { border-color: #D4AF37; outline: none; }
+        .filter-bar select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.9rem; background: #FFF; cursor: pointer; min-width: 140px; }
+        
+        .table-panel { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; overflow: hidden; box-shadow: var(--card-3d-shadow); }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+        table th { text-align: left; padding: 14px 16px; font-weight: 600; color: #666; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px; background: #FAFAFA; border-bottom: 2px solid #F0EDE5; white-space: nowrap; }
+        table td { padding: 14px 16px; border-bottom: 1px solid #F5F5F5; color: #333; }
+        table tbody tr { transition: background 0.2s ease; cursor: pointer; }
+        table tbody tr:hover { background: rgba(212,175,55,0.03); }
+        
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
+        .badge-new { background: #F0F0FF; color: #6366F1; }
+        .badge-qualified { background: #FDF0F8; color: #EC4899; }
+        .badge-proposal { background: #EEF2FF; color: #4F46E5; }
+        .badge-won { background: #ECFDF5; color: #059669; }
+        .badge-lost { background: #FEF2F2; color: #DC2626; }
+        .badge-default { background: #F5F5F5; color: #666; }
+        
+        .action-btns { display: flex; gap: 4px; }
+        .btn-table { width: 32px; height: 32px; border-radius: 8px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.2s ease; }
+        .btn-table:hover { background: #F5F5F5; border-color: #D4AF37; }
+        
+        .score-bar { width: 50px; height: 6px; background: #F0EDE5; border-radius: 3px; overflow: hidden; }
+        .score-fill { height: 100%; border-radius: 3px; }
+        
+        .timeline-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #F5F5F5; }
+        .timeline-dot { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; flex-shrink: 0; background: #F5F5F5; }
+        
+        .modal-overlay { position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: none; align-items: center; justify-content: center; padding: 20px; }
+        .modal-overlay.show { display: flex; animation: fadeIn 0.2s ease; }
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        .modal-box { background: #FFF; border-radius: 20px; width: 100%; max-width: 600px; max-height: 85vh; overflow-y: auto; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: slideUp 0.3s ease; }
+        @keyframes slideUp { from{opacity:0;transform:translateY(20px);} to{opacity:1;transform:translateY(0);} }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .modal-title { font-size: 1.3rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        .modal-close { width: 36px; height: 36px; border-radius: 50%; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; }
+        .modal-close:hover { background: #FEE2E2; border-color: #DC2626; color: #DC2626; }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.85rem; color: #333; margin-bottom: 6px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.9rem; font-family: 'Inter',sans-serif; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #D4AF37; outline: none; }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; border: 1.5px solid transparent; text-decoration: none; }
+        .btn-primary { background: linear-gradient(135deg,#D4AF37,#B8960F); color: #FFF; border: none; }
+        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #B8960F; border-color: #D4AF37; }
+        .btn-outline:hover { background: rgba(212,175,55,0.08); }
+        .btn-ghost { background: transparent; color: #666; border-color: transparent; }
+        .btn-ghost:hover { background: #F5F5F5; }
+        .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+        .btn-success { background: #10B981; color: #FFF; border: none; }
+        .btn-success:hover { background: #059669; }
+        
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
+        .toast { background: #FFF; border: 1px solid #E5E5E5; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.9rem; font-weight: 500; animation: slideIn 0.3s ease; }
+        .toast-success { border-left: 4px solid #10B981; }
+        .toast-error { border-left: 4px solid #DC2626; }
+        .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes slideIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+        .empty-icon { font-size: 4rem; margin-bottom: 12px; opacity: 0.5; }
+        
+        @media(max-width:768px){ .leads-container{padding:16px;} .page-header{padding:20px;flex-direction:column;text-align:center;} }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="../index.html" class="header-brand" aria-label="11 Avatar Hub">
+            <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect width="36" height="36" rx="10" fill="#D4AF37"/><text x="18" y="24" text-anchor="middle" fill="#fff" font-size="14" font-weight="800" font-family="Inter">11A</text></svg>
+            <span style="color:#B8960F">11 Avatar Hub</span>
+        </a>
+        <nav class="header-nav">
+            <a href="dashboard.html" class="header-link">Dashboard</a>
+            <a href="leads.html" class="header-link active">Leads</a>
+            <a href="pipeline.html" class="header-link">Pipeline</a>
+            <a href="clients.html" class="header-link">Clients</a>
+            <a href="invoices.html" class="header-link">Invoices</a>
+            <a href="payments.html" class="header-link">Payments</a>
+        </nav>
+        <div class="header-actions">
+            <button class="header-btn" title="Notifications">🔔</button>
+            <button class="header-btn" title="Profile">👤</button>
+            <button class="header-btn header-toggle" title="Menu">☰</button>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="leads-container">
+            
+            <!-- Page Header -->
+            <div class="page-header">
+                <div>
+                    <h1>👥 Leads Management</h1>
+                    <p style="color:#888;margin:4px 0 0;" id="leadCountText">Loading leads...</p>
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-outline" onclick="exportLeads()">📤 Export</button>
+                    <button class="btn btn-primary" onclick="openLeadForm()">➕ New Lead</button>
+                </div>
+            </div>
+            
+            <!-- Stats -->
+            <div class="leads-stats">
+                <div class="lead-stat-card" onclick="filterByStatus('')"><div class="lead-stat-value" id="stat-total" style="color:#0A0A0A;">0</div><div class="lead-stat-label">Total Leads</div></div>
+                <div class="lead-stat-card" onclick="filterByStatus('New')"><div class="lead-stat-value" id="stat-new" style="color:#6366F1;">0</div><div class="lead-stat-label">New</div></div>
+                <div class="lead-stat-card" onclick="filterByStatus('Qualified')"><div class="lead-stat-value" id="stat-qualified" style="color:#EC4899;">0</div><div class="lead-stat-label">Qualified</div></div>
+                <div class="lead-stat-card" onclick="filterByStatus('Won')"><div class="lead-stat-value" id="stat-won" style="color:#059669;">0</div><div class="lead-stat-label">Won</div></div>
+            </div>
+            
+            <!-- Filter Bar -->
+            <div class="filter-bar">
+                <input type="search" id="searchInput" placeholder="🔍 Search by name, mobile, email..." oninput="renderTable()">
+                <select id="filterStatus" onchange="renderTable()">
+                    <option value="">All Status</option>
+                    <option>New</option><option>Attempting Contact</option><option>Connected</option>
+                    <option>Qualified</option><option>Discovery Call Booked</option><option>Proposal Sent</option>
+                    <option>Negotiation</option><option>Verbal Yes</option><option>Invoice Sent</option>
+                    <option>Won</option><option>Lost</option>
+                </select>
+                <select id="filterSource" onchange="renderTable()">
+                    <option value="">All Sources</option>
+                    <option>Website</option><option>Referral</option><option>WhatsApp</option>
+                    <option>Cold Calling</option><option>Google Ads</option><option>Facebook Ads</option><option>LinkedIn</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" onclick="clearFilters()">✕ Clear</button>
+            </div>
+            
+            <!-- Table -->
+            <div class="table-panel">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>ID</th><th>Name</th><th>Mobile</th><th>Business</th><th>Source</th><th>Status</th><th>Score</th><th>Follow-up</th><th style="min-width:170px;">Actions</th></tr></thead>
+                        <tbody id="leadsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Lead Form Modal -->
+    <div class="modal-overlay" id="leadModal">
+        <div class="modal-box">
+            <div class="modal-header"><span class="modal-title" id="leadModalTitle">➕ New Lead</span><button class="modal-close" onclick="closeLeadModal()">✕</button></div>
+            <form id="leadForm" onsubmit="saveLead(event)">
+                <input type="hidden" id="leadId">
+                <div class="form-row"><div class="form-group"><label>Full Name *</label><input type="text" id="leadName" required></div><div class="form-group"><label>Mobile * (10 digits)</label><input type="tel" id="leadMobile" required maxlength="10" pattern="[0-9]{10}"></div></div>
+                <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="leadEmail"></div><div class="form-group"><label>Business</label><input type="text" id="leadBusiness"></div></div>
+                <div class="form-row"><div class="form-group"><label>City</label><input type="text" id="leadCity"></div><div class="form-group"><label>Source</label><select id="leadSource"><option>Website</option><option>Referral</option><option>WhatsApp</option><option>Cold Calling</option><option>Google Ads</option><option>Facebook Ads</option><option>LinkedIn</option><option>Other</option></select></div></div>
+                <div class="form-row"><div class="form-group"><label>Deal Value (₹)</label><input type="number" id="leadValue" min="0"></div><div class="form-group"><label>Website</label><input type="url" id="leadWebsite"></div></div>
+                <div class="form-group"><label>Notes</label><textarea id="leadNotes" rows="3"></textarea></div>
+                <div style="display:flex;gap:10px;margin-top:12px;"><button type="submit" class="btn btn-primary">💾 Save Lead</button><button type="button" class="btn btn-outline" onclick="closeLeadModal()">Cancel</button></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Timeline Modal -->
+    <div class="modal-overlay" id="timelineModal">
+        <div class="modal-box" style="max-width:500px;">
+            <div class="modal-header"><span class="modal-title">📜 Lead Timeline</span><button class="modal-close" onclick="closeTimelineModal()">✕</button></div>
+            <div id="timelineContent"></div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- ============================================================
+    SCRIPTS — Centralized + Page Logic
+    ============================================================ -->
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    
+    <!-- Core JS -->
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
+    <!-- Page Logic -->
+    <script>
+        'use strict';
+        var leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
+        
+        if (leads.length === 0) {
+            leads = [
+                { id:'LD001',name:'Rajesh Kumar',mobile:'9876543210',email:'rajesh@email.com',business:'Kumar Enterprises',source:'Website',status:'New',score:45,value:50000,city:'Mumbai',website:'',notes:'Interested in SEO',created:new Date().toISOString(),followup:new Date(Date.now()+86400000).toISOString().split('T')[0],timeline:[{type:'created',text:'Lead created',time:new Date().toISOString(),user:'System'}] },
+                { id:'LD002',name:'Priya Sharma',mobile:'8765432109',email:'priya@email.com',business:'Sharma Textiles',source:'Referral',status:'Qualified',score:72,value:120000,city:'Surat',website:'',notes:'Social media package',created:new Date(Date.now()-86400000).toISOString(),followup:new Date().toISOString().split('T')[0],timeline:[{type:'created',text:'Lead created',time:new Date(Date.now()-86400000).toISOString(),user:'System'},{type:'call',text:'Called - interested',time:new Date(Date.now()-3600000).toISOString(),user:'Admin'}] },
+                { id:'LD003',name:'Amit Patel',mobile:'7654321098',email:'amit@email.com',business:'Patel Construction',source:'Cold Calling',status:'Proposal Sent',score:85,value:250000,city:'Ahmedabad',website:'',notes:'Website + SEO',created:new Date(Date.now()-172800000).toISOString(),followup:new Date(Date.now()-86400000).toISOString().split('T')[0],timeline:[{type:'created',text:'Lead created',time:new Date(Date.now()-172800000).toISOString(),user:'System'},{type:'proposal',text:'Proposal sent',time:new Date(Date.now()-86400000).toISOString(),user:'Admin'}] },
+                { id:'LD004',name:'Sunita Verma',mobile:'9988776655',email:'sunita@email.com',business:'Verma Exports',source:'WhatsApp',status:'Connected',score:55,value:80000,city:'Delhi',website:'',notes:'Google Ads inquiry',created:new Date(Date.now()-259200000).toISOString(),followup:new Date().toISOString().split('T')[0],timeline:[{type:'created',text:'Lead created via WhatsApp',time:new Date(Date.now()-259200000).toISOString(),user:'System'}] },
+                { id:'LD005',name:'Vikram Singh',mobile:'9811122233',email:'vikram@email.com',business:'ABC Corporation',source:'Website',status:'Won',score:92,value:450000,city:'Mumbai',website:'www.abc.com',notes:'Annual contract signed',created:new Date(Date.now()-604800000).toISOString(),followup:'',timeline:[{type:'created',text:'Lead created',time:new Date(Date.now()-604800000).toISOString(),user:'System'},{type:'won',text:'Deal won - ₹4.5L',time:new Date(Date.now()-86400000).toISOString(),user:'Admin'}] }
+            ];
+            saveLeads();
+        }
+
+        function saveLeads() { try { localStorage.setItem('crm_leads', JSON.stringify(leads)); } catch(e) {} }
+
+        function renderTable() {
+            var s = (document.getElementById('searchInput')?.value || '').toLowerCase();
+            var sf = document.getElementById('filterStatus')?.value || '';
+            var src = document.getElementById('filterSource')?.value || '';
+            var filtered = leads.filter(function(l){
+                if (s && !(l.name?.toLowerCase().includes(s)||l.mobile?.includes(s)||l.email?.toLowerCase().includes(s)||l.business?.toLowerCase().includes(s)||l.id?.toLowerCase().includes(s))) return false;
+                if (sf && l.status !== sf) return false;
+                if (src && l.source !== src) return false;
+                return true;
+            });
+            
+            var tbody = document.getElementById('leadsTableBody');
+            tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="9"><div class="empty-state"><div class="empty-icon">📭</div><p>No leads found</p></div></td></tr>' :
+                filtered.map(function(l){
+                    var bc = {New:'badge-new',Qualified:'badge-qualified','Proposal Sent':'badge-proposal',Won:'badge-won',Lost:'badge-lost'}[l.status]||'badge-default';
+                    var sc = l.score>=80?'#059669':l.score>=50?'#D4AF37':l.score>=30?'#F59E0B':'#DC2626';
+                    var od = l.followup && l.followup < new Date().toISOString().split('T')[0] && !['Won','Lost'].includes(l.status);
+                    return '<tr><td><span style="background:#F5F5F5;padding:2px 8px;border-radius:6px;font-size:0.75rem;font-weight:600;">'+l.id+'</span></td><td><strong>'+esc(l.name)+'</strong>'+(l.business?'<br><small style="color:#999;">'+esc(l.business)+'</small>':'')+'</td><td>'+esc(l.mobile||'-')+'</td><td>'+esc(l.business||'-')+'</td><td>'+esc(l.source||'-')+'</td><td><span class="badge '+bc+'">'+esc(l.status)+'</span></td><td><div style="display:flex;align-items:center;gap:6px;"><div class="score-bar"><div class="score-fill" style="width:'+(l.score||0)+'%;background:'+sc+';"></div></div><span style="font-weight:600;font-size:0.8rem;">'+(l.score||0)+'</span></div></td><td style="color:'+(od?'#DC2626':'#999')+';font-size:0.82rem;">'+(l.followup?fd(l.followup)+(od?' ⚠️':''):'-')+'</td><td><div class="action-btns"><button class="btn-table" title="Call" onclick="callLead(\''+l.id+'\')">📞</button><button class="btn-table" title="WhatsApp" onclick="whatsappLead(\''+l.id+'\')">💬</button><button class="btn-table" title="Follow-up" onclick="openFollowup(\''+l.id+'\')">🔄</button><button class="btn-table" title="Edit" onclick="editLead(\''+l.id+'\')">✏️</button><button class="btn-table" title="Timeline" onclick="openTimeline(\''+l.id+'\')">📜</button><button class="btn-table" title="Delete" onclick="deleteLead(\''+l.id+'\')" style="color:#DC2626;">🗑️</button></div></td></tr>';
+                }).join('');
+            
+            document.getElementById('stat-total').textContent = leads.length;
+            document.getElementById('stat-new').textContent = leads.filter(function(l){return l.status==='New';}).length;
+            document.getElementById('stat-qualified').textContent = leads.filter(function(l){return l.status==='Qualified';}).length;
+            document.getElementById('stat-won').textContent = leads.filter(function(l){return l.status==='Won';}).length;
+            document.getElementById('leadCountText').textContent = filtered.length + ' leads showing';
+        }
+
+        function filterByStatus(st) { document.getElementById('filterStatus').value = st; renderTable(); }
+        function clearFilters() { document.getElementById('searchInput').value=''; document.getElementById('filterStatus').value=''; document.getElementById('filterSource').value=''; renderTable(); }
+
+        function openLeadForm(id) {
+            var f = document.getElementById('leadForm'); f.reset();
+            if (id) {
+                var l = leads.find(function(x){return x.id===id;});
+                if (l) {
+                    document.getElementById('leadModalTitle').textContent='✏️ Edit Lead';
+                    document.getElementById('leadId').value=l.id; document.getElementById('leadName').value=l.name||'';
+                    document.getElementById('leadMobile').value=l.mobile||''; document.getElementById('leadEmail').value=l.email||'';
+                    document.getElementById('leadBusiness').value=l.business||''; document.getElementById('leadCity').value=l.city||'';
+                    document.getElementById('leadSource').value=l.source||'Website'; document.getElementById('leadValue').value=l.value||'';
+                    document.getElementById('leadWebsite').value=l.website||''; document.getElementById('leadNotes').value=l.notes||'';
+                }
+            } else { document.getElementById('leadModalTitle').textContent='➕ New Lead'; document.getElementById('leadId').value=''; }
+            document.getElementById('leadModal').classList.add('show');
+        }
+
+        function closeLeadModal() { document.getElementById('leadModal').classList.remove('show'); }
+
+        function saveLead(e) {
+            e.preventDefault();
+            var id = document.getElementById('leadId').value;
+            var d = {
+                name:document.getElementById('leadName').value.trim(), mobile:document.getElementById('leadMobile').value.trim(),
+                email:document.getElementById('leadEmail').value.trim(), business:document.getElementById('leadBusiness').value.trim(),
+                city:document.getElementById('leadCity').value.trim(), source:document.getElementById('leadSource').value,
+                value:parseInt(document.getElementById('leadValue').value)||0, website:document.getElementById('leadWebsite').value.trim(),
+                notes:document.getElementById('leadNotes').value.trim(), status:'New', score:45,
+                followup:new Date(Date.now()+2*86400000).toISOString().split('T')[0]
+            };
+            if (!d.name||!d.mobile) { showToast('Name and mobile required!','error'); return; }
+            if (!/^\d{10}$/.test(d.mobile)) { showToast('Mobile must be 10 digits!','error'); return; }
+            
+            if (id) {
+                var i = leads.findIndex(function(x){return x.id===id;});
+                if (i!==-1) { d.id=id; d.created=leads[i].created; d.timeline=leads[i].timeline||[]; d.timeline.push({type:'updated',text:'Lead updated',time:new Date().toISOString(),user:'Admin'}); leads[i]=d; showToast('✅ Lead updated: '+d.name,'success'); }
+            } else {
+                d.id='LD'+String(leads.length+1).padStart(3,'0'); d.created=new Date().toISOString();
+                d.timeline=[{type:'created',text:'Lead created',time:new Date().toISOString(),user:'Admin'}];
+                leads.unshift(d); showToast('✅ Lead created: '+d.name,'success');
+            }
+            saveLeads(); closeLeadModal(); renderTable();
+        }
+
+        function editLead(id) { openLeadForm(id); }
+
+        function deleteLead(id) { if(!confirm('Delete this lead?')) return; leads = leads.filter(function(l){return l.id!==id;}); saveLeads(); renderTable(); showToast('🗑️ Lead deleted','info'); }
+
+        function callLead(id) { var l=leads.find(function(x){return x.id===id;}); if(l&&l.mobile){ window.open('tel:'+l.mobile); l.timeline=l.timeline||[]; l.timeline.push({type:'call',text:'Called '+l.name,time:new Date().toISOString(),user:'Admin'}); saveLeads(); } else showToast('No mobile','error'); }
+
+        function whatsappLead(id) { var l=leads.find(function(x){return x.id===id;}); if(l&&l.mobile){ window.open('https://wa.me/91'+l.mobile); l.timeline=l.timeline||[]; l.timeline.push({type:'whatsapp',text:'WhatsApp sent',time:new Date().toISOString(),user:'Admin'}); saveLeads(); } else showToast('No mobile','error'); }
+
+        function openFollowup(id) {
+            var l=leads.find(function(x){return x.id===id;}); if(!l) return;
+            var h='<div class="modal-overlay show" id="fupModal" onclick="if(event.target===this)closeFup()"><div class="modal-box" style="max-width:450px;"><div class="modal-header"><span class="modal-title">🔄 Follow-up: '+esc(l.name)+'</span><button class="modal-close" onclick="closeFup()">✕</button></div>';
+            h+='<div class="form-group"><label>Follow-up Date</label><input type="date" id="fupDate" value="'+(l.followup||'')+'"></div>';
+            h+='<div class="form-group"><label>Notes</label><textarea id="fupNotes" rows="3">'+(l.followupNotes||'')+'</textarea></div>';
+            h+='<div style="display:flex;gap:8px;"><button class="btn btn-primary" onclick="saveFup(\''+id+'\')">💾 Save</button><button class="btn btn-success" onclick="doneFup(\''+id+'\')">✅ Done</button><button class="btn btn-outline" onclick="closeFup()">Cancel</button></div></div></div>';
+            document.body.insertAdjacentHTML('beforeend',h);
+        }
+        function closeFup() { var e=document.getElementById('fupModal'); if(e) e.remove(); }
+        function saveFup(id) { var l=leads.find(function(x){return x.id===id;}); if(!l) return; l.followup=document.getElementById('fupDate').value; l.followupNotes=document.getElementById('fupNotes').value; l.timeline=l.timeline||[]; l.timeline.push({type:'followup',text:'Follow-up set',time:new Date().toISOString(),user:'Admin'}); saveLeads(); closeFup(); renderTable(); showToast('✅ Saved','success'); }
+        function doneFup(id) { var l=leads.find(function(x){return x.id===id;}); if(!l) return; var st=['New','Attempting Contact','Connected','Qualified','Discovery Call Booked','Discovery Call Completed','Proposal Sent','Negotiation','Verbal Yes','Invoice Sent','Won','Lost']; var i=st.indexOf(l.status); if(i>=0&&i<st.length-2) l.status=st[i+1]; l.followup=''; l.timeline=l.timeline||[]; l.timeline.push({type:'progress',text:'Advanced to '+l.status,time:new Date().toISOString(),user:'Admin'}); saveLeads(); closeFup(); renderTable(); showToast('✅ Advanced to '+l.status,'success'); }
+
+        function openTimeline(id) { var l=leads.find(function(x){return x.id===id;}); if(!l||!l.timeline||l.timeline.length===0){ showToast('No timeline','info'); return; } var ic={created:'📋',updated:'✏️',call:'📞',whatsapp:'💬',followup:'🔄',progress:'📈',proposal:'📄',won:'🏆',lost:'❌'}; document.getElementById('timelineContent').innerHTML=l.timeline.reverse().map(function(t){return '<div class="timeline-item"><div class="timeline-dot">'+(ic[t.type]||'📌')+'</div><div><div>'+esc(t.text)+'</div><div style="font-size:0.75rem;color:#999;">'+ft(t.time)+' · '+esc(t.user||'System')+'</div></div></div>';}).join(''); document.getElementById('timelineModal').classList.add('show'); }
+        function closeTimelineModal() { document.getElementById('timelineModal').classList.remove('show'); }
+
+        function exportLeads() {
+            var csv='ID,Name,Mobile,Email,Business,Source,Status,Score,Value,City,Follow-up\n'+leads.map(function(l){return [l.id,l.name,l.mobile,l.email,l.business,l.source,l.status,l.score,l.value,l.city,l.followup].map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
+            var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='leads_'+new Date().toISOString().split('T')[0]+'.csv'; a.click(); showToast('📤 Exported!','success');
+        }
+
+        function showToast(m,t) { t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ if(d.parentNode) d.remove(); },3500); }
+        function esc(s) { return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; }
+        function fd(d) { if(!d) return '-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+        function ft(d) { if(!d) return '-'; try{return new Date(d).toLocaleString('en-IN',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}catch(e){return d;} }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+            document.getElementById('leadModal').addEventListener('click',function(e){if(e.target===this)closeLeadModal();});
+            document.getElementById('timelineModal').addEventListener('click',function(e){if(e.target===this)closeTimelineModal();});
+            console.log('✅ Leads page ready — '+leads.length+' leads');
+        });
+    </script>
+</body>
+</html>
