@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F6F0" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-    <meta name="description" content="Dashboard - 11 Avatar Digital Hub" />
-    <meta name="robots" content="noindex, nofollow" />
-    
     <title>Dashboard - 11 Avatar Digital Hub</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,55 +18,48 @@
             --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-            --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
-            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0 0%, #F3F1EB 30%, #F0EDE5 60%, #F5F3ED 100%);
+            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
             min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
         }
         
-        .dash-container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+        .dash-container { max-width: 1400px; margin: 0 auto; padding: 24px; padding-bottom: 100px; }
         
-        /* ============================================================
-           BOTTOM SUBMENU — Functional Tab Switcher
-           ============================================================ */
+        /* BOTTOM SUBMENU — Fixed at bottom */
         .bottom-submenu {
-            position: sticky; bottom: 0; left: 0; right: 0; z-index: 100;
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
             background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.08);
-            box-shadow: 0 -4px 16px rgba(0,0,0,0.06);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
             padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
-            display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
+            display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
             justify-content: center; flex-wrap: wrap;
         }
         .bottom-submenu::-webkit-scrollbar { display: none; }
-        
         .bottom-tab {
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
-            padding: 10px 18px; border-radius: 12px; cursor: pointer;
-            font-size: 0.72rem; font-weight: 500; color: #777;
-            transition: all 0.2s ease; white-space: nowrap; min-width: 70px;
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 10px 16px; border-radius: 12px; cursor: pointer;
+            font-size: 0.7rem; font-weight: 500; color: #777;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
             border: 1.5px solid transparent; background: transparent;
         }
         .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
-        .bottom-tab.active {
-            background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600;
-            border-color: rgba(212,175,55,0.3);
-        }
+        .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
         .bottom-tab .tab-icon { font-size: 1.3rem; }
         
-        /* Welcome Section */
-        .welcome-section {
-            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;
-            padding: 28px 32px; background: linear-gradient(135deg, #FFFFFF, #FFFDF7, #FFFAEE);
+        /* Page Header */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: var(--card-3d); margin-bottom: 24px;
+            box-shadow: var(--card-3d); margin-bottom: 20px;
         }
-        .welcome-section h1 { font-size: 1.8rem; font-weight: 800; color: #0A0A0A; margin: 0; }
-        .welcome-section .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .welcome-section p { color: #888; margin: 4px 0 0; }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
         
         /* Buttons */
         .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
@@ -79,7 +67,7 @@
         .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
         .btn-outline:hover { background: rgba(212,175,55,0.08); }
-        .btn-sm { padding: 6px 14px; font-size: 0.8rem; }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
         .btn-ghost { background: transparent; color: #666; }
         .btn-ghost:hover { background: #F5F5F5; }
         
@@ -89,16 +77,15 @@
         @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
         
         /* Stats Grid */
-        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; margin-bottom: 24px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
         @media(max-width:768px){ .stats-grid{grid-template-columns:repeat(2,1fr);} }
-        
         .stat-card {
-            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
-            padding: 18px 20px; cursor: pointer; transition: var(--transition);
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 16px 18px; cursor: pointer; transition: var(--transition);
         }
         .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
-        .stat-card .val { font-size: 1.7rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
-        .stat-card .lbl { font-size: 0.78rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
         
         /* Cards */
         .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
@@ -109,11 +96,8 @@
         .activity-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #F5F5F5; align-items: flex-start; }
         .activity-item:last-child { border-bottom: none; }
         .activity-dot { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
-        .activity-dot.revenue { background: #D4AF37; }
-        .activity-dot.lead { background: #8B5CF6; }
-        .activity-dot.call { background: #3B82F6; }
-        .activity-dot.won { background: #10B981; }
-        .activity-dot.task { background: #F59E0B; }
+        .activity-dot.revenue { background: #D4AF37; } .activity-dot.lead { background: #8B5CF6; }
+        .activity-dot.call { background: #3B82F6; } .activity-dot.won { background: #10B981; } .activity-dot.task { background: #F59E0B; }
         .activity-text { font-size: 0.9rem; color: #333; flex: 1; }
         .activity-time { font-size: 0.75rem; color: #999; white-space: nowrap; }
         
@@ -125,18 +109,17 @@
             border-radius: 14px; cursor: pointer; transition: var(--transition); text-decoration: none;
         }
         .quick-btn:hover { background: #FFF; border-color: rgba(212,175,55,0.3); transform: translateY(-3px); box-shadow: var(--card-hover); }
-        .quick-btn .q-icon { font-size: 1.8rem; transition: var(--transition-bounce); }
-        .quick-btn:hover .q-icon { transform: scale(1.2); }
+        .quick-btn .q-icon { font-size: 1.8rem; }
         .quick-btn .q-label { font-size: 0.8rem; font-weight: 600; color: #333; }
         
         /* Revenue Bar */
         .revenue-bar { height: 12px; background: #F0EDE5; border-radius: 20px; overflow: hidden; margin: 12px 0; }
         .revenue-fill { height: 100%; background: var(--gold-gradient); border-radius: 20px; transition: width 1.5s ease; }
         
-        /* Today Tasks */
+        /* Tasks */
         .task-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #F5F5F5; }
         .task-item:last-child { border-bottom: none; }
-        .task-check { width: 20px; height: 20px; border-radius: 6px; border: 2px solid #D4AF37; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; accent-color: #D4AF37; }
+        .task-check { width: 20px; height: 20px; accent-color: #D4AF37; cursor: pointer; flex-shrink: 0; }
         .task-text { flex: 1; font-size: 0.9rem; }
         .task-priority { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; }
         .priority-high { background: #FEE2E2; color: #DC2626; }
@@ -146,28 +129,30 @@
         /* Toast */
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
         .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: slideIn 0.3s ease; }
-        .toast-success { border-left: 4px solid #10B981; }
-        .toast-error { border-left: 4px solid #DC2626; }
-        .toast-info { border-left: 4px solid #3B82F6; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
         @keyframes slideIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
         
         .empty-state { text-align: center; padding: 40px; color: #999; }
         .empty-icon { font-size: 3rem; margin-bottom: 8px; opacity: 0.5; }
         
-        @media(max-width:768px){ .dash-container{padding:16px;} .welcome-section{padding:20px;text-align:center;flex-direction:column;} }
+        .text-xs { font-size: 0.75rem; } .text-muted { color: #888; } .font-semibold { font-weight: 600; }
+        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .flex-wrap { flex-wrap: wrap; }
+        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        
+        @media(max-width:768px){ .dash-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} .stats-grid{grid-template-columns:repeat(2,1fr);} }
     </style>
 </head>
 <body>
 
     <div class="dash-container">
         
-        <!-- Welcome Section -->
-        <div class="welcome-section">
+        <!-- Page Header -->
+        <div class="page-header">
             <div>
                 <h1>Welcome back, <span class="gold" id="userName">User</span> 👋</h1>
-                <p id="welcomeDate">Here's what's happening today</p>
+                <p id="welcomeDate">Here's your business at a glance</p>
             </div>
-            <div style="display:flex;gap:8px;">
+            <div class="flex gap-2">
                 <button class="btn btn-outline btn-sm" onclick="Dashboard.refresh()">🔄 Refresh</button>
                 <button class="btn btn-primary" onclick="window.location.href='leads.html?action=new'">➕ New Lead</button>
             </div>
@@ -175,50 +160,29 @@
         
         <!-- Stats Grid -->
         <div class="stats-grid">
-            <div class="stat-card" onclick="Dashboard.currentTab='overview';Dashboard.render()">
-                <div class="val" id="stat-revenue" style="color:#059669;">₹0</div>
-                <div class="lbl">💰 Revenue Collected</div>
-            </div>
-            <div class="stat-card" onclick="Dashboard.currentTab='overview';Dashboard.render()">
-                <div class="val" id="stat-leads" style="color:#4F46E5;">0</div>
-                <div class="lbl">👥 Total Leads</div>
-            </div>
-            <div class="stat-card" onclick="Dashboard.currentTab='overview';Dashboard.render()">
-                <div class="val" id="stat-pipeline" style="color:#D4AF37;">₹0</div>
-                <div class="lbl">📈 Pipeline Value</div>
-            </div>
-            <div class="stat-card" onclick="Dashboard.currentTab='tasks';Dashboard.render()">
-                <div class="val" id="stat-tasks" style="color:#F59E0B;">0</div>
-                <div class="lbl">✅ Pending Tasks</div>
-            </div>
+            <div class="stat-card"><div class="val" id="stat-revenue" style="color:#059669;">₹0</div><div class="lbl">💰 Revenue</div></div>
+            <div class="stat-card"><div class="val" id="stat-leads" style="color:#4F46E5;">0</div><div class="lbl">👥 Total Leads</div></div>
+            <div class="stat-card"><div class="val" id="stat-pipeline" style="color:#D4AF37;">₹0</div><div class="lbl">📈 Pipeline</div></div>
+            <div class="stat-card"><div class="val" id="stat-tasks" style="color:#F59E0B;">0</div><div class="lbl">✅ Pending Tasks</div></div>
         </div>
         
-        <!-- TAB CONTENT -->
-        
-        <!-- Overview Tab -->
+        <!-- TAB: Overview -->
         <div id="tab-overview" class="tab-content active">
             <div style="display:grid;grid-template-columns:2fr 1fr;gap:20px;">
                 <div>
                     <div class="card">
                         <div class="card-header"><span class="card-title">🕐 Recent Activity</span></div>
-                        <div id="activityList">
-                            <div class="activity-item"><div class="activity-dot lead"></div><div class="activity-text">New lead created: <strong>Rajesh Kumar</strong></div><div class="activity-time">2 min ago</div></div>
-                            <div class="activity-item"><div class="activity-dot call"></div><div class="activity-text">Called <strong>Priya Sharma</strong> - Interested in SMM</div><div class="activity-time">15 min ago</div></div>
-                            <div class="activity-item"><div class="activity-dot revenue"></div><div class="activity-text">Payment received: <strong>₹50,000</strong> from ABC Corp</div><div class="activity-time">1 hour ago</div></div>
-                            <div class="activity-item"><div class="activity-dot won"></div><div class="activity-text">Deal won: <strong>SEO Package</strong> for Vikram Industries</div><div class="activity-time">3 hours ago</div></div>
-                            <div class="activity-item"><div class="activity-dot task"></div><div class="activity-text">Task completed: <strong>Follow-up with Amit Patel</strong></div><div class="activity-time">5 hours ago</div></div>
-                        </div>
+                        <div class="activity-item"><div class="activity-dot lead"></div><div class="activity-text">New lead: <strong>Rajesh Kumar</strong></div><div class="activity-time">2m ago</div></div>
+                        <div class="activity-item"><div class="activity-dot call"></div><div class="activity-text">Called <strong>Priya Sharma</strong></div><div class="activity-time">15m ago</div></div>
+                        <div class="activity-item"><div class="activity-dot revenue"></div><div class="activity-text">Payment: <strong>₹50,000</strong> from ABC Corp</div><div class="activity-time">1h ago</div></div>
+                        <div class="activity-item"><div class="activity-dot won"></div><div class="activity-text">Deal won: <strong>SEO Package</strong></div><div class="activity-time">3h ago</div></div>
                     </div>
                     
                     <div class="card">
-                        <div class="card-header"><span class="card-title">📊 Monthly Revenue Goal</span><span style="font-weight:700;color:#D4AF37;" id="goalText">₹70,000</span></div>
-                        <div style="display:flex;justify-content:space-between;font-size:0.85rem;color:#888;">
-                            <span id="collectedLabel">Collected: ₹0</span><span id="percentLabel">0%</span>
-                        </div>
+                        <div class="card-header"><span class="card-title">📊 Revenue Goal</span><span style="font-weight:700;color:#D4AF37;">₹70,000</span></div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.82rem;color:#888;"><span id="collectedLabel">Collected: ₹0</span><span id="percentLabel">0%</span></div>
                         <div class="revenue-bar"><div class="revenue-fill" id="revenueFill" style="width:0%;"></div></div>
-                        <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#999;">
-                            <span id="remainingLabel">Remaining: ₹70,000</span><span id="dailyLabel">Required/day: ₹2,333</span>
-                        </div>
+                        <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:#999;"><span id="remainingLabel">Remaining: ₹70,000</span><span id="dailyLabel">Required/day: ₹2,333</span></div>
                     </div>
                 </div>
                 
@@ -226,9 +190,9 @@
                     <div class="card">
                         <div class="card-header"><span class="card-title">⚡ Quick Actions</span></div>
                         <div class="quick-grid">
-                            <a href="leads.html?action=new" class="quick-btn"><span class="q-icon">➕</span><span class="q-label">New Lead</span></a>
-                            <a href="invoices.html?action=new" class="quick-btn"><span class="q-icon">🧾</span><span class="q-label">GST Invoice</span></a>
-                            <a href="payments.html?action=new" class="quick-btn"><span class="q-icon">💰</span><span class="q-label">Add Revenue</span></a>
+                            <a href="leads.html" class="quick-btn"><span class="q-icon">➕</span><span class="q-label">New Lead</span></a>
+                            <a href="invoices.html" class="quick-btn"><span class="q-icon">🧾</span><span class="q-label">GST Invoice</span></a>
+                            <a href="payments.html" class="quick-btn"><span class="q-icon">💰</span><span class="q-label">Add Revenue</span></a>
                             <a href="whatsapp.html" class="quick-btn"><span class="q-icon">💬</span><span class="q-label">WhatsApp</span></a>
                         </div>
                     </div>
@@ -236,52 +200,26 @@
             </div>
         </div>
         
-        <!-- Tasks Tab -->
+        <!-- TAB: Today's Tasks -->
         <div id="tab-tasks" class="tab-content">
             <div class="card">
                 <div class="card-header">
                     <span class="card-title">📋 Today's Tasks</span>
                     <button class="btn btn-outline btn-sm" onclick="Dashboard.addTask()">➕ Add Task</button>
                 </div>
-                <div id="tasksList">
-                    <div class="task-item">
-                        <input type="checkbox" class="task-check" onchange="Dashboard.toggleTask(0)" id="task0">
-                        <span class="task-text">Follow up with Rajesh Kumar - SEO inquiry</span>
-                        <span class="task-priority priority-high">High</span>
-                    </div>
-                    <div class="task-item">
-                        <input type="checkbox" class="task-check" onchange="Dashboard.toggleTask(1)" id="task1">
-                        <span class="task-text">Send proposal to ABC Corporation</span>
-                        <span class="task-priority priority-medium">Medium</span>
-                    </div>
-                    <div class="task-item">
-                        <input type="checkbox" class="task-check" onchange="Dashboard.toggleTask(2)" id="task2">
-                        <span class="task-text">Invoice follow-up - XYZ Analytics</span>
-                        <span class="task-priority priority-high">High</span>
-                    </div>
-                    <div class="task-item">
-                        <input type="checkbox" class="task-check" onchange="Dashboard.toggleTask(3)" id="task3">
-                        <span class="task-text">Update pipeline with new leads</span>
-                        <span class="task-priority priority-low">Low</span>
-                    </div>
-                    <div class="task-item">
-                        <input type="checkbox" class="task-check" onchange="Dashboard.toggleTask(4)" id="task4">
-                        <span class="task-text">Prepare monthly report</span>
-                        <span class="task-priority priority-medium">Medium</span>
-                    </div>
-                </div>
+                <div id="tasksList"></div>
             </div>
         </div>
         
-        <!-- Revenue Stats Tab -->
+        <!-- TAB: Revenue Stats -->
         <div id="tab-revenue" class="tab-content">
             <div class="card">
                 <div class="card-header"><span class="card-title">💰 Revenue Breakdown</span></div>
-                <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
+                <div class="stats-grid">
                     <div class="stat-card"><div class="val" style="color:#059669;">₹50,000</div><div class="lbl">This Month</div></div>
                     <div class="stat-card"><div class="val" style="color:#D4AF37;">₹1,50,000</div><div class="lbl">This Quarter</div></div>
                     <div class="stat-card"><div class="val" style="color:#4F46E5;">₹4,50,000</div><div class="lbl">This Year</div></div>
-                    <div class="stat-card"><div class="val" style="color:#EC4899;">₹35,000</div><div class="lbl">Pending Collection</div></div>
+                    <div class="stat-card"><div class="val" style="color:#EC4899;">₹35,000</div><div class="lbl">Pending</div></div>
                 </div>
             </div>
         </div>
@@ -296,10 +234,10 @@
             <span class="tab-icon">📊</span> Overview
         </div>
         <div class="bottom-tab" onclick="Dashboard.currentTab='tasks';Dashboard.render()">
-            <span class="tab-icon">📋</span> Today's Tasks
+            <span class="tab-icon">📋</span> Tasks
         </div>
         <div class="bottom-tab" onclick="Dashboard.currentTab='revenue';Dashboard.render()">
-            <span class="tab-icon">💰</span> Revenue Stats
+            <span class="tab-icon">💰</span> Revenue
         </div>
         <div class="bottom-tab" onclick="window.location.href='leads.html'">
             <span class="tab-icon">👥</span> Leads
@@ -318,21 +256,18 @@
         var Dashboard = {
             currentTab: 'overview',
             tasks: [
-                { id:0, text:'Follow up with Rajesh Kumar - SEO inquiry', priority:'high', done:false },
-                { id:1, text:'Send proposal to ABC Corporation', priority:'medium', done:false },
-                { id:2, text:'Invoice follow-up - XYZ Analytics', priority:'high', done:false },
-                { id:3, text:'Update pipeline with new leads', priority:'low', done:false },
-                { id:4, text:'Prepare monthly report', priority:'medium', done:false }
+                { id:1, text:'Follow up with Rajesh Kumar', priority:'high', done:false },
+                { id:2, text:'Send proposal to ABC Corporation', priority:'medium', done:false },
+                { id:3, text:'Invoice follow-up - XYZ Analytics', priority:'high', done:false },
+                { id:4, text:'Update pipeline with new leads', priority:'low', done:false },
+                { id:5, text:'Prepare monthly report', priority:'medium', done:false }
             ],
             
             init: function() {
                 var user = JSON.parse(localStorage.getItem('crm_user') || '{"name":"User"}');
                 document.getElementById('userName').textContent = user.name || 'User';
-                
                 var now = new Date();
-                document.getElementById('welcomeDate').textContent = 
-                    now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
-                
+                document.getElementById('welcomeDate').textContent = now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
                 this.loadStats();
                 this.render();
             },
@@ -351,7 +286,6 @@
                 document.getElementById('stat-pipeline').textContent = '₹' + pipeValue.toLocaleString('en-IN');
                 document.getElementById('stat-tasks').textContent = pendingTasks;
                 
-                // Revenue bar
                 var goal = 70000;
                 var percent = Math.min(100, Math.round((totalRevenue / goal) * 100));
                 document.getElementById('revenueFill').style.width = percent + '%';
@@ -359,81 +293,52 @@
                 document.getElementById('percentLabel').textContent = percent + '%';
                 document.getElementById('remainingLabel').textContent = 'Remaining: ₹' + Math.max(0, goal - totalRevenue).toLocaleString('en-IN');
                 
-                var daysLeft = new Date(now.getFullYear(), now.getMonth()+1, 0).getDate() - now.getDate() + 1;
+                var today = new Date();
+                var daysLeft = new Date(today.getFullYear(), today.getMonth()+1, 0).getDate() - today.getDate() + 1;
                 var daily = Math.round(Math.max(0, goal - totalRevenue) / Math.max(1, daysLeft));
                 document.getElementById('dailyLabel').textContent = 'Required/day: ₹' + daily.toLocaleString('en-IN');
             },
             
             render: function() {
-                // Update bottom tabs
-                var tabs = document.querySelectorAll('.bottom-tab');
-                var tabKeys = ['overview', 'tasks', 'revenue', null, null];
-                tabs.forEach(function(tab, i) {
-                    if (tabKeys[i]) {
-                        tab.classList.toggle('active', tabKeys[i] === Dashboard.currentTab);
-                    }
+                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
+                    var tabs = ['overview','tasks','revenue',null,null];
+                    if (tabs[i]) tab.classList.toggle('active', tabs[i] === Dashboard.currentTab);
                 });
                 
-                // Show tab content
                 document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
                 var tabEl = document.getElementById('tab-' + this.currentTab);
                 if (tabEl) tabEl.classList.add('active');
                 
-                // Render tasks if on tasks tab
                 if (this.currentTab === 'tasks') this.renderTasks();
             },
             
             renderTasks: function() {
                 var self = this;
                 var container = document.getElementById('tasksList');
-                if (this.tasks.length === 0) {
-                    container.innerHTML = '<div class="empty-state"><div class="empty-icon">🎉</div><p>No tasks! Great job!</p></div>';
-                    return;
-                }
-                container.innerHTML = this.tasks.map(function(t, i) {
+                container.innerHTML = this.tasks.map(function(t) {
                     var pc = t.priority==='high'?'priority-high':t.priority==='medium'?'priority-medium':'priority-low';
                     return '<div class="task-item" style="'+(t.done?'opacity:0.5;':'')+'">'+
-                        '<input type="checkbox" class="task-check" onchange="Dashboard.toggleTask('+i+')" '+(t.done?'checked':'')+'>'+
+                        '<input type="checkbox" class="task-check" '+(t.done?'checked':'')+' onchange="Dashboard.toggleTask('+t.id+')">'+
                         '<span class="task-text" style="'+(t.done?'text-decoration:line-through;':'')+'">'+self.esc(t.text)+'</span>'+
-                        '<span class="task-priority '+pc+'">'+t.priority+'</span>'+
-                    '</div>';
+                        '<span class="task-priority '+pc+'">'+t.priority+'</span></div>';
                 }).join('');
             },
             
-            toggleTask: function(index) {
-                this.tasks[index].done = !this.tasks[index].done;
-                this.renderTasks();
-                this.loadStats();
-                this.toast(this.tasks[index].done ? '✅ Task completed!' : '🔄 Task reopened', 'info');
+            toggleTask: function(id) {
+                var t = this.tasks.find(function(x){return x.id===id;});
+                if (t) { t.done = !t.done; this.renderTasks(); this.loadStats(); this.toast(t.done?'✅ Task completed!':'🔄 Task reopened','info'); }
             },
             
             addTask: function() {
-                var text = prompt('Enter task description:');
-                if (text && text.trim()) {
-                    this.tasks.push({ id: Date.now(), text: text.trim(), priority: 'medium', done: false });
-                    this.renderTasks();
-                    this.loadStats();
-                    this.toast('✅ Task added!', 'success');
-                }
+                var text = prompt('Enter task:');
+                if (text?.trim()) { this.tasks.push({ id:Date.now(), text:text.trim(), priority:'medium', done:false }); this.renderTasks(); this.loadStats(); this.toast('✅ Task added!','success'); }
             },
             
-            refresh: function() {
-                this.loadStats();
-                this.render();
-                this.toast('✅ Dashboard refreshed', 'success');
-            },
+            refresh: function() { this.loadStats(); this.toast('✅ Refreshed','success'); },
             
-            toast: function(msg, type) {
-                type = type || 'info';
-                var d = document.createElement('div');
-                d.className = 'toast toast-' + type;
-                d.textContent = msg;
-                var c = document.getElementById('toastContainer');
-                c.appendChild(d);
-                setTimeout(function(){ d.remove(); }, 3000);
-            },
+            toast: function(m,t) { t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
             
-            esc: function(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):''; }
         };
         
         document.addEventListener('DOMContentLoaded', function() { Dashboard.init(); });
