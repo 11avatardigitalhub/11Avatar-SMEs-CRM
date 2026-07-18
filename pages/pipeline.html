@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="internal">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F6F0" />
+    <title>Pipeline - 11 Avatar Digital Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/crm-design-system.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    
+    <style>
+        :root {
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
+            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+        }
+        .pipeline-container { max-width: 100%; margin: 0 auto; padding: 20px; padding-bottom: 100px; }
+        
+        /* Bottom Submenu */
+        .bottom-submenu {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+            display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .bottom-submenu::-webkit-scrollbar { display: none; }
+        .bottom-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 10px 16px; border-radius: 12px; cursor: pointer;
+            font-size: 0.7rem; font-weight: 500; color: #777;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
+            border: 1.5px solid transparent; background: transparent;
+        }
+        .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
+        .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
+        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        
+        /* Page Header */
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 16px;
+        }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn-primary { background: var(--gold-gradient); color: #FFF; }
+        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
+        .btn-outline:hover { background: rgba(212,175,55,0.08); }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-ghost { background: transparent; color: #666; }
+        .btn-ghost:hover { background: #F5F5F5; }
+        .btn-danger { background: #DC2626; color: #FFF; }
+        
+        /* Stats */
+        .pipeline-stats { display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+        .pipe-stat {
+            background: #FFF; border-radius: 10px; padding: 12px 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04); flex: 1; min-width: 100px;
+            text-align: center; border-left: 3px solid var(--s-color);
+        }
+        .pipe-stat .num { font-size: 20px; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        .pipe-stat .lbl { font-size: 10px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        /* Kanban Board */
+        .pipeline-board { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; min-height: 450px; }
+        .pipeline-col {
+            background: #f0f2f5; border-radius: 12px; padding: 10px;
+            min-width: 260px; max-width: 300px; flex: 1; display: flex; flex-direction: column;
+        }
+        .pipeline-col-header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 8px; padding-bottom: 8px; border-bottom: 3px solid var(--col-color);
+        }
+        .pipeline-col-header h6 { font-size: 13px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 6px; }
+        .pipeline-col-header .count { font-size: 11px; background: #FFF; padding: 2px 10px; border-radius: 10px; font-weight: 600; }
+        .pipeline-cards { flex: 1; min-height: 60px; }
+        
+        .pipe-card {
+            background: #FFF; border: 1px solid #e0e0e0; border-radius: 8px;
+            padding: 10px; margin-bottom: 6px; cursor: pointer; transition: all 0.15s;
+            position: relative;
+        }
+        .pipe-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); border-color: #D4AF37; }
+        .pipe-card.dragging { opacity: 0.4; transform: rotate(2deg); }
+        .pipe-card .card-name { font-weight: 600; font-size: 13px; margin: 2px 0; }
+        .pipe-card .card-detail { font-size: 11px; color: #888; }
+        .pipe-card .card-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+        .pipe-card .card-badge { font-size: 10px; padding: 1px 6px; border-radius: 8px; }
+        .card-badge.priority-high { background: #FEE2E2; color: #DC2626; }
+        .card-badge.priority-medium { background: #FEF3C7; color: #D97706; }
+        .card-badge.priority-low { background: #E0F2FE; color: #0284C7; }
+        .card-badge.followup { background: #DCFCE7; color: #166534; }
+        .card-badge.notes { background: #F3E8FF; color: #6B21A8; }
+        
+        .quick-add-btn {
+            background: none; border: 1px dashed #c0c0c0; border-radius: 6px;
+            padding: 8px; width: 100%; cursor: pointer; font-size: 11px; color: #888;
+            text-align: center; margin-top: 4px;
+        }
+        .quick-add-btn:hover { background: #e7f3ff; border-color: #D4AF37; color: #B8960F; }
+        .quick-add-form { display: flex; gap: 4px; margin-top: 4px; flex-wrap: wrap; }
+        .quick-add-form input { flex: 1; padding: 5px 8px; border: 1px solid #dadde1; border-radius: 4px; font-size: 11px; min-width: 60px; }
+        .drag-over { background: #e7f3ff !important; border: 2px dashed #D4AF37 !important; }
+        
+        /* Detail Panel */
+        .detail-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2999; }
+        .detail-panel {
+            position: fixed; top: 0; right: 0; width: 450px; max-width: 95vw; height: 100vh;
+            background: #FFF; box-shadow: -4px 0 20px rgba(0,0,0,0.15);
+            z-index: 3000; overflow-y: auto; padding: 20px; animation: slideIn 0.2s ease;
+        }
+        @keyframes slideIn { from{transform:translateX(100%);} to{transform:translateX(0);} }
+        
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; z-index: 3100; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
+        .modal-box { background: #FFF; border-radius: 16px; padding: 24px; width: 100%; max-width: 450px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        
+        /* Form */
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.78rem; color: #333; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 8px 12px; border: 1.5px solid #E5E5E5; border-radius: 8px;
+            font-size: 0.85rem; font-family: 'Inter',sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #D4AF37; outline: none; }
+        
+        /* Toast */
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        
+        @media(max-width:768px){ .pipeline-board{flex-direction:column;} .pipeline-col{max-width:100%;} .detail-panel{width:100%;} }
+    </style>
+</head>
+<body>
+
+    <div class="pipeline-container">
+        
+        <!-- Page Header -->
+        <div class="page-header">
+            <div><h1>📈 <span class="gold">Pipeline</span> Kanban</h1></div>
+            <div class="flex gap-2" style="display:flex;flex-wrap:wrap;">
+                <button class="btn btn-outline btn-sm" onclick="Pipeline.render()">🔄 Refresh</button>
+                <button class="btn btn-primary btn-sm" onclick="Pipeline.showAddForm()">➕ Add Deal</button>
+            </div>
+        </div>
+        
+        <!-- Stats -->
+        <div class="pipeline-stats" id="pipelineStats"></div>
+        
+        <!-- Kanban Board -->
+        <div class="pipeline-board" id="kanbanBoard"></div>
+        
+        <!-- Modal Container -->
+        <div id="modalContainer"></div>
+        
+        <!-- Detail Panel -->
+        <div id="detailPanel"></div>
+        
+    </div>
+    
+    <!-- Bottom Submenu -->
+    <div class="bottom-submenu">
+        <div class="bottom-tab active" onclick="Pipeline.render()"><span class="tab-icon">📌</span> Kanban</div>
+        <div class="bottom-tab" onclick="Pipeline.showAddForm()"><span class="tab-icon">➕</span> Add Deal</div>
+        <div class="bottom-tab" onclick="window.location.href='leads.html'"><span class="tab-icon">👥</span> Leads</div>
+        <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        'use strict';
+        
+        var Pipeline = {
+            stages: [
+                { id:'new', name:'New Lead', color:'#6366f1', icon:'⭐' },
+                { id:'contacted', name:'Contacted', color:'#8b5cf6', icon:'📞' },
+                { id:'qualified', name:'Qualified', color:'#3b82f6', icon:'✅' },
+                { id:'proposal', name:'Proposal', color:'#f59e0b', icon:'📄' },
+                { id:'negotiation', name:'Negotiation', color:'#ef4444', icon:'🤝' },
+                { id:'won', name:'Won', color:'#10b981', icon:'🏆' },
+                { id:'lost', name:'Lost', color:'#6b7280', icon:'❌' }
+            ],
+            deals: [],
+            draggedId: null,
+            selectedCard: null,
+            
+            init: function() {
+                this.deals = JSON.parse(localStorage.getItem('crm_deals') || '[]');
+                if (this.deals.length === 0) this.seedData();
+                this.render();
+            },
+            
+            seedData: function() {
+                this.deals = [
+                    { id:'DL001',name:'Website Redesign',contact:'Rajesh Kumar',company:'Kumar Enterprises',stage:'proposal',value:150000,priority:'high',notes:'Needs complete redesign',followup:new Date(Date.now()+86400000*3).toISOString().split('T')[0],created:new Date().toISOString() },
+                    { id:'DL002',name:'SEO Package',contact:'Priya Sharma',company:'Sharma Textiles',stage:'qualified',value:80000,priority:'medium',notes:'6-month contract',followup:new Date().toISOString().split('T')[0],created:new Date().toISOString() },
+                    { id:'DL003',name:'Social Media Management',contact:'Amit Patel',company:'Patel Construction',stage:'new',value:45000,priority:'low',notes:'',followup:'',created:new Date().toISOString() },
+                    { id:'DL004',name:'Google Ads Campaign',contact:'Sunita Verma',company:'Verma Exports',stage:'negotiation',value:200000,priority:'high',notes:'Quarterly budget',followup:new Date(Date.now()+86400000).toISOString().split('T')[0],created:new Date().toISOString() },
+                    { id:'DL005',name:'Annual Maintenance',contact:'Vikram Singh',company:'ABC Corp',stage:'won',value:450000,priority:'high',notes:'Signed 1-year',followup:'',created:new Date(Date.now()-86400000*7).toISOString() }
+                ];
+                this.save();
+            },
+            
+            save: function() { try { localStorage.setItem('crm_deals', JSON.stringify(this.deals)); } catch(e) {} },
+            
+            totalValue: function() {
+                return this.deals.reduce(function(s,d){ return s + (parseInt(d.value)||0); }, 0).toLocaleString('en-IN');
+            },
+            
+            render: function() {
+                var self = this;
+                
+                // Stats
+                document.getElementById('pipelineStats').innerHTML = 
+                    '<div class="pipe-stat" style="--s-color:#6366f1;"><div class="num">'+this.deals.length+'</div><div class="lbl">Total Deals</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#3b82f6;"><div class="num">'+this.deals.filter(function(d){return ['new','contacted','qualified'].includes(d.stage);}).length+'</div><div class="lbl">Active</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#f59e0b;"><div class="num">'+this.deals.filter(function(d){return ['proposal','negotiation'].includes(d.stage);}).length+'</div><div class="lbl">Negotiating</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#10b981;"><div class="num">'+this.deals.filter(function(d){return d.stage==='won';}).length+'</div><div class="lbl">Won</div></div>'+
+                    '<div class="pipe-stat" style="--s-color:#ef4444;"><div class="num">₹'+this.totalValue()+'</div><div class="lbl">Pipeline Value</div></div>';
+                
+                // Board
+                document.getElementById('kanbanBoard').innerHTML = this.stages.map(function(stage) {
+                    var items = self.deals.filter(function(d){ return d.stage === stage.id; });
+                    return '<div class="pipeline-col" data-stage="'+stage.id+'" style="--col-color:'+stage.color+';">'+
+                        '<div class="pipeline-col-header"><h6><span style="color:'+stage.color+';">'+stage.icon+'</span> '+stage.name+'</h6><span class="count">'+items.length+'</span></div>'+
+                        '<div class="pipeline-cards" ondragover="Pipeline.dragOver(event)" ondragleave="Pipeline.dragLeave(event)" ondrop="Pipeline.drop(event,\''+stage.id+'\')">'+
+                            items.map(function(d){ return self.renderCard(d); }).join('')+
+                        '</div>'+
+                        '<div class="quick-add-btn" onclick="Pipeline.showQuickAdd(\''+stage.id+'\',event)">+ Quick Add</div>'+
+                    '</div>';
+                }).join('');
+                
+                if (this.selectedCard) { setTimeout(function(){ self.openDetailPanel(self.selectedCard); }, 100); }
+            },
+            
+            renderCard: function(d) {
+                var prio = d.priority==='high'?'priority-high':d.priority==='low'?'priority-low':'priority-medium';
+                var hasFup = d.followup ? true : false;
+                var hasNotes = d.notes ? true : false;
+                var badges = '';
+                if (d.priority==='high') badges += '<span class="card-badge priority-high">🔴 High</span>';
+                else if (d.priority==='low') badges += '<span class="card-badge priority-low">🔵 Low</span>';
+                if (hasFup) badges += '<span class="card-badge followup">📅 Follow-up</span>';
+                if (hasNotes) badges += '<span class="card-badge notes">📝 Notes</span>';
+                
+                return '<div class="pipe-card" draggable="true" data-id="'+d.id+'" ondragstart="Pipeline.drag(event)" ondragend="Pipeline.dragEnd(event)" onclick="Pipeline.openCardDetail(\''+d.id+'\')">'+
+                    '<div class="card-name">'+this.esc(d.name)+'</div>'+
+                    '<div class="card-detail">'+this.esc(d.contact||'')+' · '+this.esc(d.company||'')+'</div>'+
+                    (d.value ? '<div class="card-detail"><strong>₹'+parseInt(d.value).toLocaleString('en-IN')+'</strong></div>' : '')+
+                    (badges ? '<div class="card-badges">'+badges+'</div>' : '')+
+                '</div>';
+            },
+            
+            // Drag & Drop
+            drag: function(e) {
+                var card = e.target.closest('.pipe-card');
+                if (!card) return;
+                this.draggedId = card.dataset.id;
+                card.classList.add('dragging');
+            },
+            dragEnd: function(e) {
+                document.querySelectorAll('.pipe-card.dragging').forEach(function(c){ c.classList.remove('dragging'); });
+                document.querySelectorAll('.pipeline-cards.drag-over').forEach(function(c){ c.classList.remove('drag-over'); });
+            },
+            dragOver: function(e) { e.preventDefault(); var c = e.target.closest('.pipeline-cards'); if(c) c.classList.add('drag-over'); },
+            dragLeave: function(e) { var c = e.target.closest('.pipeline-cards'); if(c && !c.contains(e.relatedTarget)) c.classList.remove('drag-over'); },
+            drop: function(e, stage) {
+                e.preventDefault();
+                e.target.closest('.pipeline-cards')?.classList.remove('drag-over');
+                if (stage && this.draggedId) {
+                    var d = this.deals.find(function(x){return x.id===this.draggedId;}.bind(this));
+                    if (d) { d.stage = stage; this.save(); this.render(); this.toast('✅ Moved to '+stage,'success'); }
+                    this.draggedId = null;
+                }
+            }.bind(this),
+            
+            // Detail Panel
+            openCardDetail: function(id) { this.selectedCard = {id:id}; this.render(); },
+            closeDetail: function() { this.selectedCard = null; document.getElementById('detailPanel').innerHTML = ''; this.render(); },
+            
+            openDetailPanel: function(card) {
+                var self = this;
+                var d = this.deals.find(function(x){return x.id===card.id;});
+                if (!d) return;
+                var stageOpts = this.stages.map(function(s){ return '<option value="'+s.id+'" '+(d.stage===s.id?'selected':'')+'>'+s.name+'</option>'; }).join('');
+                
+                var h = '<div class="detail-backdrop" onclick="Pipeline.closeDetail()"></div>';
+                h += '<div class="detail-panel">';
+                h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">';
+                h += '<h5 style="margin:0;">'+this.esc(d.name)+'</h5>';
+                h += '<div><button class="btn btn-danger btn-xs" onclick="Pipeline.deleteDeal(\''+d.id+'\')">🗑️</button> <button class="btn btn-ghost btn-xs" onclick="Pipeline.closeDetail()">✕</button></div></div>';
+                h += '<div class="form-group"><label>Status</label><select onchange="Pipeline.updateField(\''+d.id+'\',\'status\',this.value)">'+stageOpts+'</select></div>';
+                h += '<div class="form-group"><label>Priority</label><select onchange="Pipeline.updateField(\''+d.id+'\',\'priority\',this.value)"><option value="high" '+(d.priority==='high'?'selected':'')+'>🔴 High</option><option value="medium" '+(d.priority==='medium'?'selected':'')+'>🟡 Medium</option><option value="low" '+(d.priority==='low'?'selected':'')+'>🔵 Low</option></select></div>';
+                h += '<div class="form-group"><label>Contact</label><input type="text" value="'+this.esc(d.contact||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'contact\',this.value)"></div>';
+                h += '<div class="form-group"><label>Company</label><input type="text" value="'+this.esc(d.company||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'company\',this.value)"></div>';
+                h += '<div class="form-group"><label>Deal Value (₹)</label><input type="number" value="'+(d.value||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'value\',this.value)"></div>';
+                h += '<div class="form-group"><label>📅 Follow-up Date</label><input type="date" value="'+(d.followup||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'followup\',this.value)"></div>';
+                h += '<div class="form-group"><label>📝 Notes</label><textarea rows="3" id="detailNotes">'+this.esc(d.notes||'')+'</textarea><button class="btn btn-outline btn-sm mt-1" onclick="Pipeline.saveNotes(\''+d.id+'\')">Save Notes</button></div>';
+                h += '<div class="form-group"><label>Created</label><p class="text-xs text-muted">'+this.fd(d.created)+'</p></div>';
+                h += '</div>';
+                document.getElementById('detailPanel').innerHTML = h;
+            },
+            
+            updateField: function(id, field, value) {
+                var d = this.deals.find(function(x){return x.id===id;});
+                if (d) { d[field] = value; this.save(); if (field==='status') this.render(); }
+            },
+            
+            saveNotes: function(id) {
+                var notes = document.getElementById('detailNotes')?.value || '';
+                var d = this.deals.find(function(x){return x.id===id;});
+                if (d) { d.notes = notes; this.save(); this.closeDetail(); this.toast('✅ Notes saved','success'); }
+            },
+            
+            deleteDeal: function(id) {
+                if (!confirm('Delete this deal?')) return;
+                this.deals = this.deals.filter(function(d){return d.id!==id;});
+                this.save(); this.closeDetail(); this.toast('🗑️ Deal deleted','info');
+            },
+            
+            // Quick Add
+            showQuickAdd: function(stage, e) {
+                e.stopPropagation();
+                var btn = e.target.closest('.quick-add-btn');
+                if (!btn) return;
+                btn.outerHTML = '<div class="quick-add-form" onclick="event.stopPropagation()"><input type="text" id="qName_'+stage+'" placeholder="Deal name" onkeydown="if(event.key===\'Enter\')Pipeline.quickAdd(\''+stage+'\')"><button class="btn btn-primary btn-xs" onclick="Pipeline.quickAdd(\''+stage+'\')">+</button></div>';
+                setTimeout(function(){ var inp = document.getElementById('qName_'+stage); if(inp) inp.focus(); }, 100);
+            },
+            
+            quickAdd: function(stage) {
+                var nameEl = document.getElementById('qName_'+stage);
+                var name = nameEl?.value?.trim() || '';
+                if (!name) { this.toast('Name required!','error'); return; }
+                this.deals.unshift({ id:'DL'+String(this.deals.length+1).padStart(3,'0'), name:name, contact:'', company:'', stage:stage, value:0, priority:'medium', notes:'', followup:'', created:new Date().toISOString() });
+                this.save(); this.render(); this.toast('✅ Deal added!','success');
+            },
+            
+            // Add Deal Modal
+            showAddForm: function() {
+                var h = '<div class="modal-overlay" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'"><div class="modal-box" onclick="event.stopPropagation()"><h5 style="margin-bottom:16px;">➕ Add New Deal</h5>';
+                h += '<div class="form-group"><label>Deal Name *</label><input type="text" id="kName"></div>';
+                h += '<div class="form-group"><label>Contact</label><input type="text" id="kContact"></div>';
+                h += '<div class="form-group"><label>Company</label><input type="text" id="kCompany"></div>';
+                h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="form-group"><label>Value (₹)</label><input type="number" id="kValue"></div><div class="form-group"><label>Stage</label><select id="kStage">'+this.stages.map(function(s){return '<option value="'+s.id+'">'+s.name+'</option>';}).join('')+'</select></div></div>';
+                h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="form-group"><label>Priority</label><select id="kPriority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🔵 Low</option></select></div><div class="form-group"><label>Follow-up</label><input type="date" id="kFollowup"></div></div>';
+                h += '<div style="display:flex;gap:8px;margin-top:12px;"><button class="btn btn-primary" onclick="Pipeline.addDeal()">💾 Save</button><button class="btn btn-ghost" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'">Cancel</button></div></div></div>';
+                document.getElementById('modalContainer').innerHTML = h;
+            },
+            
+            addDeal: function() {
+                var name = document.getElementById('kName')?.value?.trim();
+                if (!name) { this.toast('Name required!','error'); return; }
+                this.deals.unshift({
+                    id:'DL'+String(this.deals.length+1).padStart(3,'0'), name:name,
+                    contact:document.getElementById('kContact')?.value?.trim()||'',
+                    company:document.getElementById('kCompany')?.value?.trim()||'',
+                    value:parseInt(document.getElementById('kValue')?.value)||0,
+                    stage:document.getElementById('kStage')?.value||'new',
+                    priority:document.getElementById('kPriority')?.value||'medium',
+                    followup:document.getElementById('kFollowup')?.value||'',
+                    notes:'', created:new Date().toISOString()
+                });
+                this.save(); document.getElementById('modalContainer').innerHTML = ''; this.render(); this.toast('✅ Deal added!','success');
+            },
+            
+            toast: function(m,t) { t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
+            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
+            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() { Pipeline.init(); });
+    </script>
+</body>
+</html>
