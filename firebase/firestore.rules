@@ -1,0 +1,609 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ============================================================
+    // HELPER FUNCTIONS — Aligned with CRM_Config 8-Level RBAC
+    // ============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function currentUser() {
+      return request.auth.uid;
+    }
+    
+    function getUserRole() {
+      return request.auth.token.role;
+    }
+    
+    function getTenantId() {
+      return request.auth.token.tenantId;
+    }
+    
+    function hasTenant() {
+      return request.auth.token.tenantId != null;
+    }
+    
+    // 8-Level RBAC matching CRM_Config roles
+    function isPlatformOwner() {
+      return getUserRole() == 'PLATFORM_OWNER';
+    }
+    
+    function isTenantAdmin() {
+      return getUserRole() == 'TENANT_ADMIN' || isPlatformOwner();
+    }
+    
+    function isSubAdmin() {
+      return getUserRole() == 'SUB_ADMIN' || isTenantAdmin();
+    }
+    
+    function isManager() {
+      return getUserRole() == 'MANAGER' || isSubAdmin();
+    }
+    
+    function isTeamLeader() {
+      return getUserRole() == 'TEAM_LEADER' || isManager();
+    }
+    
+    function isExecutive() {
+      return getUserRole() == 'EXECUTIVE' || isTeamLeader();
+    }
+    
+    function isViewer() {
+      return getUserRole() == 'VIEWER' || isExecutive();
+    }
+    
+    function isRestricted() {
+      return getUserRole() == 'RESTRICTED' || isViewer();
+    }
+    
+    // Tenant isolation
+    function belongsToTenant(tenantId) {
+      return hasTenant() && tenantId == getTenantId();
+    }
+    
+    function isOwner(ownerId) {
+      return ownerId == currentUser();
+    }
+    
+    // Validation helpers
+    function isValidString(value, minLen, maxLen) {
+      return value is string && value.size() >= minLen && value.size() <= maxLen;
+    }
+    
+    function isValidEmail(value) {
+      return value is string && value.matches('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$');
+    }
+    
+    function isValidPhone(value) {
+      return value is string && value.matches('^[+]?[0-9]{10,15}$');
+    }
+    
+    function isValidGSTIN(value) {
+      return value is string && value.matches('^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}[Z]{1}[0-9A-Z]{1}$');
+    }
+
+    // ============================================================
+    // ORGANIZATIONS (Tenants)
+    // ============================================================
+    match /organizations/{orgId} {
+      allow read: if isAuthenticated() && belongsToTenant(orgId);
+      allow create: if isAuthenticated() && isPlatformOwner();
+      allow update: if isAuthenticated() && isTenantAdmin() && belongsToTenant(orgId);
+      allow delete: if isPlatformOwner();
+    }
+
+    // ============================================================
+    // USERS
+    // ============================================================
+    match /users/{userId} {
+      allow read: if isAuthenticated() && 
+        (currentUser() == userId || isTenantAdmin());
+      
+      allow create: if isAuthenticated() && 
+        isTenantAdmin() &&
+        isValidString(request.resource.data.displayName, 2, 100) &&
+        isValidEmail(request.resource.data.email);
+      
+      allow update: if isAuthenticated() && 
+        ((currentUser() == userId) || isTenantAdmin());
+      
+      allow delete: if isPlatformOwner();
+    }
+
+    // ============================================================
+    // TENANTS
+    // ============================================================
+    match /tenants/{tenantId} {
+      allow read: if isAuthenticated() && belongsToTenant(tenantId);
+      allow create: if isAuthenticated() && isPlatformOwner();
+      allow update: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+      allow delete: if isPlatformOwner();
+    }
+
+    // ============================================================
+    // LEADS
+    // ============================================================
+    match /leads/{leadId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      
+      allow create: if isAuthenticated() && 
+        isExecutive() &&
+        request.resource.data.tenantId == getTenantId() &&
+        isValidString(request.resource.data.firstName, 1, 100);
+      
+      allow update: if isAuthenticated() && 
+        belongsToTenant(resource.data.tenantId) &&
+        (isManager() || isOwner(resource.data.createdBy));
+      
+      allow delete: if isAuthenticated() && 
+        isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // CLIENTS
+    // ============================================================
+    match /clients/{clientId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // CONTACTS
+    // ============================================================
+    match /contacts/{contactId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // DEALS / PIPELINE
+    // ============================================================
+    match /deals/{dealId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /pipeline_stages/{stageId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update, delete: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+    }
+
+    // ============================================================
+    // INVOICES & ITEMS
+    // ============================================================
+    match /invoices/{invoiceId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      
+      allow create: if isAuthenticated() && 
+        isExecutive() && 
+        request.resource.data.tenantId == getTenantId();
+      
+      allow update: if isAuthenticated() && 
+        isManager() && belongsToTenant(resource.data.tenantId);
+      
+      allow delete: if isAuthenticated() && 
+        isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /invoice_items/{itemId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // PAYMENTS
+    // ============================================================
+    match /payments/{paymentId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /payment_gateways/{gatewayId} {
+      allow read, create, update, delete: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+    }
+
+    // ============================================================
+    // TASKS
+    // ============================================================
+    match /tasks/{taskId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && belongsToTenant(resource.data.tenantId) && 
+        (isManager() || isOwner(resource.data.createdBy) || resource.data.assignee == currentUser());
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /task_comments/{commentId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive();
+      allow update, delete: if isAuthenticated() && isOwner(resource.data.createdBy);
+    }
+
+    // ============================================================
+    // PROJECTS
+    // ============================================================
+    match /projects/{projectId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /project_milestones/{milestoneId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update, delete: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+    }
+
+    // ============================================================
+    // RETAINERS
+    // ============================================================
+    match /retainers/{retainerId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /retainer_invoices/{invId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // TRAINING LMS
+    // ============================================================
+    match /courses/{courseId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /course_modules/{moduleId} {
+      allow read, create, update, delete: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+    }
+
+    match /enrollments/{enrollmentId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && belongsToTenant(request.resource.data.tenantId);
+      allow update: if isAuthenticated() && (isManager() || resource.data.studentId == currentUser());
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /assessments/{assessmentId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isManager();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /certificates/{certId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager();
+      allow update, delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // REFERRALS
+    // ============================================================
+    match /referrals/{referralId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /referral_partners/{partnerId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /referral_commissions/{commissionId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager();
+      allow update: if isAuthenticated() && isTenantAdmin();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // WHATSAPP
+    // ============================================================
+    match /whatsapp_messages/{messageId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /whatsapp_templates/{templateId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /whatsapp_contacts/{contactId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // APPOINTMENTS
+    // ============================================================
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /calendar_events/{eventId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update, delete: if isAuthenticated() && belongsToTenant(request.resource.data.tenantId);
+    }
+
+    // ============================================================
+    // NOTIFICATIONS
+    // ============================================================
+    match /notifications/{notificationId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && (resource.data.userId == currentUser() || isTenantAdmin());
+      allow delete: if isAuthenticated() && resource.data.userId == currentUser();
+    }
+
+    match /notification_preferences/{userId} {
+      allow read, write: if isAuthenticated() && currentUser() == userId;
+    }
+
+    // ============================================================
+    // EMAIL & SMS QUEUE
+    // ============================================================
+    match /email_queue/{emailId} {
+      allow read, create: if isAuthenticated() && belongsToTenant(request.resource.data.tenantId);
+      allow update, delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /sms_queue/{smsId} {
+      allow read, create: if isAuthenticated() && belongsToTenant(request.resource.data.tenantId);
+      allow update, delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // WEBHOOKS
+    // ============================================================
+    match /webhook_events/{eventId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // SETTINGS
+    // ============================================================
+    match /settings/{tenantId} {
+      allow read: if isAuthenticated() && belongsToTenant(tenantId);
+      allow create, update: if isAuthenticated() && isTenantAdmin() && tenantId == getTenantId();
+      allow delete: if isPlatformOwner();
+    }
+
+    // ============================================================
+    // AUDIT LOGS
+    // ============================================================
+    match /audit_logs/{logId} {
+      allow read: if isAuthenticated() && isTenantAdmin();
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update: if false;
+      allow delete: if isPlatformOwner();
+    }
+
+    // ============================================================
+    // ACTIVITY LOGS
+    // ============================================================
+    match /activity_logs/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    // ============================================================
+    // REPORTS
+    // ============================================================
+    match /reports/{reportId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    match /report_schedules/{scheduleId} {
+      allow read, create, update, delete: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+    }
+
+    // ============================================================
+    // API KEYS
+    // ============================================================
+    match /api_keys/{keyId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(resource.data.tenantId);
+    }
+
+    // ============================================================
+    // BACKUP
+    // ============================================================
+    match /backup_history/{backupId} {
+      allow read: if isAuthenticated() && isTenantAdmin();
+      allow create: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if isPlatformOwner();
+    }
+
+    // ============================================================
+    // TEAM INVITES
+    // ============================================================
+    match /team_invites/{inviteId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isTenantAdmin();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // BROADCAST LOGS
+    // ============================================================
+    match /broadcast_logs/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // AUTOMATION RULES
+    // ============================================================
+    match /automation_rules/{ruleId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isManager() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // OTP STORE
+    // ============================================================
+    match /otp_store/{otpId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // ZAPIER ZAPS
+    // ============================================================
+    match /zapier_zaps/{zapId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /zapier_logs/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    match /zapier_webhooks/{webhookId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // ZOHO MAPPINGS
+    // ============================================================
+    match /zoho_mappings/{mappingId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /zoho_sync_log/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    // ============================================================
+    // HUBSPOT MAPPINGS
+    // ============================================================
+    match /hubspot_mappings/{mappingId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /hubspot_sync_log/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    // ============================================================
+    // SALESFORCE MAPPINGS
+    // ============================================================
+    match /salesforce_mappings/{mappingId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update: if isAuthenticated() && isTenantAdmin() && request.resource.data.tenantId == getTenantId();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /salesforce_sync_log/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    // ============================================================
+    // TALLY SYNC LOG
+    // ============================================================
+    match /tally_sync_log/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    // ============================================================
+    // DRIVE FILES
+    // ============================================================
+    match /drive_files/{fileId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    match /drive_shared_drives/{driveId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create, update, delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // DROPBOX FILES
+    // ============================================================
+    match /dropbox_files/{fileId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && isExecutive() && request.resource.data.tenantId == getTenantId();
+      allow update: if isAuthenticated() && isManager();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // WEBHOOK LOGS
+    // ============================================================
+    match /webhook_logs/{logId} {
+      allow read: if isAuthenticated() && belongsToTenant(resource.data.tenantId);
+      allow create: if isAuthenticated() && request.resource.data.tenantId == getTenantId();
+      allow update, delete: if false;
+    }
+
+    // ============================================================
+    // WILDCARD DENY (Catch-all security)
+    // ============================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
