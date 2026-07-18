@@ -1,1615 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-    <!-- ========================================================
-    META TAGS
-    ======================================================== -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="11 Avatar SMEs CRM - India's Most Affordable, Complete Revenue Operating System for Small & Medium Enterprises. GST-Ready Invoicing, WhatsApp Integration, Lead Management, Pipeline Tracking, and more. Start Free Today." />
-    <meta name="keywords" content="SME CRM India, small business CRM, GST invoicing software, lead management, WhatsApp CRM, affordable CRM, Indian business software, 11 Avatar, revenue management, sales pipeline" />
+    <meta name="description" content="11 Avatar SMEs CRM - India's Most Affordable Revenue Operating System for Small Businesses. GST Invoicing, WhatsApp, Lead Management." />
+    <meta name="keywords" content="SME CRM India, GST invoicing, lead management, WhatsApp CRM, affordable CRM" />
     <meta name="author" content="11 Avatar Digital Hub" />
-    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
-    <meta name="googlebot" content="index, follow" />
     <meta name="theme-color" content="#0A0A0A" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="11 Avatar CRM" />
-    <meta name="format-detection" content="telephone=no" />
     <meta name="application-name" content="11 Avatar SMEs CRM" />
-
-    <!-- Open Graph / Social -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="11 Avatar SMEs CRM" />
     <meta property="og:title" content="11 Avatar SMEs CRM - India's Affordable Revenue OS" />
-    <meta property="og:description" content="Complete CRM for Indian Small Businesses. Leads, Pipeline, GST Invoices, WhatsApp, Payments — all in one place. Start Free." />
+    <meta property="og:description" content="Complete CRM for Indian Small Businesses. Start Free Today." />
     <meta property="og:url" content="https://SME.11avatardigitalhub.cloud/" />
-    <meta property="og:image" content="https://SME.11avatardigitalhub.cloud/assets/images/og-image.png" />
     <meta property="og:locale" content="en_IN" />
-
-    <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="11 Avatar SMEs CRM - India's Affordable Revenue OS" />
-    <meta name="twitter:description" content="Complete CRM for Indian Small Businesses. Start Free Today." />
-    <meta name="twitter:image" content="https://SME.11avatardigitalhub.cloud/assets/images/og-image.png" />
-
-    <!-- PWA Manifest -->
     <link rel="manifest" href="manifest.json" />
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23D4AF37'/%3E%3Ctext x='50' y='68' font-size='38' text-anchor='middle' fill='%230A0A0A' font-weight='900' font-family='Poppins,sans-serif'%3E11A%3C/text%3E%3C/svg%3E" />
-
-    <!-- Canonical -->
     <link rel="canonical" href="https://SME.11avatardigitalhub.cloud/" />
-
-    <!-- Preconnect for Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="preconnect" href="https://www.gstatic.com" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://www.gstatic.com" />
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
 
-    <!-- Design System CSS -->
+    <!-- DESIGN SYSTEM + PUBLIC CSS -->
     <link rel="stylesheet" href="css/crm-design-system.css" />
+    <link rel="stylesheet" href="css/public.css" />
 
-    <title>11 Avatar SMEs CRM — India's Most Affordable Revenue Operating System for Small Businesses</title>
-
-    <!-- ========================================================
-    PAGE-SPECIFIC STYLES
-    ======================================================== -->
-    <style>
-        /* ========================================================
-           PUBLIC PAGE OVERRIDES (Dark Theme Default)
-           ======================================================== */
-        :root {
-            --public-bg: #0A0A0A;
-            --public-bg-secondary: #111111;
-            --public-bg-card: rgba(26, 26, 26, 0.85);
-            --public-bg-glass: rgba(20, 20, 20, 0.65);
-            --hero-glow: radial-gradient(ellipse 60% 50% at 50% 40%, rgba(212, 175, 55, 0.12) 0%, transparent 70%);
-            --hero-glow-2: radial-gradient(ellipse 40% 60% at 80% 30%, rgba(232, 201, 90, 0.08) 0%, transparent 60%);
-            --hero-glow-3: radial-gradient(ellipse 50% 50% at 20% 60%, rgba(184, 150, 15, 0.06) 0%, transparent 60%);
-        }
-
-        body {
-            background: var(--public-bg);
-            padding-top: 0;
-            overflow-x: hidden;
-        }
-
-        /* ========================================================
-           HEADER / PRIMARY NAV
-           ======================================================== */
-        .public-header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: var(--z-sticky);
-            background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-            height: var(--nav-height);
-            transition: all var(--transition);
-        }
-
-        .public-header.scrolled {
-            background: rgba(10, 10, 10, 0.95);
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
-        }
-
-        .header-inner {
-            max-width: var(--container-wide);
-            margin: 0 auto;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 var(--space-6);
-            gap: var(--space-4);
-        }
-
-        .header-logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            text-decoration: none;
-            flex-shrink: 0;
-            font-family: var(--font-heading);
-            font-weight: var(--weight-extrabold);
-            font-size: var(--text-lg);
-            color: #FFFFFF;
-            letter-spacing: var(--tracking-tight);
-            transition: opacity var(--transition-fast);
-        }
-
-        .header-logo:hover {
-            opacity: 0.9;
-            text-decoration: none;
-        }
-
-        .header-logo svg {
-            width: 38px;
-            height: 38px;
-            flex-shrink: 0;
-            filter: drop-shadow(0 2px 8px rgba(212, 175, 55, 0.3));
-        }
-
-        .header-logo-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-        }
-
-        .header-logo-text .brand-name {
-            font-size: var(--text-lg);
-            font-weight: var(--weight-extrabold);
-            color: #FFFFFF;
-        }
-
-        .header-logo-text .brand-tagline {
-            font-size: var(--text-2xs);
-            font-weight: var(--weight-normal);
-            color: var(--gold);
-            letter-spacing: var(--tracking-wider);
-            text-transform: uppercase;
-        }
-
-        /* Desktop Nav */
-        .header-nav {
-            display: flex;
-            align-items: center;
-            gap: var(--space-1);
-        }
-
-        .header-nav-link {
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-full);
-            font-size: var(--text-sm);
-            font-weight: var(--weight-medium);
-            color: rgba(255, 255, 255, 0.7);
-            text-decoration: none;
-            transition: all var(--transition-fast);
-            white-space: nowrap;
-        }
-
-        .header-nav-link:hover,
-        .header-nav-link:focus-visible {
-            color: #FFFFFF;
-            background: rgba(255, 255, 255, 0.06);
-            text-decoration: none;
-        }
-
-        .header-actions {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            flex-shrink: 0;
-        }
-
-        /* Mobile Menu Toggle */
-        .mobile-menu-toggle {
-            display: none;
-            width: 44px;
-            height: 44px;
-            border-radius: var(--radius-full);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: transparent;
-            color: #FFFFFF;
-            font-size: 1.4rem;
-            cursor: pointer;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-        }
-
-        .mobile-menu-toggle:hover {
-            background: rgba(255, 255, 255, 0.06);
-        }
-
-        /* Mobile Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: var(--nav-height);
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(10, 10, 10, 0.98);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            z-index: var(--z-sidebar);
-            padding: var(--space-6);
-            overflow-y: auto;
-            animation: fadeDown 0.3s var(--ease-out);
-        }
-
-        .mobile-menu.show {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-2);
-        }
-
-        .mobile-menu-link {
-            padding: var(--space-4) var(--space-5);
-            border-radius: var(--radius);
-            font-size: var(--text-base);
-            font-weight: var(--weight-medium);
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            transition: all var(--transition-fast);
-            display: block;
-        }
-
-        .mobile-menu-link:hover,
-        .mobile-menu-link:focus-visible {
-            background: rgba(255, 255, 255, 0.06);
-            color: #FFFFFF;
-            text-decoration: none;
-        }
-
-        .mobile-menu-cta {
-            margin-top: var(--space-4);
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-3);
-        }
-
-        /* ========================================================
-           SUB MENU (Page-Specific - Rule #10)
-           ======================================================== */
-        .submenu {
-            position: sticky;
-            top: var(--nav-height);
-            z-index: var(--z-dropdown);
-            background: rgba(10, 10, 10, 0.9);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .submenu::-webkit-scrollbar {
-            display: none;
-        }
-
-        .submenu-inner {
-            max-width: var(--container-wide);
-            margin: 0 auto;
-            display: flex;
-            align-items: center;
-            gap: var(--space-1);
-            padding: 0 var(--space-6);
-            min-height: 48px;
-        }
-
-        .submenu-link {
-            padding: var(--space-2) var(--space-4);
-            border-radius: var(--radius-full);
-            font-size: var(--text-xs);
-            font-weight: var(--weight-medium);
-            color: rgba(255, 255, 255, 0.55);
-            text-decoration: none;
-            white-space: nowrap;
-            transition: all var(--transition-fast);
-        }
-
-        .submenu-link:hover,
-        .submenu-link:focus-visible {
-            color: #FFFFFF;
-            background: rgba(255, 255, 255, 0.06);
-            text-decoration: none;
-        }
-
-        .submenu-link.active {
-            color: var(--gold);
-            background: rgba(212, 175, 55, 0.1);
-        }
-
-        /* ========================================================
-           HERO SECTION
-           ======================================================== */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            min-height: 100dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: calc(var(--nav-height) + var(--space-16)) var(--space-6) var(--space-16);
-            overflow: hidden;
-            isolation: isolate;
-        }
-
-        .hero-bg {
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .hero-bg::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--hero-glow);
-        }
-
-        .hero-bg::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: var(--hero-glow-2);
-        }
-
-        .hero-grid-pattern {
-            position: absolute;
-            inset: 0;
-            z-index: -2;
-            opacity: 0.03;
-            background-image:
-                linear-gradient(rgba(255, 255, 255, 0.5) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.5) 1px, transparent 1px);
-            background-size: 60px 60px;
-            mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
-            -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, black 30%, transparent 70%);
-        }
-
-        .hero-content {
-            max-width: 900px;
-            text-align: center;
-            z-index: 1;
-            animation: fadeUp 0.8s var(--ease-out) forwards;
-        }
-
-        .hero-trust-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-1-5) var(--space-5);
-            background: rgba(212, 175, 55, 0.1);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: var(--radius-full);
-            font-size: var(--text-xs);
-            font-weight: var(--weight-semibold);
-            color: var(--gold-light);
-            margin-bottom: var(--space-8);
-            animation: fadeUp 0.6s var(--ease-out) 0.2s both;
-        }
-
-        .hero-trust-badge .badge-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: var(--gold);
-            animation: pulse 2s var(--ease-in-out) infinite;
-        }
-
-        .hero-headline {
-            font-family: var(--font-heading);
-            font-size: var(--h1);
-            font-weight: var(--weight-black);
-            line-height: 1.1;
-            color: #FFFFFF;
-            margin-bottom: var(--space-6);
-            letter-spacing: var(--tracking-tight);
-        }
-
-        .hero-headline .gold-text {
-            background: var(--gold-text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subheadline {
-            font-size: var(--text-lg);
-            color: rgba(255, 255, 255, 0.6);
-            max-width: 650px;
-            margin: 0 auto var(--space-10);
-            line-height: var(--leading-relaxed);
-        }
-
-        .hero-cta-group {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-4);
-            flex-wrap: wrap;
-            margin-bottom: var(--space-12);
-        }
-
-        .hero-cta-primary {
-            padding: var(--space-5) var(--space-10);
-            min-height: 56px;
-            font-size: var(--text-base);
-            font-weight: var(--weight-semibold);
-            background: var(--gold-gradient);
-            color: #0A0A0A;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all var(--transition);
-            box-shadow: 0 4px 24px rgba(212, 175, 55, 0.3);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-
-        .hero-cta-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 40px rgba(212, 175, 55, 0.5);
-            text-decoration: none;
-            color: #0A0A0A;
-        }
-
-        .hero-cta-secondary {
-            padding: var(--space-5) var(--space-10);
-            min-height: 56px;
-            font-size: var(--text-base);
-            font-weight: var(--weight-medium);
-            background: transparent;
-            color: #FFFFFF;
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all var(--transition);
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
-        }
-
-        .hero-cta-secondary:hover {
-            border-color: rgba(255, 255, 255, 0.5);
-            background: rgba(255, 255, 255, 0.04);
-            text-decoration: none;
-            color: #FFFFFF;
-        }
-
-        /* Trust Indicators */
-        .hero-trust-indicators {
-            display: flex;
-            justify-content: center;
-            gap: var(--space-8);
-            flex-wrap: wrap;
-        }
-
-        .trust-item {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        .trust-item .trust-icon {
-            font-size: var(--text-lg);
-        }
-
-        /* Dashboard Mockup */
-        .hero-mockup {
-            margin-top: var(--space-16);
-            max-width: 1000px;
-            margin-left: auto;
-            margin-right: auto;
-            animation: fadeUp 0.8s var(--ease-out) 0.4s both;
-        }
-
-        .hero-mockup-card {
-            background: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-lg);
-            padding: var(--space-2);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(212, 175, 55, 0.1);
-            transform: perspective(1200px) rotateX(2deg);
-            transition: transform var(--transition-slow);
-        }
-
-        .hero-mockup-card:hover {
-            transform: perspective(1200px) rotateX(0deg);
-        }
-
-        .mockup-toolbar {
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            padding: var(--space-2) var(--space-3);
-            margin-bottom: var(--space-2);
-        }
-
-        .mockup-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-        }
-
-        .mockup-dot-red { background: #FF5F57; }
-        .mockup-dot-yellow { background: #FFBD2E; }
-        .mockup-dot-green { background: #28CA41; }
-
-        .mockup-url-bar {
-            flex: 1;
-            height: 26px;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: var(--radius-xs);
-            margin: 0 var(--space-4);
-        }
-
-        .mockup-body {
-            display: grid;
-            grid-template-columns: 60px 1fr;
-            gap: var(--space-2);
-            padding: var(--space-2);
-        }
-
-        .mockup-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-1);
-        }
-
-        .mockup-sidebar-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: var(--radius-sm);
-            background: rgba(255, 255, 255, 0.04);
-            margin: 0 auto;
-        }
-
-        .mockup-sidebar-icon.gold {
-            background: rgba(212, 175, 55, 0.2);
-        }
-
-        .mockup-main {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-2);
-        }
-
-        .mockup-stat {
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: var(--radius-sm);
-            padding: var(--space-3);
-            min-height: 50px;
-        }
-
-        .mockup-stat-line {
-            height: 6px;
-            border-radius: var(--radius-full);
-            background: rgba(255, 255, 255, 0.06);
-            margin-bottom: var(--space-2);
-        }
-
-        .mockup-stat-line.gold {
-            background: rgba(212, 175, 55, 0.3);
-            width: 60%;
-        }
-
-        .mockup-stat-line.short {
-            width: 40%;
-        }
-
-        .mockup-chart-area {
-            grid-column: 1 / -1;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: var(--radius-sm);
-            padding: var(--space-3);
-            min-height: 80px;
-            display: flex;
-            align-items: flex-end;
-            gap: var(--space-1);
-        }
-
-        .mockup-bar {
-            flex: 1;
-            border-radius: var(--radius-xs) var(--radius-xs) 0 0;
-            background: rgba(255, 255, 255, 0.04);
-            min-height: 20px;
-        }
-
-        .mockup-bar:nth-child(odd) {
-            background: rgba(212, 175, 55, 0.15);
-        }
-
-        /* ========================================================
-           SECTION COMMONS
-           ======================================================== */
-        .section {
-            padding: var(--space-20) var(--space-6);
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            max-width: 700px;
-            margin: 0 auto var(--space-16);
-        }
-
-        .section-label {
-            display: inline-block;
-            padding: var(--space-1) var(--space-4);
-            background: rgba(212, 175, 55, 0.08);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            border-radius: var(--radius-full);
-            font-size: var(--text-xs);
-            font-weight: var(--weight-semibold);
-            color: var(--gold-light);
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-wider);
-            margin-bottom: var(--space-4);
-        }
-
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: var(--h2);
-            font-weight: var(--weight-extrabold);
-            color: #FFFFFF;
-            margin-bottom: var(--space-4);
-            letter-spacing: var(--tracking-tight);
-            line-height: 1.2;
-        }
-
-        .section-title .gold-text {
-            background: var(--gold-text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-description {
-            font-size: var(--text-lg);
-            color: rgba(255, 255, 255, 0.55);
-            line-height: var(--leading-relaxed);
-        }
-
-        /* ========================================================
-           FEATURES SECTION
-           ======================================================== */
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-            gap: var(--space-6);
-            max-width: var(--container-wide);
-            margin: 0 auto;
-        }
-
-        .feature-card {
-            background: rgba(26, 26, 26, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            border-radius: var(--radius-lg);
-            padding: var(--space-8);
-            transition: all var(--transition);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .feature-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: var(--gold-gradient-horizontal);
-            opacity: 0;
-            transition: opacity var(--transition);
-        }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(212, 175, 55, 0.2);
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.1);
-        }
-
-        .feature-card:hover::before {
-            opacity: 1;
-        }
-
-        .feature-icon {
-            width: 56px;
-            height: 56px;
-            border-radius: var(--radius);
-            background: rgba(212, 175, 55, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.6rem;
-            margin-bottom: var(--space-5);
-            border: 1px solid rgba(212, 175, 55, 0.15);
-        }
-
-        .feature-title {
-            font-family: var(--font-heading);
-            font-size: var(--text-xl);
-            font-weight: var(--weight-semibold);
-            color: #FFFFFF;
-            margin-bottom: var(--space-3);
-        }
-
-        .feature-description {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.5);
-            line-height: var(--leading-relaxed);
-        }
-
-        /* ========================================================
-           STATS BAR
-           ======================================================== */
-        .stats-bar {
-            background: rgba(26, 26, 26, 0.4);
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            padding: var(--space-12) var(--space-6);
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-8);
-            max-width: var(--container-wide);
-            margin: 0 auto;
-            text-align: center;
-        }
-
-        .stat-item .stat-number {
-            font-family: var(--font-heading);
-            font-size: var(--text-4xl);
-            font-weight: var(--weight-extrabold);
-            background: var(--gold-text-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            display: block;
-            margin-bottom: var(--space-1);
-        }
-
-        .stat-item .stat-label-text {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.5);
-            font-weight: var(--weight-medium);
-        }
-
-        /* ========================================================
-           SOLUTIONS SECTION
-           ======================================================== */
-        .solutions-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: var(--space-4);
-            max-width: var(--container-wide);
-            margin: 0 auto;
-        }
-
-        .solution-card {
-            background: rgba(26, 26, 26, 0.4);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-md);
-            padding: var(--space-5);
-            text-align: center;
-            transition: all var(--transition);
-            cursor: default;
-        }
-
-        .solution-card:hover {
-            background: rgba(26, 26, 26, 0.7);
-            border-color: rgba(212, 175, 55, 0.2);
-            transform: translateY(-2px);
-        }
-
-        .solution-icon {
-            font-size: 2rem;
-            margin-bottom: var(--space-3);
-            display: block;
-        }
-
-        .solution-name {
-            font-weight: var(--weight-semibold);
-            font-size: var(--text-sm);
-            color: #FFFFFF;
-        }
-
-        /* ========================================================
-           HOW IT WORKS
-           ======================================================== */
-        .steps-container {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: var(--space-6);
-            max-width: var(--container-wide);
-            margin: 0 auto;
-        }
-
-        .step-card {
-            text-align: center;
-            position: relative;
-        }
-
-        .step-number {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
-            background: var(--gold-gradient);
-            color: #0A0A0A;
-            font-family: var(--font-heading);
-            font-size: var(--text-2xl);
-            font-weight: var(--weight-extrabold);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto var(--space-5);
-            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.25);
-        }
-
-        .step-title {
-            font-family: var(--font-heading);
-            font-weight: var(--weight-semibold);
-            font-size: var(--text-lg);
-            color: #FFFFFF;
-            margin-bottom: var(--space-2);
-        }
-
-        .step-description {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.5);
-            line-height: var(--leading-relaxed);
-        }
-
-        /* ========================================================
-           PRICING SECTION
-           ======================================================== */
-        .pricing-card {
-            max-width: 500px;
-            margin: 0 auto;
-            background: rgba(26, 26, 26, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(212, 175, 55, 0.25);
-            border-radius: var(--radius-xl);
-            padding: var(--space-10);
-            text-align: center;
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(212, 175, 55, 0.08);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .pricing-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: var(--gold-gradient-horizontal);
-        }
-
-        .pricing-badge {
-            display: inline-block;
-            padding: var(--space-1) var(--space-4);
-            background: rgba(212, 175, 55, 0.15);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: var(--radius-full);
-            font-size: var(--text-xs);
-            font-weight: var(--weight-semibold);
-            color: var(--gold-light);
-            margin-bottom: var(--space-6);
-        }
-
-        .pricing-price {
-            font-family: var(--font-heading);
-            font-size: 4rem;
-            font-weight: var(--weight-black);
-            color: #FFFFFF;
-            line-height: 1;
-            margin-bottom: var(--space-2);
-        }
-
-        .pricing-price .currency {
-            font-size: 2rem;
-            vertical-align: super;
-            color: var(--gold);
-        }
-
-        .pricing-period {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.4);
-            margin-bottom: var(--space-8);
-        }
-
-        .pricing-features {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 var(--space-8);
-            text-align: left;
-        }
-
-        .pricing-features li {
-            padding: var(--space-3) 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.7);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .pricing-features li::before {
-            content: '✓';
-            color: var(--gold);
-            font-weight: var(--weight-bold);
-            flex-shrink: 0;
-        }
-
-        .pricing-cta {
-            width: 100%;
-            padding: var(--space-4) var(--space-8);
-            min-height: 52px;
-            font-size: var(--text-base);
-            font-weight: var(--weight-semibold);
-            background: var(--gold-gradient);
-            color: #0A0A0A;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all var(--transition);
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.25);
-        }
-
-        .pricing-cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.4);
-        }
-
-        .pricing-note {
-            margin-top: var(--space-4);
-            font-size: var(--text-xs);
-            color: rgba(255, 255, 255, 0.35);
-        }
-
-        /* ========================================================
-           TESTIMONIALS
-           ======================================================== */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: var(--space-6);
-            max-width: var(--container-wide);
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background: rgba(26, 26, 26, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: var(--radius-lg);
-            padding: var(--space-8);
-            transition: all var(--transition);
-        }
-
-        .testimonial-card:hover {
-            border-color: rgba(255, 255, 255, 0.1);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .testimonial-stars {
-            color: var(--gold);
-            font-size: var(--text-lg);
-            margin-bottom: var(--space-4);
-            letter-spacing: 2px;
-        }
-
-        .testimonial-quote {
-            font-size: var(--text-base);
-            color: rgba(255, 255, 255, 0.75);
-            line-height: var(--leading-relaxed);
-            margin-bottom: var(--space-6);
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .testimonial-avatar {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--gold-gradient);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: var(--weight-bold);
-            color: #0A0A0A;
-            font-size: var(--text-lg);
-        }
-
-        .testimonial-name {
-            font-weight: var(--weight-semibold);
-            color: #FFFFFF;
-            font-size: var(--text-sm);
-        }
-
-        .testimonial-company {
-            font-size: var(--text-xs);
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        /* ========================================================
-           FAQ SECTION
-           ======================================================== */
-        .faq-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .faq-item {
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-        }
-
-        .faq-question {
-            width: 100%;
-            padding: var(--space-5) 0;
-            background: none;
-            border: none;
-            color: #FFFFFF;
-            font-size: var(--text-base);
-            font-weight: var(--weight-medium);
-            text-align: left;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: var(--space-4);
-            font-family: var(--font-body);
-            transition: color var(--transition-fast);
-        }
-
-        .faq-question:hover {
-            color: var(--gold);
-        }
-
-        .faq-icon {
-            font-size: var(--text-xl);
-            transition: transform var(--transition);
-            flex-shrink: 0;
-            color: var(--gold);
-        }
-
-        .faq-item.open .faq-icon {
-            transform: rotate(45deg);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height var(--transition), padding var(--transition);
-        }
-
-        .faq-item.open .faq-answer {
-            max-height: 300px;
-            padding-bottom: var(--space-5);
-        }
-
-        .faq-answer p {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.55);
-            line-height: var(--leading-relaxed);
-            margin: 0;
-        }
-
-        /* ========================================================
-           CTA SECTION
-           ======================================================== */
-        .cta-section {
-            position: relative;
-            overflow: hidden;
-        }
-
-        .cta-section::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(ellipse 60% 50% at 50% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 70%);
-            pointer-events: none;
-        }
-
-        .cta-content {
-            text-align: center;
-            max-width: 600px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .cta-title {
-            font-family: var(--font-heading);
-            font-size: var(--h2);
-            font-weight: var(--weight-extrabold);
-            color: #FFFFFF;
-            margin-bottom: var(--space-4);
-        }
-
-        .cta-description {
-            font-size: var(--text-lg);
-            color: rgba(255, 255, 255, 0.55);
-            margin-bottom: var(--space-8);
-        }
-
-        /* ========================================================
-           FOOTER
-           ======================================================== */
-        .public-footer {
-            background: rgba(10, 10, 10, 0.8);
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            padding: var(--space-16) var(--space-6) var(--space-8);
-        }
-
-        .footer-grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: var(--space-10);
-            max-width: var(--container-wide);
-            margin: 0 auto;
-        }
-
-        .footer-brand {
-            font-family: var(--font-heading);
-            font-weight: var(--weight-bold);
-            font-size: var(--text-xl);
-            color: #FFFFFF;
-            margin-bottom: var(--space-4);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .footer-description {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.45);
-            line-height: var(--leading-relaxed);
-            margin-bottom: var(--space-6);
-        }
-
-        .footer-column-title {
-            font-weight: var(--weight-semibold);
-            font-size: var(--text-sm);
-            color: #FFFFFF;
-            margin-bottom: var(--space-5);
-            text-transform: uppercase;
-            letter-spacing: var(--tracking-wider);
-        }
-
-        .footer-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .footer-links li {
-            margin-bottom: var(--space-3);
-        }
-
-        .footer-links a {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.5);
-            text-decoration: none;
-            transition: color var(--transition-fast);
-        }
-
-        .footer-links a:hover {
-            color: var(--gold);
-            text-decoration: none;
-        }
-
-        .footer-bottom {
-            max-width: var(--container-wide);
-            margin: var(--space-12) auto 0;
-            padding-top: var(--space-6);
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: var(--space-4);
-            font-size: var(--text-xs);
-            color: rgba(255, 255, 255, 0.35);
-        }
-
-        /* ========================================================
-           LOGIN / REGISTER MODAL
-           ======================================================== */
-        .auth-modal-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: var(--z-modal);
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-4);
-        }
-
-        .auth-modal-overlay.show {
-            display: flex;
-            animation: fadeIn 0.2s var(--ease-out);
-        }
-
-        .auth-modal {
-            background: #1A1A1A;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: var(--radius-xl);
-            width: 100%;
-            max-width: 460px;
-            padding: var(--space-10);
-            box-shadow: 0 24px 80px rgba(0, 0, 0, 0.6);
-            animation: modalIn 0.3s var(--ease-spring);
-            position: relative;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .auth-modal-close {
-            position: absolute;
-            top: var(--space-4);
-            right: var(--space-4);
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: rgba(255, 255, 255, 0.06);
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 1.2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all var(--transition-fast);
-            z-index: 1;
-        }
-
-        .auth-modal-close:hover {
-            background: rgba(255, 255, 255, 0.12);
-            color: #FFFFFF;
-        }
-
-        .auth-modal-title {
-            font-family: var(--font-heading);
-            font-size: var(--text-2xl);
-            font-weight: var(--weight-bold);
-            color: #FFFFFF;
-            margin-bottom: var(--space-2);
-            text-align: center;
-        }
-
-        .auth-modal-subtitle {
-            font-size: var(--text-sm);
-            color: rgba(255, 255, 255, 0.5);
-            text-align: center;
-            margin-bottom: var(--space-8);
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 0;
-            margin-bottom: var(--space-6);
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: var(--radius);
-            padding: var(--space-1);
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: var(--space-3);
-            text-align: center;
-            border-radius: var(--radius-sm);
-            font-weight: var(--weight-medium);
-            font-size: var(--text-sm);
-            cursor: pointer;
-            transition: all var(--transition-fast);
-            border: none;
-            background: none;
-            color: rgba(255, 255, 255, 0.5);
-            font-family: var(--font-body);
-        }
-
-        .auth-tab.active {
-            background: rgba(212, 175, 55, 0.15);
-            color: var(--gold);
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-4);
-        }
-
-        .auth-form .form-group label {
-            color: rgba(255, 255, 255, 0.7);
-        }
-
-        .auth-form input {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.1);
-            color: #FFFFFF;
-        }
-
-        .auth-form input:focus {
-            border-color: var(--gold);
-            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
-        }
-
-        .auth-submit {
-            width: 100%;
-            padding: var(--space-4);
-            min-height: 52px;
-            font-size: var(--text-base);
-            font-weight: var(--weight-semibold);
-            background: var(--gold-gradient);
-            color: #0A0A0A;
-            border: none;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: all var(--transition);
-            margin-top: var(--space-2);
-        }
-
-        .auth-submit:hover {
-            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.3);
-            transform: translateY(-1px);
-        }
-
-        .auth-divider {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-            margin: var(--space-6) 0;
-            color: rgba(255, 255, 255, 0.3);
-            font-size: var(--text-xs);
-        }
-
-        .auth-divider::before,
-        .auth-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: rgba(255, 255, 255, 0.08);
-        }
-
-        .auth-social {
-            display: flex;
-            gap: var(--space-3);
-        }
-
-        .auth-social-btn {
-            flex: 1;
-            padding: var(--space-3);
-            min-height: 48px;
-            border-radius: var(--radius);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: rgba(255, 255, 255, 0.02);
-            color: #FFFFFF;
-            font-size: var(--text-sm);
-            font-weight: var(--weight-medium);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: var(--space-2);
-            transition: all var(--transition-fast);
-            font-family: var(--font-body);
-        }
-
-        .auth-social-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.2);
-        }
-
-        .auth-note {
-            text-align: center;
-            font-size: var(--text-xs);
-            color: rgba(255, 255, 255, 0.35);
-            margin-top: var(--space-6);
-        }
-
-        /* ========================================================
-           SCROLL TO TOP
-           ======================================================== */
-        .scroll-top-btn {
-            position: fixed;
-            bottom: var(--space-6);
-            right: var(--space-6);
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: var(--gold-gradient);
-            color: #0A0A0A;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(20px);
-            transition: all var(--transition);
-            z-index: var(--z-sticky);
-        }
-
-        .scroll-top-btn.visible {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-        }
-
-        .scroll-top-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 32px rgba(212, 175, 55, 0.5);
-        }
-
-        /* ========================================================
-           RESPONSIVE
-           ======================================================== */
-        @media (max-width: 1024px) {
-            .steps-container {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .header-nav {
-                display: none;
-            }
-
-            .header-actions .btn-outline,
-            .header-actions .btn-primary {
-                display: none;
-            }
-
-            .mobile-menu-toggle {
-                display: flex;
-            }
-
-            .hero-headline {
-                font-size: clamp(2rem, 6vw, 3rem);
-            }
-
-            .hero-subheadline {
-                font-size: var(--text-base);
-            }
-
-            .hero-mockup {
-                margin-top: var(--space-10);
-            }
-
-            .mockup-body {
-                grid-template-columns: 1fr;
-            }
-
-            .mockup-sidebar {
-                display: none;
-            }
-
-            .mockup-main {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .features-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .solutions-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .steps-container {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .testimonials-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: var(--space-8);
-            }
-
-            .hero-cta-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .hero-cta-primary,
-            .hero-cta-secondary {
-                justify-content: center;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .header-inner {
-                padding: 0 var(--space-4);
-            }
-
-            .header-logo-text .brand-tagline {
-                display: none;
-            }
-
-            .section {
-                padding: var(--space-12) var(--space-4);
-            }
-
-            .section-title {
-                font-size: var(--text-3xl);
-            }
-
-            .hero {
-                padding: calc(var(--nav-height) + var(--space-8)) var(--space-4) var(--space-8);
-            }
-
-            .hero-trust-indicators {
-                gap: var(--space-4);
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: var(--space-6);
-            }
-
-            .stat-item .stat-number {
-                font-size: var(--text-2xl);
-            }
-
-            .pricing-card {
-                padding: var(--space-6);
-            }
-
-            .pricing-price {
-                font-size: 3rem;
-            }
-
-            .auth-modal {
-                padding: var(--space-6);
-                margin: var(--space-4);
-            }
-        }
-    </style>
+    <title>11 Avatar SMEs CRM — India's Most Affordable Revenue OS</title>
 </head>
-<body>
+<body class="public-layout">
 
-    <!-- ========================================================
-    SKIP LINK (Accessibility - Rule #14)
-    ======================================================== -->
     <a href="#main-content" class="skip-link">Skip to Main Content</a>
 
     <!-- ========================================================
     HEADER
     ======================================================== -->
-    <header class="public-header" id="publicHeader" role="banner" aria-label="Main navigation">
+    <header class="public-header" id="publicHeader" role="banner">
         <div class="header-inner">
             <a href="#" class="header-logo" aria-label="11 Avatar SMEs CRM Home">
                 <svg width="38" height="38" viewBox="0 0 38 38" fill="none" aria-hidden="true">
@@ -1617,8 +47,7 @@
                     <text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins, sans-serif">11A</text>
                     <defs>
                         <linearGradient id="logo-gold" x1="0" y1="0" x2="38" y2="38">
-                            <stop stop-color="#E8C95A" />
-                            <stop offset="1" stop-color="#B8960F" />
+                            <stop stop-color="#E8C95A" /><stop offset="1" stop-color="#B8960F" />
                         </linearGradient>
                     </defs>
                 </svg>
@@ -1637,16 +66,14 @@
             </nav>
 
             <div class="header-actions">
-                <button class="btn btn-outline btn-sm" id="loginBtn" aria-label="Sign in to your account">Sign In</button>
-                <button class="btn btn-primary btn-sm" id="registerBtn" aria-label="Start free trial">Start Free</button>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle mobile menu" aria-expanded="false">
-                    ☰
-                </button>
+                <button class="btn btn-outline btn-sm" id="loginBtn">Sign In</button>
+                <button class="btn btn-primary btn-sm" id="registerBtn">Start Free</button>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
             </div>
         </div>
 
         <!-- Mobile Menu -->
-        <div class="mobile-menu" id="mobileMenu" role="navigation" aria-label="Mobile navigation">
+        <div class="mobile-menu" id="mobileMenu">
             <a href="#features" class="mobile-menu-link">Features</a>
             <a href="#solutions" class="mobile-menu-link">Solutions</a>
             <a href="#how-it-works" class="mobile-menu-link">How It Works</a>
@@ -1660,9 +87,9 @@
     </header>
 
     <!-- ========================================================
-    SUB MENU (Rule #10 - Page Specific)
+    SUB MENU
     ======================================================== -->
-    <nav class="submenu" aria-label="Page sections quick navigation">
+    <nav class="submenu" aria-label="Page sections">
         <div class="submenu-inner">
             <a href="#hero" class="submenu-link active" data-submenu>Overview</a>
             <a href="#features" class="submenu-link" data-submenu>Features</a>
@@ -1680,60 +107,39 @@
     ======================================================== -->
     <main id="main-content" role="main">
 
-        <!-- ====================================================
-        HERO SECTION
-        ==================================================== -->
+        <!-- HERO -->
         <section class="hero" id="hero" aria-labelledby="hero-headline">
             <div class="hero-bg" aria-hidden="true"></div>
             <div class="hero-grid-pattern" aria-hidden="true"></div>
-
             <div class="hero-content">
                 <div class="hero-trust-badge">
                     <span class="badge-dot" aria-hidden="true"></span>
                     Trusted by 10,000+ Indian Businesses
                 </div>
-
                 <h1 class="hero-headline" id="hero-headline">
                     India's Most Affordable<br />
                     <span class="gold-text">Revenue Operating System</span><br />
                     for Small Businesses
                 </h1>
-
                 <p class="hero-subheadline">
                     Capture leads, manage pipelines, send GST-compliant invoices, 
                     collect payments via UPI, and retain clients — all from one 
                     powerful, easy-to-use CRM built for Indian SMEs.
                 </p>
-
                 <div class="hero-cta-group">
                     <a href="#" class="hero-cta-primary" id="heroCtaPrimary" role="button">
-                        🚀 Start Free Forever
-                        <span aria-hidden="true">→</span>
+                        🚀 Start Free Forever <span aria-hidden="true">→</span>
                     </a>
                     <a href="#features" class="hero-cta-secondary" role="button">
                         ▶️ See How It Works
                     </a>
                 </div>
-
                 <div class="hero-trust-indicators">
-                    <div class="trust-item">
-                        <span class="trust-icon" aria-hidden="true">✅</span>
-                        No Credit Card
-                    </div>
-                    <div class="trust-item">
-                        <span class="trust-icon" aria-hidden="true">🇮🇳</span>
-                        Made in India
-                    </div>
-                    <div class="trust-item">
-                        <span class="trust-icon" aria-hidden="true">🔒</span>
-                        Bank-Grade Security
-                    </div>
-                    <div class="trust-item">
-                        <span class="trust-icon" aria-hidden="true">📱</span>
-                        PWA Mobile App
-                    </div>
+                    <div class="trust-item"><span class="trust-icon">✅</span> No Credit Card</div>
+                    <div class="trust-item"><span class="trust-icon">🇮🇳</span> Made in India</div>
+                    <div class="trust-item"><span class="trust-icon">🔒</span> Bank-Grade Security</div>
+                    <div class="trust-item"><span class="trust-icon">📱</span> PWA Mobile App</div>
                 </div>
-
                 <!-- Dashboard Mockup -->
                 <div class="hero-mockup" aria-hidden="true">
                     <div class="hero-mockup-card">
@@ -1753,22 +159,10 @@
                                 <div class="mockup-sidebar-icon"></div>
                             </div>
                             <div class="mockup-main">
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-line gold"></div>
-                                    <div class="mockup-stat-line short"></div>
-                                </div>
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-line"></div>
-                                    <div class="mockup-stat-line short"></div>
-                                </div>
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-line gold"></div>
-                                    <div class="mockup-stat-line short"></div>
-                                </div>
-                                <div class="mockup-stat">
-                                    <div class="mockup-stat-line"></div>
-                                    <div class="mockup-stat-line short"></div>
-                                </div>
+                                <div class="mockup-stat"><div class="mockup-stat-line gold"></div><div class="mockup-stat-line short"></div></div>
+                                <div class="mockup-stat"><div class="mockup-stat-line"></div><div class="mockup-stat-line short"></div></div>
+                                <div class="mockup-stat"><div class="mockup-stat-line gold"></div><div class="mockup-stat-line short"></div></div>
+                                <div class="mockup-stat"><div class="mockup-stat-line"></div><div class="mockup-stat-line short"></div></div>
                                 <div class="mockup-chart-area">
                                     <div class="mockup-bar" style="height:40px;"></div>
                                     <div class="mockup-bar" style="height:55px;"></div>
@@ -1786,195 +180,76 @@
             </div>
         </section>
 
-        <!-- ====================================================
-        FEATURES SECTION
-        ==================================================== -->
+        <!-- FEATURES -->
         <section class="section" id="features" aria-labelledby="features-title">
             <div class="section-header">
                 <span class="section-label">Core Features</span>
-                <h2 class="section-title" id="features-title">
-                    Everything Your <span class="gold-text">Business Needs</span>
-                </h2>
-                <p class="section-description">
-                    15+ powerful modules designed specifically for Indian SMEs. 
-                    From lead capture to GST invoicing — we've got you covered.
-                </p>
+                <h2 class="section-title" id="features-title">Everything Your <span class="gold-text">Business Needs</span></h2>
+                <p class="section-description">15+ powerful modules designed specifically for Indian SMEs. From lead capture to GST invoicing.</p>
             </div>
-
             <div class="features-grid">
-                <!-- Feature 1 -->
-                <article class="feature-card" aria-labelledby="feat1-title">
-                    <div class="feature-icon" aria-hidden="true">👥</div>
-                    <h3 class="feature-title" id="feat1-title">Lead Management</h3>
-                    <p class="feature-description">
-                        Capture leads from WhatsApp, forms, CSV imports, and 10+ sources. 
-                        12-stage pipeline with auto-scoring, follow-up reminders, and bulk operations.
-                    </p>
-                </article>
-
-                <!-- Feature 2 -->
-                <article class="feature-card" aria-labelledby="feat2-title">
-                    <div class="feature-icon" aria-hidden="true">📊</div>
-                    <h3 class="feature-title" id="feat2-title">Visual Pipeline</h3>
-                    <p class="feature-description">
-                        Drag-and-drop Kanban board to move deals from New → Contacted → 
-                        Negotiation → Won. Real-time revenue forecasting and WIP tracking.
-                    </p>
-                </article>
-
-                <!-- Feature 3 -->
-                <article class="feature-card" aria-labelledby="feat3-title">
-                    <div class="feature-icon" aria-hidden="true">🧾</div>
-                    <h3 class="feature-title" id="feat3-title">GST-Compliant Invoices</h3>
-                    <p class="feature-description">
-                        Auto-calculate CGST, SGST, IGST. Generate E-Invoices with HSN/SAC codes. 
-                        Send payment links via WhatsApp & Email. Tally integration included.
-                    </p>
-                </article>
-
-                <!-- Feature 4 -->
-                <article class="feature-card" aria-labelledby="feat4-title">
-                    <div class="feature-icon" aria-hidden="true">💬</div>
-                    <h3 class="feature-title" id="feat4-title">WhatsApp Integration</h3>
-                    <p class="feature-description">
-                        Send messages, share invoices, broadcast updates directly from CRM. 
-                        CloudWA-powered with template messaging and automation rules.
-                    </p>
-                </article>
-
-                <!-- Feature 5 -->
-                <article class="feature-card" aria-labelledby="feat5-title">
-                    <div class="feature-icon" aria-hidden="true">💰</div>
-                    <h3 class="feature-title" id="feat5-title">Payment Tracking</h3>
-                    <p class="feature-description">
-                        Track UPI, NEFT, RTGS, cheque payments. Auto-reconciliation, 
-                        UTR tracking, cash payment IT compliance (₹2L limit alert).
-                    </p>
-                </article>
-
-                <!-- Feature 6 -->
-                <article class="feature-card" aria-labelledby="feat6-title">
-                    <div class="feature-icon" aria-hidden="true">📈</div>
-                    <h3 class="feature-title" id="feat6-title">Advanced Reports</h3>
-                    <p class="feature-description">
-                        12 chart types, custom report builder, scheduled PDF/Excel delivery. 
-                        KPI dashboards for revenue, conversion rates, team performance.
-                    </p>
-                </article>
+                <article class="feature-card"><div class="feature-icon">👥</div><h3 class="feature-title">Lead Management</h3><p class="feature-description">Capture from WhatsApp, forms, CSV. 12-stage pipeline with auto-scoring, follow-up reminders.</p></article>
+                <article class="feature-card"><div class="feature-icon">📊</div><h3 class="feature-title">Visual Pipeline</h3><p class="feature-description">Drag-drop Kanban board. Real-time revenue forecasting & WIP tracking.</p></article>
+                <article class="feature-card"><div class="feature-icon">🧾</div><h3 class="feature-title">GST Invoicing</h3><p class="feature-description">Auto CGST/SGST/IGST. E-Invoice IRN, HSN codes, payment links. Tally sync.</p></article>
+                <article class="feature-card"><div class="feature-icon">💬</div><h3 class="feature-title">WhatsApp CRM</h3><p class="feature-description">CloudWA-powered messaging, templates, broadcast directly from CRM.</p></article>
+                <article class="feature-card"><div class="feature-icon">💰</div><h3 class="feature-title">Payment Tracking</h3><p class="feature-description">UPI, NEFT, RTGS. Auto-reconciliation, UTR tracking, cash compliance.</p></article>
+                <article class="feature-card"><div class="feature-icon">📈</div><h3 class="feature-title">Advanced Reports</h3><p class="feature-description">12 chart types, custom reports, scheduled PDF/Excel delivery.</p></article>
             </div>
         </section>
 
-        <!-- ====================================================
-        STATS SECTION
-        ==================================================== -->
-        <section class="stats-bar" id="stats" aria-labelledby="stats-title">
-            <h2 class="sr-only" id="stats-title">Platform Statistics</h2>
+        <!-- STATS -->
+        <section class="stats-bar" id="stats">
             <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-number">50,000+</span>
-                    <span class="stat-label-text">Businesses Trust Us</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">₹0</span>
-                    <span class="stat-label-text">To Get Started</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">15+</span>
-                    <span class="stat-label-text">Business Modules</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-number">99.9%</span>
-                    <span class="stat-label-text">Uptime Guaranteed</span>
-                </div>
+                <div class="stat-item"><span class="stat-number">50,000+</span><span class="stat-label-text">Businesses Trust Us</span></div>
+                <div class="stat-item"><span class="stat-number">₹0</span><span class="stat-label-text">To Get Started</span></div>
+                <div class="stat-item"><span class="stat-number">15+</span><span class="stat-label-text">Business Modules</span></div>
+                <div class="stat-item"><span class="stat-number">99.9%</span><span class="stat-label-text">Uptime Guaranteed</span></div>
             </div>
         </section>
 
-        <!-- ====================================================
-        SOLUTIONS SECTION
-        ==================================================== -->
+        <!-- SOLUTIONS -->
         <section class="section" id="solutions" aria-labelledby="solutions-title">
             <div class="section-header">
                 <span class="section-label">Industry Solutions</span>
-                <h2 class="section-title" id="solutions-title">
-                    Built for <span class="gold-text">Every Indian Business</span>
-                </h2>
-                <p class="section-description">
-                    Customizable workflows for diverse industries across India.
-                </p>
+                <h2 class="section-title" id="solutions-title">Built for <span class="gold-text">Every Indian Business</span></h2>
             </div>
-
             <div class="solutions-grid">
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🏠</span><span class="solution-name">Real Estate</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🎓</span><span class="solution-name">Education</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🏥</span><span class="solution-name">Healthcare</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🏭</span><span class="solution-name">Manufacturing</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🛒</span><span class="solution-name">Retail & E-commerce</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🏦</span><span class="solution-name">Finance & Insurance</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">💻</span><span class="solution-name">IT & SaaS</span></div>
-                <div class="solution-card"><span class="solution-icon" aria-hidden="true">🚚</span><span class="solution-name">Field Sales & Service</span></div>
+                <div class="solution-card"><span class="solution-icon">🏠</span><span class="solution-name">Real Estate</span></div>
+                <div class="solution-card"><span class="solution-icon">🎓</span><span class="solution-name">Education</span></div>
+                <div class="solution-card"><span class="solution-icon">🏥</span><span class="solution-name">Healthcare</span></div>
+                <div class="solution-card"><span class="solution-icon">🏭</span><span class="solution-name">Manufacturing</span></div>
+                <div class="solution-card"><span class="solution-icon">🛒</span><span class="solution-name">Retail & E-com</span></div>
+                <div class="solution-card"><span class="solution-icon">🏦</span><span class="solution-name">Finance</span></div>
+                <div class="solution-card"><span class="solution-icon">💻</span><span class="solution-name">IT & SaaS</span></div>
+                <div class="solution-card"><span class="solution-icon">🚚</span><span class="solution-name">Field Sales</span></div>
             </div>
         </section>
 
-        <!-- ====================================================
-        HOW IT WORKS
-        ==================================================== -->
+        <!-- HOW IT WORKS -->
         <section class="section" id="how-it-works" aria-labelledby="how-title">
             <div class="section-header">
                 <span class="section-label">Simple Process</span>
-                <h2 class="section-title" id="how-title">
-                    From <span class="gold-text">Lead → Revenue</span> in 4 Steps
-                </h2>
-                <p class="section-description">
-                    Our streamlined workflow gets you up and running in minutes.
-                </p>
+                <h2 class="section-title" id="how-title">From <span class="gold-text">Lead → Revenue</span> in 4 Steps</h2>
             </div>
-
             <div class="steps-container">
-                <div class="step-card">
-                    <div class="step-number" aria-hidden="true">1</div>
-                    <h3 class="step-title">Capture Leads</h3>
-                    <p class="step-description">Import from WhatsApp, forms, CSV, or add manually. Auto-enrich with scoring.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number" aria-hidden="true">2</div>
-                    <h3 class="step-title">Nurture Pipeline</h3>
-                    <p class="step-description">Track every interaction. Set follow-ups. Move deals through stages.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number" aria-hidden="true">3</div>
-                    <h3 class="step-title">Send GST Invoices</h3>
-                    <p class="step-description">Generate compliant invoices. Share payment links via WhatsApp/Email.</p>
-                </div>
-                <div class="step-card">
-                    <div class="step-number" aria-hidden="true">4</div>
-                    <h3 class="step-title">Retain & Grow</h3>
-                    <p class="step-description">Convert clients to retainers. Track MRR. Get referrals. Scale your business.</p>
-                </div>
+                <div class="step-card"><div class="step-number">1</div><h3 class="step-title">Capture Leads</h3><p class="step-description">Import from WhatsApp, forms, CSV, or add manually.</p></div>
+                <div class="step-card"><div class="step-number">2</div><h3 class="step-title">Nurture Pipeline</h3><p class="step-description">Track interactions, set follow-ups, move deals.</p></div>
+                <div class="step-card"><div class="step-number">3</div><h3 class="step-title">Send Invoices</h3><p class="step-description">GST-compliant invoices with payment links.</p></div>
+                <div class="step-card"><div class="step-number">4</div><h3 class="step-title">Retain & Grow</h3><p class="step-description">MRR tracking, referrals, scale your business.</p></div>
             </div>
         </section>
 
-        <!-- ====================================================
-        PRICING SECTION
-        ==================================================== -->
+        <!-- PRICING -->
         <section class="section" id="pricing" aria-labelledby="pricing-title">
             <div class="section-header">
                 <span class="section-label">Simple Pricing</span>
-                <h2 class="section-title" id="pricing-title">
-                    Start <span class="gold-text">Free</span>, Scale as You Grow
-                </h2>
-                <p class="section-description">
-                    No hidden charges. Upgrade only when your business needs it.
-                </p>
+                <h2 class="section-title" id="pricing-title">Start <span class="gold-text">Free</span>, Scale as You Grow</h2>
             </div>
-
             <div class="pricing-card">
                 <span class="pricing-badge">🌟 Free Forever Plan</span>
-                <div class="pricing-price">
-                    <span class="currency">₹</span>0
-                </div>
+                <div class="pricing-price"><span class="currency">₹</span>0</div>
                 <p class="pricing-period">No credit card required</p>
-
-                <ul class="pricing-features" aria-label="Free plan features">
+                <ul class="pricing-features">
                     <li>Up to 500 Leads & Contacts</li>
                     <li>Unlimited Pipeline Stages</li>
                     <li>GST-Compliant Invoicing (50/mo)</li>
@@ -1984,259 +259,76 @@
                     <li>Email & Chat Support</li>
                     <li>Data Export (CSV, JSON, Excel)</li>
                 </ul>
-
-                <button class="pricing-cta" id="pricingCta" aria-label="Start free forever plan">
-                    🚀 Get Started Free
-                </button>
-                <p class="pricing-note">
-                    Paid plans start at ₹499/month for unlimited everything.
-                </p>
+                <button class="btn btn-primary btn-lg" style="width:100%;" id="pricingCta">🚀 Get Started Free</button>
+                <p class="pricing-note">Paid plans start at ₹499/month for unlimited everything.</p>
             </div>
         </section>
 
-        <!-- ====================================================
-        TESTIMONIALS
-        ==================================================== -->
+        <!-- TESTIMONIALS -->
         <section class="section" id="testimonials" aria-labelledby="testimonials-title">
             <div class="section-header">
                 <span class="section-label">Testimonials</span>
-                <h2 class="section-title" id="testimonials-title">
-                    Loved by <span class="gold-text">Business Owners</span>
-                </h2>
+                <h2 class="section-title" id="testimonials-title">Loved by <span class="gold-text">Business Owners</span></h2>
             </div>
-
             <div class="testimonials-grid">
-                <article class="testimonial-card" aria-labelledby="test1-author">
-                    <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                    <blockquote class="testimonial-quote">
-                        "Pehle hum 3 alag-alag apps use karte the — ek leads ke liye, 
-                        ek invoices ke liye, ek WhatsApp ke liye. 11 Avatar ne teeno ko 
-                        ek jagah la diya. ₹5000/month bach rahe hain."
-                    </blockquote>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar" aria-hidden="true">RS</div>
-                        <div>
-                            <div class="testimonial-name" id="test1-author">Rajesh Sharma</div>
-                            <div class="testimonial-company">Sharma Real Estate, Jaipur</div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="testimonial-card" aria-labelledby="test2-author">
-                    <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                    <blockquote class="testimonial-quote">
-                        "GST invoicing was a headache. 11 Avatar automatically calculates 
-                        CGST/SGST. Clients get payment link on WhatsApp. Collection time 
-                        reduced from 15 days to 3 days."
-                    </blockquote>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar" aria-hidden="true">PK</div>
-                        <div>
-                            <div class="testimonial-name" id="test2-author">Priya Kapoor</div>
-                            <div class="testimonial-company">Kapoor Textiles, Surat</div>
-                        </div>
-                    </div>
-                </article>
-
-                <article class="testimonial-card" aria-labelledby="test3-author">
-                    <div class="testimonial-stars" aria-label="5 out of 5 stars">★★★★★</div>
-                    <blockquote class="testimonial-quote">
-                        "As a small coaching institute, we needed something simple. 11 Avatar 
-                        is so easy — my office boy also uses it. Student leads, fees tracking, 
-                        everything in one app."
-                    </blockquote>
-                    <div class="testimonial-author">
-                        <div class="testimonial-avatar" aria-hidden="true">AM</div>
-                        <div>
-                            <div class="testimonial-name" id="test3-author">Amit Mishra</div>
-                            <div class="testimonial-company">Success Coaching, Lucknow</div>
-                        </div>
-                    </div>
-                </article>
+                <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><blockquote class="testimonial-quote">"Pehle 3 apps use karte the. 11 Avatar ne sab ek jagah la diya. ₹5000/month bach rahe hain."</blockquote><div class="testimonial-author"><div class="testimonial-avatar">RS</div><div><div class="testimonial-name">Rajesh Sharma</div><div class="testimonial-company">Sharma Real Estate, Jaipur</div></div></div></div>
+                <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><blockquote class="testimonial-quote">"GST invoicing was a headache. Now auto CGST/SGST. Collection time 15 days → 3 days."</blockquote><div class="testimonial-author"><div class="testimonial-avatar">PK</div><div><div class="testimonial-name">Priya Kapoor</div><div class="testimonial-company">Kapoor Textiles, Surat</div></div></div></div>
+                <div class="testimonial-card"><div class="testimonial-stars">★★★★★</div><blockquote class="testimonial-quote">"So easy — my office boy also uses it. Student leads, fees tracking, everything in one app."</blockquote><div class="testimonial-author"><div class="testimonial-avatar">AM</div><div><div class="testimonial-name">Amit Mishra</div><div class="testimonial-company">Success Coaching, Lucknow</div></div></div></div>
             </div>
         </section>
 
-        <!-- ====================================================
-        FAQ SECTION
-        ==================================================== -->
+        <!-- FAQ -->
         <section class="section" id="faq" aria-labelledby="faq-title">
-            <div class="section-header">
-                <span class="section-label">FAQ</span>
-                <h2 class="section-title" id="faq-title">
-                    Frequently Asked <span class="gold-text">Questions</span>
-                </h2>
-            </div>
-
-            <div class="faq-container" role="list">
-                <div class="faq-item" role="listitem">
-                    <button class="faq-question" aria-expanded="false" id="faq-btn-1">
-                        Is 11 Avatar CRM really free?
-                        <span class="faq-icon" aria-hidden="true">+</span>
-                    </button>
-                    <div class="faq-answer" role="region" aria-labelledby="faq-btn-1" hidden>
-                        <p>Yes! Our Free Forever plan includes up to 500 leads, unlimited pipeline stages, 50 GST invoices/month, and WhatsApp integration (100 msgs/day). No credit card required. When your business grows, paid plans start at just ₹499/month.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item" role="listitem">
-                    <button class="faq-question" aria-expanded="false" id="faq-btn-2">
-                        Is my business data secure?
-                        <span class="faq-icon" aria-hidden="true">+</span>
-                    </button>
-                    <div class="faq-answer" role="region" aria-labelledby="faq-btn-2" hidden>
-                        <p>Absolutely. We use Firebase (Google Cloud) infrastructure with 256-bit encryption. Your data is stored in India servers. We offer 2-factor authentication, role-based access control, and regular automated backups.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item" role="listitem">
-                    <button class="faq-question" aria-expanded="false" id="faq-btn-3">
-                        Can I use it on my mobile phone?
-                        <span class="faq-icon" aria-hidden="true">+</span>
-                    </button>
-                    <div class="faq-answer" role="region" aria-labelledby="faq-btn-3" hidden>
-                        <p>Yes! 11 Avatar CRM is a PWA (Progressive Web App). You can install it on your Android or iOS home screen. It works offline and syncs when you're back online. Full mobile functionality — capture leads, send invoices, make calls, all from your phone.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item" role="listitem">
-                    <button class="faq-question" aria-expanded="false" id="faq-btn-4">
-                        Does it support GST invoicing?
-                        <span class="faq-icon" aria-hidden="true">+</span>
-                    </button>
-                    <div class="faq-answer" role="region" aria-labelledby="faq-btn-4" hidden>
-                        <p>Yes, fully GST-compliant. Auto-calculates CGST, SGST, and IGST based on your state and client's state. Supports HSN/SAC codes, E-Invoice IRN generation, and E-Way Bill integration. You can also sync with Tally ERP.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item" role="listitem">
-                    <button class="faq-question" aria-expanded="false" id="faq-btn-5">
-                        Can multiple team members use it?
-                        <span class="faq-icon" aria-hidden="true">+</span>
-                    </button>
-                    <div class="faq-answer" role="region" aria-labelledby="faq-btn-5" hidden>
-                        <p>Yes! 11 Avatar CRM is multi-tenant with 8 levels of role-based access (Owner, Admin, Manager, Team Lead, Executive, Viewer, and more). You control exactly what each team member can see and do. Add unlimited team members on paid plans.</p>
-                    </div>
-                </div>
-
-                <div class="faq-item" role="listitem">
-                    <button class="faq-question" aria-expanded="false" id="faq-btn-6">
-                        Can I import my existing leads?
-                        <span class="faq-icon" aria-hidden="true">+</span>
-                    </button>
-                    <div class="faq-answer" role="region" aria-labelledby="faq-btn-6" hidden>
-                        <p>Yes, you can import leads from CSV, JSON, Excel files, or directly from Google Sheets. We also support migration from Zoho CRM, HubSpot, and other platforms. Our support team will assist you with free data migration.</p>
-                    </div>
-                </div>
+            <div class="section-header"><span class="section-label">FAQ</span><h2 class="section-title" id="faq-title">Frequently Asked <span class="gold-text">Questions</span></h2></div>
+            <div class="faq-container">
+                <div class="faq-item"><button class="faq-question" aria-expanded="false">Is 11 Avatar CRM really free?<span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! Free Forever includes 500 leads, unlimited pipeline, 50 GST invoices/month. Paid plans from ₹499/month.</p></div></div>
+                <div class="faq-item"><button class="faq-question" aria-expanded="false">Is my business data secure?<span class="faq-icon">+</span></button><div class="faq-answer"><p>Absolutely. Firebase (Google Cloud), 256-bit encryption, India servers, 2FA, role-based access.</p></div></div>
+                <div class="faq-item"><button class="faq-question" aria-expanded="false">Can I use it on mobile?<span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! PWA — install on Android/iOS home screen. Works offline, syncs online.</p></div></div>
+                <div class="faq-item"><button class="faq-question" aria-expanded="false">GST invoicing supported?<span class="faq-icon">+</span></button><div class="faq-answer"><p>Fully GST-compliant. Auto CGST/SGST/IGST, HSN/SAC codes, E-Invoice IRN, E-Way Bill.</p></div></div>
+                <div class="faq-item"><button class="faq-question" aria-expanded="false">Multiple team members?<span class="faq-icon">+</span></button><div class="faq-answer"><p>Yes! 8-level RBAC — Owner, Admin, Manager, Team Lead, Executive, Viewer. Unlimited on paid plans.</p></div></div>
+                <div class="faq-item"><button class="faq-question" aria-expanded="false">Import existing leads?<span class="faq-icon">+</span></button><div class="faq-answer"><p>CSV, JSON, Excel, Google Sheets. Free migration from Zoho, HubSpot.</p></div></div>
             </div>
         </section>
 
-        <!-- ====================================================
-        CTA SECTION
-        ==================================================== -->
+        <!-- CTA -->
         <section class="section cta-section" aria-labelledby="cta-title">
             <div class="cta-content">
-                <h2 class="cta-title" id="cta-title">
-                    Ready to Transform <span class="gold-text">Your Business</span>?
-                </h2>
-                <p class="cta-description">
-                    Join 50,000+ Indian SMEs who are already growing with 11 Avatar CRM. 
-                    Start free, no credit card required.
-                </p>
-                <a href="#" class="hero-cta-primary" id="ctaPrimary" role="button">
-                    🚀 Start Free Forever
-                    <span aria-hidden="true">→</span>
-                </a>
+                <h2 class="cta-title" id="cta-title">Ready to Transform <span class="gold-text">Your Business</span>?</h2>
+                <p class="cta-description">Join 50,000+ Indian SMEs growing with 11 Avatar CRM. Start free.</p>
+                <a href="#" class="hero-cta-primary" id="finalCta" role="button">🚀 Start Free Forever →</a>
             </div>
         </section>
 
     </main>
 
-    <!-- ========================================================
-    FOOTER
-    ======================================================== -->
-    <footer class="public-footer" role="contentinfo" aria-label="Site footer">
+    <!-- FOOTER -->
+    <footer class="public-footer" role="contentinfo">
         <div class="footer-grid">
             <div>
                 <div class="footer-brand">
-                    <svg width="32" height="32" viewBox="0 0 38 38" fill="none" aria-hidden="true">
-                        <rect width="38" height="38" rx="10" fill="url(#logo-gold-footer)" />
-                        <text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins, sans-serif">11A</text>
-                        <defs>
-                            <linearGradient id="logo-gold-footer" x1="0" y1="0" x2="38" y2="38">
-                                <stop stop-color="#E8C95A" /><stop offset="1" stop-color="#B8960F" />
-                            </linearGradient>
-                        </defs>
-                    </svg>
+                    <svg width="30" height="30" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#logo-gold-footer)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="logo-gold-footer"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
                     11 Avatar SMEs CRM
                 </div>
-                <p class="footer-description">
-                    India's most affordable, complete Revenue Operating System for 
-                    Small & Medium Enterprises. From lead to revenue — all in one place.
-                </p>
-                <p style="font-size: var(--text-xs); color: rgba(255,255,255,0.4);">
-                    📧 <a href="mailto:info@11avatardigitalhub.cloud" style="color: rgba(255,255,255,0.5);">info@11avatardigitalhub.cloud</a><br />
-                    📧 <a href="mailto:support@11avatardigitalhub.cloud" style="color: rgba(255,255,255,0.5);">support@11avatardigitalhub.cloud</a>
-                </p>
+                <p class="footer-description">India's most affordable Revenue OS for SMEs. Lead → Revenue — all in one place.</p>
+                <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);">📧 info@11avatardigitalhub.cloud<br>📧 support@11avatardigitalhub.cloud</p>
             </div>
-
-            <div>
-                <h4 class="footer-column-title">Product</h4>
-                <ul class="footer-links">
-                    <li><a href="#features">Features</a></li>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#solutions">Solutions</a></li>
-                    <li><a href="#">Integrations</a></li>
-                    <li><a href="#">WhatsApp CRM</a></li>
-                    <li><a href="#">Mobile App</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="footer-column-title">Company</h4>
-                <ul class="footer-links">
-                    <li><a href="#">About Us</a></li>
-                    <li><a href="#">Careers</a></li>
-                    <li><a href="#">Blog</a></li>
-                    <li><a href="#">Contact</a></li>
-                    <li><a href="#">Partner Program</a></li>
-                    <li><a href="#">Press Kit</a></li>
-                </ul>
-            </div>
-
-            <div>
-                <h4 class="footer-column-title">Legal</h4>
-                <ul class="footer-links">
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                    <li><a href="#">GDPR Compliance</a></li>
-                    <li><a href="#">Refund Policy</a></li>
-                    <li><a href="#">Security</a></li>
-                    <li><a href="#">Cookie Policy</a></li>
-                </ul>
-            </div>
+            <div><h4 class="footer-column-title">Product</h4><ul class="footer-links"><li><a href="#features">Features</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#">Integrations</a></li><li><a href="#">WhatsApp CRM</a></li></ul></div>
+            <div><h4 class="footer-column-title">Company</h4><ul class="footer-links"><li><a href="#">About</a></li><li><a href="#">Blog</a></li><li><a href="#">Contact</a></li><li><a href="#">Partners</a></li></ul></div>
+            <div><h4 class="footer-column-title">Legal</h4><ul class="footer-links"><li><a href="#">Privacy</a></li><li><a href="#">Terms</a></li><li><a href="#">GDPR</a></li><li><a href="#">Security</a></li></ul></div>
         </div>
-
-        <div class="footer-bottom">
-            <span>&copy; 2025 11 Avatar Digital Hub. All rights reserved.</span>
-            <span>Made with ❤️ for Indian Businesses 🇮🇳</span>
-        </div>
+        <div class="footer-bottom"><span>© 2025 11 Avatar Digital Hub</span><span>Made with ❤️ for India 🇮🇳</span></div>
     </footer>
 
-    <!-- ========================================================
-    AUTH MODAL (Login / Register)
-    ======================================================== -->
+    <!-- AUTH MODAL -->
     <div class="auth-modal-overlay" id="authModalOverlay" role="dialog" aria-modal="true" aria-labelledby="authModalTitle" hidden>
         <div class="auth-modal">
-            <button class="auth-modal-close" id="authModalClose" aria-label="Close dialog">✕</button>
-
+            <button class="auth-modal-close" id="authModalClose" aria-label="Close">✕</button>
             <h2 class="auth-modal-title" id="authModalTitle">Welcome Back</h2>
             <p class="auth-modal-subtitle" id="authModalSubtitle">Sign in to your account</p>
-
-            <div class="auth-tabs" role="tablist" aria-label="Authentication options">
-                <button class="auth-tab active" role="tab" aria-selected="true" id="tabLogin" data-auth-tab="login">Sign In</button>
-                <button class="auth-tab" role="tab" aria-selected="false" id="tabRegister" data-auth-tab="register">Register</button>
+            <div class="auth-tabs" role="tablist">
+                <button class="auth-tab active" role="tab" aria-selected="true" id="tabLogin">Sign In</button>
+                <button class="auth-tab" role="tab" aria-selected="false" id="tabRegister">Register</button>
             </div>
-
             <form class="auth-form" id="authForm" novalidate>
                 <div class="form-group" id="nameGroup" style="display:none;">
                     <label for="authName">Full Name</label>
@@ -2252,526 +344,150 @@
                 </div>
                 <button type="submit" class="auth-submit" id="authSubmit">Sign In</button>
             </form>
-
             <div class="auth-divider">or continue with</div>
-
             <div class="auth-social">
-                <button class="auth-social-btn" aria-label="Sign in with Google">
-                    <span aria-hidden="true">G</span> Google
-                </button>
-                <button class="auth-social-btn" aria-label="Sign in with Phone">
-                    <span aria-hidden="true">📱</span> Phone
-                </button>
+                <button class="auth-social-btn">G Google</button>
+                <button class="auth-social-btn">📱 Phone</button>
             </div>
-
-            <p class="auth-note">
-                By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
-            </p>
+            <p class="auth-note">By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
         </div>
     </div>
 
-    <!-- ========================================================
-    SCROLL TO TOP BUTTON
-    ======================================================== -->
-    <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top" title="Back to top">
-        ↑
-    </button>
+    <!-- SCROLL TO TOP -->
+    <button class="scroll-top-btn" id="scrollTopBtn" aria-label="Scroll to top">↑</button>
 
     <!-- ========================================================
     SCRIPTS
     ======================================================== -->
     <script>
-        /**
-         * 11 Avatar SMEs CRM - Public Landing Page Scripts
-         * @file index.html scripts
-         * @description All interactive functionality for the landing page
-         */
-
         'use strict';
 
-        // ============================================================
-        // GLOBAL STATE
-        // ============================================================
-        const PUBLIC_STATE = {
-            isMobileMenuOpen: false,
-            isAuthModalOpen: false,
-            authMode: 'login', // 'login' | 'register'
-            headerScrolled: false,
-            activeSubmenuLink: null,
-            scrollTopVisible: false,
-        };
+        // DOM refs
+        const $ = (s) => document.querySelector(s);
+        const header = $('#publicHeader');
+        const mobileToggle = $('#mobileMenuToggle');
+        const mobileMenu = $('#mobileMenu');
+        const authOverlay = $('#authModalOverlay');
+        const authClose = $('#authModalClose');
+        const authTitle = $('#authModalTitle');
+        const authSubtitle = $('#authModalSubtitle');
+        const authForm = $('#authForm');
+        const authSubmit = $('#authSubmit');
+        const authName = $('#authName');
+        const authEmail = $('#authEmail');
+        const authPassword = $('#authPassword');
+        const nameGroup = $('#nameGroup');
+        const tabLogin = $('#tabLogin');
+        const tabRegister = $('#tabRegister');
+        const scrollTopBtn = $('#scrollTopBtn');
+        let authMode = 'login';
+        let menuOpen = false;
 
-        // ============================================================
-        // DOM REFERENCES
-        // ============================================================
-        const DOM = {
-            header: document.getElementById('publicHeader'),
-            mobileMenuToggle: document.getElementById('mobileMenuToggle'),
-            mobileMenu: document.getElementById('mobileMenu'),
-            authModalOverlay: document.getElementById('authModalOverlay'),
-            authModalClose: document.getElementById('authModalClose'),
-            authModalTitle: document.getElementById('authModalTitle'),
-            authModalSubtitle: document.getElementById('authModalSubtitle'),
-            authForm: document.getElementById('authForm'),
-            authSubmit: document.getElementById('authSubmit'),
-            authName: document.getElementById('authName'),
-            authEmail: document.getElementById('authEmail'),
-            authPassword: document.getElementById('authPassword'),
-            nameGroup: document.getElementById('nameGroup'),
-            tabLogin: document.getElementById('tabLogin'),
-            tabRegister: document.getElementById('tabRegister'),
-            scrollTopBtn: document.getElementById('scrollTopBtn'),
-            faqItems: document.querySelectorAll('.faq-item'),
-            submenuLinks: document.querySelectorAll('[data-submenu]'),
-            allCtaButtons: document.querySelectorAll(
-                '#loginBtn, #registerBtn, #mobileLoginBtn, #mobileRegisterBtn, ' +
-                '#heroCtaPrimary, #pricingCta, #ctaPrimary'
-            ),
-        };
+        // Mobile menu
+        mobileToggle.addEventListener('click', () => {
+            menuOpen = !menuOpen;
+            mobileMenu.classList.toggle('show', menuOpen);
+            mobileToggle.textContent = menuOpen ? '✕' : '☰';
+            mobileToggle.setAttribute('aria-expanded', menuOpen);
+        });
+        mobileMenu.querySelectorAll('a, button').forEach(el => el.addEventListener('click', () => {
+            menuOpen = false;
+            mobileMenu.classList.remove('show');
+            mobileToggle.textContent = '☰';
+        }));
 
-        // ============================================================
-        // MOBILE MENU
-        // ============================================================
-        function openMobileMenu() {
-            PUBLIC_STATE.isMobileMenuOpen = true;
-            DOM.mobileMenu.classList.add('show');
-            DOM.mobileMenuToggle.setAttribute('aria-expanded', 'true');
-            DOM.mobileMenuToggle.innerHTML = '✕';
+        // Auth modal
+        function openAuth(mode) {
+            authMode = mode || 'login';
+            const isLogin = authMode === 'login';
+            authTitle.textContent = isLogin ? 'Welcome Back' : 'Create Your Account';
+            authSubtitle.textContent = isLogin ? 'Sign in to your account' : 'Start your free trial today';
+            authSubmit.textContent = isLogin ? 'Sign In' : 'Create Free Account';
+            nameGroup.style.display = isLogin ? 'none' : 'block';
+            tabLogin.classList.toggle('active', isLogin);
+            tabRegister.classList.toggle('active', !isLogin);
+            tabLogin.setAttribute('aria-selected', isLogin);
+            tabRegister.setAttribute('aria-selected', !isLogin);
+            authForm.reset();
+            authOverlay.classList.add('show');
+            authOverlay.removeAttribute('hidden');
             document.body.style.overflow = 'hidden';
+            setTimeout(() => authEmail.focus(), 300);
         }
-
-        function closeMobileMenu() {
-            PUBLIC_STATE.isMobileMenuOpen = false;
-            DOM.mobileMenu.classList.remove('show');
-            DOM.mobileMenuToggle.setAttribute('aria-expanded', 'false');
-            DOM.mobileMenuToggle.innerHTML = '☰';
+        function closeAuth() {
+            authOverlay.classList.remove('show');
+            authOverlay.setAttribute('hidden', '');
             document.body.style.overflow = '';
         }
 
-        function toggleMobileMenu() {
-            if (PUBLIC_STATE.isMobileMenuOpen) {
-                closeMobileMenu();
-            } else {
-                openMobileMenu();
-            }
-        }
+        authClose.addEventListener('click', closeAuth);
+        authOverlay.addEventListener('click', (e) => { if (e.target === authOverlay) closeAuth(); });
+        tabLogin.addEventListener('click', () => openAuth('login'));
+        tabRegister.addEventListener('click', () => openAuth('register'));
 
-        // ============================================================
-        // AUTH MODAL
-        // ============================================================
-        function openAuthModal(mode) {
-            try {
-                PUBLIC_STATE.authMode = mode || 'login';
-                PUBLIC_STATE.isAuthModalOpen = true;
-                updateAuthModalUI();
-                DOM.authModalOverlay.classList.add('show');
-                DOM.authModalOverlay.removeAttribute('hidden');
-                document.body.style.overflow = 'hidden';
-                setTimeout(() => {
-                    DOM.authEmail.focus();
-                }, 300);
-            } catch (error) {
-                console.error('[11Avatar] Error opening auth modal:', error);
-            }
-        }
-
-        function closeAuthModal() {
-            try {
-                PUBLIC_STATE.isAuthModalOpen = false;
-                DOM.authModalOverlay.classList.remove('show');
-                DOM.authModalOverlay.setAttribute('hidden', '');
-                document.body.style.overflow = '';
-                resetAuthForm();
-            } catch (error) {
-                console.error('[11Avatar] Error closing auth modal:', error);
-            }
-        }
-
-        function updateAuthModalUI() {
-            const isLogin = PUBLIC_STATE.authMode === 'login';
-            DOM.authModalTitle.textContent = isLogin ? 'Welcome Back' : 'Create Your Account';
-            DOM.authModalSubtitle.textContent = isLogin ?
-                'Sign in to your account' :
-                'Start your free trial today';
-            DOM.authSubmit.textContent = isLogin ? 'Sign In' : 'Create Free Account';
-            DOM.nameGroup.style.display = isLogin ? 'none' : 'block';
-            DOM.tabLogin.classList.toggle('active', isLogin);
-            DOM.tabLogin.setAttribute('aria-selected', isLogin ? 'true' : 'false');
-            DOM.tabRegister.classList.toggle('active', !isLogin);
-            DOM.tabRegister.setAttribute('aria-selected', !isLogin ? 'true' : 'false');
-            DOM.authForm.reset();
-        }
-
-        function resetAuthForm() {
-            DOM.authForm.reset();
-            // Clear any error states
-            DOM.authEmail.classList.remove('error');
-            DOM.authPassword.classList.remove('error');
-            if (DOM.authName) DOM.authName.classList.remove('error');
-        }
-
-        function handleAuthSubmit(event) {
-            event.preventDefault();
-            try {
-                const email = DOM.authEmail.value.trim();
-                const password = DOM.authPassword.value.trim();
-                const name = DOM.authName ? DOM.authName.value.trim() : '';
-
-                // Basic validation
-                if (!email) {
-                    showFieldError(DOM.authEmail, 'Email is required');
-                    return;
-                }
-                if (!isValidEmail(email)) {
-                    showFieldError(DOM.authEmail, 'Please enter a valid email');
-                    return;
-                }
-                if (!password || password.length < 6) {
-                    showFieldError(DOM.authPassword, 'Password must be at least 6 characters');
-                    return;
-                }
-                if (PUBLIC_STATE.authMode === 'register' && !name) {
-                    showFieldError(DOM.authName, 'Name is required');
-                    return;
-                }
-
-                // Clear errors
-                clearFieldErrors();
-
-                // Show loading state
-                DOM.authSubmit.classList.add('btn-loading');
-                DOM.authSubmit.disabled = true;
-
-                // Simulate auth (will be replaced with Firebase Auth)
-                setTimeout(() => {
-                    DOM.authSubmit.classList.remove('btn-loading');
-                    DOM.authSubmit.disabled = false;
-                    closeAuthModal();
-                    showToast(
-                        PUBLIC_STATE.authMode === 'login' ?
-                        '✅ Welcome back! Redirecting...' :
-                        '✅ Account created! Redirecting...',
-                        'success'
-                    );
-                    // In production: redirect to app.html after Firebase auth
-                }, 1500);
-
-            } catch (error) {
-                console.error('[11Avatar] Auth submit error:', error);
-                DOM.authSubmit.classList.remove('btn-loading');
-                DOM.authSubmit.disabled = false;
-                showToast('❌ Something went wrong. Please try again.', 'error');
-            }
-        }
-
-        function showFieldError(field, message) {
-            field.classList.add('error');
-            const existing = field.parentElement.querySelector('.form-error');
-            if (!existing) {
-                const errorEl = document.createElement('span');
-                errorEl.className = 'form-error';
-                errorEl.textContent = message;
-                errorEl.setAttribute('role', 'alert');
-                field.parentElement.appendChild(errorEl);
-            }
-        }
-
-        function clearFieldErrors() {
-            document.querySelectorAll('#authForm .form-error').forEach(el => el.remove());
-            document.querySelectorAll('#authForm .error').forEach(el => el.classList.remove('error'));
-        }
-
-        function isValidEmail(email) {
-            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-        }
-
-        // ============================================================
-        // TOAST SYSTEM
-        // ============================================================
-        function showToast(message, type) {
-            try {
-                let container = document.querySelector('.toast-container');
-                if (!container) {
-                    container = document.createElement('div');
-                    container.className = 'toast-container';
-                    document.body.appendChild(container);
-                }
-
-                const toast = document.createElement('div');
-                toast.className = `toast toast-${type || 'info'}`;
-                toast.setAttribute('role', 'status');
-                toast.setAttribute('aria-live', 'polite');
-                toast.innerHTML = `
-                    <span class="toast-message">${message}</span>
-                    <button class="toast-close" aria-label="Close notification">✕</button>
-                `;
-
-                container.appendChild(toast);
-
-                const closeBtn = toast.querySelector('.toast-close');
-                closeBtn.addEventListener('click', () => removeToast(toast));
-
-                setTimeout(() => removeToast(toast), 4000);
-            } catch (error) {
-                console.error('[11Avatar] Toast error:', error);
-            }
-        }
-
-        function removeToast(toast) {
-            toast.classList.add('toast-removing');
+        authForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = authEmail.value.trim();
+            const password = authPassword.value.trim();
+            const name = authMode === 'register' ? authName.value.trim() : '';
+            if (!email || !password) { alert('Please fill all required fields.'); return; }
+            if (password.length < 6) { alert('Password must be at least 6 characters.'); return; }
+            if (authMode === 'register' && !name) { alert('Please enter your full name.'); return; }
+            // Simulate login/register
+            authSubmit.textContent = 'Processing...';
+            authSubmit.disabled = true;
             setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.remove();
-                }
-            }, 300);
-        }
+                alert(authMode === 'login' ? '✅ Login successful! Redirecting to CRM...' : '✅ Account created! Redirecting to CRM...');
+                window.location.href = 'app.html';
+            }, 1000);
+        });
 
-        // ============================================================
-        // FAQ ACCORDION
-        // ============================================================
-        function initFaqAccordion() {
-            DOM.faqItems.forEach((item) => {
-                const button = item.querySelector('.faq-question');
-                const answer = item.querySelector('.faq-answer');
+        // CTA buttons
+        document.querySelectorAll('#loginBtn, #mobileLoginBtn').forEach(b => b.addEventListener('click', (e) => { e.preventDefault(); openAuth('login'); }));
+        document.querySelectorAll('#registerBtn, #mobileRegisterBtn, #heroCtaPrimary, #pricingCta, #finalCta').forEach(b => b.addEventListener('click', (e) => { e.preventDefault(); openAuth('register'); }));
 
-                if (!button || !answer) return;
+        // Scroll
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 50);
+            scrollTopBtn.classList.toggle('visible', window.scrollY > 600);
+        }, { passive: true });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-                button.addEventListener('click', () => {
-                    const isOpen = item.classList.contains('open');
-                    // Close all
-                    DOM.faqItems.forEach((otherItem) => {
-                        otherItem.classList.remove('open');
-                        const otherBtn = otherItem.querySelector('.faq-question');
-                        const otherAnswer = otherItem.querySelector('.faq-answer');
-                        if (otherBtn) otherBtn.setAttribute('aria-expanded', 'false');
-                        if (otherAnswer) otherAnswer.setAttribute('hidden', '');
-                    });
-                    // Open clicked (if not already open)
-                    if (!isOpen) {
-                        item.classList.add('open');
-                        button.setAttribute('aria-expanded', 'true');
-                        answer.removeAttribute('hidden');
-                    }
-                });
-
-                // Keyboard support
-                button.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        button.click();
-                    }
-                });
+        // FAQ
+        document.querySelectorAll('.faq-question').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const item = btn.parentElement;
+                const isOpen = item.classList.contains('open');
+                document.querySelectorAll('.faq-item').forEach(i => { i.classList.remove('open'); i.querySelector('.faq-question').setAttribute('aria-expanded', 'false'); });
+                if (!isOpen) { item.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
             });
-        }
+        });
 
-        // ============================================================
-        // HEADER SCROLL EFFECT
-        // ============================================================
-        function handleHeaderScroll() {
-            const scrollY = window.scrollY;
-            const shouldScrolled = scrollY > 50;
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', function(e) {
+                const id = this.getAttribute('href');
+                if (id === '#') return;
+                const target = document.querySelector(id);
+                if (target) { e.preventDefault(); window.scrollTo({ top: target.offsetTop - 100, behavior: 'smooth' }); }
+            });
+        });
 
-            if (shouldScrolled !== PUBLIC_STATE.headerScrolled) {
-                PUBLIC_STATE.headerScrolled = shouldScrolled;
-                DOM.header.classList.toggle('scrolled', shouldScrolled);
-            }
-
-            // Scroll to top button
-            const shouldShowScrollTop = scrollY > 600;
-            if (shouldShowScrollTop !== PUBLIC_STATE.scrollTopVisible) {
-                PUBLIC_STATE.scrollTopVisible = shouldShowScrollTop;
-                DOM.scrollTopBtn.classList.toggle('visible', shouldShowScrollTop);
-            }
-
-            // Update active submenu link
-            updateActiveSubmenu();
-        }
-
-        // ============================================================
-        // SUBMENU ACTIVE TRACKING
-        // ============================================================
-        function updateActiveSubmenu() {
+        // Submenu active tracking
+        window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section[id]');
-            let currentSection = '';
+            let current = '';
+            sections.forEach(s => { const top = s.offsetTop - 150; if (window.scrollY >= top && window.scrollY < top + s.offsetHeight) current = s.id; });
+            document.querySelectorAll('[data-submenu]').forEach(l => l.classList.toggle('active', l.getAttribute('href') === '#' + current));
+        }, { passive: true });
 
-            sections.forEach((section) => {
-                const sectionTop = section.offsetTop - 150;
-                const sectionBottom = sectionTop + section.offsetHeight;
-                if (window.scrollY >= sectionTop && window.scrollY < sectionBottom) {
-                    currentSection = section.getAttribute('id');
-                }
-            });
+        // Escape key
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape') { closeAuth(); if (menuOpen) { menuOpen = false; mobileMenu.classList.remove('show'); mobileToggle.textContent = '☰'; } } });
 
-            DOM.submenuLinks.forEach((link) => {
-                const href = link.getAttribute('href');
-                const sectionId = href ? href.replace('#', '') : '';
-                link.classList.toggle('active', sectionId === currentSection);
-            });
-        }
-
-        // ============================================================
-        // SCROLL TO TOP
-        // ============================================================
-        function scrollToTop() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth',
-            });
-        }
-
-        // ============================================================
-        // SMOOTH SCROLL FOR ANCHOR LINKS
-        // ============================================================
-        function initSmoothScroll() {
-            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-                anchor.addEventListener('click', function(e) {
-                    const targetId = this.getAttribute('href');
-                    if (targetId === '#') return;
-                    const target = document.querySelector(targetId);
-                    if (target) {
-                        e.preventDefault();
-                        const offset = 120; // Header + submenu height
-                        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth',
-                        });
-                        // Close mobile menu if open
-                        if (PUBLIC_STATE.isMobileMenuOpen) {
-                            closeMobileMenu();
-                        }
-                    }
-                });
-            });
-        }
-
-        // ============================================================
-        // ESCAPE KEY HANDLER
-        // ============================================================
-        function handleEscapeKey(e) {
-            if (e.key === 'Escape') {
-                if (PUBLIC_STATE.isAuthModalOpen) {
-                    closeAuthModal();
-                }
-                if (PUBLIC_STATE.isMobileMenuOpen) {
-                    closeMobileMenu();
-                }
-            }
-        }
-
-        // ============================================================
-        // CLICK OUTSIDE HANDLERS
-        // ============================================================
-        function handleClickOutside(e) {
-            // Close auth modal on overlay click
-            if (PUBLIC_STATE.isAuthModalOpen && e.target === DOM.authModalOverlay) {
-                closeAuthModal();
-            }
-        }
-
-        // ============================================================
-        // EVENT LISTENERS SETUP
-        // ============================================================
-        function setupEventListeners() {
-            try {
-                // Mobile menu
-                DOM.mobileMenuToggle.addEventListener('click', toggleMobileMenu);
-
-                // Close mobile menu on link click
-                DOM.mobileMenu.querySelectorAll('a').forEach((link) => {
-                    link.addEventListener('click', () => {
-                        if (PUBLIC_STATE.isMobileMenuOpen) closeMobileMenu();
-                    });
-                });
-
-                // Auth modal
-                DOM.authModalClose.addEventListener('click', closeAuthModal);
-                DOM.authModalOverlay.addEventListener('click', handleClickOutside);
-
-                // Auth tabs
-                DOM.tabLogin.addEventListener('click', () => {
-                    PUBLIC_STATE.authMode = 'login';
-                    updateAuthModalUI();
-                });
-                DOM.tabRegister.addEventListener('click', () => {
-                    PUBLIC_STATE.authMode = 'register';
-                    updateAuthModalUI();
-                });
-
-                // Auth form
-                DOM.authForm.addEventListener('submit', handleAuthSubmit);
-
-                // CTA Buttons - Open auth modal
-                DOM.allCtaButtons.forEach((btn) => {
-                    btn.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        const mode = btn.id.includes('Register') || btn.id.includes('register') ?
-                            'register' : 'login';
-                        openAuthModal(mode);
-                    });
-                });
-
-                // Scroll to top
-                DOM.scrollTopBtn.addEventListener('click', scrollToTop);
-
-                // Keyboard
-                document.addEventListener('keydown', handleEscapeKey);
-
-                // Scroll
-                window.addEventListener('scroll', handleHeaderScroll, { passive: true });
-
-                // Initialize FAQ
-                initFaqAccordion();
-
-                // Initialize smooth scroll
-                initSmoothScroll();
-
-                console.log('[11Avatar] Public landing page initialized successfully.');
-                console.log('[11Avatar] Design System: ✅ LOCK CRM UI ACTIVE');
-                console.log('[11Avatar] All event listeners bound.');
-            } catch (error) {
-                console.error('[11Avatar] Error during initialization:', error);
-            }
-        }
-
-        // ============================================================
-        // INITIALIZATION
-        // ============================================================
-        function init() {
-            try {
-                setupEventListeners();
-                // Initial header state check
-                handleHeaderScroll();
-                // Set initial submenu active
-                updateActiveSubmenu();
-            } catch (error) {
-                console.error('[11Avatar] Fatal initialization error:', error);
-            }
-        }
-
-        // Run on DOM ready
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', init);
-        } else {
-            init();
-        }
-
-        // ============================================================
-        // EXPORT TO GLOBAL (Rule #20)
-        // ============================================================
-        window.PublicLandingPage = {
-            openAuthModal,
-            closeAuthModal,
-            toggleMobileMenu,
-            openMobileMenu,
-            closeMobileMenu,
-            showToast,
-            scrollToTop,
-            STATE: PUBLIC_STATE,
-        };
-
-        console.log('[11Avatar] window.PublicLandingPage exported for debugging.');
+        console.log('✅ 11 Avatar Landing Page Ready');
+        console.log('🔐 Auth modal working — Sign In / Register');
+        console.log('📱 Mobile menu working');
+        console.log('🌙 Theme: Dark (Public Page)');
     </script>
-
 </body>
 </html>
