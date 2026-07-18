@@ -395,6 +395,9 @@
                     var user = APP_STATE.user;
                     var displayName = user.displayName || user.name || 'User';
                     var avatar = displayName.charAt(0).toUpperCase();
+                    // Header avatar bhi update karo
+                    var headerAvatar = document.getElementById('headerAvatar');
+                    if (headerAvatar) headerAvatar.textContent = avatar;
 
                     if (DOM.sidebarUserName) DOM.sidebarUserName.textContent = displayName;
                     if (DOM.sidebarUserRole) DOM.sidebarUserRole.textContent = user.role || 'Executive';
@@ -654,6 +657,13 @@
             function setupEvents() {
                 if (DOM.sidebarCollapseBtn) DOM.sidebarCollapseBtn.addEventListener('click', toggleSidebar);
                 if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.addEventListener('click', openMobileSidebar);
+                var headerProfileBtn = document.getElementById('headerProfileBtn');
+                if (headerProfileBtn) {
+                    headerProfileBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleUserDropdown();
+                    });
+                }
                 if (DOM.sidebarOverlay) DOM.sidebarOverlay.addEventListener('click', closeMobileSidebar);
                 if (DOM.mobileThemeBtn) DOM.mobileThemeBtn.addEventListener('click', toggleTheme);
                 if (DOM.themeToggleBtn) DOM.themeToggleBtn.addEventListener('click', toggleTheme);
