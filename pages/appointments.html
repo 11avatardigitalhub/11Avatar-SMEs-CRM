@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="internal">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F6F0" />
+    <title>Appointments - 11 Avatar Digital Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/crm-design-system.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    
+    <style>
+        :root {
+            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
+            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+        }
+        
+        .appt-container { max-width: 1200px; margin: 0 auto; padding: 24px; padding-bottom: 100px; }
+        
+        .bottom-submenu {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+            display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .bottom-submenu::-webkit-scrollbar { display: none; }
+        .bottom-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 10px 16px; border-radius: 12px; cursor: pointer;
+            font-size: 0.7rem; font-weight: 500; color: #777;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
+            border: 1.5px solid transparent; background: transparent;
+        }
+        .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
+        .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
+        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
+            box-shadow: var(--card-3d); margin-bottom: 20px;
+        }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn-primary { background: var(--gold-gradient); color: #FFF; }
+        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
+        .btn-outline:hover { background: rgba(212,175,55,0.08); }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-ghost { background: transparent; color: #666; }
+        .btn-ghost:hover { background: #F5F5F5; }
+        .btn-danger { background: #DC2626; color: #FFF; }
+        .btn-success { background: #10B981; color: #FFF; }
+        
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+        .stat-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 16px 18px; cursor: pointer; transition: var(--transition);
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        
+        /* Calendar */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; text-align: center; }
+        .cal-day-header { font-size: 0.68rem; font-weight: 600; color: #888; padding: 8px 0; text-transform: uppercase; }
+        .cal-day {
+            aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+            border-radius: 10px; font-size: 0.85rem; cursor: pointer; transition: all 0.15s ease;
+            position: relative; font-weight: 500;
+        }
+        .cal-day:hover { background: rgba(212,175,55,0.1); }
+        .cal-day.today { background: rgba(212,175,55,0.2); font-weight: 700; color: #B8960F; }
+        .cal-day.selected { background: var(--gold-gradient); color: #FFF; font-weight: 700; }
+        .cal-day.has-appt::after { content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px; border-radius: 50%; background: #D4AF37; }
+        .cal-day.other-month { color: #CCC; }
+        
+        /* Appointments List */
+        .appt-list { display: flex; flex-direction: column; gap: 10px; }
+        .appt-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 16px 20px; display: flex; align-items: center; gap: 14px;
+            transition: var(--transition); cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .appt-card:hover { transform: translateX(3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .appt-time {
+            width: 60px; text-align: center; flex-shrink: 0;
+            font-weight: 700; font-size: 0.95rem; color: #B8960F;
+            padding: 8px; background: rgba(212,175,55,0.08); border-radius: 10px;
+        }
+        .appt-info { flex: 1; min-width: 0; }
+        .appt-title { font-weight: 600; font-size: 0.95rem; }
+        .appt-meta { font-size: 0.78rem; color: #888; margin-top: 2px; }
+        .appt-status { font-size: 0.7rem; font-weight: 600; padding: 4px 10px; border-radius: 10px; white-space: nowrap; }
+        .status-scheduled { background: #EFF6FF; color: #2563EB; }
+        .status-completed { background: #ECFDF5; color: #059669; }
+        .status-cancelled { background: #FEE2E2; color: #DC2626; }
+        .appt-actions { display: flex; gap: 4px; }
+        
+        /* Forms */
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: #333; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5;
+            border-radius: 10px; font-size: 0.88rem; font-family: 'Inter',sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; }
+        .form-group textarea { resize: vertical; min-height: 70px; }
+        
+        .tbl-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; transition: all 0.15s ease; }
+        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
+        
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        
+        .empty-state { text-align: center; padding: 50px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
+        .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
+        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        
+        @media(max-width:768px){ .appt-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} .appt-card{flex-direction:column;align-items:flex-start;} }
+    </style>
+</head>
+<body>
+
+    <div class="appt-container">
+        
+        <div class="page-header">
+            <div>
+                <h1>📅 <span class="gold">Appointments</span> & Scheduling</h1>
+                <p id="apptCountText">Manage meetings and calls</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-outline btn-sm" onclick="Appointments.exportCSV()">📤 Export</button>
+                <button class="btn btn-primary" onclick="Appointments.openScheduleForm()">➕ Schedule</button>
+            </div>
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">Total</div></div>
+            <div class="stat-card"><div class="val" id="stat-today" style="color:#D4AF37;">0</div><div class="lbl">📅 Today</div></div>
+            <div class="stat-card"><div class="val" id="stat-upcoming" style="color:#2563EB;">0</div><div class="lbl">📆 Upcoming</div></div>
+            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">0</div><div class="lbl">✅ Completed</div></div>
+        </div>
+        
+        <!-- TAB: Calendar -->
+        <div id="tab-calendar" class="tab-content active">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">📅 Calendar</span>
+                        <div class="flex gap-2">
+                            <button class="btn btn-ghost btn-sm" onclick="Appointments.calMonth--;Appointments.renderCalendar()">◀</button>
+                            <span class="font-semibold" id="calMonthLabel"></span>
+                            <button class="btn btn-ghost btn-sm" onclick="Appointments.calMonth++;Appointments.renderCalendar()">▶</button>
+                        </div>
+                    </div>
+                    <div class="calendar-grid" id="calendarGrid"></div>
+                </div>
+                <div>
+                    <div class="card">
+                        <div class="card-header"><span class="card-title">📋 Appointments for <span id="selectedDateLabel">Today</span></span></div>
+                        <div class="appt-list" id="dayApptList"></div>
+                        <div class="empty-state" id="dayEmpty" style="display:none;"><p>No appointments for this date</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB: All Appointments -->
+        <div id="tab-all" class="tab-content">
+            <div class="appt-list" id="allApptList"></div>
+            <div class="empty-state" id="allEmpty" style="display:none;"><div class="empty-icon">📅</div><p>No appointments scheduled</p></div>
+        </div>
+        
+        <!-- TAB: Schedule -->
+        <div id="tab-schedule" class="tab-content">
+            <div class="card" style="max-width:650px;">
+                <div class="card-header"><span class="card-title">➕ Schedule Appointment</span></div>
+                <form id="apptForm" onsubmit="Appointments.saveAppointment(event)">
+                    <div class="form-row">
+                        <div class="form-group"><label>Title *</label><input type="text" id="aTitle" required placeholder="Meeting / Call title"></div>
+                        <div class="form-group"><label>With (Client/Lead)</label><select id="aWith"><option value="">Select...</option></select></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Date *</label><input type="date" id="aDate" required></div>
+                        <div class="form-group"><label>Time *</label><input type="time" id="aTime" required></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Duration</label><select id="aDuration"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="60">1 hour</option><option value="120">2 hours</option></select></div>
+                        <div class="form-group"><label>Type</label><select id="aType"><option value="meeting">🤝 Meeting</option><option value="call">📞 Phone Call</option><option value="video">📹 Video Call</option><option value="demo">💻 Demo</option></select></div>
+                    </div>
+                    <div class="form-group"><label>Notes</label><textarea id="aNotes" rows="2"></textarea></div>
+                    <div class="flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-primary">💾 Schedule</button>
+                        <button type="button" class="btn btn-outline" onclick="Appointments.currentTab='calendar';Appointments.render()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Bottom Submenu -->
+    <div class="bottom-submenu">
+        <div class="bottom-tab active" onclick="Appointments.currentTab='calendar';Appointments.render()"><span class="tab-icon">📅</span> Calendar</div>
+        <div class="bottom-tab" onclick="Appointments.currentTab='all';Appointments.render()"><span class="tab-icon">📋</span> All</div>
+        <div class="bottom-tab" onclick="Appointments.currentTab='schedule';Appointments.render()"><span class="tab-icon">➕</span> Schedule</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        'use strict';
+        
+        var Appointments = {
+            currentTab: 'calendar',
+            selectedDate: new Date().toISOString().split('T')[0],
+            calMonth: new Date().getMonth(),
+            calYear: new Date().getFullYear(),
+            
+            init: function() {
+                this.data = JSON.parse(localStorage.getItem('crm_appointments') || '[]');
+                if (this.data.length === 0) this.seedData();
+                this.render();
+            },
+            
+            seedData: function() {
+                var today = new Date().toISOString().split('T')[0];
+                var tomorrow = new Date(Date.now()+86400000).toISOString().split('T')[0];
+                this.data = [
+                    { id:'APT001',title:'SEO Strategy Meeting',with:'Rajesh Kumar',date:today,time:'10:00',duration:30,type:'meeting',status:'scheduled',notes:'Discuss Q1 SEO plan',created:new Date().toISOString() },
+                    { id:'APT002',title:'Product Demo - ABC Corp',with:'Vikram Singh',date:today,time:'14:30',duration:60,type:'demo',status:'scheduled',notes:'Show new features',created:new Date().toISOString() },
+                    { id:'APT003',title:'Follow-up Call',with:'Priya Sharma',date:tomorrow,time:'11:00',duration:15,type:'call',status:'scheduled',notes:'Check on proposal',created:new Date().toISOString() },
+                    { id:'APT004',title:'Quarterly Review',with:'Amit Patel',date:new Date(Date.now()-86400000*3).toISOString().split('T')[0],time:'16:00',duration:60,type:'meeting',status:'completed',notes:'Reviewed Q4 results',created:new Date().toISOString() }
+                ];
+                this.save();
+            },
+            
+            save: function() { try { localStorage.setItem('crm_appointments', JSON.stringify(this.data)); } catch(e) {} },
+            
+            render: function() {
+                var tabs = ['calendar','all','schedule'];
+                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
+                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Appointments.currentTab);
+                });
+                
+                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+                var tabEl = document.getElementById('tab-' + this.currentTab);
+                if (tabEl) tabEl.classList.add('active');
+                
+                var today = new Date().toISOString().split('T')[0];
+                document.getElementById('stat-total').textContent = this.data.length;
+                document.getElementById('stat-today').textContent = this.data.filter(function(a){return a.date===today;}).length;
+                document.getElementById('stat-upcoming').textContent = this.data.filter(function(a){return a.date>today && a.status==='scheduled';}).length;
+                document.getElementById('stat-completed').textContent = this.data.filter(function(a){return a.status==='completed';}).length;
+                document.getElementById('apptCountText').textContent = this.data.length + ' appointments';
+                
+                if (this.currentTab === 'calendar') this.renderCalendar();
+                if (this.currentTab === 'all') this.renderAll();
+                if (this.currentTab === 'schedule') this.loadContacts();
+            },
+            
+            renderCalendar: function() {
+                var self = this;
+                var year = this.calYear;
+                var month = this.calMonth;
+                var today = new Date().toISOString().split('T')[0];
+                
+                var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+                document.getElementById('calMonthLabel').textContent = months[month] + ' ' + year;
+                
+                var firstDay = new Date(year, month, 1).getDay();
+                var daysInMonth = new Date(year, month + 1, 0).getDate();
+                var daysInPrev = new Date(year, month, 0).getDate();
+                
+                var apptDates = {};
+                this.data.forEach(function(a){ apptDates[a.date] = (apptDates[a.date]||0)+1; });
+                
+                var html = '';
+                ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(function(d){ html += '<div class="cal-day-header">'+d+'</div>'; });
+                
+                for (var i=firstDay-1; i>=0; i--) { html += '<div class="cal-day other-month">'+(daysInPrev-i)+'</div>'; }
+                
+                for (var d=1; d<=daysInMonth; d++) {
+                    var ds = year+'-'+String(month+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+                    var cls = ['cal-day'];
+                    if (ds===today) cls.push('today');
+                    if (ds===this.selectedDate) cls.push('selected');
+                    if (apptDates[ds]) cls.push('has-appt');
+                    html += '<div class="'+cls.join(' ')+'" onclick="Appointments.selectDate(\''+ds+'\')" title="'+(apptDates[ds]||0)+' appt">'+d+'</div>';
+                }
+                
+                var remaining = 42 - (firstDay + daysInMonth);
+                for (var d=1; d<=remaining; d++) { html += '<div class="cal-day other-month">'+d+'</div>'; }
+                
+                document.getElementById('calendarGrid').innerHTML = html;
+                this.renderDayAppts();
+            },
+            
+            selectDate: function(date) {
+                this.selectedDate = date;
+                this.renderCalendar();
+            },
+            
+            renderDayAppts: function() {
+                var appts = this.data.filter(function(a){return a.date===Appointments.selectedDate;}).sort(function(a,b){return a.time.localeCompare(b.time);});
+                var list = document.getElementById('dayApptList');
+                var empty = document.getElementById('dayEmpty');
+                var self = this;
+                
+                document.getElementById('selectedDateLabel').textContent = this.fd(this.selectedDate);
+                
+                if (appts.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+                empty.style.display = 'none';
+                
+                list.innerHTML = appts.map(function(a) {
+                    return '<div class="appt-card">'+
+                        '<div class="appt-time">'+a.time+'</div>'+
+                        '<div class="appt-info"><div class="appt-title">'+self.esc(a.title)+'</div><div class="appt-meta">👤 '+self.esc(a.with||'N/A')+' · ⏱️ '+a.duration+'min · '+a.type+'</div></div>'+
+                        '<span class="appt-status '+(a.status==='scheduled'?'status-scheduled':a.status==='completed'?'status-completed':'status-cancelled')+'">'+a.status+'</span>'+
+                        '<div class="appt-actions"><button class="tbl-btn" onclick="Appointments.completeAppt(\''+a.id+'\')" title="Complete">✅</button><button class="tbl-btn" onclick="Appointments.deleteAppt(\''+a.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button></div></div>';
+                }).join('');
+            },
+            
+            renderAll: function() {
+                var appts = this.data.sort(function(a,b){return new Date(b.date+'T'+b.time)-new Date(a.date+'T'+a.time);});
+                var list = document.getElementById('allApptList');
+                var empty = document.getElementById('allEmpty');
+                var self = this;
+                
+                if (appts.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
+                empty.style.display = 'none';
+                
+                list.innerHTML = appts.map(function(a) {
+                    return '<div class="appt-card">'+
+                        '<div class="appt-time">'+self.fd(a.date)+'<br><small>'+a.time+'</small></div>'+
+                        '<div class="appt-info"><div class="appt-title">'+self.esc(a.title)+'</div><div class="appt-meta">👤 '+self.esc(a.with||'N/A')+' · '+a.duration+'min · '+a.type+'</div></div>'+
+                        '<span class="appt-status '+(a.status==='scheduled'?'status-scheduled':a.status==='completed'?'status-completed':'status-cancelled')+'">'+a.status+'</span>'+
+                        '<div class="appt-actions"><button class="tbl-btn" onclick="Appointments.completeAppt(\''+a.id+'\')" title="Complete">✅</button><button class="tbl-btn" onclick="Appointments.deleteAppt(\''+a.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button></div></div>';
+                }).join('');
+            },
+            
+            loadContacts: function() {
+                var leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
+                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
+                var sel = document.getElementById('aWith');
+                if (sel) sel.innerHTML = '<option value="">Select...</option>' +
+                    leads.map(function(l){return '<option value="'+l.name+'">👤 '+l.name+' (Lead)</option>';}).join('') +
+                    clients.map(function(c){return '<option value="'+c.name+'">🏢 '+c.name+' (Client)</option>';}).join('');
+            },
+            
+            openScheduleForm: function() { this.currentTab = 'schedule'; this.render(); },
+            
+            saveAppointment: function(e) {
+                e.preventDefault();
+                var d = {
+                    title:document.getElementById('aTitle').value.trim(),
+                    with:document.getElementById('aWith').value,
+                    date:document.getElementById('aDate').value,
+                    time:document.getElementById('aTime').value,
+                    duration:parseInt(document.getElementById('aDuration').value)||30,
+                    type:document.getElementById('aType').value,
+                    notes:document.getElementById('aNotes').value.trim(),
+                    status:'scheduled'
+                };
+                if (!d.title||!d.date||!d.time) { this.toast('Title, date & time required!','error'); return; }
+                d.id='APT'+String(this.data.length+1).padStart(3,'0'); d.created=new Date().toISOString();
+                this.data.unshift(d);
+                this.save(); this.currentTab='calendar'; this.render();
+                this.toast('✅ Appointment scheduled!','success');
+            },
+            
+            completeAppt: function(id) {
+                var a = this.data.find(function(x){return x.id===id;});
+                if (a) { a.status = 'completed'; this.save(); this.render(); this.toast('✅ Marked as completed','success'); }
+            },
+            
+            deleteAppt: function(id) {
+                if (!confirm('Delete this appointment?')) return;
+                this.data = this.data.filter(function(a){return a.id!==id;});
+                this.save(); this.render(); this.toast('🗑️ Deleted','info');
+            },
+            
+            exportCSV: function() {
+                var csv='Title,With,Date,Time,Duration,Type,Status\n';
+                csv+=this.data.map(function(a){return [a.title,a.with,a.date,a.time,a.duration,a.type,a.status].map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
+                var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='appointments.csv'; a.click();
+                this.toast('📤 Exported!','success');
+            },
+            
+            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
+            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
+            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() { Appointments.init(); });
+    </script>
+</body>
+</html>
