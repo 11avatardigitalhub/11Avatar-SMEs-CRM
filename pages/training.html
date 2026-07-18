@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="internal">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="theme-color" content="#F8F6F0" />
+    <title>Training - 11 Avatar Digital Hub</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/crm-design-system.css" />
+    <link rel="stylesheet" href="../css/app.css" />
+    
+    <style>
+        :root {
+            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
+            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+        }
+        
+        .training-container { max-width: 1400px; margin: 0 auto; padding: 24px; padding-bottom: 100px; }
+        
+        .bottom-submenu {
+            position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
+            padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
+            display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+            justify-content: center; flex-wrap: wrap;
+        }
+        .bottom-submenu::-webkit-scrollbar { display: none; }
+        .bottom-tab {
+            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            padding: 10px 16px; border-radius: 12px; cursor: pointer;
+            font-size: 0.7rem; font-weight: 500; color: #777;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
+            border: 1.5px solid transparent; background: transparent;
+        }
+        .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
+        .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
+        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        
+        .page-header {
+            display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
+            box-shadow: var(--card-3d); margin-bottom: 20px;
+        }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
+        
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn-primary { background: var(--gold-gradient); color: #FFF; }
+        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
+        .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
+        .btn-outline:hover { background: rgba(212,175,55,0.08); }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
+        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-ghost { background: transparent; color: #666; }
+        .btn-ghost:hover { background: #F5F5F5; }
+        .btn-danger { background: #DC2626; color: #FFF; }
+        .btn-success { background: #10B981; color: #FFF; }
+        
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        
+        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+        .stat-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
+            padding: 16px 18px; cursor: pointer; transition: var(--transition);
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        
+        .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
+        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; }
+        .filter-row input:focus { border-color: var(--gold); outline: none; }
+        .filter-row select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; cursor: pointer; min-width: 140px; }
+        
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        table th { text-align: left; padding: 12px 14px; font-weight: 600; color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: #FAFAFA; border-bottom: 2px solid #F0EDE5; white-space: nowrap; }
+        table td { padding: 12px 14px; border-bottom: 1px solid #F5F5F5; color: #333; }
+        table tbody tr { transition: background 0.15s ease; cursor: pointer; }
+        table tbody tr:hover { background: rgba(212,175,55,0.03); }
+        
+        .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
+        .badge-active { background: #ECFDF5; color: #059669; }
+        .badge-completed { background: #EFF6FF; color: #2563EB; }
+        .badge-pending { background: #FEF3C7; color: #D97706; }
+        
+        .tbl-actions { display: flex; gap: 3px; }
+        .tbl-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; transition: all 0.15s ease; }
+        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
+        
+        .course-card {
+            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
+            padding: 20px; transition: var(--transition); cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .course-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .course-card .cc-icon { font-size: 2rem; margin-bottom: 10px; }
+        .course-card .cc-title { font-weight: 700; font-size: 1rem; margin-bottom: 4px; }
+        .course-card .cc-meta { font-size: 0.78rem; color: #888; }
+        .course-card .cc-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #F5F5F5; }
+        
+        .course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        @media(max-width:480px){ .course-grid{grid-template-columns:1fr;} }
+        
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: #333; margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5;
+            border-radius: 10px; font-size: 0.88rem; font-family: 'Inter',sans-serif;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; }
+        .form-group textarea { resize: vertical; min-height: 70px; }
+        
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        
+        .empty-state { text-align: center; padding: 50px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
+        .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
+        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        
+        @media(max-width:768px){ .training-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} }
+    </style>
+</head>
+<body>
+
+    <div class="training-container">
+        
+        <div class="page-header">
+            <div>
+                <h1>🎓 <span class="gold">Training</span> & LMS</h1>
+                <p id="trainingCountText">Manage courses, students, and certifications</p>
+            </div>
+            <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-outline btn-sm" onclick="Training.exportCSV()">📤 Export</button>
+                <button class="btn btn-primary" onclick="Training.openCourseForm()">➕ New Course</button>
+            </div>
+        </div>
+        
+        <div class="stats-row">
+            <div class="stat-card"><div class="val" id="stat-courses">0</div><div class="lbl">Total Courses</div></div>
+            <div class="stat-card"><div class="val" id="stat-students">0</div><div class="lbl">👨‍🎓 Students</div></div>
+            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">0</div><div class="lbl">✅ Completed</div></div>
+            <div class="stat-card"><div class="val" id="stat-revenue" style="color:#D4AF37;">₹0</div><div class="lbl">💰 Revenue</div></div>
+        </div>
+        
+        <!-- TAB: Courses -->
+        <div id="tab-courses" class="tab-content active">
+            <div class="filter-row">
+                <input type="search" id="searchInput" placeholder="🔍 Search courses..." oninput="Training.search=this.value;Training.render()">
+                <select id="filterStatus" onchange="Training.filterStatus=this.value;Training.render()">
+                    <option value="">All Status</option><option value="Active">Active</option><option value="Completed">Completed</option><option value="Draft">Draft</option>
+                </select>
+                <button class="btn btn-ghost btn-sm" onclick="Training.clearFilters()">✕ Clear</button>
+            </div>
+            <div class="course-grid" id="courseGrid"></div>
+        </div>
+        
+        <!-- TAB: Students -->
+        <div id="tab-students" class="tab-content">
+            <div class="filter-row">
+                <input type="search" id="studentSearch" placeholder="🔍 Search students..." oninput="Training.studentSearch=this.value;Training.render()">
+                <button class="btn btn-outline btn-sm" onclick="Training.openEnrollForm()">➕ Enroll Student</button>
+            </div>
+            <div class="card" style="padding:0;overflow:hidden;">
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Student</th><th>Mobile</th><th>Course</th><th>Enrolled</th><th>Progress</th><th>Status</th><th style="min-width:100px;">Actions</th></tr></thead>
+                        <tbody id="studentTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- TAB: Add Course -->
+        <div id="tab-add" class="tab-content">
+            <div class="card" style="max-width:700px;">
+                <div class="card-header"><span class="card-title" id="formTitle">➕ New Course</span></div>
+                <form id="courseForm" onsubmit="Training.saveCourse(event)">
+                    <input type="hidden" id="editId">
+                    <div class="form-row">
+                        <div class="form-group"><label>Course Name *</label><input type="text" id="cName" required></div>
+                        <div class="form-group"><label>Instructor</label><input type="text" id="cInstructor"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Duration</label><input type="text" id="cDuration" placeholder="e.g., 4 Weeks"></div>
+                        <div class="form-group"><label>Fee (₹)</label><input type="number" id="cFee" min="0"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group"><label>Status</label><select id="cStatus"><option value="Active">Active</option><option value="Draft">Draft</option><option value="Completed">Completed</option></select></div>
+                        <div class="form-group"><label>Start Date</label><input type="date" id="cStartDate"></div>
+                    </div>
+                    <div class="form-group"><label>Description</label><textarea id="cDesc" rows="3"></textarea></div>
+                    <div class="form-group"><label>Syllabus / Topics</label><textarea id="cSyllabus" rows="3" placeholder="Comma-separated topics"></textarea></div>
+                    <div class="flex gap-2 mt-2">
+                        <button type="submit" class="btn btn-primary">💾 Save Course</button>
+                        <button type="button" class="btn btn-outline" onclick="Training.currentTab='courses';Training.render()">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    
+    <!-- Enroll Modal Container -->
+    <div id="modalContainer"></div>
+    
+    <!-- Bottom Submenu -->
+    <div class="bottom-submenu">
+        <div class="bottom-tab active" onclick="Training.currentTab='courses';Training.render()"><span class="tab-icon">📚</span> Courses</div>
+        <div class="bottom-tab" onclick="Training.currentTab='students';Training.render()"><span class="tab-icon">👨‍🎓</span> Students</div>
+        <div class="bottom-tab" onclick="Training.currentTab='add';Training.render()"><span class="tab-icon">➕</span> Add</div>
+        <div class="bottom-tab" onclick="window.location.href='leads.html'"><span class="tab-icon">👥</span> Leads</div>
+        <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        'use strict';
+        
+        var Training = {
+            currentTab: 'courses',
+            search: '',
+            filterStatus: '',
+            studentSearch: '',
+            
+            init: function() {
+                this.courses = JSON.parse(localStorage.getItem('crm_courses') || '[]');
+                this.students = JSON.parse(localStorage.getItem('crm_training_students') || '[]');
+                if (this.courses.length === 0) this.seedData();
+                this.render();
+            },
+            
+            seedData: function() {
+                this.courses = [
+                    { id:'CRS001',name:'Digital Marketing Masterclass',instructor:'Admin',duration:'6 Weeks',fee:15000,status:'Active',startDate:'2025-02-01',desc:'Complete digital marketing course covering SEO, SMM, Google Ads',syllabus:'SEO Basics,Social Media Marketing,Google Ads,Analytics,Content Marketing',created:new Date().toISOString() },
+                    { id:'CRS002',name:'Website Development Bootcamp',instructor:'Developer',duration:'8 Weeks',fee:25000,status:'Active',startDate:'2025-01-15',desc:'Learn HTML, CSS, JavaScript and build real projects',syllabus:'HTML5,CSS3,JavaScript,React,Node.js,Project',created:new Date().toISOString() },
+                    { id:'CRS003',name:'Business Communication Skills',instructor:'Manager',duration:'2 Weeks',fee:5000,status:'Draft',startDate:'',desc:'Improve professional communication and presentation skills',syllabus:'Email Writing,Presentation,Client Communication,Negotiation',created:new Date().toISOString() }
+                ];
+                this.students = [
+                    { id:'STU001',name:'Rajesh Kumar',mobile:'9876543210',courseId:'CRS001',courseName:'Digital Marketing Masterclass',enrolled:'2025-02-01',progress:60,status:'Active',fee:15000 },
+                    { id:'STU002',name:'Priya Sharma',mobile:'8765432109',courseId:'CRS002',courseName:'Website Development Bootcamp',enrolled:'2025-01-20',progress:85,status:'Active',fee:25000 },
+                    { id:'STU003',name:'Amit Patel',mobile:'7654321098',courseId:'CRS001',courseName:'Digital Marketing Masterclass',enrolled:'2025-02-05',progress:100,status:'Completed',fee:15000 }
+                ];
+                this.save();
+            },
+            
+            save: function() {
+                try { localStorage.setItem('crm_courses', JSON.stringify(this.courses)); } catch(e) {}
+                try { localStorage.setItem('crm_training_students', JSON.stringify(this.students)); } catch(e) {}
+            },
+            
+            getFilteredCourses: function() {
+                var self = this;
+                return this.courses.filter(function(c) {
+                    if (self.search && !(c.name?.toLowerCase().includes(self.search)||c.instructor?.toLowerCase().includes(self.search))) return false;
+                    if (self.filterStatus && c.status !== self.filterStatus) return false;
+                    return true;
+                });
+            },
+            
+            getFilteredStudents: function() {
+                var s = this.studentSearch.toLowerCase();
+                return this.students.filter(function(st) {
+                    return !s || st.name?.toLowerCase().includes(s) || st.mobile?.includes(s) || st.courseName?.toLowerCase().includes(s);
+                });
+            },
+            
+            render: function() {
+                var tabs = ['courses','students','add'];
+                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
+                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Training.currentTab);
+                });
+                
+                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
+                var tabEl = document.getElementById('tab-' + this.currentTab);
+                if (tabEl) tabEl.classList.add('active');
+                
+                var totalRevenue = this.students.reduce(function(s,st){return s+(parseInt(st.fee)||0);},0);
+                document.getElementById('stat-courses').textContent = this.courses.length;
+                document.getElementById('stat-students').textContent = this.students.length;
+                document.getElementById('stat-completed').textContent = this.students.filter(function(st){return st.status==='Completed';}).length;
+                document.getElementById('stat-revenue').textContent = '₹' + totalRevenue.toLocaleString('en-IN');
+                document.getElementById('trainingCountText').textContent = this.courses.length + ' courses · ' + this.students.length + ' students';
+                
+                if (this.currentTab === 'courses') this.renderCourses();
+                if (this.currentTab === 'students') this.renderStudents();
+            },
+            
+            renderCourses: function() {
+                var filtered = this.getFilteredCourses();
+                var grid = document.getElementById('courseGrid');
+                var self = this;
+                
+                grid.innerHTML = filtered.length === 0 ? '<div class="empty-state"><div class="empty-icon">📚</div><p>No courses found</p></div>' :
+                    filtered.map(function(c) {
+                        var studentCount = self.students.filter(function(st){return st.courseId===c.id;}).length;
+                        return '<div class="course-card" onclick="Training.openCourseDetail(\''+c.id+'\')">'+
+                            '<div class="cc-icon">📚</div>'+
+                            '<div class="cc-title">'+self.esc(c.name)+'</div>'+
+                            '<div class="cc-meta">👨‍🏫 '+self.esc(c.instructor)+' · ⏱️ '+self.esc(c.duration)+'</div>'+
+                            '<div class="cc-meta">👨‍🎓 '+studentCount+' students · 💰 ₹'+parseInt(c.fee||0).toLocaleString('en-IN')+'</div>'+
+                            '<div class="cc-footer"><span class="badge '+(c.status==='Active'?'badge-active':c.status==='Completed'?'badge-completed':'badge-pending')+'">'+c.status+'</span>'+
+                            '<div class="tbl-actions" onclick="event.stopPropagation();">'+
+                                '<button class="tbl-btn" onclick="Training.editCourse(\''+c.id+'\')" title="Edit">✏️</button>'+
+                                '<button class="tbl-btn" onclick="Training.deleteCourse(\''+c.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button>'+
+                            '</div></div></div>';
+                    }).join('');
+            },
+            
+            renderStudents: function() {
+                var filtered = this.getFilteredStudents();
+                var tbody = document.getElementById('studentTableBody');
+                var self = this;
+                
+                tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="7"><div class="empty-state"><p>No students found</p></div></td></tr>' :
+                    filtered.map(function(st) {
+                        return '<tr>'+
+                            '<td><strong>'+self.esc(st.name)+'</strong></td>'+
+                            '<td>'+self.esc(st.mobile||'-')+'</td>'+
+                            '<td>'+self.esc(st.courseName)+'</td>'+
+                            '<td>'+self.fd(st.enrolled)+'</td>'+
+                            '<td><div style="display:flex;align-items:center;gap:8px;"><div style="flex:1;height:6px;background:#F0EDE5;border-radius:3px;overflow:hidden;"><div style="height:100%;background:'+(st.progress>=100?'#10B981':'#D4AF37')+';width:'+st.progress+'%;border-radius:3px;"></div></div><span class="text-xs">'+st.progress+'%</span></div></td>'+
+                            '<td><span class="badge '+(st.status==='Completed'?'badge-completed':'badge-active')+'">'+st.status+'</span></td>'+
+                            '<td><div class="tbl-actions"><button class="tbl-btn" onclick="Training.updateProgress(\''+st.id+'\')" title="Update">📊</button><button class="tbl-btn" onclick="Training.removeStudent(\''+st.id+'\')" style="color:#DC2626;" title="Remove">🗑️</button></div></td></tr>';
+                    }).join('');
+            },
+            
+            openCourseForm: function() { this.currentTab = 'add'; this.render(); },
+            
+            editCourse: function(id) {
+                this.currentTab = 'add'; this.render();
+                var c = this.courses.find(function(x){return x.id===id;});
+                if (c) {
+                    document.getElementById('editId').value = c.id;
+                    document.getElementById('formTitle').textContent = '✏️ Edit: '+c.name;
+                    document.getElementById('cName').value=c.name||''; document.getElementById('cInstructor').value=c.instructor||'';
+                    document.getElementById('cDuration').value=c.duration||''; document.getElementById('cFee').value=c.fee||'';
+                    document.getElementById('cStatus').value=c.status||'Active'; document.getElementById('cStartDate').value=c.startDate||'';
+                    document.getElementById('cDesc').value=c.desc||''; document.getElementById('cSyllabus').value=c.syllabus||'';
+                }
+            },
+            
+            saveCourse: function(e) {
+                e.preventDefault();
+                var id = document.getElementById('editId').value;
+                var d = {
+                    name:document.getElementById('cName').value.trim(),
+                    instructor:document.getElementById('cInstructor').value.trim(),
+                    duration:document.getElementById('cDuration').value.trim(),
+                    fee:parseInt(document.getElementById('cFee').value)||0,
+                    status:document.getElementById('cStatus').value,
+                    startDate:document.getElementById('cStartDate').value,
+                    desc:document.getElementById('cDesc').value.trim(),
+                    syllabus:document.getElementById('cSyllabus').value.trim()
+                };
+                if (!d.name) { this.toast('Course name required!','error'); return; }
+                
+                if (id) {
+                    var i = this.courses.findIndex(function(x){return x.id===id;});
+                    if (i!==-1) { d.id=id; d.created=this.courses[i].created; this.courses[i]=d; this.toast('✅ Course updated!','success'); }
+                } else {
+                    d.id='CRS'+String(this.courses.length+1).padStart(3,'0'); d.created=new Date().toISOString();
+                    this.courses.unshift(d); this.toast('✅ Course created!','success');
+                }
+                this.save(); this.currentTab='courses'; this.render();
+            },
+            
+            deleteCourse: function(id) {
+                if (!confirm('Delete this course and all enrollments?')) return;
+                this.courses = this.courses.filter(function(c){return c.id!==id;});
+                this.students = this.students.filter(function(st){return st.courseId!==id;});
+                this.save(); this.render(); this.toast('🗑️ Course deleted','info');
+            },
+            
+            openEnrollForm: function() {
+                var self = this;
+                var courses = this.courses.filter(function(c){return c.status==='Active';});
+                var leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
+                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
+                var contacts = [].concat(leads, clients).filter(function(c){return c.mobile;});
+                
+                var h = '<div style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><div class="card" style="width:480px;max-width:90vw;max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()"><div class="card-header"><span class="card-title">➕ Enroll Student</span><button class="btn btn-ghost btn-xs" onclick="this.closest(\'div[style]\').remove()">✕</button></div>'+
+                    '<div class="form-group"><label>Student Name *</label><select id="enStudent" style="width:100%;"><option value="">Select...</option>'+contacts.map(function(c){return '<option value="'+c.name+'|'+c.mobile+'">'+c.name+' - '+c.mobile+'</option>';}).join('')+'</select></div>'+
+                    '<div class="form-group"><label>Course *</label><select id="enCourse" style="width:100%;">'+courses.map(function(c){return '<option value="'+c.id+'|'+c.name+'|'+c.fee+'">'+c.name+' - ₹'+c.fee+'</option>';}).join('')+'</select></div>'+
+                    '<button class="btn btn-primary btn-sm" onclick="Training.enrollStudent()">💾 Enroll</button></div></div>';
+                document.getElementById('modalContainer').innerHTML = h;
+            },
+            
+            enrollStudent: function() {
+                var studentVal = document.getElementById('enStudent')?.value;
+                var courseVal = document.getElementById('enCourse')?.value;
+                if (!studentVal || !courseVal) { this.toast('Select student and course!','error'); return; }
+                var studentParts = studentVal.split('|');
+                var courseParts = courseVal.split('|');
+                
+                this.students.unshift({
+                    id:'STU'+String(this.students.length+1).padStart(3,'0'),
+                    name:studentParts[0], mobile:studentParts[1],
+                    courseId:courseParts[0], courseName:courseParts[1],
+                    enrolled:new Date().toISOString().split('T')[0],
+                    progress:0, status:'Active', fee:parseInt(courseParts[2])||0
+                });
+                this.save(); this.currentTab='students'; this.render();
+                document.getElementById('modalContainer').innerHTML = '';
+                this.toast('✅ Student enrolled!','success');
+            },
+            
+            updateProgress: function(id) {
+                var st = this.students.find(function(x){return x.id===id;});
+                if (!st) return;
+                var prog = prompt('Enter progress (0-100):', st.progress);
+                if (prog === null) return;
+                prog = parseInt(prog) || 0;
+                st.progress = Math.min(100, Math.max(0, prog));
+                if (st.progress >= 100) st.status = 'Completed';
+                this.save(); this.render();
+                this.toast('✅ Progress updated to '+st.progress+'%','success');
+            },
+            
+            removeStudent: function(id) {
+                if (!confirm('Remove this student?')) return;
+                this.students = this.students.filter(function(st){return st.id!==id;});
+                this.save(); this.render(); this.toast('🗑️ Student removed','info');
+            },
+            
+            openCourseDetail: function(id) {
+                var c = this.courses.find(function(x){return x.id===id;});
+                if (!c) return;
+                var students = this.students.filter(function(st){return st.courseId===id;});
+                alert('📚 '+c.name+'\n\n👨‍🏫 Instructor: '+c.instructor+'\n⏱️ Duration: '+c.duration+'\n💰 Fee: ₹'+parseInt(c.fee||0).toLocaleString('en-IN')+'\n👨‍🎓 Students: '+students.length+'\n\n📝 '+c.desc+'\n\n📖 Syllabus: '+c.syllabus);
+            },
+            
+            clearFilters: function() {
+                this.search=''; this.filterStatus='';
+                document.getElementById('searchInput').value=''; document.getElementById('filterStatus').value='';
+                this.render();
+            },
+            
+            exportCSV: function() {
+                var csv='Type,ID,Name,Details\n';
+                this.courses.forEach(function(c){ csv+='Course,'+c.id+','+c.name+','+c.instructor+','+c.duration+','+c.fee+','+c.status+'\n'; });
+                this.students.forEach(function(st){ csv+='Student,'+st.id+','+st.name+','+st.courseName+','+st.progress+'%,'+st.status+'\n'; });
+                var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='training.csv'; a.click();
+                this.toast('📤 Exported!','success');
+            },
+            
+            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
+            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
+            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() { Training.init(); });
+    </script>
+</body>
+</html>
