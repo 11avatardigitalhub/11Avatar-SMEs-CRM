@@ -2,25 +2,22 @@
 <html lang="en-IN" dir="ltr" data-theme="light">
 <head>
     <!-- ============================================================
-    11 AVATAR SMEs CRM - INTERNAL APP SHELL v3.0
-    Enterprise-grade | All issues fixed | User profile working
+    11 AVATAR SMEs CRM - INTERNAL APP SHELL v4.0
+    Enterprise-grade | Sidebar REMOVED | Header-only layout
+    Footer dynamic sub-menu | Firebase SDK loaded | All fixes applied
     
-    FIXES APPLIED:
-    ✅ User dropdown HTML properly placed (not inside <script>)
-    ✅ All user profile functions: View, Edit, Save, Change Password
-    ✅ Social media linking (Google, Phone, LinkedIn)
-    ✅ toggleUserDropdown() function added
-    ✅ Duplicate updateUserDisplay() removed
-    ✅ Proper module paths: js/core/ and js/modules/
-    ✅ Dark mode toggle working from all buttons
-    ✅ Toast notifications working
-    ✅ Sidebar collapse/expand with localStorage
+    CHANGES IN v4.0:
+    ✅ Sidebar permanently hidden - header-only layout
+    ✅ Firebase SDK properly loaded before core JS
+    ✅ Dynamic footer sub-menu per module (Rule #10)
+    ✅ Firestore initialized to prevent console errors
+    ✅ All user profile functions intact
+    ✅ Dark mode toggle from header button
     ✅ Mobile responsive with bottom nav
-    ✅ Keyboard shortcuts (Ctrl+K, Ctrl+B, Escape)
-    ✅ Demo mode when no user found
+    ✅ Keyboard shortcuts preserved
     
     @file       app.html
-    @version    3.0.0
+    @version    4.0.0
     @author     11 Avatar Digital Hub
     @email      info@11avatardigitalhub.cloud
     @repo       https://github.com/11avatardigitalhub/11Avatar-SMEs-CRM.git
@@ -29,7 +26,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="11 Avatar SMEs CRM - Internal Application. Manage your leads, pipeline, invoices, and business operations." />
+    <meta name="description" content="11 Avatar SMEs CRM - Internal Application" />
     <meta name="theme-color" content="#F8F6F0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
@@ -38,15 +35,12 @@
     <meta name="robots" content="noindex, nofollow" />
 
     <link rel="manifest" href="manifest.json" />
-    <link rel="apple-touch-icon" href="assets/icons/icon-192.png" />
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23D4AF37'/%3E%3Ctext x='50' y='68' font-size='38' text-anchor='middle' fill='%230A0A0A' font-weight='900' font-family='Poppins,sans-serif'%3E11A%3C/text%3E%3C/svg%3E" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23D4AF37'/%3E%3Ctext x='50' y='68' font-size='38' text-anchor='middle' fill='%230A0A0A' font-weight='900' font-family='Poppins,sans-serif'%3E11A%3C/text%3E%3C/svg%3E" />
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preconnect" href="https://www.gstatic.com" />
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://www.gstatic.com" />
-
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <link rel="stylesheet" href="css/crm-design-system.css" />
@@ -56,167 +50,592 @@
     <title>11 Avatar SMEs CRM — Dashboard</title>
 
     <style>
-        body{background:var(--bg-primary,#F8F6F0);padding:0;margin:0;display:flex;min-height:100vh;min-height:100dvh;overflow-x:hidden;font-family:var(--font-body,'Inter',sans-serif)}
-        .app-sidebar{position:fixed;top:0;left:0;bottom:0;width:var(--sidebar-width,280px);background:var(--bg-secondary,#FFF);border-right:1px solid var(--border-color,rgba(0,0,0,.06));display:flex;flex-direction:column;z-index:var(--z-sidebar,300);transition:width .3s ease,transform .3s ease;overflow:hidden;box-shadow:var(--shadow-sm,0 2px 8px rgba(0,0,0,.06))}
-        .app-sidebar.collapsed{width:var(--sidebar-collapsed,72px)}
-        .app-main{flex:1;margin-left:var(--sidebar-width,280px);display:flex;flex-direction:column;min-height:100vh;min-height:100dvh;transition:margin-left .3s ease}
-        .app-sidebar.collapsed~.app-main{margin-left:var(--sidebar-collapsed,72px)}
-        .module-container{display:none;animation:fadeUp .35s ease}
-        .module-container.active{display:block}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-        @media(max-width:1024px){.app-sidebar{transform:translateX(-100%);width:var(--sidebar-width,280px)}.app-sidebar.mobile-open{transform:translateX(0);box-shadow:var(--shadow-xl)}.app-main{margin-left:0!important}}
+        /* ============================================================
+           CRITICAL INLINE STYLES — Header-Only Layout
+           ============================================================ */
+        body {
+            background: var(--bg-primary, #F8F6F0);
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+            overflow-x: hidden;
+            font-family: var(--font-body, 'Inter', sans-serif);
+        }
+
+        /* SIDEBAR — Permanently hidden */
+        .app-sidebar,
+        .sidebar-overlay,
+        .sidebar-collapse-btn {
+            display: none !important;
+        }
+
+        /* MAIN — Full width always */
+        .app-main {
+            flex: 1;
+            margin-left: 0 !important;
+            width: 100% !important;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+
+        /* MODULE CONTAINERS */
+        .module-container {
+            display: none;
+            animation: fadeUp 0.35s cubic-bezier(0, 0, 0.2, 1);
+        }
+        .module-container.active {
+            display: block;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           HEADER STYLES
+           ============================================================ */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.06));
+            height: 60px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+            gap: 12px;
+        }
+
+        [data-theme="dark"] .app-header {
+            background: rgba(10, 10, 10, 0.9);
+            border-bottom-color: rgba(255, 255, 255, 0.08);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            flex-shrink: 0;
+            min-width: 0;
+        }
+
+        .header-brand svg {
+            width: 32px;
+            height: 32px;
+            flex-shrink: 0;
+        }
+
+        .header-brand-text {
+            line-height: 1.1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header-brand-name {
+            font-family: var(--font-heading, 'Poppins', sans-serif);
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--text-primary, #0A0A0A);
+            white-space: nowrap;
+        }
+
+        .header-brand-sub {
+            font-size: 9px;
+            color: var(--gold, #D4AF37);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .header-search {
+            flex: 1;
+            max-width: 420px;
+            position: relative;
+        }
+
+        .header-search input {
+            width: 100%;
+            height: 40px;
+            padding-left: 40px;
+            padding-right: 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--border-color-strong, rgba(0,0,0,0.1));
+            background: var(--bg-secondary, #FFFFFF);
+            font-size: 14px;
+            color: var(--text-primary, #0A0A0A);
+            font-family: var(--font-body, 'Inter', sans-serif);
+            transition: all 0.2s ease;
+        }
+
+        .header-search input:focus {
+            border-color: var(--gold, #D4AF37);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.12);
+            outline: none;
+        }
+
+        [data-theme="dark"] .header-search input {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            color: #FFFFFF;
+        }
+
+        .header-search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted, #888);
+            pointer-events: none;
+            font-size: 15px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
+        }
+
+        .header-action-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            border: 1px solid var(--border-color, rgba(0,0,0,0.08));
+            background: var(--bg-secondary, #FFFFFF);
+            color: var(--text-secondary, #555);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: all 0.2s ease;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .header-action-btn:hover {
+            background: rgba(212, 175, 55, 0.08);
+            color: var(--text-primary, #0A0A0A);
+            border-color: var(--gold, #D4AF37);
+        }
+
+        [data-theme="dark"] .header-action-btn {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+            color: #BBB;
+        }
+
+        [data-theme="dark"] .header-action-btn:hover {
+            background: rgba(212, 175, 55, 0.12);
+            color: #FFF;
+        }
+
+        .header-profile-btn {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: var(--gold-gradient, linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F));
+            color: #0A0A0A;
+            border: none;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 13px;
+            font-family: var(--font-heading, 'Poppins', sans-serif);
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .header-profile-btn:hover {
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.35);
+            transform: translateY(-1px);
+        }
+
+        .notification-dot {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #DC2626;
+            border: 2px solid var(--bg-secondary, #FFFFFF);
+            display: none;
+        }
+
+        /* ============================================================
+           SUB-MENU (Module Navigation Bar)
+           ============================================================ */
+        .app-submenu {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.05));
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+        }
+
+        .app-submenu::-webkit-scrollbar { display: none; }
+
+        [data-theme="dark"] .app-submenu {
+            background: rgba(10, 10, 10, 0.8);
+            border-bottom-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .app-submenu-inner {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 0 16px;
+            min-height: 44px;
+        }
+
+        .app-submenu-link {
+            padding: 7px 15px;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted, #777);
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: var(--font-body, 'Inter', sans-serif);
+        }
+
+        .app-submenu-link:hover {
+            color: var(--text-primary, #0A0A0A);
+            background: rgba(212, 175, 55, 0.06);
+        }
+
+        .app-submenu-link.active {
+            color: #8B6914;
+            background: rgba(212, 175, 55, 0.12);
+            font-weight: 600;
+        }
+
+        [data-theme="dark"] .app-submenu-link { color: #999; }
+        [data-theme="dark"] .app-submenu-link:hover { color: #FFF; background: rgba(255,255,255,0.06); }
+        [data-theme="dark"] .app-submenu-link.active { color: var(--gold-light, #E8C95A); background: rgba(212,175,55,0.15); }
+
+        /* ============================================================
+           CONTENT AREA
+           ============================================================ */
+        .app-content {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* ============================================================
+           FOOTER SUB-MENU (Dynamic per module - Mobile)
+           ============================================================ */
+        .footer-submenu {
+            position: fixed;
+            bottom: 56px;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary, #FFFFFF);
+            border-top: 1px solid var(--border-color, rgba(0,0,0,0.06));
+            z-index: 199;
+            display: none;
+            overflow-x: auto;
+            padding: 6px 12px;
+            gap: 6px;
+            scrollbar-width: none;
+        }
+
+        .footer-submenu::-webkit-scrollbar { display: none; }
+
+        [data-theme="dark"] .footer-submenu {
+            background: #1A1A1A;
+            border-top-color: rgba(255,255,255,0.08);
+        }
+
+        .footer-submenu-nav {
+            display: flex;
+            gap: 6px;
+            flex-wrap: nowrap;
+        }
+
+        .footer-submenu-btn {
+            padding: 8px 14px;
+            border-radius: 18px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--text-muted, #777);
+            border: 1px solid var(--border-color, rgba(0,0,0,0.08));
+            background: var(--bg-secondary, #FFFFFF);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            flex-shrink: 0;
+        }
+
+        .footer-submenu-btn:hover {
+            color: var(--text-primary, #0A0A0A);
+            border-color: var(--gold, #D4AF37);
+            background: rgba(212, 175, 55, 0.06);
+        }
+
+        .footer-submenu-btn.active {
+            background: rgba(212, 175, 55, 0.15);
+            color: #8B6914;
+            border-color: var(--gold, #D4AF37);
+            font-weight: 600;
+        }
+
+        [data-theme="dark"] .footer-submenu-btn {
+            background: rgba(255,255,255,0.03);
+            border-color: rgba(255,255,255,0.08);
+            color: #999;
+        }
+        [data-theme="dark"] .footer-submenu-btn:hover { background: rgba(255,255,255,0.06); color: #FFF; }
+        [data-theme="dark"] .footer-submenu-btn.active { background: rgba(212,175,55,0.15); color: var(--gold-light); }
+
+        /* ============================================================
+           MOBILE BOTTOM NAV
+           ============================================================ */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-secondary, #FFFFFF);
+            border-top: 1px solid var(--border-color, rgba(0,0,0,0.06));
+            z-index: 200;
+            padding: 6px 10px;
+            padding-bottom: max(6px, env(safe-area-inset-bottom));
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+        }
+
+        [data-theme="dark"] .mobile-bottom-nav {
+            background: #1A1A1A;
+            border-top-color: rgba(255,255,255,0.08);
+        }
+
+        .mobile-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            padding: 5px 8px;
+            border-radius: 8px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            font-size: 10px;
+            color: var(--text-muted, #888);
+            transition: all 0.15s ease;
+            min-width: 48px;
+            text-decoration: none;
+        }
+
+        .mobile-nav-item.active {
+            color: #8B6914;
+            font-weight: 600;
+        }
+
+        .mobile-nav-item:hover { color: var(--text-primary, #0A0A0A); }
+
+        .mobile-nav-icon { font-size: 1.2rem; }
+
+        /* ============================================================
+           USER DROPDOWN
+           ============================================================ */
+        .user-dropdown {
+            position: fixed;
+            top: 64px;
+            right: 12px;
+            width: 240px;
+            background: var(--bg-secondary, #FFFFFF);
+            border: 1px solid var(--border-color-strong, rgba(0,0,0,0.12));
+            border-radius: 14px;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            z-index: 500;
+            display: none;
+            overflow: hidden;
+            animation: fadeDown 0.2s ease;
+        }
+
+        .user-dropdown.show { display: block; }
+
+        .user-dropdown-header {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color, rgba(0,0,0,0.06));
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-tertiary, #F8F6F0);
+        }
+
+        .user-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: var(--text-primary, #0A0A0A);
+            cursor: pointer;
+            transition: background 0.15s ease;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            min-height: 44px;
+        }
+
+        .user-dropdown-item:hover { background: rgba(212, 175, 55, 0.06); }
+        .user-dropdown-item.danger { color: #DC2626; }
+        .user-dropdown-item.danger:hover { background: rgba(220, 38, 38, 0.08); }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ============================================================
+           RESPONSIVE
+           ============================================================ */
+        @media (max-width: 1024px) {
+            .header-search { display: none !important; }
+            .mobile-bottom-nav { display: flex; }
+            .footer-submenu { display: flex; }
+            .app-content { padding-bottom: calc(20px + 56px + 44px); }
+        }
+
+        @media (max-width: 768px) {
+            .app-header { padding: 0 10px; gap: 8px; height: 54px; }
+            .header-brand svg { width: 26px; height: 26px; }
+            .header-brand-name { font-size: 13px; }
+            .header-brand-sub { font-size: 8px; }
+            .header-action-btn { width: 34px; height: 34px; font-size: 13px; }
+            .header-profile-btn { width: 34px; height: 34px; font-size: 11px; }
+            .app-content { padding: 14px; padding-bottom: calc(14px + 56px + 44px); }
+        }
+
+        @media (max-width: 480px) {
+            .app-header { padding: 0 8px; gap: 4px; }
+            .header-brand svg { width: 22px; height: 22px; }
+            .header-brand-name { font-size: 11px; }
+            .header-brand-sub { display: none; }
+            .header-action-btn { width: 32px; height: 32px; font-size: 12px; }
+            .header-profile-btn { width: 32px; height: 32px; font-size: 10px; }
+        }
+
+        @media (min-width: 1025px) {
+            .footer-submenu { display: none !important; }
+            .mobile-bottom-nav { display: none !important; }
+            .app-content { padding-bottom: 20px; }
+        }
     </style>
 </head>
 <body>
 
     <a href="#appContent" class="skip-link">Skip to Main Content</a>
-    <div class="sidebar-overlay" id="sidebarOverlay" aria-hidden="true"></div>
 
     <!-- ============================================================
-    SIDEBAR
+    HEADER — Always Visible, No Sidebar
     ============================================================ -->
-    <aside class="app-sidebar" id="appSidebar" role="navigation" aria-label="Main navigation">
-        <div class="sidebar-header">
-            <a href="#" class="sidebar-logo" aria-label="11 Avatar CRM Dashboard">
-                <svg width="36" height="36" viewBox="0 0 38 38" fill="none" aria-hidden="true">
-                    <rect width="38" height="38" rx="10" fill="url(#sb-logo-gold)"/>
-                    <text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins, sans-serif">11A</text>
-                    <defs><linearGradient id="sb-logo-gold" x1="0" y1="0" x2="38" y2="38"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs>
-                </svg>
-                <div class="sidebar-brand-text"><div>11 Avatar</div><div class="sidebar-brand-sub">SMEs CRM</div></div>
-            </a>
-            <button class="sidebar-collapse-btn" id="sidebarCollapseBtn" aria-label="Toggle sidebar" title="Collapse Sidebar">◀</button>
-        </div>
-
-        <nav class="sidebar-nav" id="sidebarNav" aria-label="Module navigation">
-            <div class="nav-section"><div class="nav-section-title">Main</div>
-                <button class="nav-item active" data-module="dashboard" data-nav="dashboard" aria-current="page"><span class="nav-item-icon">📊</span><span class="nav-item-label">Dashboard</span></button>
-                <button class="nav-item" data-module="leads" data-nav="leads"><span class="nav-item-icon">👥</span><span class="nav-item-label">Leads</span></button>
-                <button class="nav-item" data-module="pipeline" data-nav="pipeline"><span class="nav-item-icon">📈</span><span class="nav-item-label">Pipeline</span></button>
-                <button class="nav-item" data-module="clients" data-nav="clients"><span class="nav-item-icon">🏢</span><span class="nav-item-label">Clients</span></button>
+    <header class="app-header" role="banner">
+        <a href="#" class="header-brand" aria-label="11 Avatar CRM Dashboard">
+            <svg width="32" height="32" viewBox="0 0 38 38" fill="none" aria-hidden="true">
+                <rect width="38" height="38" rx="10" fill="url(#hdr-logo-gold)"/>
+                <text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins, sans-serif">11A</text>
+                <defs><linearGradient id="hdr-logo-gold" x1="0" y1="0" x2="38" y2="38"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs>
+            </svg>
+            <div class="header-brand-text">
+                <span class="header-brand-name">11 Avatar</span>
+                <span class="header-brand-sub">SMEs CRM</span>
             </div>
-            <div class="nav-section"><div class="nav-section-title">Financial</div>
-                <button class="nav-item" data-module="invoices" data-nav="invoices"><span class="nav-item-icon">🧾</span><span class="nav-item-label">Invoices</span></button>
-                <button class="nav-item" data-module="payments" data-nav="payments"><span class="nav-item-icon">💰</span><span class="nav-item-label">Payments</span></button>
-                <button class="nav-item" data-module="retainers" data-nav="retainers"><span class="nav-item-icon">🔄</span><span class="nav-item-label">Retainers</span></button>
-            </div>
-            <div class="nav-section"><div class="nav-section-title">Operations</div>
-                <button class="nav-item" data-module="tasks" data-nav="tasks"><span class="nav-item-icon">✅</span><span class="nav-item-label">Tasks</span></button>
-                <button class="nav-item" data-module="projects" data-nav="projects"><span class="nav-item-icon">🚀</span><span class="nav-item-label">Projects</span></button>
-                <button class="nav-item" data-module="appointments" data-nav="appointments"><span class="nav-item-icon">📅</span><span class="nav-item-label">Appointments</span></button>
-            </div>
-            <div class="nav-section"><div class="nav-section-title">Communication</div>
-                <button class="nav-item" data-module="whatsapp" data-nav="whatsapp"><span class="nav-item-icon">💬</span><span class="nav-item-label">WhatsApp</span></button>
-                <button class="nav-item" data-module="training" data-nav="training"><span class="nav-item-icon">🎓</span><span class="nav-item-label">Training</span></button>
-                <button class="nav-item" data-module="referrals" data-nav="referrals"><span class="nav-item-icon">🔗</span><span class="nav-item-label">Referrals</span></button>
-            </div>
-            <div class="nav-section"><div class="nav-section-title">Insights</div>
-                <button class="nav-item" data-module="reports" data-nav="reports"><span class="nav-item-icon">📋</span><span class="nav-item-label">Reports</span></button>
-                <button class="nav-item" data-module="notifications" data-nav="notifications"><span class="nav-item-icon">🔔</span><span class="nav-item-label">Notifications</span></button>
-            </div>
-            <div class="nav-section"><div class="nav-section-title">System</div>
-                <button class="nav-item" data-module="settings" data-nav="settings"><span class="nav-item-icon">⚙️</span><span class="nav-item-label">Settings</span></button>
-            </div>
-        </nav>
-
-        <!-- SIDEBAR FOOTER WITH USER -->
-        <div class="sidebar-footer">
-            <div class="sidebar-user" id="sidebarUser" role="button" tabindex="0" aria-haspopup="true" aria-expanded="false">
-                <div class="sidebar-user-avatar" id="sidebarUserAvatar">DU</div>
-                <div class="sidebar-user-info">
-                    <div class="sidebar-user-name" id="sidebarUserName">Demo User</div>
-                    <div class="sidebar-user-role" id="sidebarUserRole">Executive</div>
-                </div>
-            </div>
-            
-            <!-- USER DROPDOWN — Complete with all actions -->
-            <div class="user-dropdown" id="userDropdown" role="menu" aria-label="User menu">
-                <div class="user-dropdown-header">
-                    <div class="sidebar-user-avatar" id="dropdownAvatar">DU</div>
-                    <div style="flex:1;min-width:0;">
-                        <div style="font-weight:600;font-size:14px;color:var(--text-primary);" id="dropdownName">Demo User</div>
-                        <div style="font-size:11px;color:var(--text-muted);" id="dropdownEmail">demo@example.com</div>
-                        <div style="font-size:10px;color:var(--gold-dark);margin-top:2px;" id="dropdownRole">Executive</div>
-                    </div>
-                </div>
-                <button class="user-dropdown-item" onclick="window.CRM.openUserProfile()" role="menuitem">
-                    <span style="font-size:16px;">👤</span> My Profile
-                </button>
-                <button class="user-dropdown-item" onclick="window.CRM.openUserSettings()" role="menuitem">
-                    <span style="font-size:16px;">⚙️</span> Account Settings
-                </button>
-                <button class="user-dropdown-item" onclick="window.CRM.openChangePassword()" role="menuitem">
-                    <span style="font-size:16px;">🔑</span> Change Password
-                </button>
-                <button class="user-dropdown-item" onclick="window.CRM.linkSocialMedia()" role="menuitem">
-                    <span style="font-size:16px;">🔗</span> Linked Accounts
-                </button>
-                <button class="user-dropdown-item" id="themeToggleBtn" role="menuitem">
-                    <span style="font-size:16px;">🌓</span> Toggle Dark Mode
-                </button>
-                <div style="border-top:1px solid var(--border-color);margin:6px 0;"></div>
-                <button class="user-dropdown-item" onclick="window.CRM.handleLogout()" role="menuitem" style="color:#DC2626;">
-                    <span style="font-size:16px;">🚪</span> Sign Out
-                </button>
-            </div>
-        </div>
-    </aside>
-
-    <!-- ============================================================
-    MAIN CONTENT AREA
-    ============================================================ -->
-    <div class="app-main" id="appMain">
-        <header class="app-header" role="banner">
-        <button class="header-action-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" title="Menu" style="display:none;">☰</button>
-    
-        <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
-            <svg width="34" height="34" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#hdr-g)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="hdr-g"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
-            <div style="line-height:1.1;"><div style="font-family:var(--font-heading);font-weight:800;font-size:15px;color:var(--text-primary);">11 Avatar</div><div style="font-size:9px;color:var(--gold);text-transform:uppercase;">SMEs CRM</div></div>
         </a>
-    
-        <div class="header-search" id="headerSearchDesktop" style="flex:1;max-width:400px;margin:0 20px;">
-            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);">🔍</span>
-            <input type="search" placeholder="Search... (Ctrl+K)" id="globalSearchInput" style="width:100%;height:40px;padding-left:40px;border-radius:20px;border:1.5px solid var(--border-color);background:var(--bg-secondary);font-size:14px;"/>
+
+        <div class="header-search" id="headerSearchDesktop">
+            <span class="header-search-icon">🔍</span>
+            <input type="search" placeholder="Search leads, clients, invoices... (Ctrl+K)" id="globalSearchInput" aria-label="Global search"/>
         </div>
-    
-        <div style="flex:1;display:none;" class="header-spacer"></div>
-    
-        <div class="header-actions" style="display:flex;align-items:center;gap:6px;">
-            <button class="header-action-btn" id="quickAddBtn" title="Quick Add" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-secondary);cursor:pointer;font-size:16px;">➕</button>
-            <button class="header-action-btn" id="notificationsBtn" title="Notifications" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-secondary);cursor:pointer;font-size:16px;position:relative;">🔔<span id="notificationDot" style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#DC2626;display:none;"></span></button>
-            <button class="header-action-btn" id="mobileThemeBtn" title="Theme" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-secondary);cursor:pointer;font-size:16px;">🌓</button>
-            <button class="header-action-btn" id="headerProfileBtn" title="Profile" style="width:38px;height:38px;border-radius:50%;background:var(--gold-gradient);color:#0A0A0A;border:none;cursor:pointer;font-weight:700;font-size:13px;font-family:var(--font-heading);"><span id="headerAvatar">DU</span></button>
+
+        <div style="flex:1;"></div>
+
+        <div class="header-actions">
+            <button class="header-action-btn" id="quickAddBtn" title="Quick Add" aria-label="Quick add">➕</button>
+            <button class="header-action-btn" id="notificationsBtn" title="Notifications" aria-label="Notifications">
+                🔔<span class="notification-dot" id="notificationDot"></span>
+            </button>
+            <button class="header-action-btn" id="mobileThemeBtn" title="Toggle Dark/Light Mode" aria-label="Toggle theme">🌓</button>
+            <button class="header-profile-btn" id="headerProfileBtn" title="User Profile" aria-label="User profile">
+                <span id="headerAvatar">DU</span>
+            </button>
         </div>
     </header>
 
-        <nav class="app-submenu" id="appSubmenu" aria-label="Module sub-navigation">
-            <div class="app-submenu-inner" id="submenuInner">
-                <span class="app-submenu-link active">Overview</span>
-                <span class="app-submenu-link">Recent Activity</span>
-                <span class="app-submenu-link">Quick Actions</span>
-            </div>
-        </nav>
+    <!-- ============================================================
+    SUB-MENU (Module Navigation)
+    ============================================================ -->
+    <nav class="app-submenu" id="appSubmenu" aria-label="Module sub-navigation">
+        <div class="app-submenu-inner" id="submenuInner">
+            <span class="app-submenu-link active">Overview</span>
+            <span class="app-submenu-link">Recent Activity</span>
+            <span class="app-submenu-link">Quick Actions</span>
+        </div>
+    </nav>
 
-        <main class="app-content" id="appContent" role="main">
-            <div class="module-container active" id="module-dashboard"><div id="dashboardContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Dashboard...</div></div></div></div>
-            <div class="module-container" id="module-leads"><div id="leadsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Leads...</div></div></div></div>
-            <div class="module-container" id="module-pipeline"><div id="pipelineContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Pipeline...</div></div></div></div>
-            <div class="module-container" id="module-clients"><div id="clientsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Clients...</div></div></div></div>
-            <div class="module-container" id="module-invoices"><div id="invoicesContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Invoices...</div></div></div></div>
-            <div class="module-container" id="module-payments"><div id="paymentsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Payments...</div></div></div></div>
-            <div class="module-container" id="module-tasks"><div id="tasksContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Tasks...</div></div></div></div>
-            <div class="module-container" id="module-projects"><div id="projectsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Projects...</div></div></div></div>
-            <div class="module-container" id="module-retainers"><div id="retainersContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Retainers...</div></div></div></div>
-            <div class="module-container" id="module-whatsapp"><div id="whatsappContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading WhatsApp...</div></div></div></div>
-            <div class="module-container" id="module-training"><div id="trainingContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Training...</div></div></div></div>
-            <div class="module-container" id="module-referrals"><div id="referralsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Referrals...</div></div></div></div>
-            <div class="module-container" id="module-reports"><div id="reportsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Reports...</div></div></div></div>
-            <div class="module-container" id="module-notifications"><div id="notificationsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Notifications...</div></div></div></div>
-            <div class="module-container" id="module-appointments"><div id="appointmentsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Appointments...</div></div></div></div>
-            <div class="module-container" id="module-settings"><div id="settingsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Settings...</div></div></div></div>
-        </main>
+    <!-- ============================================================
+    MAIN CONTENT — 16 Module Containers
+    ============================================================ -->
+    <main class="app-content" id="appContent" role="main">
+        <div class="module-container active" id="module-dashboard"><div id="dashboardContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Dashboard...</div></div></div></div>
+        <div class="module-container" id="module-leads"><div id="leadsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Leads...</div></div></div></div>
+        <div class="module-container" id="module-pipeline"><div id="pipelineContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Pipeline...</div></div></div></div>
+        <div class="module-container" id="module-clients"><div id="clientsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Clients...</div></div></div></div>
+        <div class="module-container" id="module-invoices"><div id="invoicesContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Invoices...</div></div></div></div>
+        <div class="module-container" id="module-payments"><div id="paymentsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Payments...</div></div></div></div>
+        <div class="module-container" id="module-tasks"><div id="tasksContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Tasks...</div></div></div></div>
+        <div class="module-container" id="module-projects"><div id="projectsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Projects...</div></div></div></div>
+        <div class="module-container" id="module-retainers"><div id="retainersContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Retainers...</div></div></div></div>
+        <div class="module-container" id="module-whatsapp"><div id="whatsappContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading WhatsApp...</div></div></div></div>
+        <div class="module-container" id="module-training"><div id="trainingContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Training...</div></div></div></div>
+        <div class="module-container" id="module-referrals"><div id="referralsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Referrals...</div></div></div></div>
+        <div class="module-container" id="module-reports"><div id="reportsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Reports...</div></div></div></div>
+        <div class="module-container" id="module-notifications"><div id="notificationsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Notifications...</div></div></div></div>
+        <div class="module-container" id="module-appointments"><div id="appointmentsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Appointments...</div></div></div></div>
+        <div class="module-container" id="module-settings"><div id="settingsContent"><div class="module-loader"><div class="module-loader-spinner"></div><div class="module-loader-text">Loading Settings...</div></div></div></div>
+    </main>
+
+    <!-- ============================================================
+    FOOTER SUB-MENU — Dynamic per module (Mobile)
+    ============================================================ -->
+    <div class="footer-submenu" id="footerSubmenu">
+        <nav class="footer-submenu-nav" id="footerSubmenuNav"></nav>
     </div>
 
+    <!-- ============================================================
+    MOBILE BOTTOM NAV
+    ============================================================ -->
     <nav class="mobile-bottom-nav" id="mobileBottomNav" aria-label="Mobile navigation">
         <button class="mobile-nav-item active" data-module="dashboard"><span class="mobile-nav-icon">📊</span><span>Home</span></button>
         <button class="mobile-nav-item" data-module="leads"><span class="mobile-nav-icon">👥</span><span>Leads</span></button>
@@ -225,22 +644,56 @@
         <button class="mobile-nav-item" data-module="settings"><span class="mobile-nav-icon">⚙️</span><span>More</span></button>
     </nav>
 
+    <!-- ============================================================
+    USER DROPDOWN
+    ============================================================ -->
+    <div class="user-dropdown" id="userDropdown" role="menu" aria-label="User menu">
+        <div class="user-dropdown-header">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--gold-gradient);color:#0A0A0A;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;font-family:var(--font-heading);" id="dropdownAvatar">DU</div>
+            <div style="flex:1;min-width:0;">
+                <div style="font-weight:600;font-size:14px;color:var(--text-primary);" id="dropdownName">Demo User</div>
+                <div style="font-size:11px;color:var(--text-muted);" id="dropdownEmail">demo@example.com</div>
+                <div style="font-size:10px;color:var(--gold-dark);margin-top:2px;" id="dropdownRole">Executive</div>
+            </div>
+        </div>
+        <button class="user-dropdown-item" onclick="window.CRM.openUserProfile()" role="menuitem">👤 My Profile</button>
+        <button class="user-dropdown-item" onclick="window.CRM.openUserSettings()" role="menuitem">⚙️ Account Settings</button>
+        <button class="user-dropdown-item" onclick="window.CRM.openChangePassword()" role="menuitem">🔑 Change Password</button>
+        <button class="user-dropdown-item" onclick="window.CRM.linkSocialMedia()" role="menuitem">🔗 Linked Accounts</button>
+        <button class="user-dropdown-item" id="themeToggleBtn" role="menuitem">🌓 Toggle Dark Mode</button>
+        <div style="border-top:1px solid var(--border-color);margin:6px 0;"></div>
+        <button class="user-dropdown-item danger" onclick="window.CRM.handleLogout()" role="menuitem">🚪 Sign Out</button>
+    </div>
+
+    <!-- ============================================================
+    TOAST CONTAINER
+    ============================================================ -->
     <div class="toast-container" id="appToastContainer" aria-live="polite"></div>
-    
-    <!-- FIREBASE SDK -->
+
+    <!-- ============================================================
+    FIREBASE SDK (Must load before core JS)
+    ============================================================ -->
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-    <!-- CORE JS -->
+    <!-- ============================================================
+    CORE JS (Order matters)
+    ============================================================ -->
     <script src="js/core/config.js"></script>
     <script src="js/core/auth.js"></script>
     <script src="js/core/firestore.js"></script>
     <script src="js/core/tenant.js"></script>
     <script src="js/core/router.js"></script>
+
+    <!-- ============================================================
+    MODULE JS — Preload dashboard
+    ============================================================ -->
     <script src="js/modules/dashboard.js"></script>
 
-    <!-- APP SHELL ENGINE — Complete with User Profile System -->
+    <!-- ============================================================
+    APP SHELL ENGINE v4.0
+    ============================================================ -->
     <script>
         'use strict';
 
@@ -250,8 +703,6 @@
             // ============================================================
             var APP_STATE = {
                 currentModule: 'dashboard',
-                sidebarCollapsed: false,
-                sidebarMobileOpen: false,
                 isDarkMode: false,
                 userDropdownOpen: false,
                 loadedModules: { dashboard: true },
@@ -274,27 +725,18 @@
             var DOM = {};
 
             function cacheDOM() {
-                DOM.appSidebar = document.getElementById('appSidebar');
-                DOM.sidebarOverlay = document.getElementById('sidebarOverlay');
-                DOM.sidebarCollapseBtn = document.getElementById('sidebarCollapseBtn');
-                DOM.sidebarNav = document.getElementById('sidebarNav');
                 DOM.appContent = document.getElementById('appContent');
                 DOM.submenuInner = document.getElementById('submenuInner');
-                DOM.mobileMenuBtn = document.getElementById('mobileMenuBtn');
                 DOM.mobileBottomNav = document.getElementById('mobileBottomNav');
                 DOM.globalSearchInput = document.getElementById('globalSearchInput');
                 DOM.notificationsBtn = document.getElementById('notificationsBtn');
                 DOM.notificationDot = document.getElementById('notificationDot');
                 DOM.quickAddBtn = document.getElementById('quickAddBtn');
                 DOM.mobileThemeBtn = document.getElementById('mobileThemeBtn');
-                DOM.sidebarUser = document.getElementById('sidebarUser');
-                DOM.sidebarUserName = document.getElementById('sidebarUserName');
-                DOM.sidebarUserRole = document.getElementById('sidebarUserRole');
-                DOM.sidebarUserAvatar = document.getElementById('sidebarUserAvatar');
                 DOM.themeToggleBtn = document.getElementById('themeToggleBtn');
-                DOM.logoutBtn = document.getElementById('logoutBtn');
                 DOM.userDropdown = document.getElementById('userDropdown');
                 DOM.appToastContainer = document.getElementById('appToastContainer');
+                DOM.footerSubmenuNav = document.getElementById('footerSubmenuNav');
             }
 
             // ============================================================
@@ -335,32 +777,6 @@
             }
 
             // ============================================================
-            // SIDEBAR
-            // ============================================================
-            function toggleSidebar() {
-                try {
-                    APP_STATE.sidebarCollapsed = !APP_STATE.sidebarCollapsed;
-                    DOM.appSidebar.classList.toggle('collapsed', APP_STATE.sidebarCollapsed);
-                    if (DOM.sidebarCollapseBtn) DOM.sidebarCollapseBtn.innerHTML = APP_STATE.sidebarCollapsed ? '▶' : '◀';
-                    localStorage.setItem('crm_sidebar_collapsed', APP_STATE.sidebarCollapsed ? '1' : '0');
-                } catch (e) { console.error('[AppShell] Sidebar error:', e); }
-            }
-
-            function openMobileSidebar() {
-                APP_STATE.sidebarMobileOpen = true;
-                DOM.appSidebar.classList.add('mobile-open');
-                DOM.sidebarOverlay.classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function closeMobileSidebar() {
-                APP_STATE.sidebarMobileOpen = false;
-                DOM.appSidebar.classList.remove('mobile-open');
-                DOM.sidebarOverlay.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-
-            // ============================================================
             // THEME
             // ============================================================
             function toggleTheme() {
@@ -389,7 +805,6 @@
             function toggleUserDropdown() {
                 APP_STATE.userDropdownOpen = !APP_STATE.userDropdownOpen;
                 if (DOM.userDropdown) DOM.userDropdown.classList.toggle('show', APP_STATE.userDropdownOpen);
-                if (DOM.sidebarUser) DOM.sidebarUser.setAttribute('aria-expanded', String(APP_STATE.userDropdownOpen));
             }
 
             // ============================================================
@@ -400,13 +815,9 @@
                     var user = APP_STATE.user;
                     var displayName = user.displayName || user.name || 'User';
                     var avatar = displayName.charAt(0).toUpperCase();
-                    // Header avatar bhi update karo
+
                     var headerAvatar = document.getElementById('headerAvatar');
                     if (headerAvatar) headerAvatar.textContent = avatar;
-
-                    if (DOM.sidebarUserName) DOM.sidebarUserName.textContent = displayName;
-                    if (DOM.sidebarUserRole) DOM.sidebarUserRole.textContent = user.role || 'Executive';
-                    if (DOM.sidebarUserAvatar) DOM.sidebarUserAvatar.textContent = avatar;
 
                     var dn = document.getElementById('dropdownName');
                     var de = document.getElementById('dropdownEmail');
@@ -450,10 +861,7 @@
                 } catch(e) { console.error('[Profile] Open error:', e); }
             }
 
-            function closeUserProfile() {
-                var el = document.getElementById('profileOverlay');
-                if (el) el.remove();
-            }
+            function closeUserProfile() { var el = document.getElementById('profileOverlay'); if (el) el.remove(); }
 
             function saveUserProfile() {
                 try {
@@ -480,8 +888,7 @@
                 try {
                     toggleUserDropdown();
                     var h = '<div class="modal-overlay show" id="pwdOverlay" onclick="if(event.target===this)window.CRM.closeChangePassword()">';
-                    h += '<div class="modal-box modal-sm">';
-                    h += '<div class="modal-header"><span class="modal-title">🔑 Change Password</span><button class="modal-close" onclick="window.CRM.closeChangePassword()">✕</button></div>';
+                    h += '<div class="modal-box modal-sm"><div class="modal-header"><span class="modal-title">🔑 Change Password</span><button class="modal-close" onclick="window.CRM.closeChangePassword()">✕</button></div>';
                     h += '<div class="form-group"><label class="form-label">Current Password</label><input type="password" id="currentPwd"></div>';
                     h += '<div class="form-group"><label class="form-label">New Password</label><input type="password" id="newPwd" minlength="6"></div>';
                     h += '<div class="form-group"><label class="form-label">Confirm Password</label><input type="password" id="confirmPwd"></div>';
@@ -491,10 +898,7 @@
                 } catch(e) { console.error('[Pwd] Open error:', e); }
             }
 
-            function closeChangePassword() {
-                var el = document.getElementById('pwdOverlay');
-                if (el) el.remove();
-            }
+            function closeChangePassword() { var el = document.getElementById('pwdOverlay'); if (el) el.remove(); }
 
             function submitChangePassword() {
                 try {
@@ -515,11 +919,7 @@
             function linkSocialMedia() {
                 try {
                     toggleUserDropdown();
-                    var accounts = [
-                        {icon:'G',name:'Google',status:'Not connected'},
-                        {icon:'📱',name:'Phone',status:'Not connected'},
-                        {icon:'💼',name:'LinkedIn',status:'Not connected'}
-                    ];
+                    var accounts = [{icon:'G',name:'Google',status:'Not connected'},{icon:'📱',name:'Phone',status:'Not connected'},{icon:'💼',name:'LinkedIn',status:'Not connected'}];
                     var h = '<div class="modal-overlay show" id="socialOverlay" onclick="if(event.target===this)window.CRM.closeSocialModal()">';
                     h += '<div class="modal-box modal-md"><div class="modal-header"><span class="modal-title">🔗 Linked Accounts</span><button class="modal-close" onclick="window.CRM.closeSocialModal()">✕</button></div>';
                     h += '<p class="text-sm text-muted mb-4">Connect accounts for easy login.</p>';
@@ -533,15 +933,8 @@
                 } catch(e) { console.error('[Social] Open error:', e); }
             }
 
-            function closeSocialModal() {
-                var el = document.getElementById('socialOverlay');
-                if (el) el.remove();
-            }
-
-            function openUserSettings() {
-                toggleUserDropdown();
-                showToast('Account Settings module coming soon.', 'info');
-            }
+            function closeSocialModal() { var el = document.getElementById('socialOverlay'); if (el) el.remove(); }
+            function openUserSettings() { toggleUserDropdown(); showToast('Account Settings module coming soon.', 'info'); }
 
             // ============================================================
             // MODULE NAVIGATION
@@ -550,20 +943,18 @@
                 try {
                     if (APP_STATE.currentModule === moduleName) return;
                     APP_STATE.currentModule = moduleName;
-                    if (DOM.sidebarNav) DOM.sidebarNav.querySelectorAll('.nav-item').forEach(function(item) {
-                        var ia = item.dataset.module === moduleName;
-                        item.classList.toggle('active', ia);
-                        if (ia) item.setAttribute('aria-current', 'page'); else item.removeAttribute('aria-current');
-                    });
+
                     if (DOM.mobileBottomNav) DOM.mobileBottomNav.querySelectorAll('.mobile-nav-item').forEach(function(item) {
                         item.classList.toggle('active', item.dataset.module === moduleName);
                     });
+
                     if (DOM.appContent) DOM.appContent.querySelectorAll('.module-container').forEach(function(c) {
                         c.classList.toggle('active', c.id === 'module-' + moduleName);
                     });
+
                     updateSubmenu(moduleName);
+                    renderFooterSubmenu(moduleName);
                     loadModuleScript(moduleName, function() { initModule(moduleName); });
-                    if (APP_STATE.sidebarMobileOpen) closeMobileSidebar();
                     if (DOM.appContent) DOM.appContent.scrollTop = 0;
                     localStorage.setItem('crm_last_module', moduleName);
                     console.log('[AppShell] Navigated to:', moduleName);
@@ -611,6 +1002,46 @@
             }
 
             // ============================================================
+            // FOOTER SUB-MENU (Dynamic per module)
+            // ============================================================
+            var footerSubmenuData = {
+                dashboard: [{label:'📊 Overview', action:'overview'}, {label:'🕐 Activity', action:'activity'}, {label:'⚡ Actions', action:'actions'}],
+                leads: [{label:'➕ New Lead', action:'new'}, {label:'📋 All Leads', action:'list'}, {label:'📥 Import', action:'import'}, {label:'📤 Export', action:'export'}],
+                pipeline: [{label:'📌 Kanban', action:'kanban'}, {label:'📋 List', action:'list'}, {label:'📈 Forecast', action:'forecast'}],
+                clients: [{label:'➕ Add Client', action:'new'}, {label:'👥 All Clients', action:'list'}, {label:'⭐ Active', action:'active'}],
+                invoices: [{label:'➕ Create', action:'new'}, {label:'📋 All', action:'list'}, {label:'⏳ Pending', action:'pending'}, {label:'✅ Paid', action:'paid'}],
+                payments: [{label:'➕ Record', action:'new'}, {label:'📋 All', action:'list'}, {label:'📱 UPI', action:'upi'}],
+                tasks: [{label:'➕ New Task', action:'new'}, {label:'📋 My Tasks', action:'mine'}, {label:'📅 Calendar', action:'calendar'}],
+                projects: [{label:'➕ New Project', action:'new'}, {label:'📋 All', action:'list'}, {label:'📊 Gantt', action:'gantt'}],
+                retainers: [{label:'➕ New', action:'new'}, {label:'✅ Active', action:'active'}, {label:'⚠️ Expiring', action:'expiring'}],
+                whatsapp: [{label:'💬 Chat', action:'chat'}, {label:'📝 Templates', action:'templates'}, {label:'📢 Broadcast', action:'broadcast'}],
+                training: [{label:'📚 Courses', action:'courses'}, {label:'👨‍🎓 Students', action:'students'}, {label:'🏆 Certificates', action:'certificates'}],
+                referrals: [{label:'🤝 Partners', action:'partners'}, {label:'💰 Commissions', action:'commissions'}, {label:'💸 Payouts', action:'payouts'}],
+                reports: [{label:'💰 Revenue', action:'revenue'}, {label:'👥 Leads', action:'leads'}, {label:'📊 Custom', action:'custom'}],
+                notifications: [{label:'📥 Inbox', action:'inbox'}, {label:'⚙️ Settings', action:'settings'}],
+                appointments: [{label:'📅 Calendar', action:'calendar'}, {label:'➕ Schedule', action:'new'}, {label:'⏳ Pending', action:'pending'}],
+                settings: [{label:'🏢 Org', action:'org'}, {label:'👥 Team', action:'team'}, {label:'🔒 Security', action:'security'}]
+            };
+
+            function renderFooterSubmenu(moduleName) {
+                if (!DOM.footerSubmenuNav) return;
+                var items = footerSubmenuData[moduleName] || [{label:'📋 Overview', action:'overview'}];
+                DOM.footerSubmenuNav.innerHTML = items.map(function(item, i) {
+                    return '<button class="footer-submenu-btn' + (i===0?' active':'') + '" data-action="' + item.action + '" data-module="' + moduleName + '">' + item.label + '</button>';
+                }).join('');
+                DOM.footerSubmenuNav.querySelectorAll('.footer-submenu-btn').forEach(function(btn) {
+                    btn.addEventListener('click', function() {
+                        DOM.footerSubmenuNav.querySelectorAll('.footer-submenu-btn').forEach(function(b) { b.classList.remove('active'); });
+                        this.classList.add('active');
+                        var action = this.dataset.action;
+                        var mod = this.dataset.module;
+                        console.log('[FooterSubmenu] Action:', action, 'Module:', mod);
+                        showToast('Action: ' + action, 'info');
+                    });
+                });
+            }
+
+            // ============================================================
             // TOAST
             // ============================================================
             function showToast(message, type) {
@@ -640,15 +1071,6 @@
             }
 
             // ============================================================
-            // RESPONSIVE
-            // ============================================================
-            function checkResponsive() {
-                var im = window.innerWidth <= 1024;
-                if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.style.display = im ? 'flex' : 'none';
-                if (DOM.mobileBottomNav) DOM.mobileBottomNav.style.display = im ? 'flex' : 'none';
-            }
-
-            // ============================================================
             // UTILITY
             // ============================================================
             function escHtml(str) {
@@ -660,44 +1082,39 @@
             // EVENT SETUP
             // ============================================================
             function setupEvents() {
-                if (DOM.sidebarCollapseBtn) DOM.sidebarCollapseBtn.addEventListener('click', toggleSidebar);
-                if (DOM.mobileMenuBtn) DOM.mobileMenuBtn.addEventListener('click', openMobileSidebar);
-                var headerProfileBtn = document.getElementById('headerProfileBtn');
-                if (headerProfileBtn) {
-                    headerProfileBtn.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                        toggleUserDropdown();
-                    });
-                }
-                if (DOM.sidebarOverlay) DOM.sidebarOverlay.addEventListener('click', closeMobileSidebar);
                 if (DOM.mobileThemeBtn) DOM.mobileThemeBtn.addEventListener('click', toggleTheme);
                 if (DOM.themeToggleBtn) DOM.themeToggleBtn.addEventListener('click', toggleTheme);
-                if (DOM.logoutBtn) DOM.logoutBtn.addEventListener('click', handleLogout);
-                if (DOM.sidebarUser) DOM.sidebarUser.addEventListener('click', toggleUserDropdown);
-                if (DOM.sidebarNav) DOM.sidebarNav.querySelectorAll('.nav-item').forEach(function(item) {
-                    item.addEventListener('click', function() { var mn = this.dataset.module; if (mn) navigateToModule(mn); });
-                });
+
+                var headerProfileBtn = document.getElementById('headerProfileBtn');
+                if (headerProfileBtn) {
+                    headerProfileBtn.addEventListener('click', function(e) { e.stopPropagation(); toggleUserDropdown(); });
+                }
+
                 if (DOM.mobileBottomNav) DOM.mobileBottomNav.querySelectorAll('.mobile-nav-item').forEach(function(item) {
                     item.addEventListener('click', function() { var mn = this.dataset.module; if (mn) navigateToModule(mn); });
                 });
+
                 if (DOM.quickAddBtn) DOM.quickAddBtn.addEventListener('click', function() { showToast('Quick Add coming soon.', 'info'); });
                 if (DOM.notificationsBtn) DOM.notificationsBtn.addEventListener('click', function() { navigateToModule('notifications'); });
+
                 document.addEventListener('click', function(e) {
-                    if (APP_STATE.userDropdownOpen && DOM.userDropdown && !DOM.userDropdown.contains(e.target) && DOM.sidebarUser && !DOM.sidebarUser.contains(e.target)) {
-                        APP_STATE.userDropdownOpen = false;
-                        DOM.userDropdown.classList.remove('show');
-                        DOM.sidebarUser.setAttribute('aria-expanded', 'false');
+                    if (APP_STATE.userDropdownOpen && DOM.userDropdown && !DOM.userDropdown.contains(e.target)) {
+                        var hpb = document.getElementById('headerProfileBtn');
+                        if (hpb && !hpb.contains(e.target)) {
+                            APP_STATE.userDropdownOpen = false;
+                            DOM.userDropdown.classList.remove('show');
+                        }
                     }
                 });
+
                 document.addEventListener('keydown', function(e) {
                     if ((e.ctrlKey||e.metaKey) && e.key === 'k') { e.preventDefault(); if (DOM.globalSearchInput) DOM.globalSearchInput.focus(); }
-                    if ((e.ctrlKey||e.metaKey) && e.key === 'b') { e.preventDefault(); toggleSidebar(); }
-                    if (e.key === 'Escape') { if (APP_STATE.sidebarMobileOpen) closeMobileSidebar(); if (APP_STATE.userDropdownOpen) toggleUserDropdown(); }
+                    if (e.key === 'Escape') { if (APP_STATE.userDropdownOpen) toggleUserDropdown(); }
                 });
+
                 window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function(e) {
                     if (!localStorage.getItem('crm_theme')) { APP_STATE.isDarkMode = e.matches; applyTheme(); }
                 });
-                window.addEventListener('resize', checkResponsive, { passive: true });
             }
 
             // ============================================================
@@ -724,7 +1141,6 @@
                     }
                     updateUserDisplay();
                 } catch(e) {
-                    console.error('[AppShell] checkAuth error:', e);
                     APP_STATE.user = { displayName:'Demo User',name:'Demo User',email:'demo@example.com',role:'Executive',avatar:'DU',mobile:'',designation:'',bio:'' };
                     updateUserDisplay();
                 }
@@ -738,18 +1154,17 @@
                     cacheDOM();
                     loadThemePreference();
                     checkAuth();
-                    var sc = localStorage.getItem('crm_sidebar_collapsed');
-                    if (sc === '1') { APP_STATE.sidebarCollapsed = true; if (DOM.appSidebar) DOM.appSidebar.classList.add('collapsed'); if (DOM.sidebarCollapseBtn) DOM.sidebarCollapseBtn.innerHTML = '▶'; }
                     setupEvents();
-                    checkResponsive();
                     var lm = localStorage.getItem('crm_last_module') || 'dashboard';
                     navigateToModule(lm);
                     updateSubmenu(lm);
+                    renderFooterSubmenu(lm);
                     initModule('dashboard');
-                    console.log('🚀 [11 Avatar CRM] App Shell v3.0 Ready');
+                    console.log('🚀 [11 Avatar CRM] App Shell v4.0 Ready');
                     console.log('👤 User:', APP_STATE.user.name, '('+APP_STATE.user.role+')');
                     console.log('🌓 Theme:', APP_STATE.isDarkMode?'Dark':'Light');
-                    console.log('✅ User Profile System: Active');
+                    console.log('📱 Layout: Header-only, No sidebar');
+                    console.log('📋 Footer sub-menu: Active for mobile');
                 } catch(e) { console.error('[AppShell] Fatal init error:', e); }
             }
 
@@ -763,9 +1178,6 @@
                 STATE: APP_STATE,
                 DOM: DOM,
                 navigateToModule: navigateToModule,
-                toggleSidebar: toggleSidebar,
-                openMobileSidebar: openMobileSidebar,
-                closeMobileSidebar: closeMobileSidebar,
                 toggleTheme: toggleTheme,
                 applyTheme: applyTheme,
                 toggleUserDropdown: toggleUserDropdown,
@@ -781,7 +1193,8 @@
                 closeSocialModal: closeSocialModal,
                 showToast: showToast,
                 handleLogout: handleLogout,
-                loadModuleScript: loadModuleScript
+                loadModuleScript: loadModuleScript,
+                renderFooterSubmenu: renderFooterSubmenu
             };
 
             console.log('[AppShell] window.CRM exported with', Object.keys(window.CRM).length, 'methods.');
