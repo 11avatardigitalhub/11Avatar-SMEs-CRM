@@ -1,0 +1,270 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // ============================================================
+    // HELPER FUNCTIONS — Same RBAC as Firestore
+    // ============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function currentUser() {
+      return request.auth.uid;
+    }
+    
+    function getUserRole() {
+      return request.auth.token.role;
+    }
+    
+    function getTenantId() {
+      return request.auth.token.tenantId;
+    }
+    
+    function hasTenant() {
+      return request.auth.token.tenantId != null;
+    }
+    
+    function isPlatformOwner() {
+      return getUserRole() == 'PLATFORM_OWNER';
+    }
+    
+    function isTenantAdmin() {
+      return getUserRole() == 'TENANT_ADMIN' || isPlatformOwner();
+    }
+    
+    function isSubAdmin() {
+      return getUserRole() == 'SUB_ADMIN' || isTenantAdmin();
+    }
+    
+    function isManager() {
+      return getUserRole() == 'MANAGER' || isSubAdmin();
+    }
+    
+    function isExecutive() {
+      return getUserRole() == 'EXECUTIVE' || isManager();
+    }
+    
+    function belongsToTenant(tenantId) {
+      return hasTenant() && tenantId == getTenantId();
+    }
+    
+    // Extract tenantId from path: /tenants/{tenantId}/...
+    function getPathTenantId() {
+      return request.resource.name.split('/')[1];
+    }
+    
+    function isTenantPath() {
+      return request.resource.name.matches('^tenants/.*');
+    }
+    
+    function isUserAvatarPath() {
+      return request.resource.name.matches('^users/.*/avatar/.*');
+    }
+    
+    function isClientLogoPath() {
+      return request.resource.name.matches('^clients/.*/logo/.*');
+    }
+    
+    // File validation
+    function isValidFileSize(maxSize) {
+      return request.resource.size <= maxSize;
+    }
+    
+    function isValidImageType() {
+      return request.resource.contentType.matches('image/(jpeg|png|gif|webp|svg+xml)');
+    }
+    
+    function isValidDocumentType() {
+      return request.resource.contentType.matches(
+        '(application/pdf|application/msword|application/vnd.openxmlformats-officedocument.wordprocessingml.document|application/vnd.ms-excel|application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|text/csv|application/json|text/plain|application/zip)'
+      );
+    }
+    
+    function isValidMediaType() {
+      return request.resource.contentType.matches(
+        '(image/(jpeg|png|gif|webp|svg+xml)|video/(mp4|webm|quicktime)|audio/(mpeg|wav|ogg))'
+      );
+    }
+
+    // ============================================================
+    // ALL FILES — Default deny
+    // ============================================================
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+
+    // ============================================================
+    // USER AVATARS
+    // Path: users/{userId}/avatar/{fileName}
+    // ============================================================
+    match /users/{userId}/avatar/{fileName} {
+      // Anyone authenticated can view avatars
+      allow read: if isAuthenticated();
+      
+      // Users can upload their own avatar, admins can upload any
+      allow create: if isAuthenticated() &&
+        (currentUser() == userId || isTenantAdmin()) &&
+        isValidImageType() &&
+        isValidFileSize(5 * 1024 * 1024); // 5 MB max
+      
+      allow update: if isAuthenticated() &&
+        (currentUser() == userId || isTenantAdmin()) &&
+        isValidImageType() &&
+        isValidFileSize(5 * 1024 * 1024);
+      
+      allow delete: if isAuthenticated() &&
+        (currentUser() == userId || isTenantAdmin());
+    }
+
+    // ============================================================
+    // CLIENT LOGOS
+    // Path: clients/{clientId}/logo/{fileName}
+    // ============================================================
+    match /clients/{clientId}/logo/{fileName} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated() &&
+        isExecutive() &&
+        isValidImageType() &&
+        isValidFileSize(2 * 1024 * 1024); // 2 MB max
+      
+      allow update: if isAuthenticated() && isManager() &&
+        isValidImageType() &&
+        isValidFileSize(2 * 1024 * 1024);
+      
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // INVOICE PDFs
+    // Path: invoices/{invoiceId}/pdf/{fileName}
+    // ============================================================
+    match /invoices/{invoiceId}/pdf/{fileName} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated() &&
+        isExecutive() &&
+        request.resource.contentType == 'application/pdf' &&
+        isValidFileSize(10 * 1024 * 1024); // 10 MB max
+      
+      allow update: if isAuthenticated() && isManager();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // TENANT DOCUMENTS
+    // Path: tenants/{tenantId}/documents/{fileName}
+    // ============================================================
+    match /tenants/{tenantId}/documents/{fileName} {
+      allow read: if isAuthenticated() && belongsToTenant(tenantId);
+      
+      allow create: if isAuthenticated() &&
+        isExecutive() &&
+        belongsToTenant(tenantId) &&
+        isValidDocumentType() &&
+        isValidFileSize(25 * 1024 * 1024); // 25 MB max
+      
+      allow update: if isAuthenticated() &&
+        isManager() && belongsToTenant(tenantId);
+      
+      allow delete: if isAuthenticated() &&
+        isTenantAdmin() && belongsToTenant(tenantId);
+    }
+
+    // ============================================================
+    // COURSE MATERIALS
+    // Path: courses/{courseId}/materials/{fileName}
+    // ============================================================
+    match /courses/{courseId}/materials/{fileName} {
+      allow read: if isAuthenticated();
+      
+      allow create: if isAuthenticated() &&
+        isManager() &&
+        (isValidDocumentType() || isValidMediaType()) &&
+        isValidFileSize(100 * 1024 * 1024); // 100 MB max
+      
+      allow update: if isAuthenticated() && isManager();
+      allow delete: if isAuthenticated() && isTenantAdmin();
+    }
+
+    // ============================================================
+    // TEMP UPLOADS (Auto-clean after 24 hours)
+    // Path: temp/{userId}/{fileName}
+    // ============================================================
+    match /temp/{userId}/{fileName} {
+      allow read: if isAuthenticated() && currentUser() == userId;
+      
+      allow create: if isAuthenticated() &&
+        currentUser() == userId &&
+        isValidFileSize(50 * 1024 * 1024); // 50 MB max
+      
+      allow update: if isAuthenticated() && currentUser() == userId;
+      allow delete: if isAuthenticated() && currentUser() == userId;
+    }
+
+    // ============================================================
+    // EXPORTS
+    // Path: tenants/{tenantId}/exports/{fileName}
+    // ============================================================
+    match /tenants/{tenantId}/exports/{fileName} {
+      allow read: if isAuthenticated() && belongsToTenant(tenantId);
+      
+      allow create: if isAuthenticated() &&
+        isManager() && belongsToTenant(tenantId) &&
+        (request.resource.contentType.matches('(application/pdf|application/vnd.ms-excel|text/csv|application/json)')) &&
+        isValidFileSize(50 * 1024 * 1024);
+      
+      allow update: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+    }
+
+    // ============================================================
+    // SIGNATURES
+    // Path: signatures/{userId}/{fileName}
+    // ============================================================
+    match /signatures/{userId}/{fileName} {
+      allow read: if isAuthenticated() && 
+        (currentUser() == userId || isTenantAdmin());
+      
+      allow create: if isAuthenticated() &&
+        currentUser() == userId &&
+        isValidImageType() &&
+        isValidFileSize(1 * 1024 * 1024); // 1 MB max
+      
+      allow update: if isAuthenticated() && currentUser() == userId;
+      allow delete: if isAuthenticated() && currentUser() == userId;
+    }
+
+    // ============================================================
+    // BACKUP FILES
+    // Path: tenants/{tenantId}/backups/{fileName}
+    // ============================================================
+    match /tenants/{tenantId}/backups/{fileName} {
+      allow read: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+      
+      allow create: if isAuthenticated() &&
+        isTenantAdmin() && belongsToTenant(tenantId) &&
+        isValidFileSize(500 * 1024 * 1024); // 500 MB max
+      
+      allow update: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+    }
+
+    // ============================================================
+    // WHATSAPP MEDIA
+    // Path: whatsapp/{tenantId}/{fileName}
+    // ============================================================
+    match /whatsapp/{tenantId}/{fileName} {
+      allow read: if isAuthenticated() && belongsToTenant(tenantId);
+      
+      allow create: if isAuthenticated() &&
+        isExecutive() && belongsToTenant(tenantId) &&
+        isValidMediaType() &&
+        isValidFileSize(16 * 1024 * 1024); // 16 MB (WhatsApp limit)
+      
+      allow update: if isAuthenticated() && isManager() && belongsToTenant(tenantId);
+      allow delete: if isAuthenticated() && isTenantAdmin() && belongsToTenant(tenantId);
+    }
+  }
+}
