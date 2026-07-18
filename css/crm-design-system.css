@@ -184,12 +184,12 @@
     --text-6xl: 3.75rem;
 
     /* Heading Sizes - Clamp for Responsive */
-    --h1: clamp(2.5rem, 5vw, 4.5rem);
-    --h2: clamp(2rem, 4vw, 3.5rem);
-    --h3: clamp(1.5rem, 2.5vw, 2rem);
-    --h4: clamp(1.25rem, 2vw, 1.5rem);
-    --h5: 1.125rem;
-    --h6: 1rem;
+    --h1: clamp(2rem, 4vw, 3rem);
+   --h2: clamp(1.5rem, 3vw, 2.25rem);
+   --h3: 1.25rem;
+   --h4: 1.1rem;
+   --h5: 1.11rem;
+   --h6: 1rem;
 
     /* Font Weights */
     --weight-light: 300;
@@ -1984,6 +1984,33 @@ table .text-right { text-align: right; }
     border-bottom-color: var(--gold);
 }
 
+/* ADD/UPDATE */
+body {
+    overflow-x: hidden; /* Keep this */
+}
+
+.kanban-board {
+    overflow-x: auto !important;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    padding-bottom: 12px;
+}
+
+.kanban-col {
+    min-width: 260px !important;
+    max-width: 300px !important;
+    flex-shrink: 0;
+}
+
+/* Make scrollbar visible */
+.kanban-board::-webkit-scrollbar {
+    height: 6px;
+}
+.kanban-board::-webkit-scrollbar-thumb {
+    background: var(--gold);
+    border-radius: 4px;
+}
 /* ============================================================
    TABS
    ============================================================ */
