@@ -822,22 +822,24 @@ const CRM_Router = (function() {
         try {
             const state = event.state;
             let path = DEFAULT_ROUTE;
-
             if (state && state.route) {
                 path = state.route;
             } else {
-                // Extract from URL
-                if (ROUTER_MODE === 'hash') {
-                    const hash = window.location.hash.replace('#!', '');
-                    path = hash || DEFAULT_ROUTE;
-                } else {
-                    path = window.location.pathname || DEFAULT_ROUTE;
+                var hash = window.location.hash;
+                if (hash) {
+                    // Handle all hash formats: #!/path, #!path, #/path, #path
+                    path = hash.replace(/^#!?\/?/, '/') || DEFAULT_ROUTE;
+                    // Remove query params for routing
+                    if (path.includes('?')) path = path.split('?')[0];
+                    // Handle 404 redirect
+                    if (path.includes('404')) path = DEFAULT_ROUTE;
                 }
             }
-
+            if (!path || path === '/') path = DEFAULT_ROUTE;
             navigate(path, { silent: false, replace: true });
         } catch (error) {
             console.error('[CRM_Router] PopState error:', error);
+            navigate(DEFAULT_ROUTE, { silent: false, replace: true });
         }
     }
 
@@ -899,12 +901,11 @@ const CRM_Router = (function() {
 
             // Handle initial route
             let initialPath = DEFAULT_ROUTE;
-            if (ROUTER_MODE === 'hash') {
-                const hash = window.location.hash.replace('#!', '');
-                if (hash) initialPath = hash;
-            } else {
-                initialPath = window.location.pathname || DEFAULT_ROUTE;
-            }
+            var hash = window.location.hash;
+            if (hash) {
+                initialPath = hash.replace(/^#!?\/?/, '/') || DEFAULT_ROUTE;
+                if (initialPath.includes('404') || initialPath.includes('?')) initialPath = DEFAULT_ROUTE;
+            }}
 
             // Navigate to initial route
             navigate(initialPath, { replace: true, silent: false });
