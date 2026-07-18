@@ -167,17 +167,27 @@
     ============================================================ -->
     <div class="app-main" id="appMain">
         <header class="app-header" role="banner">
-            <button class="header-action-btn" id="mobileMenuBtn" aria-label="Open menu" title="Menu" style="display:none;">☰</button>
-            <div class="header-search" id="headerSearchDesktop">
-                <span class="header-search-icon">🔍</span>
-                <input type="search" placeholder="Search... (Ctrl+K)" id="globalSearchInput" aria-label="Global search"/>
-            </div>
-            <div class="header-actions">
-                <button class="header-action-btn" id="quickAddBtn" aria-label="Quick add" title="Quick Add (+)">➕</button>
-                <button class="header-action-btn" id="notificationsBtn" aria-label="Notifications" title="Notifications">🔔<span class="notification-dot" id="notificationDot" style="display:none;"></span></button>
-                <button class="header-action-btn" id="mobileThemeBtn" aria-label="Toggle theme" title="Toggle dark/light mode">🌓</button>
-            </div>
-        </header>
+        <button class="header-action-btn mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu" title="Menu" style="display:none;">☰</button>
+    
+        <a href="#" style="display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;">
+            <svg width="34" height="34" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#hdr-g)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="hdr-g"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
+            <div style="line-height:1.1;"><div style="font-family:var(--font-heading);font-weight:800;font-size:15px;color:var(--text-primary);">11 Avatar</div><div style="font-size:9px;color:var(--gold);text-transform:uppercase;">SMEs CRM</div></div>
+        </a>
+    
+        <div class="header-search" id="headerSearchDesktop" style="flex:1;max-width:400px;margin:0 20px;">
+            <span style="position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text-muted);">🔍</span>
+            <input type="search" placeholder="Search... (Ctrl+K)" id="globalSearchInput" style="width:100%;height:40px;padding-left:40px;border-radius:20px;border:1.5px solid var(--border-color);background:var(--bg-secondary);font-size:14px;"/>
+        </div>
+    
+        <div style="flex:1;display:none;" class="header-spacer"></div>
+    
+        <div class="header-actions" style="display:flex;align-items:center;gap:6px;">
+            <button class="header-action-btn" id="quickAddBtn" title="Quick Add" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-secondary);cursor:pointer;font-size:16px;">➕</button>
+            <button class="header-action-btn" id="notificationsBtn" title="Notifications" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-secondary);cursor:pointer;font-size:16px;position:relative;">🔔<span id="notificationDot" style="position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#DC2626;display:none;"></span></button>
+            <button class="header-action-btn" id="mobileThemeBtn" title="Theme" style="width:38px;height:38px;border-radius:50%;border:1px solid var(--border-color);background:var(--bg-secondary);cursor:pointer;font-size:16px;">🌓</button>
+            <button class="header-action-btn" id="headerProfileBtn" title="Profile" style="width:38px;height:38px;border-radius:50%;background:var(--gold-gradient);color:#0A0A0A;border:none;cursor:pointer;font-weight:700;font-size:13px;font-family:var(--font-heading);"><span id="headerAvatar">DU</span></button>
+        </div>
+    </header>
 
         <nav class="app-submenu" id="appSubmenu" aria-label="Module sub-navigation">
             <div class="app-submenu-inner" id="submenuInner">
