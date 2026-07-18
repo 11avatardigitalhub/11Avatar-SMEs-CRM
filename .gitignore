@@ -1,0 +1,242 @@
+# ============================================================
+# 11 AVATAR SMEs CRM — GIT IGNORE FILE
+# ============================================================
+# Prevents sensitive, generated, and unnecessary files
+# from being committed to the repository.
+# ============================================================
+
+# ============================================================
+# DEPENDENCIES
+# ============================================================
+node_modules/
+bower_components/
+jspm_packages/
+
+# ============================================================
+# BUILD OUTPUT
+# ============================================================
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+parcel-cache/
+
+# ============================================================
+# ENVIRONMENT FILES
+# ============================================================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*.local
+
+# ============================================================
+# FIREBASE
+# ============================================================
+.firebase/
+.firebaserc
+firebase-debug.log
+firebase-debug.*.log
+ui-debug.log
+
+# ============================================================
+# CLOUDFLARE
+# ============================================================
+.wrangler/
+wrangler.toml
+.dev.vars
+
+# ============================================================
+# IDE & EDITORS
+# ============================================================
+# Visual Studio Code
+.vscode/
+.vscode/settings.json
+.vscode/launch.json
+.vscode/tasks.json
+.vscode/extensions.json
+*.code-workspace
+
+# IntelliJ / WebStorm
+.idea/
+*.iml
+*.iws
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Eclipse
+.project
+.classpath
+.settings/
+
+# NetBeans
+nbproject/
+nbbuild/
+nbdist/
+
+# ============================================================
+# OPERATING SYSTEM
+# ============================================================
+# macOS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# ============================================================
+# LOGS & TEMP
+# ============================================================
+*.log
+*.tmp
+*.temp
+logs/
+tmp/
+temp/
+*.pid
+*.seed
+*.pid.lock
+
+# ============================================================
+# ARCHIVES
+# ============================================================
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# ============================================================
+# LOCAL DEVELOPMENT
+# ============================================================
+# Live Server / Browser-Sync
+.browserslistrc
+
+# Local test files
+test-local/
+local-only/
+scratch/
+playground/
+
+# ============================================================
+# SENSITIVE CONFIGURATION
+# ============================================================
+# NEVER commit these files containing secrets
+config/secrets.js
+config/credentials.json
+config/serviceAccountKey.json
+firebase-service-account.json
+*.pem
+*.key
+*.crt
+*.csr
+
+# ============================================================
+# UPLOADS & USER CONTENT
+# ============================================================
+uploads/
+user-uploads/
+temp-uploads/
+*.upload
+
+# ============================================================
+# COVERAGE & TESTING
+# ============================================================
+coverage/
+.nyc_output/
+.jest/
+cypress/
+test-results/
+reports/
+
+# ============================================================
+# DOCS GENERATED
+# ============================================================
+docs/_build/
+docs/.doctrees/
+site/
+
+# ============================================================
+# DATABASE & BACKUPS
+# ============================================================
+*.sql
+*.sqlite
+*.sqlite3
+*.db
+dump/
+backups/
+*.backup
+
+# ============================================================
+# PACKAGE MANAGERS
+# ============================================================
+# npm
+package-lock.json
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.npmrc
+
+# yarn
+.yarn/
+.yarn-integrity
+
+# pnpm
+pnpm-lock.yaml
+.pnpm-store/
+
+# ============================================================
+# MISCELLANEOUS
+# ============================================================
+*.bak
+*.old
+*.orig
+*.rej
+*.patch
+*.diff
+*.sass-cache/
+*.css.map
+*.js.map
+*.ts.map
+
+# ============================================================
+# DOCKER
+# ============================================================
+.docker/
+docker-compose.override.yml
+
+# ============================================================
+# KEEP THESE FILES (Negations)
+# ============================================================
+# Keep important dotfiles
+!.gitignore
+!.gitattributes
+!.editorconfig
+!.prettierrc
+!.eslintrc.json
+!.stylelintrc.json
+
+# Keep example env files
+!.env.example
+!.env.sample
