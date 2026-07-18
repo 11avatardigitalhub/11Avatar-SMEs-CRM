@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en-IN" data-theme="public">
+<head>
+    <!-- ==========================================
+         11 AVATAR DIGITAL HUB - Offline Page
+         Version: 3.0 Enterprise
+         Theme: Public (Dark) - White/Gold/Black
+         ========================================== -->
+    
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    
+    <!-- SEO & Indexing -->
+    <meta name="description" content="You are offline - 11 Avatar Digital Hub. Don't worry, you can still access previously loaded data. Changes will sync when you're back online." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="author" content="11 Avatar Digital Hub" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="You are Offline - 11 Avatar Digital Hub" />
+    <meta property="og:description" content="Continue working offline. Your data will sync automatically when back online." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://11avatardigitalhub.github.io/11-Avatar-SMEs-CRM/offline.html" />
+    <meta property="og:site_name" content="11 Avatar Digital Hub" />
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://11avatardigitalhub.github.io/11-Avatar-SMEs-CRM/offline.html" />
+    
+    <!-- PWA & Icons -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-72x72.png" />
+    <link rel="apple-touch-icon" href="icons/icon-192x192.png" />
+    
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="src/css/main.css" />
+    
+    <title>You are Offline - 11 Avatar Digital Hub | Master Revenue CRM</title>
+    
+    <!-- Anti-flicker -->
+    <style>
+        body { opacity: 0; transition: opacity 0.35s ease; }
+        body.loaded { opacity: 1; }
+        
+        .offline-page-container {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #0A0A0A 0%, #1A1A1A 50%, #0F0F0F 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .offline-page-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(212,175,55,0.04) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .offline-content-wrap {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            max-width: 550px;
+            width: 100%;
+            animation: offlineFadeUp 0.6s ease;
+        }
+        
+        @keyframes offlineFadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes offlineFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+        
+        @keyframes offlinePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        
+        .offline-icon-wrap {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 32px;
+        }
+        
+        .offline-main-icon {
+            font-size: clamp(5rem, 12vw, 8rem);
+            animation: offlineFloat 3s ease-in-out infinite;
+            display: block;
+        }
+        
+        .offline-warning-icon {
+            position: absolute;
+            top: 10px;
+            right: -20px;
+            font-size: 2rem;
+            animation: offlinePulse 1.5s ease-in-out infinite;
+        }
+        
+        .offline-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 12px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .offline-message {
+            font-size: 1.05rem;
+            color: #AAAAAA;
+            line-height: 1.7;
+            margin-bottom: 40px;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .offline-status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245,158,11,0.1);
+            border: 1px solid rgba(245,158,11,0.2);
+            border-radius: 50px;
+            padding: 8px 20px;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+            color: #F59E0B;
+            font-weight: 500;
+        }
+        
+        .offline-status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #F59E0B;
+            animation: offlinePulse 1.5s ease-in-out infinite;
+        }
+        
+        .offline-actions-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 32px;
+        }
+        
+        .offline-features-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            text-align: left;
+            margin-bottom: 32px;
+        }
+        
+        @media (min-width: 500px) {
+            .offline-features-grid { grid-template-columns: 1fr 1fr; }
+        }
+        
+        .offline-feature-item {
+            background: rgba(26,26,26,0.6);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 16px;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            transition: all 0.2s ease;
+        }
+        
+        .offline-feature-item:hover {
+            border-color: rgba(212,175,55,0.2);
+            background: rgba(26,26,26,0.8);
+        }
+        
+        .offline-feature-icon {
+            font-size: 1.5rem;
+            width: 36px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        
+        .offline-feature-title {
+            font-size: 0.9rem;
+            color: #FFFFFF;
+            margin-bottom: 2px;
+            font-weight: 600;
+        }
+        
+        .offline-feature-desc {
+            font-size: 0.8rem;
+            color: #888;
+            margin: 0;
+            line-height: 1.5;
+        }
+        
+        .offline-status-card {
+            background: rgba(26,26,26,0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-top: 24px;
+        }
+        
+        .offline-status-title {
+            font-size: 0.95rem;
+            color: #D4AF37;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+        
+        .offline-status-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .offline-status-row:last-child { border-bottom: none; }
+        
+        .offline-status-label { color: #888; }
+        
+        .offline-status-value { color: #CCC; font-weight: 500; }
+        .offline-status-value.is-online { color: #10B981; }
+        .offline-status-value.is-offline { color: #F59E0B; }
+        
+        .offline-reconnect-bar-wrap {
+            height: 4px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 2px;
+            margin-top: 12px;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .offline-reconnect-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #D4AF37, #E8C95A);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .offline-tip-text {
+            color: #666;
+            font-size: 0.85rem;
+            margin-top: 24px;
+        }
+        
+        .offline-tip-text strong {
+            color: #D4AF37;
+        }
+        
+        .offline-check-text {
+            color: #555;
+            font-size: 0.8rem;
+            margin-top: 16px;
+        }
+        
+        @media (max-width: 480px) {
+            .offline-content-wrap { padding: 0 10px; }
+            .offline-actions-row { flex-direction: column; align-items: stretch; }
+            .offline-actions-row .btn { width: 100%; justify-content: center; }
+            .offline-feature-item { padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    
+    <!-- Skip Navigation -->
+    <a href="#offline-main" class="skip-link">Skip to content</a>
+    
+    <!-- ==========================================
+         OFFLINE PAGE
+         ========================================== -->
+    <main class="offline-page-container" role="main" aria-labelledby="offline-heading" id="offline-main">
+        <div class="offline-content-wrap">
+            
+            <!-- Icon -->
+            <div class="offline-icon-wrap">
+                <span class="offline-main-icon" aria-hidden="true">📡</span>
+                <span class="offline-warning-icon" aria-hidden="true">⚠️</span>
+            </div>
+            
+            <!-- Title -->
+            <h1 class="offline-title" id="offline-heading">You're Offline</h1>
+            
+            <!-- Status Badge -->
+            <div class="offline-status-badge" role="status" aria-live="polite">
+                <span class="offline-status-dot" aria-hidden="true"></span>
+                <span id="connection-text">No Internet Connection</span>
+            </div>
+            
+            <!-- Message -->
+            <p class="offline-message">
+                Don't worry! You can still access previously loaded data. 
+                Any changes you make will be saved and automatically synced when you're back online.
+            </p>
+            
+            <!-- Available Offline Features -->
+            <div class="offline-features-grid" aria-label="Available offline features">
+                <div class="offline-feature-item">
+                    <span class="offline-feature-icon" aria-hidden="true">📋</span>
+                    <div>
+                        <h4 class="offline-feature-title">View Leads & Clients</h4>
+                        <p class="offline-feature-desc">Access your previously loaded lead and client data</p>
+                    </div>
+                </div>
+                
+                <div class="offline-feature-item">
+                    <span class="offline-feature-icon" aria-hidden="true">✏️</span>
+                    <div>
+                        <h4 class="offline-feature-title">Make Changes</h4>
+                        <p class="offline-feature-desc">Add or edit data — it will sync when online</p>
+                    </div>
+                </div>
+                
+                <div class="offline-feature-item">
+                    <span class="offline-feature-icon" aria-hidden="true">📊</span>
+                    <div>
+                        <h4 class="offline-feature-title">View Pipeline</h4>
+                        <p class="offline-feature-desc">Check your sales pipeline and deal stages</p>
+                    </div>
+                </div>
+                
+                <div class="offline-feature-item">
+                    <span class="offline-feature-icon" aria-hidden="true">🔄</span>
+                    <div>
+                        <h4 class="offline-feature-title">Auto Sync</h4>
+                        <p class="offline-feature-desc">Everything syncs automatically when reconnected</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="offline-actions-row">
+                <button type="button" id="btn-check-connection" class="btn btn-primary btn-lg" style="min-height:52px;padding:14px 28px;font-size:1rem">
+                    🔄 Check Connection
+                </button>
+                <button type="button" id="btn-reload" class="btn btn-outline btn-lg" style="min-height:52px;padding:14px 28px;font-size:1rem">
+                    🔃 Reload Page
+                </button>
+                <a href="index.html" class="btn btn-ghost btn-lg" style="min-height:52px;padding:14px 28px;font-size:1rem">
+                    🏠 Try Home
+                </a>
+            </div>
+            
+            <!-- Reconnect Progress Bar -->
+            <div class="offline-reconnect-bar-wrap" id="reconnect-progress" aria-hidden="true">
+                <div class="offline-reconnect-bar-fill" id="reconnect-bar"></div>
+            </div>
+            
+            <!-- Connection Status Details -->
+            <div class="offline-status-card">
+                <h3 class="offline-status-title">📶 Connection Details</h3>
+                <div class="offline-status-row">
+                    <span class="offline-status-label">Status</span>
+                    <span class="offline-status-value is-offline" id="status-online">Offline</span>
+                </div>
+                <div class="offline-status-row">
+                    <span class="offline-status-label">Connection Type</span>
+                    <span class="offline-status-value" id="status-type">Unknown</span>
+                </div>
+                <div class="offline-status-row">
+                    <span class="offline-status-label">Last Online</span>
+                    <span class="offline-status-value" id="status-last-online">—</span>
+                </div>
+                <div class="offline-status-row">
+                    <span class="offline-status-label">Pending Sync Items</span>
+                    <span class="offline-status-value" id="status-pending">0</span>
+                </div>
+            </div>
+            
+            <!-- Tip -->
+            <p class="offline-tip-text">
+                💡 <strong>Tip:</strong> Bookmark this page for quick offline access. 
+                The CRM works as a PWA — install it for the best offline experience.
+            </p>
+            
+            <p class="offline-check-text">
+                Auto-checking connection every <span id="check-seconds">10</span> seconds...
+            </p>
+        </div>
+    </main>
+    
+    <!-- ==========================================
+         SCRIPTS
+         ========================================== -->
+    <script>
+        /**
+         * @fileoverview Offline Page Controller
+         * @description Handles connection checking, auto-reconnect,
+         *              UI updates, and status display on offline page.
+         * @version 3.0.0
+         */
+        'use strict';
+        
+        (function() {
+            
+            // -----------------------------------------------------------------
+            // STATE
+            // -----------------------------------------------------------------
+            var checkCountdown = 10;
+            var checkInterval = null;
+            var reconnectAttempts = 0;
+            var maxReconnectAttempts = 5;
+            var isChecking = false;
+            var elements = {};
+            
+            // -----------------------------------------------------------------
+            // DOM CACHE
+            // -----------------------------------------------------------------
+            
+            function cacheElements() {
+                elements = {
+                    connectionText: document.getElementById('connection-text'),
+                    statusOnline: document.getElementById('status-online'),
+                    statusType: document.getElementById('status-type'),
+                    statusLastOnline: document.getElementById('status-last-online'),
+                    statusPending: document.getElementById('status-pending'),
+                    reconnectProgress: document.getElementById('reconnect-progress'),
+                    reconnectBar: document.getElementById('reconnect-bar'),
+                    checkSeconds: document.getElementById('check-seconds'),
+                    btnCheck: document.getElementById('btn-check-connection'),
+                    btnReload: document.getElementById('btn-reload'),
+                };
+            }
+            
+            // -----------------------------------------------------------------
+            // CONNECTION INFO
+            // -----------------------------------------------------------------
+            
+            function getConnectionInfo() {
+                var connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+                if (connection) {
+                    return {
+                        type: connection.effectiveType || 'unknown',
+                        downlink: connection.downlink || 0,
+                        rtt: connection.rtt || 0,
+                    };
+                }
+                return { type: 'unknown', downlink: 0, rtt: 0 };
+            }
+            
+            function updateConnectionDetails() {
+                var info = getConnectionInfo();
+                var typeLabels = {
+                    'slow-2g': 'Very Slow (2G)',
+                    '2g': 'Slow (2G)',
+                    '3g': '3G',
+                    '4g': '4G/LTE',
+                    '5g': '5G',
+                    'wifi': 'WiFi',
+                    'ethernet': 'Ethernet',
+                };
+                
+                if (elements.statusType) {
+                    elements.statusType.textContent = typeLabels[info.type] || info.type || 'Unknown';
+                }
+                
+                // Last online time
+                var lastOnline = localStorage.getItem('11avatar_last_online');
+                if (elements.statusLastOnline && lastOnline) {
+                    var date = new Date(parseInt(lastOnline, 10));
+                    elements.statusLastOnline.textContent = date.toLocaleTimeString('en-IN', {
+                        hour: '2-digit', minute: '2-digit', hour12: true,
+                    });
+                }
+                
+                // Pending sync items
+                try {
+                    var queue = JSON.parse(localStorage.getItem('11avatar_sync_queue') || '[]');
+                    if (elements.statusPending) {
+                        elements.statusPending.textContent = queue.length;
+                    }
+                } catch (e) {
+                    if (elements.statusPending) elements.statusPending.textContent = '0';
+                }
+            }
+            
+            // -----------------------------------------------------------------
+            // CONNECTION CHECK
+            // -----------------------------------------------------------------
+            
+            async function checkConnection() {
+                if (isChecking) return false;
+                isChecking = true;
+                
+                if (!navigator.onLine) {
+                    isChecking = false;
+                    return false;
+                }
+                
+                try {
+                    var controller = new AbortController();
+                    var timeoutId = setTimeout(function() { controller.abort(); }, 5000);
+                    
+                    // Try to fetch the root (HEAD request is lightweight)
+                    var response = await fetch('index.html', {
+                        method: 'HEAD',
+                        cache: 'no-store',
+                        signal: controller.signal,
+                    });
+                    
+                    clearTimeout(timeoutId);
+                    isChecking = false;
+                    
+                    if (response.ok) {
+                        handleReconnected();
+                        return true;
+                    }
+                } catch (e) {
+                    // Still offline
+                }
+                
+                isChecking = false;
+                return false;
+            }
+            
+            // -----------------------------------------------------------------
+            // RECONNECT HANDLER
+            // -----------------------------------------------------------------
+            
+            function handleReconnected() {
+                if (elements.connectionText) {
+                    elements.connectionText.textContent = '🟢 Back Online!';
+                    elements.connectionText.style.color = '#10B981';
+                }
+                
+                if (elements.statusOnline) {
+                    elements.statusOnline.textContent = 'Online';
+                    elements.statusOnline.className = 'offline-status-value is-online';
+                }
+                
+                if (elements.reconnectProgress) {
+                    elements.reconnectProgress.style.display = 'block';
+                }
+                if (elements.reconnectBar) {
+                    elements.reconnectBar.style.width = '100%';
+                }
+                
+                // Save last online time
+                try {
+                    localStorage.setItem('11avatar_last_online', Date.now().toString());
+                } catch (e) {}
+                
+                // Stop checking
+                if (checkInterval) {
+                    clearInterval(checkInterval);
+                    checkInterval = null;
+                }
+                
+                // Redirect after short delay
+                setTimeout(function() {
+                    if (document.referrer && document.referrer.indexOf(window.location.hostname) !== -1) {
+                        window.history.back();
+                    } else {
+                        window.location.href = 'index.html';
+                    }
+                }, 1500);
+            }
+            
+            // -----------------------------------------------------------------
+            // PERIODIC CHECK
+            // -----------------------------------------------------------------
+            
+            function startConnectionCheck() {
+                checkInterval = setInterval(async function() {
+                    checkCountdown--;
+                    
+                    if (elements.checkSeconds) {
+                        elements.checkSeconds.textContent = checkCountdown;
+                    }
+                    
+                    if (checkCountdown <= 0) {
+                        checkCountdown = 10;
+                        
+                        if (elements.reconnectProgress) {
+                            elements.reconnectProgress.style.display = 'block';
+                        }
+                        if (elements.reconnectBar) {
+                            var progress = (reconnectAttempts / maxReconnectAttempts) * 100;
+                            elements.reconnectBar.style.width = progress + '%';
+                        }
+                        
+                        var isOnline = await checkConnection();
+                        
+                        if (isOnline) {
+                            reconnectAttempts = 0;
+                        } else {
+                            reconnectAttempts++;
+                            if (reconnectAttempts >= maxReconnectAttempts) {
+                                if (elements.reconnectBar) elements.reconnectBar.style.width = '100%';
+                                setTimeout(function() {
+                                    if (elements.reconnectProgress) elements.reconnectProgress.style.display = 'none';
+                                    reconnectAttempts = 0;
+                                }, 1000);
+                            }
+                        }
+                    }
+                }, 1000);
+            }
+            
+            // -----------------------------------------------------------------
+            // EVENT HANDLERS
+            // -----------------------------------------------------------------
+            
+            function onCheckConnectionClick() {
+                checkCountdown = 10;
+                if (elements.checkSeconds) elements.checkSeconds.textContent = '10';
+                
+                var btn = elements.btnCheck;
+                if (btn) {
+                    var originalText = btn.textContent;
+                    btn.textContent = '⏳ Checking...';
+                    btn.disabled = true;
+                    
+                    checkConnection().then(function(isOnline) {
+                        if (!isOnline) {
+                            btn.textContent = '❌ Still Offline';
+                            setTimeout(function() {
+                                btn.textContent = originalText;
+                                btn.disabled = false;
+                            }, 2000);
+                        }
+                    });
+                }
+            }
+            
+            function onReloadClick() {
+                window.location.reload();
+            }
+            
+            function onOnlineEvent() {
+                if (elements.connectionText) {
+                    elements.connectionText.textContent = '🟡 Checking connection...';
+                }
+                checkConnection();
+            }
+            
+            function onOfflineEvent() {
+                if (elements.connectionText) {
+                    elements.connectionText.textContent = 'No Internet Connection';
+                }
+                if (elements.statusOnline) {
+                    elements.statusOnline.textContent = 'Offline';
+                    elements.statusOnline.className = 'offline-status-value is-offline';
+                }
+            }
+            
+            // -----------------------------------------------------------------
+            // INIT
+            // -----------------------------------------------------------------
+            
+            function init() {
+                cacheElements();
+                
+                // Attach listeners
+                if (elements.btnCheck) {
+                    elements.btnCheck.addEventListener('click', onCheckConnectionClick);
+                }
+                if (elements.btnReload) {
+                    elements.btnReload.addEventListener('click', onReloadClick);
+                }
+                
+                window.addEventListener('online', onOnlineEvent);
+                window.addEventListener('offline', onOfflineEvent);
+                
+                // Initial setup
+                updateConnectionDetails();
+                startConnectionCheck();
+                
+                // Save last online if we're somehow online
+                if (navigator.onLine) {
+                    try {
+                        localStorage.setItem('11avatar_last_online', Date.now().toString());
+                    } catch (e) {}
+                }
+                
+                // Initial check
+                checkConnection();
+                
+                // Mark loaded
+                document.body.classList.add('loaded');
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', init);
+            } else {
+                init();
+            }
+            
+        })();
+    </script>
+    
+</body>
+</html>
