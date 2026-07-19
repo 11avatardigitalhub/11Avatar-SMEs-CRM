@@ -96,7 +96,7 @@
         .hdr-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all var(--transition-fast); flex-shrink: 0; text-decoration: none; }
         .hdr-btn:hover { background: var(--hover); color: var(--text); border-color: var(--gold); }
         .hdr-profile { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); color: #000; border: none; cursor: pointer; font-weight: 700; font-size: 14px; font-family: var(--font-heading); transition: all var(--transition-fast); flex-shrink: 0; }
-        .content-area { flex: 1; padding: 20px; overflow-y: auto; }
+        .content-frame { flex: 1; border: none; width: 100%; min-height: calc(100vh - var(--header-h)); }
         .sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; }
         .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 200; padding: 6px 10px; padding-bottom: max(6px, env(safe-area-inset-bottom)); justify-content: space-around; align-items: center; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
         .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border-radius: 8px; font-size: 10px; color: var(--text3); transition: all var(--transition-fast); min-width: 50px; text-decoration: none; }
@@ -108,42 +108,18 @@
             .main { margin-left: 0 !important; }
             .main-header .menu-btn { display: flex; }
             .mobile-nav { display: flex; }
-            .content-area { padding: 12px; padding-bottom: 70px; }
+            .content-frame { min-height: calc(100vh - var(--header-h) - 56px); }
         }
         .approval-banner { background: #FEF3C7; color: #92400E; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #FCD34D; display: none; }
         .approval-banner.show { display: block; }
-        .loading-screen { display: flex; align-items: center; justify-content: center; height: 200px; color: var(--text3); font-size: 16px; gap: 12px; }
-        .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        .loading-screen { position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; background: var(--bg); z-index: 99999; }
+        .spinner { width: 40px; height: 40px; border: 4px solid var(--border2); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); }
-        .stat-card .lbl { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
-        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
-        .btn-primary { background: var(--gold-gradient); color: #FFF; }
-        .btn-outline { background: transparent; color: var(--gold-dark); border: 1.5px solid var(--gold); }
-        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
-        .btn-success { background: var(--success); color: #FFF; }
-        .btn-danger { background: var(--error); color: #FFF; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-        table th { text-align: left; padding: 12px 14px; font-weight: 600; color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg3); border-bottom: 2px solid var(--border); white-space: nowrap; }
-        table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: var(--text2); margin-bottom: 4px; }
-        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 0.88rem; font-family: var(--font-body); background: var(--bg); }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold); }
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
-        .toast { background: var(--bg2); border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 10px; }
-        .toast-success { border-left: 4px solid var(--success); } .toast-error { border-left: 4px solid var(--error); } .toast-info { border-left: 4px solid var(--info); }
-        @keyframes slideIn { from{opacity:0;transform:translateX(120%);} to{opacity:1;transform:translateX(0);} }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
+    <div class="loading-screen" id="loadingScreen"><div class="spinner"></div></div>
+
     <a href="#mainContent" class="skip-link">Skip to Main Content</a>
     <div class="sb-overlay" id="sbOverlay" onclick="closeMobile()"></div>
 
@@ -157,41 +133,41 @@
         </div>
         <nav class="sb-nav" id="sidebarNav">
             <div class="nav-sec"><div class="nav-sec-title">Main</div>
-                <button class="nav-item active" data-module="DASHBOARD" onclick="switchModule('dashboard')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-                <button class="nav-item" data-module="LEADS" onclick="switchModule('leads')"><span class="nav-icon">👥</span><span class="nav-label">Leads</span></button>
-                <button class="nav-item" data-module="PIPELINE" onclick="switchModule('pipeline')"><span class="nav-icon">📈</span><span class="nav-label">Pipeline</span></button>
-                <button class="nav-item" data-module="CLIENTS" onclick="switchModule('clients')"><span class="nav-icon">🏢</span><span class="nav-label">Clients</span></button>
+                <button class="nav-item active" data-page="dashboard" data-module="DASHBOARD" onclick="navigatePage('dashboard')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+                <button class="nav-item" data-page="leads" data-module="LEADS" onclick="navigatePage('leads')"><span class="nav-icon">👥</span><span class="nav-label">Leads</span></button>
+                <button class="nav-item" data-page="pipeline" data-module="PIPELINE" onclick="navigatePage('pipeline')"><span class="nav-icon">📈</span><span class="nav-label">Pipeline</span></button>
+                <button class="nav-item" data-page="clients" data-module="CLIENTS" onclick="navigatePage('clients')"><span class="nav-icon">🏢</span><span class="nav-label">Clients</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">Financial</div>
-                <button class="nav-item" data-module="INVOICES" onclick="switchModule('invoices')"><span class="nav-icon">🧾</span><span class="nav-label">Invoices</span></button>
-                <button class="nav-item" data-module="PAYMENTS" onclick="switchModule('payments')"><span class="nav-icon">💰</span><span class="nav-label">Payments</span></button>
-                <button class="nav-item" data-module="RETAINERS" onclick="switchModule('retainers')"><span class="nav-icon">🔄</span><span class="nav-label">Retainers</span></button>
+                <button class="nav-item" data-page="invoices" data-module="INVOICES" onclick="navigatePage('invoices')"><span class="nav-icon">🧾</span><span class="nav-label">Invoices</span></button>
+                <button class="nav-item" data-page="payments" data-module="PAYMENTS" onclick="navigatePage('payments')"><span class="nav-icon">💰</span><span class="nav-label">Payments</span></button>
+                <button class="nav-item" data-page="retainers" data-module="RETAINERS" onclick="navigatePage('retainers')"><span class="nav-icon">🔄</span><span class="nav-label">Retainers</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">Operations</div>
-                <button class="nav-item" data-module="TASKS" onclick="switchModule('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
-                <button class="nav-item" data-module="PROJECTS" onclick="switchModule('projects')"><span class="nav-icon">🚀</span><span class="nav-label">Projects</span></button>
-                <button class="nav-item" data-module="APPOINTMENTS" onclick="switchModule('appointments')"><span class="nav-icon">📅</span><span class="nav-label">Appointments</span></button>
+                <button class="nav-item" data-page="tasks" data-module="TASKS" onclick="navigatePage('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
+                <button class="nav-item" data-page="projects" data-module="PROJECTS" onclick="navigatePage('projects')"><span class="nav-icon">🚀</span><span class="nav-label">Projects</span></button>
+                <button class="nav-item" data-page="appointments" data-module="APPOINTMENTS" onclick="navigatePage('appointments')"><span class="nav-icon">📅</span><span class="nav-label">Appointments</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">Communication</div>
-                <button class="nav-item" data-module="WHATSAPP" onclick="switchModule('whatsapp')"><span class="nav-icon">💬</span><span class="nav-label">WhatsApp</span></button>
-                <button class="nav-item" data-module="TRAINING" onclick="switchModule('training')"><span class="nav-icon">🎓</span><span class="nav-label">Training</span></button>
-                <button class="nav-item" data-module="REFERRALS" onclick="switchModule('referrals')"><span class="nav-icon">🔗</span><span class="nav-label">Referrals</span></button>
+                <button class="nav-item" data-page="whatsapp" data-module="WHATSAPP" onclick="navigatePage('whatsapp')"><span class="nav-icon">💬</span><span class="nav-label">WhatsApp</span></button>
+                <button class="nav-item" data-page="training" data-module="TRAINING" onclick="navigatePage('training')"><span class="nav-icon">🎓</span><span class="nav-label">Training</span></button>
+                <button class="nav-item" data-page="referrals" data-module="REFERRALS" onclick="navigatePage('referrals')"><span class="nav-icon">🔗</span><span class="nav-label">Referrals</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">Insights</div>
-                <button class="nav-item" data-module="REPORTS" onclick="switchModule('reports')"><span class="nav-icon">📋</span><span class="nav-label">Reports</span></button>
-                <button class="nav-item" data-module="NOTIFICATIONS" onclick="switchModule('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></button>
+                <button class="nav-item" data-page="reports" data-module="REPORTS" onclick="navigatePage('reports')"><span class="nav-icon">📋</span><span class="nav-label">Reports</span></button>
+                <button class="nav-item" data-page="notifications" data-module="NOTIFICATIONS" onclick="navigatePage('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">Admin</div>
-                <button class="nav-item" data-module="PLATFORM_ADMIN" onclick="switchModule('platform-admin')"><span class="nav-icon">🛡️</span><span class="nav-label">Platform Admin</span></button>
-                <button class="nav-item" data-module="TENANT_ADMIN" onclick="switchModule('tenant-admin')"><span class="nav-icon">⚙️</span><span class="nav-label">Tenant Admin</span></button>
+                <button class="nav-item" data-page="platform-admin" data-module="PLATFORM_ADMIN" onclick="navigatePage('platform-admin')"><span class="nav-icon">🛡️</span><span class="nav-label">Platform Admin</span></button>
+                <button class="nav-item" data-page="tenant-admin" data-module="TENANT_ADMIN" onclick="navigatePage('tenant-admin')"><span class="nav-icon">⚙️</span><span class="nav-label">Tenant Admin</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">System</div>
-                <button class="nav-item" data-module="SETTINGS" onclick="switchModule('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-                <button class="nav-item" data-module="PROFILE" onclick="switchModule('profile')"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></button>
+                <button class="nav-item" data-page="settings" data-module="SETTINGS" onclick="navigatePage('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+                <button class="nav-item" data-page="profile" data-module="PROFILE" onclick="navigatePage('profile')"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></button>
             </div>
         </nav>
         <div class="sb-footer">
-            <div class="sb-user" onclick="switchModule('profile')">
+            <div class="sb-user" onclick="navigatePage('profile')">
                 <div class="sb-avatar" id="sbAvatar">U</div>
                 <div class="sb-user-info">
                     <div class="sb-user-name" id="sbUserName">User</div>
@@ -208,22 +184,20 @@
             <div class="brand-sub">SMEs CRM</div>
             <div class="spacer"></div>
             <div class="approval-banner" id="approvalBanner">⏳ Pending approval.</div>
-            <button class="hdr-btn" title="Notifications" onclick="switchModule('notifications')">🔔</button>
+            <button class="hdr-btn" title="Notifications" onclick="navigatePage('notifications')">🔔</button>
             <button class="hdr-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
-            <button class="hdr-profile" onclick="switchModule('profile')" title="Profile"><span id="hdrAvatar">U</span></button>
+            <button class="hdr-profile" onclick="navigatePage('profile')" title="Profile"><span id="hdrAvatar">U</span></button>
             <button class="hdr-btn" id="logoutBtn" onclick="doLogout()" title="Logout" style="color:var(--error);">⏻</button>
         </header>
-        <div class="content-area" id="contentArea">
-            <div class="loading-screen"><div class="spinner"></div> Loading CRM...</div>
-        </div>
+        <iframe id="contentFrame" class="content-frame" src="pages/dashboard.html" title="Module Content"></iframe>
     </div>
 
     <nav class="mobile-nav" id="mobileNav">
-        <a href="#" onclick="switchModule('dashboard')"><span>📊</span><span>Home</span></a>
-        <a href="#" onclick="switchModule('leads')"><span>👥</span><span>Leads</span></a>
-        <a href="#" onclick="switchModule('invoices')"><span>🧾</span><span>Invoice</span></a>
-        <a href="#" onclick="switchModule('whatsapp')"><span>💬</span><span>WA</span></a>
-        <a href="#" onclick="switchModule('settings')"><span>⚙️</span><span>More</span></a>
+        <a href="#" data-page="dashboard" onclick="navigatePage('dashboard')"><span>📊</span><span>Home</span></a>
+        <a href="#" data-page="leads" onclick="navigatePage('leads')"><span>👥</span><span>Leads</span></a>
+        <a href="#" data-page="invoices" onclick="navigatePage('invoices')"><span>🧾</span><span>Invoice</span></a>
+        <a href="#" data-page="whatsapp" onclick="navigatePage('whatsapp')"><span>💬</span><span>WA</span></a>
+        <a href="#" data-page="settings" onclick="navigatePage('settings')"><span>⚙️</span><span>More</span></a>
     </nav>
 
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
@@ -235,6 +209,7 @@
         'use strict';
         if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
             window.firebase.initializeApp({apiKey:"AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",authDomain:"avatar-wa-dual-crm.firebaseapp.com",projectId:"avatar-wa-dual-crm",storageBucket:"avatar-wa-dual-crm.firebasestorage.app",messagingSenderId:"946959261009",appId:"1:946959261009:web:175f5390d63715f1f8c770"});
+            console.log('🔥 Firebase initialized in home.html');
         }
     </script>
     <script src="js/core/config.js"></script>
@@ -244,197 +219,141 @@
 
     <script>
         'use strict';
-        var APP={currentModule:'dashboard',collapsed:false,mobile:false,dark:false,userProfile:null,initialized:false};
-        function $(id){return document.getElementById(id);}
-        function showToast(msg,type){var t=document.createElement('div');t.className='toast toast-'+(type||'info');t.textContent=msg;($('toastContainer')||document.body).appendChild(t);setTimeout(function(){t.remove();},3000);}
-        function escHtml(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';}
-        function formatCurrency(a){try{return'₹'+parseInt(a||0).toLocaleString('en-IN');}catch(e){return'₹0';}}
-        function formatDate(d){if(!d)return'-';try{return new Date(d).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});}catch(e){return d;}}
-
-        function updateUserUI(){
-            var p=APP.userProfile;
-            if(!p||!p.uid){try{var ud=localStorage.getItem('crm_user');if(ud)p=JSON.parse(ud);}catch(e){}}
-            if(!p||!p.uid)return;
-            APP.userProfile=p;
-            var name=p.displayName||p.name||p.email||'User';
-            var av=name.charAt(0).toUpperCase();
-            var role=p.role||'User';
-            var elAv=document.getElementById('sbAvatar');if(elAv)elAv.textContent=av;
-            var elHd=document.getElementById('hdrAvatar');if(elHd)elHd.textContent=av;
-            var elNm=document.getElementById('sbUserName');if(elNm)elNm.textContent=name;
-            var elRl=document.getElementById('sbUserRole');if(elRl)elRl.textContent=role;
-            if(p.approvalStatus==='pending'){var b=document.getElementById('approvalBanner');if(b)b.classList.add('show');}
-        }
-
-        function applyRBACFilter(){
-            var p=APP.userProfile;
-            if(!p){return;}
-            var role=p.role||'EXECUTIVE';
-            var modules=p.moduleAccess||[];
-            document.querySelectorAll('.nav-item[data-module]').forEach(function(el){
-                var mod=el.dataset.module;if(!mod)return;
-                if(role==='PLATFORM_OWNER'){el.classList.remove('hidden');return;}
-                if(mod==='PLATFORM_ADMIN'){el.classList.add('hidden');return;}
-                if(mod==='TENANT_ADMIN'){el.classList.toggle('hidden',['TENANT_ADMIN','SUB_ADMIN'].indexOf(role)===-1);return;}
-                el.classList.toggle('hidden',modules.indexOf(mod)===-1);
-            });
-            document.querySelectorAll('.nav-sec').forEach(function(sec){var v=sec.querySelectorAll('.nav-item:not(.hidden)');sec.style.display=v.length===0?'none':'';});
-        }
-
-        function setActiveNav(m){document.querySelectorAll('.nav-item').forEach(function(el){el.classList.toggle('active',el.dataset.module===m.toUpperCase()||el.dataset.module===m);});}
-
-        function switchModule(m){
-            APP.currentModule=m;setActiveNav(m);if(APP.mobile)closeMobile();
-            try{localStorage.setItem('crm_last_module',m);}catch(e){}
-            var a=$('contentArea');if(!a)return;a.innerHTML='';
-            if(m==='dashboard')renderDashboard(a);
-            else if(m==='profile')renderProfile(a);
-            else if(m==='settings')renderSettings(a);
-            else if(m==='platform-admin')renderPlatformAdmin(a);
-            else if(m==='tenant-admin')renderTenantAdmin(a);
-            else if(m==='leads')renderLeads(a);
-            else if(m==='pipeline')renderPipeline(a);
-            else a.innerHTML='<div class="card"><p style="text-align:center;padding:40px;">📦 '+m+' — coming soon</p></div>';
-        }
-
-        function renderDashboard(a){
-            updateUserUI();var p=APP.userProfile||{};
-            a.innerHTML='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:4px;">Welcome, <span style="background:linear-gradient(135deg,#D4AF37,#B8960F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">'+escHtml(p.displayName||p.name||'User')+'</span> 👋</h1><p style="color:var(--text3);margin-bottom:20px;">'+new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'</p><div class="stats-grid"><div class="stat-card"><div class="val" id="stat-revenue" style="color:#059669;">₹0</div><div class="lbl">💰 Revenue</div></div><div class="stat-card"><div class="val" id="stat-leads" style="color:#4F46E5;">0</div><div class="lbl">👥 Leads</div></div><div class="stat-card"><div class="val" id="stat-clients" style="color:#D4AF37;">0</div><div class="lbl">🏢 Clients</div></div><div class="stat-card"><div class="val" id="stat-tasks" style="color:#F59E0B;">0</div><div class="lbl">✅ Tasks</div></div></div><div class="card"><div class="card-header"><span class="card-title">⚡ Quick Actions</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">';
-            [{m:'leads',i:'👥'},{m:'invoices',i:'🧾'},{m:'clients',i:'🏢'},{m:'whatsapp',i:'💬'}].forEach(function(x){a.innerHTML+='<button class="btn btn-outline" onclick="switchModule(\''+x.m+'\')" style="flex-direction:column;gap:4px;padding:16px;"><span style="font-size:1.5rem;">'+x.i+'</span>'+x.m.charAt(0).toUpperCase()+x.m.slice(1)+'</button>';});
-            a.innerHTML+='</div></div>';
-            loadStats();
-        }
-
-        async function loadStats(){
-            if(!window.CRM_Firestore||!window.CRM_Firestore.isAvailable())return;
-            try{var l=await window.CRM_Firestore.countDocuments('leads');var c=await window.CRM_Firestore.countDocuments('clients');var t=await window.CRM_Firestore.countDocuments('tasks',[['status','!=','completed']]);var pr=await window.CRM_Firestore.queryDocuments('payments',{limit:500});var tr=0;(pr.data||[]).forEach(function(p){tr+=(parseInt(p.amount)||0);});
-            var el=function(id,val){var e=$(id);if(e)e.textContent=val;};
-            el('stat-leads',l);el('stat-clients',c);el('stat-tasks',t);el('stat-revenue',formatCurrency(tr));}catch(e){}
-        }
-
-        function renderProfile(a){
-            updateUserUI();var p=APP.userProfile||{};
-            a.innerHTML='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1><div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="'+escHtml(p.displayName||p.name||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" value="'+escHtml(p.email||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="'+escHtml(p.phoneNumber||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="'+escHtml(p.role||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div></div><button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update</button></div>';
-        }
-
-        window.saveProfile=async function(){
-            var n=($('pName')&&$('pName').value||'').trim();var m=($('pMobile')&&$('pMobile').value||'').trim();
-            var uid=APP.userProfile&&APP.userProfile.uid;if(!uid){showToast('Not identified.','error');return;}
-            try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.updateDocument('users',uid,{displayName:n,phoneNumber:m});}
-            APP.userProfile.displayName=n;APP.userProfile.phoneNumber=m;updateUserUI();showToast('✅ Updated!','success');}catch(e){showToast('Error: '+e.message,'error');}
+        
+        var S = {
+            collapsed: false,
+            mobile: false,
+            dark: false,
+            currentPage: 'dashboard',
+            pendingApproval: false,
+            userProfile: null
         };
 
-        function renderSettings(a){
-            a.innerHTML='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Settings</h1><div class="card"><div class="card-header"><span class="card-title">Organization</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><label style="font-weight:600;font-size:0.8rem;">Business Name</label><input type="text" id="setName" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">GSTIN</label><input type="text" id="setGstin" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div></div><button class="btn btn-primary" style="margin-top:10px;" onclick="saveSettings()">💾 Save</button></div><div class="card"><div class="card-header"><span class="card-title">Theme</span></div><button class="btn btn-outline" onclick="toggleTheme()">'+(APP.dark?'☀️ Light':'🌙 Dark')+'</button></div>';
-            loadSettingsData();
-        }
-        async function loadSettingsData(){
-            var tid=window.CRM_Tenant?window.CRM_Tenant.getTenantId():null;if(!tid||!window.CRM_Firestore||!window.CRM_Firestore.isAvailable())return;
-            var t=await window.CRM_Firestore.getDocument('tenants',tid);if(t){$('setName').value=t.name||'';$('setGstin').value=(t.settings&&t.settings.gstin)||'';}
-        }
-        window.saveSettings=async function(){
-            var n=($('setName')&&$('setName').value||'').trim();var g=($('setGstin')&&$('setGstin').value||'').trim();
-            var tid=window.CRM_Tenant?window.CRM_Tenant.getTenantId():null;if(!tid){showToast('No tenant.','error');return;}
-            try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.updateDocument('tenants',tid,{name:n,settings:{gstin:g}});}showToast('✅ Saved!','success');}catch(e){showToast('Error: '+e.message,'error');}
-        };
+        function $(id) { return document.getElementById(id); }
+        function showToast(msg, type) { var t = document.createElement('div'); t.className = 'toast toast-' + (type||'info'); t.textContent = msg; ($('toastContainer')||document.body).appendChild(t); setTimeout(function(){ t.remove(); }, 3000); }
+        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
 
-        async function renderPlatformAdmin(a){
-            if(!APP.userProfile||APP.userProfile.role!=='PLATFORM_OWNER'){a.innerHTML='<div class="card"><p style="text-align:center;padding:40px;">🔒 Access Denied</p></div>';return;}
-            a.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading...</div>';
-            var ar=await window.CRM_Firestore.queryDocuments('users',{filters:[['approvalStatus','==','pending']],limit:50});
-            var approvals=ar.data||[];
-            var html='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">🛡️ Platform Admin</h1>';
-            html+='<div class="stats-grid"><div class="stat-card"><div class="val">'+approvals.length+'</div><div class="lbl">⏳ Pending</div></div></div>';
-            html+='<div class="card"><div class="card-header"><span class="card-title">Approvals</span></div><table><thead><tr><th>Name</th><th>Email</th><th>Actions</th></tr></thead><tbody>';
-            if(approvals.length===0){html+='<tr><td colspan="3" style="text-align:center;">None</td></tr>';}
-            else{approvals.forEach(function(x){html+='<tr><td>'+escHtml(x.displayName||'N/A')+'</td><td>'+escHtml(x.email||'')+'</td><td><button class="btn btn-success btn-sm" onclick="approveUser(\''+(x.id||x.uid)+'\')">✅</button> <button class="btn btn-danger btn-sm" onclick="rejectUser(\''+(x.id||x.uid)+'\')">❌</button></td></tr>';});}
-            html+='</tbody></table></div>';
-            a.innerHTML=html;
-        }
-        window.approveUser=async function(uid){await window.CRM_Firestore.updateDocument('users',uid,{approvalStatus:'approved',status:'active'});showToast('✅ Approved!','success');switchModule('platform-admin');};
-        window.rejectUser=async function(uid){await window.CRM_Firestore.updateDocument('users',uid,{approvalStatus:'rejected'});showToast('Rejected.','info');switchModule('platform-admin');};
-
-        function renderTenantAdmin(a){
-            if(!APP.userProfile||['PLATFORM_OWNER','TENANT_ADMIN','SUB_ADMIN'].indexOf(APP.userProfile.role)===-1){a.innerHTML='<div class="card"><p style="text-align:center;padding:40px;">🔒 Access Denied</p></div>';return;}
-            a.innerHTML='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Tenant Admin</h1><div class="card"><div class="card-header"><span class="card-title">📨 Invite Member</span></div><div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="invEmail"></div><div class="form-group"><label>Role</label><select id="invRole"><option value="MANAGER">Manager</option><option value="EXECUTIVE" selected>Executive</option><option value="VIEWER">Viewer</option></select></div></div><button class="btn btn-primary" onclick="sendInvite()">📨 Send</button></div>';
-        }
-        window.sendInvite=async function(){
-            var em=($('invEmail')&&$('invEmail').value||'').trim();var rl=($('invRole')&&$('invRole').value)||'EXECUTIVE';
-            if(!em){showToast('Email required.','error');return;}
-            if(window.CRM_Tenant&&window.CRM_Tenant.inviteTeamMember){var r=await window.CRM_Tenant.inviteTeamMember({email:em,role:rl});showToast(r.message,r.success?'success':'error');}
-        };
-
-        function renderLeads(a){
-            a.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading...</div>';
-            window.CRM_Firestore.queryDocuments('leads',{limit:50}).then(function(r){
-                var leads=r.data||[];var h='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">👥 Leads</h1><button class="btn btn-primary" onclick="addLead()">➕ New</button></div>';
-                h+='<div class="card" style="padding:0;overflow:hidden;"><table><thead><tr><th>Name</th><th>Mobile</th><th>Status</th></tr></thead><tbody>';
-                leads.forEach(function(l){h+='<tr><td><strong>'+escHtml(l.firstName||'')+'</strong></td><td>'+escHtml(l.mobile||'-')+'</td><td>'+escHtml(l.status||'New')+'</td></tr>';});
-                h+='</tbody></table></div>';a.innerHTML=h;
-            });
-        }
-        window.addLead=async function(){var n=prompt('Name:');if(!n)return;var m=prompt('Mobile:');if(!m)return;await window.CRM_Firestore.createDocument('leads',{firstName:n,mobile:m,status:'New'});showToast('✅ Added!','success');switchModule('leads');};
-
-        function renderPipeline(a){
-            a.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading...</div>';
-            window.CRM_Firestore.queryDocuments('deals',{limit:50}).then(function(r){
-                var deals=r.data||[];var h='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:16px;">📈 Pipeline</h1><div style="display:flex;gap:10px;overflow-x:auto;">';
-                ['new','qualified','proposal','won'].forEach(function(s){var sd=deals.filter(function(d){return d.stage===s;});h+='<div style="min-width:180px;background:var(--bg3);border-radius:12px;padding:10px;"><strong>'+s+' ('+sd.length+')</strong>';sd.forEach(function(d){h+='<div style="background:var(--bg2);padding:6px 8px;border-radius:6px;margin-top:4px;font-size:0.85rem;">'+escHtml(d.name||'Deal')+'</div>';});h+='</div>';});
-                h+='</div>';a.innerHTML=h;
-            });
+        function navigatePage(page) {
+            if (!page || page === S.currentPage) return;
+            S.currentPage = page;
+            $('contentFrame').src = 'pages/' + page + '.html';
+            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.toggle('active', el.dataset.page === page); });
+            document.querySelectorAll('.mobile-nav a').forEach(function(el) { el.classList.toggle('active', el.dataset.page === page); });
+            if (S.mobile) closeMobile();
+            try { localStorage.setItem('crm_last_page', page); } catch(e) {}
         }
 
-        function toggleSidebar(){APP.collapsed=!APP.collapsed;$('sidebar').classList.toggle('collapsed',APP.collapsed);$('sbCollapse').innerHTML=APP.collapsed?'▶':'◀';try{localStorage.setItem('crm_sb',APP.collapsed?'1':'0');}catch(e){}}
-        function openMobile(){APP.mobile=true;$('sidebar').classList.add('mobile-open');$('sbOverlay').classList.add('show');document.body.style.overflow='hidden';}
-        function closeMobile(){APP.mobile=false;$('sidebar').classList.remove('mobile-open');$('sbOverlay').classList.remove('show');document.body.style.overflow='';}
-        function toggleTheme(){APP.dark=!APP.dark;document.documentElement.setAttribute('data-theme',APP.dark?'dark':'light');$('themeBtn').innerHTML=APP.dark?'☀️':'🌙';try{localStorage.setItem('crm_theme',APP.dark?'dark':'light');}catch(e){}}
-        function loadTheme(){var t=localStorage.getItem('crm_theme');APP.dark=t==='dark';document.documentElement.setAttribute('data-theme',APP.dark?'dark':'light');$('themeBtn').innerHTML=APP.dark?'☀️':'🌙';}
-        async function doLogout(){if(window.CRM_Auth&&window.CRM_Auth.logout){await window.CRM_Auth.logout();}else{try{localStorage.clear();}catch(e){}window.location.href='index.html';}}
+        function toggleSidebar() { S.collapsed=!S.collapsed; $('sidebar').classList.toggle('collapsed',S.collapsed); $('sbCollapse').innerHTML=S.collapsed?'▶':'◀'; try{localStorage.setItem('crm_sb',S.collapsed?'1':'0');}catch(e){} }
+        function openMobile() { S.mobile=true; $('sidebar').classList.add('mobile-open'); $('sbOverlay').classList.add('show'); document.body.style.overflow='hidden'; }
+        function closeMobile() { S.mobile=false; $('sidebar').classList.remove('mobile-open'); $('sbOverlay').classList.remove('show'); document.body.style.overflow=''; }
+        function toggleTheme() { S.dark=!S.dark; document.documentElement.setAttribute('data-theme',S.dark?'dark':'light'); $('themeBtn').innerHTML=S.dark?'☀️':'🌙'; try{localStorage.setItem('crm_theme',S.dark?'dark':'light');}catch(e){} }
+        function loadTheme() { var t=localStorage.getItem('crm_theme'); S.dark=t==='dark'; document.documentElement.setAttribute('data-theme',S.dark?'dark':'light'); $('themeBtn').innerHTML=S.dark?'☀️':'🌙'; }
 
-        async function init(){
-            loadTheme();
-            try{if(localStorage.getItem('crm_sb')==='1'){APP.collapsed=true;$('sidebar').classList.add('collapsed');$('sbCollapse').innerHTML='▶';}}catch(e){}
+        function updateUserUI() {
+            var p = S.userProfile;
+            if (!p || !p.role) { try { var ud = localStorage.getItem('crm_user'); if (ud) p = JSON.parse(ud); } catch(e) {} }
+            if (!p) return;
+            S.userProfile = p;
+            var name = p.displayName || p.name || p.email || 'User';
+            var av = name.charAt(0).toUpperCase();
+            var role = p.role || 'User';
+            var elAv = $('sbAvatar'); if (elAv) elAv.textContent = av;
+            var elHd = $('hdrAvatar'); if (elHd) elHd.textContent = av;
+            var elNm = $('sbUserName'); if (elNm) elNm.textContent = name;
+            var elRl = $('sbUserRole'); if (elRl) elRl.textContent = role;
+            if (p.approvalStatus === 'pending') { var b = $('approvalBanner'); if (b) b.classList.add('show'); }
+        }
+
+        function applyRBACFilter() {
+            var p = S.userProfile;
+            if (!p) return;
+            var role = p.role || 'EXECUTIVE';
+            var modules = p.moduleAccess || [];
             
-            if(window.CRM_Auth&&window.CRM_Auth.onAuthStateChange){
-                window.CRM_Auth.onAuthStateChange(async function(s){
-                    if(s.isAuthenticated&&s.authState==='authenticated'){
+            console.log('🔧 RBAC Filter — Role:', role, 'Modules:', modules);
+            
+            document.querySelectorAll('.nav-item[data-module]').forEach(function(el) {
+                var mod = el.dataset.module;
+                if (!mod) return;
+                
+                if (role === 'PLATFORM_OWNER') { el.classList.remove('hidden'); return; }
+                if (mod === 'PLATFORM_ADMIN') { el.classList.add('hidden'); return; }
+                if (mod === 'TENANT_ADMIN') { el.classList.toggle('hidden', ['TENANT_ADMIN','SUB_ADMIN'].indexOf(role) === -1); return; }
+                el.classList.toggle('hidden', modules.indexOf(mod) === -1);
+            });
+            
+            document.querySelectorAll('.nav-sec').forEach(function(sec) {
+                var v = sec.querySelectorAll('.nav-item:not(.hidden)');
+                sec.style.display = v.length === 0 ? 'none' : '';
+            });
+        }
+
+        async function doLogout() { if (window.CRM_Auth && window.CRM_Auth.logout) { await window.CRM_Auth.logout(); } else { try { localStorage.clear(); } catch(e) {} window.location.href = 'index.html'; } }
+
+        async function init() {
+            loadTheme();
+            try { if (localStorage.getItem('crm_sb') === '1') { S.collapsed = true; $('sidebar').classList.add('collapsed'); $('sbCollapse').innerHTML = '▶'; } } catch(e) {}
+            
+            var lastPage = 'dashboard';
+            try { lastPage = localStorage.getItem('crm_last_page') || 'dashboard'; } catch(e) {}
+            $('contentFrame').src = 'pages/' + lastPage + '.html';
+            S.currentPage = lastPage;
+            
+            function cr() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
+            window.addEventListener('resize', cr); cr();
+
+            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
+                window.CRM_Auth.onAuthStateChange(async function(s) {
+                    if (s.isAuthenticated && s.authState === 'authenticated') {
                         console.log('✅ Auth OK');
                         
-                        var fbUser = null;
-                        try{fbUser=window.firebase.auth().currentUser;}catch(e){}
+                        try {
+                            var fbUser = window.firebase.auth().currentUser;
+                            if (fbUser && fbUser.uid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                                var doc = await window.CRM_Firestore.getDocument('users', fbUser.uid);
+                                if (doc && doc.role) {
+                                    S.userProfile = doc;
+                                    console.log('👤 Firestore role:', doc.role);
+                                }
+                            }
+                        } catch(e) { console.error('Firestore fetch error:', e); }
                         
-                        if(fbUser&&fbUser.uid&&window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){
-                            try{
-                                var doc=await window.CRM_Firestore.getDocument('users',fbUser.uid);
-                                if(doc){APP.userProfile=doc;console.log('👤 Role:',doc.role);}
-                            }catch(e){console.error('Firestore fetch error:',e);}
+                        if (!S.userProfile || !S.userProfile.role) {
+                            try {
+                                var cachedUser = localStorage.getItem('crm_user');
+                                if (cachedUser) {
+                                    S.userProfile = JSON.parse(cachedUser);
+                                    console.log('👤 localStorage role:', S.userProfile.role);
+                                }
+                            } catch(e) {}
                         }
                         
-                        if(!APP.userProfile){
-                            try{var ud=localStorage.getItem('crm_user');if(ud)APP.userProfile=JSON.parse(ud);}catch(e){}
-                        }
-                        
-                        if(window.CRM_Tenant&&window.CRM_Tenant.initTenantContext){
-                            try{await window.CRM_Tenant.initTenantContext();}catch(e){}
+                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                            try { await window.CRM_Tenant.initTenantContext(); } catch(e) {}
                         }
                         
                         updateUserUI();
-                        applyRBACFilter();
                         
-                        if(!APP.initialized){APP.initialized=true;switchModule('dashboard');}
-                    }else if(s.authState==='unauthenticated'){
-                        window.location.href='index.html';
+                        if (S.userProfile && S.userProfile.role === 'PLATFORM_OWNER') {
+                            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('hidden'); });
+                            document.querySelectorAll('.nav-sec').forEach(function(sec) { sec.style.display = ''; });
+                            console.log('✅ All modules visible (Platform Owner)');
+                        } else {
+                            applyRBACFilter();
+                        }
+                        
+                        var ls = $('loadingScreen'); if (ls) ls.style.display = 'none';
+                    } else if (s.authState === 'unauthenticated') {
+                        window.location.href = 'index.html';
                     }
                 });
-            }else{
-                try{var ud=localStorage.getItem('crm_user');if(ud){APP.userProfile=JSON.parse(ud);updateUserUI();applyRBACFilter();switchModule('dashboard');return;}}catch(e){}
-                window.location.href='index.html';
+            } else {
+                try { var ud = localStorage.getItem('crm_user'); if (ud) { S.userProfile = JSON.parse(ud); updateUserUI(); } } catch(e) {}
+                $('loadingScreen').style.display = 'none';
             }
-            
-            function cr(){var m=window.innerWidth<=1024;$('mobileMenuBtn').style.display=m?'flex':'none';$('mobileNav').style.display=m?'flex':'none';}
-            window.addEventListener('resize',cr);cr();
         }
-        document.addEventListener('DOMContentLoaded',init);
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
-</html
+</html>
