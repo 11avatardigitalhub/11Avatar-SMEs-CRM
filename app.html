@@ -202,6 +202,22 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        'use strict';
+        if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
+            window.firebase.initializeApp({
+                apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
+                authDomain: "avatar-wa-dual-crm.firebaseapp.com",
+                projectId: "avatar-wa-dual-crm",
+                storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
+                messagingSenderId: "946959261009",
+                appId: "1:946959261009:web:175f5390d63715f1f8c770"
+            });
+            console.log('🔥 Firebase initialized in app.html');
+        }
+    </script>
+
     <script src="js/core/config.js"></script>
     <script src="js/core/auth.js"></script>
     <script src="js/core/firestore.js"></script>
@@ -251,8 +267,11 @@
             var profile = null;
             if (window.CRM_Tenant && window.CRM_Tenant.getUserProfile) profile = window.CRM_Tenant.getUserProfile();
             if (!profile && window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
+            if (!profile) {
+                try { var ud = localStorage.getItem('crm_user'); if (ud) profile = JSON.parse(ud); } catch(e) {}
+            }
             if (!profile) return;
-            var name = profile.displayName || profile.email || 'User';
+            var name = profile.displayName || profile.name || profile.email || 'User';
             var av = name.charAt(0).toUpperCase();
             var role = profile.role || 'User';
             var els = ['sbAvatar', 'hdrAvatar'];
@@ -300,14 +319,36 @@
         }
 
         async function checkAuth() {
-            // Wait for Firebase Auth to initialize
-            var maxRetries = 10;
-            var retryCount = 0;
-            
-            while (retryCount < maxRetries) {
-                if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function') {
-                    if (window.CRM_Auth.isAuthenticated()) {
-                        // Authenticated — proceed
+            // 1. Check Firebase Auth currentUser (fastest)
+            if (window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
+                console.log('✅ Auth: Firebase currentUser found');
+                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                    await window.CRM_Tenant.initTenantContext();
+                }
+                updateUserUI();
+                applyRBACFilter();
+                return;
+            }
+
+            // 2. Check CRM_Auth module
+            if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function' && window.CRM_Auth.isAuthenticated()) {
+                console.log('✅ Auth: CRM_Auth.isAuthenticated() = true');
+                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                    await window.CRM_Tenant.initTenantContext();
+                }
+                updateUserUI();
+                applyRBACFilter();
+                return;
+            }
+
+            // 3. Check localStorage session (offline fallback)
+            try {
+                var userData = localStorage.getItem('crm_user');
+                var tokenData = localStorage.getItem('crm_auth_token');
+                if (userData && tokenData) {
+                    var user = JSON.parse(userData);
+                    if (user && user.uid) {
+                        console.log('✅ Auth: localStorage session found');
                         if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
                             await window.CRM_Tenant.initTenantContext();
                         }
@@ -316,24 +357,35 @@
                         return;
                     }
                 }
-                // Wait and retry
-                await new Promise(function(resolve) { setTimeout(resolve, 500); });
-                retryCount++;
-            }
-            
-            // After 5 seconds, if still not authenticated — check once more
-            if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function') {
-                if (window.CRM_Auth.isAuthenticated()) {
-                    if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                        await window.CRM_Tenant.initTenantContext();
-                    }
-                    updateUserUI();
-                    applyRBACFilter();
-                    return;
+            } catch(e) {}
+
+            // 4. Wait 3 seconds for Firebase Auth to resolve (it may still be initializing)
+            console.log('⏳ Auth: Waiting for Firebase to resolve...');
+            await new Promise(function(resolve) { setTimeout(resolve, 3000); });
+
+            // 5. Check again after waiting
+            if (window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
+                console.log('✅ Auth: Firebase resolved after wait');
+                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                    await window.CRM_Tenant.initTenantContext();
                 }
+                updateUserUI();
+                applyRBACFilter();
+                return;
             }
-            
-            // Still not authenticated — redirect to login
+
+            if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function' && window.CRM_Auth.isAuthenticated()) {
+                console.log('✅ Auth: CRM_Auth resolved after wait');
+                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                    await window.CRM_Tenant.initTenantContext();
+                }
+                updateUserUI();
+                applyRBACFilter();
+                return;
+            }
+
+            // 6. Still not authenticated — redirect
+            console.log('❌ Auth: Not authenticated, redirecting to login');
             window.location.href = 'index.html';
         }
 
@@ -349,7 +401,7 @@
             function checkResp() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
             window.addEventListener('resize', checkResp);
             checkResp();
-            setTimeout(checkAuth, 500);
+            checkAuth().catch(function(err) { console.error('Auth check failed:', err); });
         }
 
         document.addEventListener('DOMContentLoaded', init);
