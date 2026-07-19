@@ -34,12 +34,35 @@ const CRM_Auth = (function() {
     const SESSION_TIMEOUT = 28800000;
     const INACTIVITY_TIMEOUT = 1800000;
 
+    const FIREBASE_CONFIG = {
+        apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
+        authDomain: "avatar-wa-dual-crm.firebaseapp.com",
+        projectId: "avatar-wa-dual-crm",
+        storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
+        messagingSenderId: "946959261009",
+        appId: "1:946959261009:web:175f5390d63715f1f8c770"
+    };
+
     function _getAuth() {
         try {
-            if (!window.firebase || !window.firebase.auth) return null;
-            if (!window.firebase.apps || window.firebase.apps.length === 0) return null;
+            if (!window.firebase || !window.firebase.auth) {
+                console.warn('[CRM_Auth] Firebase SDK not loaded');
+                return null;
+            }
+            if (!window.firebase.apps || window.firebase.apps.length === 0) {
+                if (typeof window.firebase.initializeApp === 'function') {
+                    window.firebase.initializeApp(FIREBASE_CONFIG);
+                    console.log('[CRM_Auth] Firebase auto-initialized');
+                } else {
+                    console.warn('[CRM_Auth] Cannot initialize Firebase');
+                    return null;
+                }
+            }
             return window.firebase.auth();
-        } catch (e) { return null; }
+        } catch (e) {
+            console.error('[CRM_Auth] _getAuth error:', e);
+            return null;
+        }
     }
 
     function _getFirestore() {
