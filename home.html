@@ -128,8 +128,6 @@
         .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
         .btn-success { background: var(--success); color: #FFF; }
         .btn-danger { background: var(--error); color: #FFF; }
-        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
-        .badge-pending { background: #FEF3C7; color: #92400E; }
         table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
         table th { text-align: left; padding: 12px 14px; font-weight: 600; color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg3); border-bottom: 2px solid var(--border); white-space: nowrap; }
         table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
@@ -248,34 +246,37 @@
         'use strict';
         var APP={currentModule:'dashboard',collapsed:false,mobile:false,dark:false,userProfile:null,initialized:false};
         function $(id){return document.getElementById(id);}
-        function showToast(msg,type){var t=document.createElement('div');t.className='toast toast-'+(type||'info');t.innerHTML='<span>'+({success:'✅',error:'❌',info:'ℹ️'}[type]||'')+'</span> '+msg;($('toastContainer')||document.body).appendChild(t);setTimeout(function(){t.style.opacity='0';t.style.transition='0.3s';setTimeout(function(){t.remove();},300);},3000);}
+        function showToast(msg,type){var t=document.createElement('div');t.className='toast toast-'+(type||'info');t.textContent=msg;($('toastContainer')||document.body).appendChild(t);setTimeout(function(){t.remove();},3000);}
         function escHtml(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';}
         function formatCurrency(a){try{return'₹'+parseInt(a||0).toLocaleString('en-IN');}catch(e){return'₹0';}}
         function formatDate(d){if(!d)return'-';try{return new Date(d).toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});}catch(e){return d;}}
 
         function updateUserUI(){
             var p=APP.userProfile;
-            if(!p||!p.role){if(window.CRM_Tenant&&window.CRM_Tenant.getUserProfile){var tp=window.CRM_Tenant.getUserProfile();if(tp&&tp.uid)p=tp;}}
-            if(!p||!p.role){if(window.CRM_Auth&&window.CRM_Auth.getUser){var ap=window.CRM_Auth.getUser();if(ap&&ap.uid)p=ap;}}
             if(!p||!p.uid){try{var ud=localStorage.getItem('crm_user');if(ud)p=JSON.parse(ud);}catch(e){}}
-            if(!p)return;APP.userProfile=p;
-            var name=p.displayName||p.name||p.email||'User';var av=name.charAt(0).toUpperCase();var role=p.role||'User';
-            document.getElementById('sbAvatar').textContent=av;
-            document.getElementById('hdrAvatar').textContent=av;
-            document.getElementById('sbUserName').textContent=name;
-            document.getElementById('sbUserRole').textContent=role;
-            if(p.approvalStatus==='pending'){document.getElementById('approvalBanner').classList.add('show');}
+            if(!p||!p.uid)return;
+            APP.userProfile=p;
+            var name=p.displayName||p.name||p.email||'User';
+            var av=name.charAt(0).toUpperCase();
+            var role=p.role||'User';
+            var elAv=document.getElementById('sbAvatar');if(elAv)elAv.textContent=av;
+            var elHd=document.getElementById('hdrAvatar');if(elHd)elHd.textContent=av;
+            var elNm=document.getElementById('sbUserName');if(elNm)elNm.textContent=name;
+            var elRl=document.getElementById('sbUserRole');if(elRl)elRl.textContent=role;
+            if(p.approvalStatus==='pending'){var b=document.getElementById('approvalBanner');if(b)b.classList.add('show');}
         }
 
         function applyRBACFilter(){
-            var p=APP.userProfile;if(!p)return;
-            var role=p.role||'EXECUTIVE';var modules=p.moduleAccess||[];
+            var p=APP.userProfile;
+            if(!p){return;}
+            var role=p.role||'EXECUTIVE';
+            var modules=p.moduleAccess||[];
             document.querySelectorAll('.nav-item[data-module]').forEach(function(el){
                 var mod=el.dataset.module;if(!mod)return;
-                if(mod==='PLATFORM_ADMIN'){el.classList.toggle('hidden',role!=='PLATFORM_OWNER');return;}
-                if(mod==='TENANT_ADMIN'){el.classList.toggle('hidden',['PLATFORM_OWNER','TENANT_ADMIN','SUB_ADMIN'].indexOf(role)===-1);return;}
-                if(role==='PLATFORM_OWNER'||role==='TENANT_ADMIN'){el.classList.remove('hidden');}
-                else{el.classList.toggle('hidden',modules.indexOf(mod)===-1);}
+                if(role==='PLATFORM_OWNER'){el.classList.remove('hidden');return;}
+                if(mod==='PLATFORM_ADMIN'){el.classList.add('hidden');return;}
+                if(mod==='TENANT_ADMIN'){el.classList.toggle('hidden',['TENANT_ADMIN','SUB_ADMIN'].indexOf(role)===-1);return;}
+                el.classList.toggle('hidden',modules.indexOf(mod)===-1);
             });
             document.querySelectorAll('.nav-sec').forEach(function(sec){var v=sec.querySelectorAll('.nav-item:not(.hidden)');sec.style.display=v.length===0?'none':'';});
         }
@@ -313,7 +314,7 @@
 
         function renderProfile(a){
             updateUserUI();var p=APP.userProfile||{};
-            a.innerHTML='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1><div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="'+escHtml(p.displayName||p.name||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" value="'+escHtml(p.email||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="'+escHtml(p.phoneNumber||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="'+escHtml(p.role||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div></div><button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update</button></div><div class="card"><div class="card-header"><span class="card-title">🔑 Change Password</span></div><div><label style="font-weight:600;font-size:0.8rem;">Current</label><input type="password" id="secCurrent" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;"><div><label style="font-weight:600;font-size:0.8rem;">New</label><input type="password" id="secNew" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Confirm</label><input type="password" id="secConfirm" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div></div><button class="btn btn-primary" style="margin-top:10px;" onclick="changePassword()">🔒 Update</button></div>';
+            a.innerHTML='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1><div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="'+escHtml(p.displayName||p.name||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" value="'+escHtml(p.email||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="'+escHtml(p.phoneNumber||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="'+escHtml(p.role||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div></div><button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update</button></div>';
         }
 
         window.saveProfile=async function(){
@@ -321,11 +322,6 @@
             var uid=APP.userProfile&&APP.userProfile.uid;if(!uid){showToast('Not identified.','error');return;}
             try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.updateDocument('users',uid,{displayName:n,phoneNumber:m});}
             APP.userProfile.displayName=n;APP.userProfile.phoneNumber=m;updateUserUI();showToast('✅ Updated!','success');}catch(e){showToast('Error: '+e.message,'error');}
-        };
-        window.changePassword=async function(){
-            var cp=($('secCurrent')&&$('secCurrent').value)||'';var np=($('secNew')&&$('secNew').value)||'';var cf=($('secConfirm')&&$('secConfirm').value)||'';
-            if(!cp||!np||np!==cf){showToast('Fill correctly.','error');return;}
-            if(window.CRM_Auth&&window.CRM_Auth.changePassword){var r=await window.CRM_Auth.changePassword(cp,np);showToast(r.message,r.success?'success':'error');}
         };
 
         function renderSettings(a){
@@ -398,17 +394,43 @@
         async function init(){
             loadTheme();
             try{if(localStorage.getItem('crm_sb')==='1'){APP.collapsed=true;$('sidebar').classList.add('collapsed');$('sbCollapse').innerHTML='▶';}}catch(e){}
+            
             if(window.CRM_Auth&&window.CRM_Auth.onAuthStateChange){
                 window.CRM_Auth.onAuthStateChange(async function(s){
                     if(s.isAuthenticated&&s.authState==='authenticated'){
-                        var uid=window.firebase.auth().currentUser.uid;
-                        if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){var doc=await window.CRM_Firestore.getDocument('users',uid);if(doc){APP.userProfile=doc;}}
-                        if(window.CRM_Tenant&&window.CRM_Tenant.initTenantContext)await window.CRM_Tenant.initTenantContext();
-                        updateUserUI();applyRBACFilter();
+                        console.log('✅ Auth OK');
+                        
+                        var fbUser = null;
+                        try{fbUser=window.firebase.auth().currentUser;}catch(e){}
+                        
+                        if(fbUser&&fbUser.uid&&window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){
+                            try{
+                                var doc=await window.CRM_Firestore.getDocument('users',fbUser.uid);
+                                if(doc){APP.userProfile=doc;console.log('👤 Role:',doc.role);}
+                            }catch(e){console.error('Firestore fetch error:',e);}
+                        }
+                        
+                        if(!APP.userProfile){
+                            try{var ud=localStorage.getItem('crm_user');if(ud)APP.userProfile=JSON.parse(ud);}catch(e){}
+                        }
+                        
+                        if(window.CRM_Tenant&&window.CRM_Tenant.initTenantContext){
+                            try{await window.CRM_Tenant.initTenantContext();}catch(e){}
+                        }
+                        
+                        updateUserUI();
+                        applyRBACFilter();
+                        
                         if(!APP.initialized){APP.initialized=true;switchModule('dashboard');}
-                    }else if(s.authState==='unauthenticated'){window.location.href='index.html';}
+                    }else if(s.authState==='unauthenticated'){
+                        window.location.href='index.html';
+                    }
                 });
-            }else{window.location.href='index.html';}
+            }else{
+                try{var ud=localStorage.getItem('crm_user');if(ud){APP.userProfile=JSON.parse(ud);updateUserUI();applyRBACFilter();switchModule('dashboard');return;}}catch(e){}
+                window.location.href='index.html';
+            }
+            
             function cr(){var m=window.innerWidth<=1024;$('mobileMenuBtn').style.display=m?'flex':'none';$('mobileNav').style.display=m?'flex':'none';}
             window.addEventListener('resize',cr);cr();
         }
