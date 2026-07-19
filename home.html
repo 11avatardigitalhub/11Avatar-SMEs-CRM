@@ -302,46 +302,41 @@
             function cr() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
             window.addEventListener('resize', cr); cr();
 
-            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
-                window.CRM_Auth.onAuthStateChange(async function(s) {
-                    if (s.isAuthenticated && s.authState === 'authenticated') {
-                        console.log('✅ Auth OK');
-                        
-                        try {
-                            var fbUser = window.firebase.auth().currentUser;
-                            if (fbUser && fbUser.uid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                                var doc = await window.CRM_Firestore.getDocument('users', fbUser.uid);
-                                if (doc && doc.role) {
-                                    S.userProfile = doc;
-                                    console.log('👤 Firestore role:', doc.role);
-                                }
-                            }
-                        } catch(e) { console.error('Firestore fetch error:', e); }
-                        
-                        if (!S.userProfile || !S.userProfile.role) {
-                            try {
-                                var cachedUser = localStorage.getItem('crm_user');
-                                if (cachedUser) {
-                                    S.userProfile = JSON.parse(cachedUser);
-                                    console.log('👤 localStorage role:', S.userProfile.role);
-                                }
-                            } catch(e) {}
-                        }
-                        
-                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                            try { await window.CRM_Tenant.initTenantContext(); } catch(e) {}
-                        }
-                        
-                        updateUserUI();
-                        
-                        if (S.userProfile && S.userProfile.role === 'PLATFORM_OWNER') {
-                            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('hidden'); });
-                            document.querySelectorAll('.nav-sec').forEach(function(sec) { sec.style.display = ''; });
-                            console.log('✅ All modules visible (Platform Owner)');
-                        } else {
-                            applyRBACFilter();
-                        }
-                        
+            if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+            try { await window.CRM_Tenant.initTenantContext(); } catch(e) {}
+            }
+            
+            // 🔥 PEHLE FIRESTORE SE DATA LO
+            if (fbUser && fbUser.uid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                var doc = await window.CRM_Firestore.getDocument('users', fbUser.uid);
+                if (doc && doc.role) {
+                    S.userProfile = doc;
+                    console.log('👤 Firestore role:', doc.role);
+                }
+            }
+            
+            // 🔥 FIR localStorage FALLBACK
+            if (!S.userProfile || !S.userProfile.role) {
+                try {
+                    var cachedUser = localStorage.getItem('crm_user');
+                    if (cachedUser) {
+                        S.userProfile = JSON.parse(cachedUser);
+                        console.log('👤 localStorage role:', S.userProfile.role);
+                    }
+                } catch(e) {}
+            }
+            
+            // 🔥 AB updateUserUI CALL KARO — DATA READY HAI
+            updateUserUI();
+            
+            // 🔥 PLATFORM OWNER = ALL MODULES
+            if (S.userProfile && S.userProfile.role === 'PLATFORM_OWNER') {
+                document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('hidden'); });
+                document.querySelectorAll('.nav-sec').forEach(function(sec) { sec.style.display = ''; });
+                console.log('✅ All modules visible (Platform Owner)');
+            } else {
+                applyRBACFilter();
+            }                        
                         var ls = $('loadingScreen'); if (ls) ls.style.display = 'none';
                     } else if (s.authState === 'unauthenticated') {
                         window.location.href = 'index.html';
