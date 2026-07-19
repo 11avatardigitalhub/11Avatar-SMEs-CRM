@@ -643,4 +643,4 @@ const CRM_Notifications = (function() {
 })();
 
 window.CRM_Notifications = CRM_Notifications;
-console.log('[CRM_Notifications] Module loaded. window.CRM_Notifications available.');
+console.log('[CRM_Notifications] Module loaded. window.CRM_Notifications available.'); 
