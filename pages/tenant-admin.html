@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en-IN" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Tenant Admin — 11 Avatar SMEs CRM</title>
+    <style>
+        :root {
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-light: #E8C95A;
+            --bg: #F8F6F0; --bg2: #FFFFFF; --bg3: #F0EDE5;
+            --text: #0A0A0A; --text2: #333; --text3: #777; --text4: #999;
+            --border: rgba(0,0,0,0.06); --border2: rgba(0,0,0,0.12);
+            --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --radius: 12px; --radius-sm: 8px;
+            --success: #10B981; --error: #DC2626; --warning: #F59E0B; --info: #3B82F6;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font); font-size: 14px; line-height: 1.6;
+            color: var(--text); background: var(--bg);
+            -webkit-font-smoothing: antialiased; min-height: 100vh;
+        }
+        a { color: var(--gold-dark); text-decoration: none; }
+
+        .page-wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+        .page-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+        .page-header h1 { font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .page-header h1 i { color: var(--gold-dark); }
+        .tenant-badge { background: var(--bg3); padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; color: var(--text2); }
+
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .stat-value { font-size: 28px; font-weight: 800; color: var(--text); }
+        .stat-label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+
+        .tab-bar { display: flex; gap: 4px; background: var(--bg3); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; width: fit-content; flex-wrap: wrap; }
+        .tab-btn { padding: 10px 20px; border-radius: var(--radius-sm); border: none; background: transparent; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text3); transition: all 0.2s; white-space: nowrap; min-height: 40px; }
+        .tab-btn.active { background: var(--bg2); color: var(--text); box-shadow: var(--shadow); }
+        .tab-btn:hover:not(.active) { color: var(--text); }
+
+        .card { background: var(--bg2); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .card-header h2 { font-size: 16px; font-weight: 700; }
+        .card-body { padding: 20px; }
+        .card-body.no-padding { padding: 0; }
+
+        .search-box { display: flex; align-items: center; gap: 8px; background: var(--bg3); border-radius: var(--radius-sm); padding: 8px 14px; min-width: 240px; }
+        .search-box input { border: none; background: transparent; font-size: 13px; color: var(--text); outline: none; width: 100%; min-height: 28px; }
+        .search-box i { color: var(--text3); }
+
+        table { width: 100%; border-collapse: collapse; }
+        table thead th { background: var(--bg3); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text3); border-bottom: 2px solid var(--border); white-space: nowrap; }
+        table tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+        table tbody tr:hover { background: rgba(212,175,55,0.03); }
+        table tbody tr:last-child td { border-bottom: none; }
+
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+        .badge-admin { background: #EDE9FE; color: #5B21B6; }
+        .badge-manager { background: #DBEAFE; color: #1E40AF; }
+        .badge-executive { background: #D1FAE5; color: #065F46; }
+        .badge-viewer { background: #F3F4F6; color: #374151; }
+        .badge-active { background: #D1FAE5; color: #065F46; }
+        .badge-inactive { background: #FEE2E2; color: #991B1B; }
+        .badge-pending { background: #FEF3C7; color: #92400E; }
+
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; min-height: 40px; white-space: nowrap; }
+        .btn-sm { padding: 5px 10px; font-size: 11px; min-height: 32px; }
+        .btn-primary { background: var(--gold); color: #000; }
+        .btn-primary:hover { background: var(--gold-light); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { opacity: 0.9; }
+        .btn-danger { background: var(--error); color: #fff; }
+        .btn-danger:hover { opacity: 0.9; }
+        .btn-outline { background: var(--bg2); border: 1.5px solid var(--border2); color: var(--text2); }
+        .btn-outline:hover { border-color: var(--gold); color: var(--gold-dark); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+        .empty-state i { font-size: 40px; display: block; margin-bottom: 12px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 700; font-size: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text3); }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; background: var(--bg2); color: var(--text); min-height: 42px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+
+        .checkbox-group { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 8px; }
+        .checkbox-item { display: flex; align-items: center; gap: 8px; font-size: 13px; padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border); cursor: pointer; }
+        .checkbox-item:hover { background: var(--bg3); }
+        .checkbox-item input { width: 16px; height: 16px; accent-color: var(--gold); }
+
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 9999; display: flex; align-items: center; justify-content: center; }
+        .modal { background: var(--bg2); border-radius: var(--radius); padding: 28px; width: 90%; max-width: 560px; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
+        .modal h3 { font-size: 18px; font-weight: 700; margin-bottom: 20px; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+        .toast { position: fixed; top: 20px; right: 20px; z-index: 99999; padding: 12px 20px; border-radius: var(--radius-sm); color: #fff; font-weight: 600; font-size: 13px; box-shadow: var(--shadow-md); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--error); }
+
+        @media (max-width: 768px) {
+            .page-wrap { padding: 16px; }
+            .form-row { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            .checkbox-group { grid-template-columns: 1fr 1fr; }
+            table { font-size: 12px; }
+            table thead th, table tbody td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <div class="page-header">
+            <h1><span>⚙️</span> Tenant Admin Panel</h1>
+            <div style="display:flex;gap:8px;align-items:center;">
+                <span class="tenant-badge" id="tenantBadge">🏢 Loading...</span>
+                <button class="btn btn-outline btn-sm" onclick="refreshData()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card"><div class="stat-value" id="statTotal">0</div><div class="stat-label">Team Members</div></div>
+            <div class="stat-card"><div class="stat-value" id="statActive">0</div><div class="stat-label">Active</div></div>
+            <div class="stat-card"><div class="stat-value" id="statAdmins">0</div><div class="stat-label">Admins/Managers</div></div>
+            <div class="stat-card"><div class="stat-value" id="statExecutives">0</div><div class="stat-label">Executives</div></div>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab-btn active" data-tab="team">👥 Team Members</button>
+            <button class="tab-btn" data-tab="invite">📨 Invite Member</button>
+            <button class="tab-btn" data-tab="modules">🔐 Module Access</button>
+            <button class="tab-btn" data-tab="settings">⚙️ Tenant Settings</button>
+        </div>
+
+        <div id="tabTeam" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Team Members</h2>
+                    <div class="search-box"><i>🔍</i><input type="text" id="searchTeam" placeholder="Search members..." oninput="renderTeam()"></div>
+                </div>
+                <div class="card-body no-padding">
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th></tr></thead>
+                            <tbody id="teamTableBody"><tr><td colspan="6"><div class="empty-state"><i>👥</i><p>Loading...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabInvite" class="tab-content" style="display:none;">
+            <div class="card">
+                <div class="card-header"><h2>Invite Team Member</h2></div>
+                <div class="card-body">
+                    <form id="inviteForm" onsubmit="sendInvite(event)">
+                        <div class="form-row">
+                            <div class="form-group"><label>Email Address *</label><input type="email" id="inviteEmail" required placeholder="colleague@company.com"></div>
+                            <div class="form-group"><label>Role *</label>
+                                <select id="inviteRole">
+                                    <option value="SUB_ADMIN">Sub Admin</option>
+                                    <option value="MANAGER">Manager</option>
+                                    <option value="TEAM_LEADER">Team Leader</option>
+                                    <option value="EXECUTIVE" selected>Executive</option>
+                                    <option value="VIEWER">Viewer</option>
+                                    <option value="RESTRICTED">Restricted</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group"><label>Module Access</label>
+                            <div class="checkbox-group" id="inviteModules"></div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">📨 Send Invitation</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabModules" class="tab-content" style="display:none;">
+            <div class="card">
+                <div class="card-header"><h2>Default Module Access for New Users</h2></div>
+                <div class="card-body">
+                    <div class="checkbox-group" id="defaultModules"></div>
+                    <button class="btn btn-primary" style="margin-top:16px;" onclick="saveDefaultModules()">💾 Save Default Modules</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabSettings" class="tab-content" style="display:none;">
+            <div class="card">
+                <div class="card-header"><h2>Tenant Settings</h2></div>
+                <div class="card-body">
+                    <form id="settingsForm" onsubmit="saveTenantSettings(event)">
+                        <div class="form-row">
+                            <div class="form-group"><label>Organization Name</label><input type="text" id="setName" placeholder="Your business name"></div>
+                            <div class="form-group"><label>Plan</label>
+                                <select id="setPlan"><option value="free">Free</option><option value="starter">Starter (₹499)</option><option value="professional">Professional (₹1499)</option><option value="enterprise">Enterprise</option></select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group"><label>GSTIN</label><input type="text" id="setGstin" placeholder="22AAAAA0000A1Z5"></div>
+                            <div class="form-group"><label>PAN</label><input type="text" id="setPan" placeholder="AAAAA0000A"></div>
+                        </div>
+                        <div class="form-group"><label>Address</label><textarea id="setAddress" placeholder="Business address" rows="2"></textarea></div>
+                        <div class="form-row">
+                            <div class="form-group"><label>Currency</label><input type="text" id="setCurrency" value="₹"></div>
+                            <div class="form-group"><label>Timezone</label>
+                                <select id="setTimezone"><option value="Asia/Kolkata">Asia/Kolkata (IST)</option><option value="Asia/Dubai">Asia/Dubai</option><option value="America/New_York">America/New_York</option><option value="Europe/London">Europe/London</option></select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">💾 Save Settings</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="editModal" style="display:none;" onclick="if(event.target===this)closeEditModal()">
+        <div class="modal">
+            <h3>✏️ Edit Member Role</h3>
+            <form id="editForm" onsubmit="saveMemberEdit(event)">
+                <input type="hidden" id="editMemberId">
+                <div class="form-group"><label>New Role</label>
+                    <select id="editMemberRole">
+                        <option value="SUB_ADMIN">Sub Admin</option>
+                        <option value="MANAGER">Manager</option>
+                        <option value="TEAM_LEADER">Team Leader</option>
+                        <option value="EXECUTIVE">Executive</option>
+                        <option value="VIEWER">Viewer</option>
+                        <option value="RESTRICTED">Restricted</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="closeEditModal()">Cancel</button>
+                    <button type="submit" class="btn btn-primary">💾 Update</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
+    <script>
+        'use strict';
+        var teamMembers = [], currentTenant = null, allModules = ['DASHBOARD','LEADS','PIPELINE','CLIENTS','INVOICES','PAYMENTS','RETAINERS','TASKS','PROJECTS','APPOINTMENTS','WHATSAPP','TRAINING','REFERRALS','REPORTS','NOTIFICATIONS','SETTINGS','PROFILE'];
+
+        function $(id) { return document.getElementById(id); }
+
+        function showToast(msg, type) {
+            var t = document.createElement('div'); t.className = 'toast toast-' + (type || 'success');
+            t.textContent = msg; document.body.appendChild(t);
+            setTimeout(function() { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(function() { t.remove(); }, 300); }, 3000);
+        }
+
+        async function checkAccess() {
+            if (!window.CRM_Auth || !window.CRM_Auth.isAuthenticated || !window.CRM_Auth.isAuthenticated()) {
+                if (window.parent && window.parent.location) window.parent.location.href = '../index.html';
+                return false;
+            }
+            if (!window.CRM_Tenant || !window.CRM_Tenant.hasMinRole || !window.CRM_Tenant.hasMinRole('TENANT_ADMIN')) {
+                showToast('Access denied. Tenant Admin or above required.', 'error');
+                setTimeout(function() { if (window.parent) window.parent.navigatePage('dashboard'); }, 1500);
+                return false;
+            }
+            return true;
+        }
+
+        async function loadTeam() {
+            if (window.CRM_Tenant && window.CRM_Tenant.getTeamMembers) {
+                teamMembers = window.CRM_Tenant.getTeamMembers();
+            }
+            if (teamMembers.length === 0) {
+                var tenantId = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
+                if (tenantId) {
+                    var result = await window.CRM_Firestore.queryDocuments('users', { filters: [['tenantId', '==', tenantId]], limit: 200 });
+                    teamMembers = result.data;
+                }
+            }
+            renderTeam();
+            updateStats();
+        }
+
+        async function loadTenantInfo() {
+            currentTenant = window.CRM_Tenant ? window.CRM_Tenant.getTenant() : null;
+            if (!currentTenant) {
+                var tenantId = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
+                if (tenantId) currentTenant = await window.CRM_Firestore.getDocument('tenants', tenantId);
+            }
+            $('tenantBadge').textContent = '🏢 ' + (currentTenant ? currentTenant.name || 'Tenant' : 'Loading...');
+            if (currentTenant) {
+                $('setName').value = currentTenant.name || '';
+                $('setPlan').value = currentTenant.plan || 'free';
+                $('setGstin').value = (currentTenant.settings && currentTenant.settings.gstin) || '';
+                $('setPan').value = (currentTenant.settings && currentTenant.settings.pan) || '';
+                $('setAddress').value = (currentTenant.settings && currentTenant.settings.address) || '';
+                $('setCurrency').value = (currentTenant.settings && currentTenant.settings.currency) || '₹';
+                $('setTimezone').value = (currentTenant.settings && currentTenant.settings.timezone) || 'Asia/Kolkata';
+            }
+            renderModuleCheckboxes();
+        }
+
+        function updateStats() {
+            $('statTotal').textContent = teamMembers.length;
+            $('statActive').textContent = teamMembers.filter(function(m) { return m.status === 'active'; }).length;
+            $('statAdmins').textContent = teamMembers.filter(function(m) { return ['SUB_ADMIN','MANAGER'].indexOf(m.role) !== -1; }).length;
+            $('statExecutives').textContent = teamMembers.filter(function(m) { return m.role === 'EXECUTIVE'; }).length;
+        }
+
+        function renderTeam() {
+            var search = ($('searchTeam') && $('searchTeam').value || '').toLowerCase();
+            var filtered = teamMembers;
+            if (search) filtered = teamMembers.filter(function(m) { return (m.displayName && m.displayName.toLowerCase().indexOf(search) !== -1) || (m.email && m.email.toLowerCase().indexOf(search) !== -1); });
+            var html = '';
+            if (filtered.length === 0) {
+                html = '<tr><td colspan="6"><div class="empty-state"><i>👥</i><p>No team members found.</p></div></td></tr>';
+            } else {
+                filtered.forEach(function(m) {
+                    var roleBadge = m.role === 'SUB_ADMIN' ? 'badge-admin' : (m.role === 'MANAGER' ? 'badge-manager' : (m.role === 'EXECUTIVE' ? 'badge-executive' : 'badge-viewer'));
+                    var statusBadge = m.status === 'active' ? 'badge-active' : 'badge-inactive';
+                    html += '<tr>';
+                    html += '<td><strong>' + escHtml(m.displayName || 'N/A') + '</strong></td>';
+                    html += '<td>' + escHtml(m.email || '') + '</td>';
+                    html += '<td><span class="badge ' + roleBadge + '">' + escHtml(m.role || 'N/A') + '</span></td>';
+                    html += '<td><span class="badge ' + statusBadge + '">' + escHtml(m.status || 'active') + '</span></td>';
+                    html += '<td>' + formatDate(m.createdAt) + '</td>';
+                    html += '<td style="display:flex;gap:6px;">';
+                    html += '<button class="btn btn-outline btn-sm" onclick="openEditModal(\'' + (m.id || m.uid) + '\',\'' + escHtml(m.role || 'EXECUTIVE') + '\')">✏️ Role</button>';
+                    html += '<button class="btn btn-danger btn-sm" onclick="removeMember(\'' + (m.id || m.uid) + '\')">🗑️</button>';
+                    html += '</td></tr>';
+                });
+            }
+            $('teamTableBody').innerHTML = html;
+        }
+
+        function renderModuleCheckboxes() {
+            var defaultModules = (currentTenant && currentTenant.moduleAccess) || ['DASHBOARD','LEADS','PIPELINE','CLIENTS'];
+            var inviteHtml = '';
+            var defaultHtml = '';
+            allModules.forEach(function(mod) {
+                inviteHtml += '<label class="checkbox-item"><input type="checkbox" value="' + mod + '" name="inviteModule"> ' + mod + '</label>';
+                var checked = defaultModules.indexOf(mod) !== -1 ? ' checked' : '';
+                defaultHtml += '<label class="checkbox-item"><input type="checkbox" value="' + mod + '" name="defaultModule"' + checked + '> ' + mod + '</label>';
+            });
+            $('inviteModules').innerHTML = inviteHtml;
+            $('defaultModules').innerHTML = defaultHtml;
+        }
+
+        async function sendInvite(e) {
+            e.preventDefault();
+            var email = $('inviteEmail').value.trim();
+            var role = $('inviteRole').value;
+            var modules = [];
+            document.querySelectorAll('input[name="inviteModule"]:checked').forEach(function(cb) { modules.push(cb.value); });
+            if (!email) { showToast('Email is required.', 'error'); return; }
+            if (window.CRM_Tenant && window.CRM_Tenant.inviteTeamMember) {
+                var result = await window.CRM_Tenant.inviteTeamMember({ email: email, role: role, moduleAccess: modules.length > 0 ? modules : null });
+                if (result.success) { showToast(result.message, 'success'); $('inviteForm').reset(); }
+                else { showToast(result.message, 'error'); }
+            } else {
+                showToast('Invite system unavailable. Use Firebase console.', 'error');
+            }
+        }
+
+        async function saveDefaultModules() {
+            var modules = [];
+            document.querySelectorAll('input[name="defaultModule"]:checked').forEach(function(cb) { modules.push(cb.value); });
+            if (window.CRM_Tenant && window.CRM_Tenant.updateSettings) {
+                var result = await window.CRM_Tenant.updateSettings({ moduleAccess: modules });
+                if (result.success) showToast('Default modules saved.', 'success');
+                else showToast(result.message, 'error');
+            } else {
+                var tenantId = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
+                if (tenantId) {
+                    await window.CRM_Firestore.updateDocument('tenants', tenantId, { moduleAccess: modules });
+                    showToast('Default modules saved.', 'success');
+                }
+            }
+            await loadTenantInfo();
+        }
+
+        async function saveTenantSettings(e) {
+            e.preventDefault();
+            var updates = {
+                name: $('setName').value.trim(),
+                plan: $('setPlan').value,
+                settings: {
+                    gstin: $('setGstin').value.trim(),
+                    pan: $('setPan').value.trim(),
+                    address: $('setAddress').value.trim(),
+                    currency: $('setCurrency').value.trim(),
+                    timezone: $('setTimezone').value,
+                }
+            };
+            if (window.CRM_Tenant && window.CRM_Tenant.updateSettings) {
+                var result = await window.CRM_Tenant.updateSettings(updates);
+                if (result.success) showToast('Settings saved.', 'success');
+                else showToast(result.message, 'error');
+            } else {
+                var tenantId = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
+                if (tenantId) {
+                    await window.CRM_Firestore.updateDocument('tenants', tenantId, updates);
+                    showToast('Settings saved.', 'success');
+                }
+            }
+            await loadTenantInfo();
+        }
+
+        function openEditModal(memberId, currentRole) {
+            $('editMemberId').value = memberId;
+            $('editMemberRole').value = currentRole || 'EXECUTIVE';
+            $('editModal').style.display = 'flex';
+        }
+
+        function closeEditModal() { $('editModal').style.display = 'none'; }
+
+        async function saveMemberEdit(e) {
+            e.preventDefault();
+            var memberId = $('editMemberId').value;
+            var newRole = $('editMemberRole').value;
+            if (window.CRM_Tenant && window.CRM_Tenant.updateMemberRole) {
+                var result = await window.CRM_Tenant.updateMemberRole(memberId, newRole);
+                if (result.success) { showToast('Role updated.', 'success'); closeEditModal(); await loadTeam(); }
+                else { showToast(result.message, 'error'); }
+            } else {
+                await window.CRM_Firestore.updateDocument('users', memberId, { role: newRole });
+                showToast('Role updated.', 'success');
+                closeEditModal();
+                await loadTeam();
+            }
+        }
+
+        async function removeMember(memberId) {
+            if (!confirm('Remove this team member?')) return;
+            if (window.CRM_Tenant && window.CRM_Tenant.removeTeamMember) {
+                var result = await window.CRM_Tenant.removeTeamMember(memberId);
+                if (result.success) { showToast('Member removed.', 'success'); await loadTeam(); }
+                else { showToast(result.message, 'error'); }
+            } else {
+                await window.CRM_Firestore.updateDocument('users', memberId, { tenantId: null, status: 'inactive' });
+                showToast('Member removed.', 'success');
+                await loadTeam();
+            }
+        }
+
+        function formatDate(d) {
+            if (!d) return '-';
+            try { var dt = new Date(d); return dt.toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' }); } catch(e) { return d; }
+        }
+
+        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+
+        async function refreshData() {
+            await Promise.all([loadTeam(), loadTenantInfo()]);
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                var tab = btn.dataset.tab;
+                ['team','invite','modules','settings'].forEach(function(t) { $('tab' + t.charAt(0).toUpperCase() + t.slice(1)).style.display = t === tab ? '' : 'none'; });
+            });
+        });
+
+        (async function init() {
+            var hasAccess = await checkAccess();
+            if (!hasAccess) return;
+            await window.CRM_Firestore.init();
+            if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) await window.CRM_Tenant.initTenantContext();
+            await refreshData();
+        })();
+    </script>
+</body>
+</html>
