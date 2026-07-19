@@ -4,13 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F6F0" />
-    <title>Referrals - 11 Avatar Digital Hub</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="Referrals Management - 11 Avatar SMEs CRM. Multi-level referral tracking with multi-tenant isolation." />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Referrals — 11 Avatar SMEs CRM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../css/crm-design-system.css" />
     <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     
     <style>
         :root {
@@ -18,20 +23,22 @@
             --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            font-family: var(--font-body); font-size: 14px; line-height: 1.6;
             color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
             min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+            overflow-x: hidden;
         }
         
-        .referrals-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 90px; }
+        .referrals-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
         
         .bottom-submenu {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.08);
             box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
             padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
             display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
@@ -39,80 +46,86 @@
         }
         .bottom-submenu::-webkit-scrollbar { display: none; }
         .bottom-tab {
-            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
             padding: 10px 16px; border-radius: 12px; cursor: pointer;
             font-size: 0.7rem; font-weight: 500; color: #777;
-            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
-            border: 1.5px solid transparent; background: transparent;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 70px; min-height: 44px;
+            border: 1.5px solid transparent; background: transparent; justify-content: center;
         }
         .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
         .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
-        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        .bottom-tab .tab-icon { font-size: 1.3rem; line-height: 1; }
         
         .page-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
             padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: var(--card-3d); margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
         
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
+        .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
         .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
         .btn-outline:hover { background: rgba(212,175,55,0.08); }
-        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
-        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
+        .btn-xs { padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; min-height: 30px; }
         .btn-ghost { background: transparent; color: #666; }
         .btn-ghost:hover { background: #F5F5F5; }
         .btn-danger { background: #DC2626; color: #FFF; }
+        .btn-danger:hover { background: #B91C1C; }
         .btn-success { background: #10B981; color: #FFF; }
         
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content { display: none; animation: fadeSlideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         
-        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 375px) { .stats-row { grid-template-columns: 1fr; } }
+        
         .stat-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
             padding: 16px 18px; cursor: pointer; transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
-        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
-        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06); border-color: rgba(212,175,55,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); line-height: 1.2; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
         
-        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
         
         .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
-        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; }
-        .filter-row input:focus { border-color: var(--gold); outline: none; }
-        .filter-row select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; cursor: pointer; min-width: 140px; }
+        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; min-height: 44px; }
+        .filter-row input:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+        .filter-row select { padding: 10px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; background: #FFF; cursor: pointer; min-width: 140px; min-height: 44px; }
         
-        .table-wrap { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; min-width: 800px; }
         table th { text-align: left; padding: 12px 14px; font-weight: 600; color: #666; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: #FAFAFA; border-bottom: 2px solid #F0EDE5; white-space: nowrap; }
-        table td { padding: 12px 14px; border-bottom: 1px solid #F5F5F5; color: #333; }
+        table td { padding: 12px 14px; border-bottom: 1px solid #F5F5F5; color: #333; vertical-align: middle; }
         table tbody tr { transition: background 0.15s ease; cursor: pointer; }
         table tbody tr:hover { background: rgba(212,175,55,0.03); }
         
         .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.7rem; font-weight: 600; white-space: nowrap; }
-        .badge-bronze { background: #FFF7ED; color: #EA580C; }
-        .badge-silver { background: #F5F5F5; color: #666; }
-        .badge-gold { background: #FEF3C7; color: #D97706; }
-        .badge-platinum { background: #EFF6FF; color: #2563EB; }
-        .badge-paid { background: #ECFDF5; color: #059669; }
-        .badge-pending { background: #FEF3C7; color: #D97706; }
+        .badge-bronze { background: #FFF7ED; color: #EA580C; } .badge-silver { background: #F5F5F5; color: #666; }
+        .badge-gold { background: #FEF3C7; color: #D97706; } .badge-platinum { background: #EFF6FF; color: #2563EB; }
+        .badge-converted { background: #ECFDF5; color: #059669; } .badge-pending { background: #FEF3C7; color: #D97706; }
+        .badge-lost { background: #FEE2E2; color: #DC2626; }
         
-        .tbl-actions { display: flex; gap: 3px; }
-        .tbl-btn { width: 30px; height: 30px; border-radius: 7px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; transition: all 0.15s ease; }
-        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
+        .tbl-actions { display: flex; gap: 4px; flex-wrap: wrap; }
+        .tbl-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.15s ease; color: #555; }
+        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; color: #B8960F; transform: scale(1.05); }
+        .tbl-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
         
+        .partner-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+        @media (max-width: 480px) { .partner-grid { grid-template-columns: 1fr; } }
         .partner-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 16px;
             padding: 20px; transition: var(--transition); cursor: pointer;
@@ -120,115 +133,107 @@
         }
         .partner-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
         .partner-card .p-header { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-        .partner-card .p-avatar {
-            width: 48px; height: 48px; border-radius: 50%; background: var(--gold-gradient);
-            color: #000; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1.1rem; flex-shrink: 0;
-        }
-        .partner-card .p-tier { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 10px; }
+        .partner-card .p-avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--gold-gradient); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.1rem; flex-shrink: 0; }
         .partner-card .p-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; font-size: 0.82rem; }
-        .partner-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-        @media(max-width:480px){ .partner-grid{grid-template-columns:1fr;} }
         
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        @media(max-width:600px){ .form-row{grid-template-columns:1fr;} }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: #333; margin-bottom: 4px; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5;
-            border-radius: 10px; font-size: 0.88rem; font-family: 'Inter',sans-serif;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.78rem; color: #333; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; font-family: var(--font-body); background: #FFF; transition: all 0.2s ease; min-height: 44px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
         .form-group textarea { resize: vertical; min-height: 70px; }
         
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
-        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
-        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
-        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastSlideIn 0.3s cubic-bezier(0.68,-0.55,0.265,1.55); display: flex; align-items: center; gap: 10px; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; } .toast-warning { border-left: 4px solid #F59E0B; }
+        @keyframes toastSlideIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
         
-        .empty-state { text-align: center; padding: 50px; color: #999; }
-        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 12px; opacity: 0.5; }
         
-        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
-        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
         .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
         .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
-        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
+        .mt-2 { margin-top: 8px; } .mt-3 { margin-top: 12px; } .mb-2 { margin-bottom: 8px; }
         
-        @media(max-width:768px){ .referrals-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} }
+        @media (max-width: 1920px) { .referrals-container { max-width: 1600px; margin: 0 auto; } }
+        @media (max-width: 1440px) { .referrals-container { max-width: 1300px; } }
+        @media (max-width: 1280px) { .referrals-container { max-width: 100%; } }
+        @media (max-width: 1024px) { .page-header { padding: 20px; } }
+        @media (max-width: 768px) { .referrals-container { padding: 12px; padding-bottom: 100px; } .page-header { padding: 16px; flex-direction: column; text-align: center; } .card { padding: 16px; } }
+        @media (max-width: 425px) { .page-header { padding: 12px; } .btn { padding: 8px 14px; font-size: 0.8rem; } }
     </style>
 </head>
 <body>
 
     <div class="referrals-container">
         
-        <div class="page-header">
+        <header class="page-header" role="banner">
             <div>
                 <h1>🔗 <span class="gold">Referrals</span> & Partners</h1>
-                <p id="referralCountText">Multi-level referral tracking</p>
+                <p id="referralCountText" aria-live="polite">Loading referrals...</p>
             </div>
             <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="Referrals.exportCSV()">📤 Export</button>
-                <button class="btn btn-primary" onclick="Referrals.openReferralForm()">➕ New Referral</button>
+                <button class="btn btn-outline btn-sm" onclick="ReferralsModule.exportCSV()" aria-label="Export referrals">📤 Export</button>
+                <button class="btn btn-primary" onclick="ReferralsModule.openReferralForm()" aria-label="Add new referral">➕ New Referral</button>
             </div>
-        </div>
+        </header>
         
-        <div class="stats-row">
-            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">Total Referrals</div></div>
+        <div class="stats-row" role="region" aria-label="Referral statistics">
+            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">📋 Total</div></div>
             <div class="stat-card"><div class="val" id="stat-converted" style="color:#059669;">0</div><div class="lbl">✅ Converted</div></div>
             <div class="stat-card"><div class="val" id="stat-commission" style="color:#D4AF37;">₹0</div><div class="lbl">💰 Commission</div></div>
-            <div class="stat-card"><div class="val" id="stat-partners">0</div><div class="lbl">🤝 Active Partners</div></div>
+            <div class="stat-card"><div class="val" id="stat-partners">0</div><div class="lbl">🤝 Partners</div></div>
         </div>
         
-        <!-- TAB: Referrals -->
-        <div id="tab-referrals" class="tab-content active">
+        <div id="tab-referrals" class="tab-content active" role="tabpanel" aria-label="Referrals list">
             <div class="filter-row">
-                <input type="search" id="searchInput" placeholder="🔍 Search referrals..." oninput="Referrals.search=this.value;Referrals.render()">
-                <select id="filterStatus" onchange="Referrals.filterStatus=this.value;Referrals.render()">
+                <input type="search" id="searchInput" placeholder="🔍 Search referrals..." aria-label="Search referrals" oninput="ReferralsModule.setSearch(this.value)">
+                <select id="filterStatusSelect" aria-label="Filter by status" onchange="ReferralsModule.setStatusFilter(this.value)">
                     <option value="">All Status</option><option value="Pending">Pending</option><option value="Converted">Converted</option><option value="Lost">Lost</option>
                 </select>
-                <button class="btn btn-ghost btn-sm" onclick="Referrals.clearFilters()">✕ Clear</button>
+                <button class="btn btn-ghost btn-sm" onclick="ReferralsModule.clearFilters()" aria-label="Clear filters">✕ Clear</button>
             </div>
             <div class="card" style="padding:0;overflow:hidden;">
                 <div class="table-wrap">
-                    <table>
-                        <thead><tr><th>Referral</th><th>Referred By</th><th>Mobile</th><th>Business</th><th>Date</th><th>Commission</th><th>Status</th><th style="min-width:100px;">Actions</th></tr></thead>
+                    <table aria-label="Referrals table">
+                        <thead><tr><th>Referral</th><th>Referred By</th><th>Mobile</th><th>Business</th><th>Date</th><th>Commission</th><th>Status</th><th>Actions</th></tr></thead>
                         <tbody id="referralTableBody"></tbody>
                     </table>
                 </div>
             </div>
         </div>
         
-        <!-- TAB: Partners -->
-        <div id="tab-partners" class="tab-content">
+        <div id="tab-partners" class="tab-content" role="tabpanel" aria-label="Partners list">
             <div class="partner-grid" id="partnerGrid"></div>
         </div>
         
-        <!-- TAB: Add Referral -->
-        <div id="tab-add" class="tab-content">
+        <div id="tab-form" class="tab-content" role="tabpanel" aria-label="Referral form">
             <div class="card" style="max-width:700px;">
                 <div class="card-header"><span class="card-title">➕ New Referral</span></div>
-                <form id="referralForm" onsubmit="Referrals.saveReferral(event)">
+                <form id="referralForm" onsubmit="return ReferralsModule.saveReferral(event)" novalidate>
                     <div class="form-row">
-                        <div class="form-group"><label>Referral Name *</label><input type="text" id="rName" required></div>
-                        <div class="form-group"><label>Mobile</label><input type="tel" id="rMobile" maxlength="10"></div>
+                        <div class="form-group"><label for="rName">Referral Name <span style="color:#DC2626;">*</span></label><input type="text" id="rName" required></div>
+                        <div class="form-group"><label for="rMobile">Mobile</label><input type="tel" id="rMobile" maxlength="10"></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label>Business</label><input type="text" id="rBusiness"></div>
-                        <div class="form-group"><label>Referred By (Partner)</label><select id="rPartner"><option value="">Select Partner...</option></select></div>
+                        <div class="form-group"><label for="rBusiness">Business</label><input type="text" id="rBusiness"></div>
+                        <div class="form-group"><label for="rPartner">Referred By (Partner)</label><select id="rPartner"><option value="">Select Partner...</option></select></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label>Commission (₹)</label><input type="number" id="rCommission" min="0" value="0"></div>
-                        <div class="form-group"><label>Commission %</label><input type="number" id="rCommissionPct" min="0" max="100" value="10"></div>
+                        <div class="form-group"><label for="rCommission">Commission (₹)</label><input type="number" id="rCommission" min="0" value="0"></div>
+                        <div class="form-group"><label for="rCommissionPct">Commission %</label><input type="number" id="rCommissionPct" min="0" max="100" value="10"></div>
                     </div>
                     <div class="form-row">
-                        <div class="form-group"><label>Status</label><select id="rStatus"><option value="Pending">Pending</option><option value="Converted">Converted</option><option value="Lost">Lost</option></select></div>
-                        <div class="form-group"><label>Date</label><input type="date" id="rDate"></div>
+                        <div class="form-group"><label for="rStatus">Status</label><select id="rStatus"><option value="Pending">Pending</option><option value="Converted">Converted</option><option value="Lost">Lost</option></select></div>
+                        <div class="form-group"><label for="rDate">Date</label><input type="date" id="rDate"></div>
                     </div>
-                    <div class="form-group"><label>Notes</label><textarea id="rNotes" rows="2"></textarea></div>
+                    <div class="form-group"><label for="rNotes">Notes</label><textarea id="rNotes" rows="2"></textarea></div>
                     <div class="flex gap-2 mt-2">
                         <button type="submit" class="btn btn-primary">💾 Save Referral</button>
-                        <button type="button" class="btn btn-outline" onclick="Referrals.currentTab='referrals';Referrals.render()">Cancel</button>
+                        <button type="button" class="btn btn-outline" onclick="ReferralsModule.switchTab('referrals')">Cancel</button>
                     </div>
                 </form>
             </div>
@@ -236,220 +241,138 @@
         
     </div>
     
-    <!-- Bottom Submenu -->
-    <div class="bottom-submenu">
-        <div class="bottom-tab active" onclick="Referrals.currentTab='referrals';Referrals.render()"><span class="tab-icon">📋</span> Referrals</div>
-        <div class="bottom-tab" onclick="Referrals.currentTab='partners';Referrals.render()"><span class="tab-icon">🤝</span> Partners</div>
-        <div class="bottom-tab" onclick="Referrals.currentTab='add';Referrals.render()"><span class="tab-icon">➕</span> Add</div>
-        <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
-        <div class="bottom-tab" onclick="window.location.href='leads.html'"><span class="tab-icon">👥</span> Leads</div>
-    </div>
+    <nav class="bottom-submenu" role="navigation" aria-label="Referrals navigation">
+        <button class="bottom-tab active" data-tab="referrals" onclick="ReferralsModule.switchTab('referrals')" aria-current="page"><span class="tab-icon">📋</span> Referrals</button>
+        <button class="bottom-tab" data-tab="partners" onclick="ReferralsModule.switchTab('partners')"><span class="tab-icon">🤝</span> Partners</button>
+        <button class="bottom-tab" data-tab="form" onclick="ReferralsModule.openReferralForm()"><span class="tab-icon">➕</span> Add</button>
+    </nav>
 
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
 
     <script>
         'use strict';
         
-        var Referrals = {
-            currentTab: 'referrals',
-            search: '',
-            filterStatus: '',
+        const ReferralsModule = (function() {
             
-            init: function() {
-                this.data = JSON.parse(localStorage.getItem('crm_referrals') || '[]');
-                this.partners = JSON.parse(localStorage.getItem('crm_partners') || '[]');
-                if (this.data.length === 0) this.seedData();
-                this.loadPartners();
-                this.render();
-            },
+            let _referrals = [];
+            let _partners = [];
+            let _clients = [];
+            let _currentTab = 'referrals';
+            let _searchQuery = '';
+            let _statusFilter = '';
+            let _isLoading = false;
             
-            seedData: function() {
-                this.data = [
-                    { id:'REF001',name:'Suresh Patel',mobile:'9988776655',business:'Patel Industries',partner:'Rajesh Kumar',partnerId:'CL001',date:'2025-01-15',commission:5000,commissionPct:10,status:'Converted',notes:'Converted to SEO client',created:new Date().toISOString() },
-                    { id:'REF002',name:'Meena Desai',mobile:'8877665544',business:'Desai Enterprises',partner:'Priya Sharma',partnerId:'CL002',date:'2025-01-22',commission:3000,commissionPct:10,status:'Pending',notes:'Follow-up scheduled',created:new Date().toISOString() },
-                    { id:'REF003',name:'Vikram Singh',mobile:'9811122233',business:'ABC Corporation',partner:'Amit Patel',partnerId:'CL003',date:'2025-01-10',commission:8000,commissionPct:10,status:'Converted',notes:'Big deal closed',created:new Date().toISOString() }
-                ];
-                this.partners = [
-                    { id:'CL001',name:'Rajesh Kumar',tier:'Gold',totalRefs:12,convertedRefs:8,totalCommission:45000,joined:'2024-06-01' },
-                    { id:'CL002',name:'Priya Sharma',tier:'Silver',totalRefs:5,convertedRefs:3,totalCommission:12000,joined:'2024-09-15' },
-                    { id:'CL003',name:'Amit Patel',tier:'Platinum',totalRefs:20,convertedRefs:15,totalCommission:85000,joined:'2024-03-01' }
-                ];
-                this.save();
-            },
+            const $ = function(id) { return document.getElementById(id); };
             
-            save: function() {
-                try { localStorage.setItem('crm_referrals', JSON.stringify(this.data)); } catch(e) {}
-                try { localStorage.setItem('crm_partners', JSON.stringify(this.partners)); } catch(e) {}
-            },
+            function showToast(message, type) {
+                try { type = type || 'info'; const container = $('toastContainer') || document.body; const toast = document.createElement('div'); toast.className = 'toast toast-' + type; toast.setAttribute('role', 'alert'); toast.innerHTML = '<span>' + ({ success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' }[type] || '') + '</span> ' + escapeHtml(message); container.appendChild(toast); setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(120%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300); }, 3500); } catch (error) {}
+            }
             
-            loadPartners: function() {
-                var sel = document.getElementById('rPartner');
-                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
-                if (sel) sel.innerHTML = '<option value="">Select Partner...</option>' + clients.map(function(c){ return '<option value="'+c.id+'">'+c.name+'</option>'; }).join('');
-            },
+            function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+            function formatCurrency(amount) { try { return '₹' + parseInt(amount || 0).toLocaleString('en-IN'); } catch(e) { return '₹0'; } }
+            function formatDate(dateInput) { if (!dateInput) return '-'; try { const d = new Date(dateInput); return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); } catch(e) { return '-'; } }
             
-            getFiltered: function() {
-                var self = this;
-                return this.data.filter(function(r) {
-                    if (self.search && !(r.name?.toLowerCase().includes(self.search)||r.partner?.toLowerCase().includes(self.search)||r.business?.toLowerCase().includes(self.search))) return false;
-                    if (self.filterStatus && r.status !== self.filterStatus) return false;
-                    return true;
-                });
-            },
+            async function checkAccess() {
+                try { if (!window.CRM_Auth || typeof window.CRM_Auth.isAuthenticated !== 'function') { showToast('Auth unavailable.', 'error'); return false; } if (!window.CRM_Auth.isAuthenticated()) { if (window.parent && window.parent.location) window.parent.location.href = '../index.html'; return false; } if (window.CRM_Tenant && typeof window.CRM_Tenant.canAccessModule === 'function' && !window.CRM_Tenant.canAccessModule('REFERRALS')) { showToast('Access denied.', 'error'); if (window.parent && window.parent.navigatePage) window.parent.navigatePage('dashboard'); return false; } return true; } catch (error) { return false; }
+            }
             
-            getPartnerTier: function(p) {
-                if (p.totalRefs >= 15) return 'Platinum';
-                if (p.totalRefs >= 10) return 'Gold';
-                if (p.totalRefs >= 5) return 'Silver';
-                return 'Bronze';
-            },
+            async function loadData() {
+                try { _isLoading = true; if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) { render(); return; } const [refResult, partnerResult, clientResult] = await Promise.all([ window.CRM_Firestore.queryDocuments('referrals', { orderBy: 'createdAt', orderDir: 'desc', limit: 500 }), window.CRM_Firestore.queryDocuments('referral_partners', { orderBy: 'totalRefs', orderDir: 'desc', limit: 200 }), window.CRM_Firestore.queryDocuments('clients', { orderBy: 'name', orderDir: 'asc', limit: 300 }) ]); _referrals = refResult.data || []; _partners = partnerResult.data || []; _clients = clientResult.data || []; console.log('[ReferralsModule] Loaded ' + _referrals.length + ' referrals, ' + _partners.length + ' partners'); render(); } catch (error) { showToast('Failed to load data.', 'error'); render(); } finally { _isLoading = false; }
+            }
             
-            getTierBadge: function(tier) {
-                var map = {Bronze:'badge-bronze',Silver:'badge-silver',Gold:'badge-gold',Platinum:'badge-platinum'};
-                return map[tier] || 'badge-silver';
-            },
+            function getPartnerTier(partner) {
+                const refs = partner.totalRefs || 0; if (refs >= 15) return 'Platinum'; if (refs >= 10) return 'Gold'; if (refs >= 5) return 'Silver'; return 'Bronze';
+            }
             
-            render: function() {
-                var tabs = ['referrals','partners','add'];
-                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
-                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Referrals.currentTab);
-                });
-                
-                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-                var tabEl = document.getElementById('tab-' + this.currentTab);
-                if (tabEl) tabEl.classList.add('active');
-                
-                var totalCommission = this.data.filter(function(r){return r.status==='Converted';}).reduce(function(s,r){return s+(parseInt(r.commission)||0);},0);
-                document.getElementById('stat-total').textContent = this.data.length;
-                document.getElementById('stat-converted').textContent = this.data.filter(function(r){return r.status==='Converted';}).length;
-                document.getElementById('stat-commission').textContent = '₹' + totalCommission.toLocaleString('en-IN');
-                document.getElementById('stat-partners').textContent = this.partners.length;
-                document.getElementById('referralCountText').textContent = this.data.length + ' referrals · ' + this.partners.length + ' partners';
-                
-                if (this.currentTab === 'referrals') this.renderTable();
-                if (this.currentTab === 'partners') this.renderPartners();
-                if (this.currentTab === 'add') this.loadPartners();
-            },
+            function getTierBadgeClass(tier) { return { Bronze: 'badge-bronze', Silver: 'badge-silver', Gold: 'badge-gold', Platinum: 'badge-platinum' }[tier] || 'badge-silver'; }
             
-            renderTable: function() {
-                var filtered = this.getFiltered();
-                var tbody = document.getElementById('referralTableBody');
-                var self = this;
-                
-                tbody.innerHTML = filtered.length === 0 ? '<tr><td colspan="8"><div class="empty-state"><p>No referrals found</p></div></td></tr>' :
-                    filtered.map(function(r) {
-                        return '<tr>'+
-                            '<td><strong>'+self.esc(r.name)+'</strong></td>'+
-                            '<td>'+self.esc(r.partner)+'</td>'+
-                            '<td>'+self.esc(r.mobile||'-')+'</td>'+
-                            '<td>'+self.esc(r.business||'-')+'</td>'+
-                            '<td>'+self.fd(r.date)+'</td>'+
-                            '<td><strong style="color:#059669;">₹'+parseInt(r.commission||0).toLocaleString('en-IN')+'</strong> ('+r.commissionPct+'%)</td>'+
-                            '<td><span class="badge '+(r.status==='Converted'?'badge-paid':'badge-pending')+'">'+r.status+'</span></td>'+
-                            '<td><div class="tbl-actions">'+
-                                '<button class="tbl-btn" onclick="Referrals.convertReferral(\''+r.id+'\')" title="Convert">✅</button>'+
-                                '<button class="tbl-btn" onclick="Referrals.deleteReferral(\''+r.id+'\')" style="color:#DC2626;" title="Delete">🗑️</button>'+
-                            '</div></td></tr>';
-                    }).join('');
-            },
+            function updateStats() {
+                try { const totalCommission = _referrals.filter(function(r) { return r.status === 'Converted'; }).reduce(function(s, r) { return s + (parseInt(r.commission) || 0); }, 0); $('stat-total').textContent = _referrals.length; $('stat-converted').textContent = _referrals.filter(function(r) { return r.status === 'Converted'; }).length; $('stat-commission').textContent = formatCurrency(totalCommission); $('stat-partners').textContent = _partners.length; $('referralCountText').textContent = _referrals.length + ' referrals · ' + _partners.length + ' partners'; } catch (error) {}
+            }
             
-            renderPartners: function() {
-                var self = this;
-                var grid = document.getElementById('partnerGrid');
-                
-                grid.innerHTML = this.partners.length === 0 ? '<div class="empty-state"><div class="empty-icon">🤝</div><p>No partners yet</p></div>' :
-                    this.partners.map(function(p) {
-                        var tier = self.getPartnerTier(p);
-                        var tierBadge = self.getTierBadge(tier);
-                        return '<div class="partner-card">'+
-                            '<div class="p-header"><div class="p-avatar">'+p.name.charAt(0)+'</div><div><strong>'+self.esc(p.name)+'</strong><br><span class="text-xs text-muted">Since '+self.fd(p.joined)+'</span></div><span class="p-tier '+tierBadge+'">🏆 '+tier+'</span></div>'+
-                            '<div class="p-stats"><div>📤 <strong>'+p.totalRefs+'</strong><br><span class="text-xs text-muted">Referrals</span></div><div>✅ <strong>'+p.convertedRefs+'</strong><br><span class="text-xs text-muted">Converted</span></div><div>💰 <strong>₹'+parseInt(p.totalCommission).toLocaleString('en-IN')+'</strong><br><span class="text-xs text-muted">Commission</span></div><div>📊 <strong>'+(p.totalRefs>0?Math.round(p.convertedRefs/p.totalRefs*100):0)+'%</strong><br><span class="text-xs text-muted">Conv. Rate</span></div></div>'+
-                        '</div>';
-                    }).join('');
-            },
+            function renderReferrals() {
+                try { const filtered = _referrals.filter(function(r) { if (_searchQuery && !((r.name||'').toLowerCase().indexOf(_searchQuery)!==-1 || (r.partnerName||'').toLowerCase().indexOf(_searchQuery)!==-1 || (r.business||'').toLowerCase().indexOf(_searchQuery)!==-1)) return false; if (_statusFilter && r.status !== _statusFilter) return false; return true; }); const tbody = $('referralTableBody'); if (!tbody) return; const statusBadges = { Converted: 'badge-converted', Pending: 'badge-pending', Lost: 'badge-lost' }; if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="8"><div class="empty-state"><div class="empty-icon">🔗</div><h3>No Referrals Found</h3></div></td></tr>'; return; } tbody.innerHTML = filtered.map(function(r) { return '<tr><td><strong>' + escapeHtml(r.name||'Unknown') + '</strong></td><td>' + escapeHtml(r.partnerName||'-') + '</td><td>' + escapeHtml(r.mobile||'-') + '</td><td>' + escapeHtml(r.business||'-') + '</td><td>' + formatDate(r.referralDate) + '</td><td><strong style="color:#059669;">' + formatCurrency(r.commission) + '</strong> (' + (r.commissionPct||10) + '%)</td><td><span class="badge ' + (statusBadges[r.status]||'badge-pending') + '">' + escapeHtml(r.status||'Pending') + '</span></td><td><div class="tbl-actions"><button class="tbl-btn" onclick="ReferralsModule.convertReferral(\'' + r.id + '\')" title="Convert" aria-label="Convert">✅</button><button class="tbl-btn" onclick="ReferralsModule.deleteReferral(\'' + r.id + '\')" title="Delete" aria-label="Delete" style="color:#DC2626;">🗑️</button></div></td></tr>'; }).join(''); } catch (error) {}
+            }
             
-            openReferralForm: function() { this.currentTab = 'add'; this.render(); },
+            function renderPartners() {
+                try { const grid = $('partnerGrid'); if (!grid) return; if (_partners.length === 0) { grid.innerHTML = '<div class="empty-state"><div class="empty-icon">🤝</div><h3>No Partners Yet</h3></div>'; return; } grid.innerHTML = _partners.map(function(p) { const tier = getPartnerTier(p); const tierBadge = getTierBadgeClass(tier); const convRate = (p.totalRefs||0) > 0 ? Math.round(((p.convertedRefs||0) / (p.totalRefs||1)) * 100) : 0; return '<div class="partner-card"><div class="p-header"><div class="p-avatar">' + (p.name||'P').charAt(0) + '</div><div><strong>' + escapeHtml(p.name||'Unknown') + '</strong><br><span class="text-xs text-muted">Since ' + formatDate(p.joinedDate) + '</span></div><span class="badge ' + tierBadge + '">🏆 ' + tier + '</span></div><div class="p-stats"><div>📤 <strong>' + (p.totalRefs||0) + '</strong><br><span class="text-xs text-muted">Referrals</span></div><div>✅ <strong>' + (p.convertedRefs||0) + '</strong><br><span class="text-xs text-muted">Converted</span></div><div>💰 <strong>' + formatCurrency(p.totalCommission) + '</strong><br><span class="text-xs text-muted">Commission</span></div><div>📊 <strong>' + convRate + '%</strong><br><span class="text-xs text-muted">Conv. Rate</span></div></div></div>'; }).join(''); } catch (error) {}
+            }
             
-            saveReferral: function(e) {
-                e.preventDefault();
-                var partnerId = document.getElementById('rPartner').value;
-                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
-                var partner = clients.find(function(c){return c.id===partnerId;});
-                
-                var d = {
-                    name:document.getElementById('rName').value.trim(),
-                    mobile:document.getElementById('rMobile').value.trim(),
-                    business:document.getElementById('rBusiness').value.trim(),
-                    partner:partner?partner.name:'',
-                    partnerId:partnerId,
-                    date:document.getElementById('rDate').value||new Date().toISOString().split('T')[0],
-                    commission:parseInt(document.getElementById('rCommission').value)||0,
-                    commissionPct:parseInt(document.getElementById('rCommissionPct').value)||10,
-                    status:document.getElementById('rStatus').value,
-                    notes:document.getElementById('rNotes').value.trim()
-                };
-                if (!d.name) { this.toast('Referral name required!','error'); return; }
-                
-                d.id='REF'+String(this.data.length+1).padStart(3,'0'); d.created=new Date().toISOString();
-                this.data.unshift(d);
-                
-                // Update partner stats
-                if (partnerId) {
-                    var p = this.partners.find(function(x){return x.id===partnerId;});
-                    if (p) {
-                        p.totalRefs = (p.totalRefs||0) + 1;
-                        if (d.status === 'Converted') { p.convertedRefs = (p.convertedRefs||0) + 1; p.totalCommission = (p.totalCommission||0) + d.commission; }
-                        p.tier = this.getPartnerTier(p);
-                    } else if (partner) {
-                        this.partners.unshift({ id:partnerId, name:partner.name, tier:'Bronze', totalRefs:1, convertedRefs:d.status==='Converted'?1:0, totalCommission:d.status==='Converted'?d.commission:0, joined:new Date().toISOString().split('T')[0] });
+            function render() { updateStats(); if (_currentTab === 'referrals') renderReferrals(); if (_currentTab === 'partners') renderPartners(); }
+            
+            function openReferralForm() { try { if ($('referralForm')) $('referralForm').reset(); if ($('rDate')) $('rDate').value = new Date().toISOString().split('T')[0]; populatePartnerDropdown(); switchTab('form'); } catch (error) {} }
+            
+            function populatePartnerDropdown() {
+                const sel = $('rPartner'); if (!sel) return;
+                sel.innerHTML = '<option value="">Select Partner...</option>' + _clients.map(function(c) { return '<option value="' + c.id + '">' + escapeHtml(c.name||'') + '</option>'; }).join('');
+            }
+            
+            async function saveReferral(event) {
+                event.preventDefault();
+                try {
+                    const partnerId = ($('rPartner')&&$('rPartner').value)||''; const partner = _clients.find(function(c) { return c.id === partnerId; });
+                    const referralData = { name: ($('rName')&&$('rName').value||'').trim(), mobile: ($('rMobile')&&$('rMobile').value||'').trim(), business: ($('rBusiness')&&$('rBusiness').value||'').trim(), partnerId: partnerId, partnerName: partner?partner.name:'', referralDate: ($('rDate')&&$('rDate').value)||new Date().toISOString().split('T')[0], commission: parseInt(($('rCommission')&&$('rCommission').value)||'0')||0, commissionPct: parseInt(($('rCommissionPct')&&$('rCommissionPct').value)||'10')||10, status: ($('rStatus')&&$('rStatus').value)||'Pending', notes: ($('rNotes')&&$('rNotes').value||'').trim() };
+                    if (!referralData.name) { showToast('Referral name is required.', 'error'); return false; }
+                    if (!window.CRM_Firestore||!window.CRM_Firestore.isAvailable()) { showToast('Database not available.', 'error'); return false; }
+                    await window.CRM_Firestore.createDocument('referrals', referralData);
+                    if (partnerId) {
+                        let partnerDoc = _partners.find(function(p) { return p.id === partnerId; });
+                        if (partnerDoc) {
+                            partnerDoc.totalRefs = (partnerDoc.totalRefs||0)+1;
+                            if (referralData.status==='Converted') { partnerDoc.convertedRefs = (partnerDoc.convertedRefs||0)+1; partnerDoc.totalCommission = (partnerDoc.totalCommission||0)+referralData.commission; }
+                            await window.CRM_Firestore.updateDocument('referral_partners', partnerId, { totalRefs: partnerDoc.totalRefs, convertedRefs: partnerDoc.convertedRefs||0, totalCommission: partnerDoc.totalCommission||0 });
+                        } else if (partner) {
+                            const newPartner = { id: partnerId, name: partner.name, totalRefs: 1, convertedRefs: referralData.status==='Converted'?1:0, totalCommission: referralData.status==='Converted'?referralData.commission:0, joinedDate: new Date().toISOString().split('T')[0] };
+                            await window.CRM_Firestore.createDocument('referral_partners', newPartner);
+                            _partners.unshift(newPartner);
+                        }
                     }
-                }
-                
-                this.save(); this.currentTab='referrals'; this.render();
-                this.toast('✅ Referral created!','success');
-            },
+                    _referrals.unshift(referralData);
+                    if ($('referralForm')) $('referralForm').reset();
+                    showToast('✅ Referral created!', 'success'); switchTab('referrals');
+                } catch (error) { showToast('Failed to save.', 'error'); }
+                return false;
+            }
             
-            convertReferral: function(id) {
-                var r = this.data.find(function(x){return x.id===id;});
-                if (!r) return;
-                r.status = 'Converted';
-                var p = this.partners.find(function(x){return x.id===r.partnerId;});
-                if (p) { p.convertedRefs = (p.convertedRefs||0) + 1; p.totalCommission = (p.totalCommission||0) + (parseInt(r.commission)||0); p.tier = this.getPartnerTier(p); }
-                
-                // Auto-create lead
-                var leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
-                leads.unshift({ id:'LD'+String(leads.length+1).padStart(3,'0'), name:r.name, mobile:r.mobile||'', business:r.business||'', source:'Referral', status:'New', score:60, value:r.commission*10||0, city:'', notes:'Referred by '+r.partner, created:new Date().toISOString(), followup:new Date(Date.now()+2*86400000).toISOString().split('T')[0], timeline:[{type:'created',text:'Lead from referral',time:new Date().toISOString(),user:'System'}] });
-                localStorage.setItem('crm_leads', JSON.stringify(leads));
-                
-                this.save(); this.render();
-                this.toast('✅ Referral converted! Lead created.','success');
-            },
+            async function convertReferral(referralId) {
+                try { const r = _referrals.find(function(x) { return x.id === referralId; }); if (!r) return; if (!window.CRM_Firestore||!window.CRM_Firestore.isAvailable()) return; await window.CRM_Firestore.updateDocument('referrals', referralId, { status: 'Converted' }); r.status = 'Converted'; if (r.partnerId) { const p = _partners.find(function(x) { return x.id === r.partnerId; }); if (p) { p.convertedRefs = (p.convertedRefs||0)+1; p.totalCommission = (p.totalCommission||0)+(parseInt(r.commission)||0); await window.CRM_Firestore.updateDocument('referral_partners', r.partnerId, { convertedRefs: p.convertedRefs, totalCommission: p.totalCommission }); } } const leadData = { firstName: r.name||'', mobile: r.mobile||'', business: r.business||'', source: 'Referral', status: 'New', score: 60, value: (parseInt(r.commission)||0)*10, notes: 'Referred by '+(r.partnerName||''), followup: new Date(Date.now()+2*86400000).toISOString().split('T')[0] }; await window.CRM_Firestore.createDocument('leads', leadData); showToast('✅ Referral converted! Lead created.', 'success'); render(); } catch (error) { showToast('Failed to convert.', 'error'); }
+            }
             
-            deleteReferral: function(id) {
-                if (!confirm('Delete this referral?')) return;
-                this.data = this.data.filter(function(r){return r.id!==id;});
-                this.save(); this.render(); this.toast('🗑️ Referral deleted','info');
-            },
+            async function deleteReferral(referralId) {
+                try { if (!confirm('Delete this referral?')) return; if (!window.CRM_Firestore||!window.CRM_Firestore.isAvailable()) return; await window.CRM_Firestore.deleteDocument('referrals', referralId); _referrals = _referrals.filter(function(r) { return r.id !== referralId; }); showToast('🗑️ Referral deleted.', 'info'); render(); } catch (error) { showToast('Failed to delete.', 'error'); }
+            }
             
-            clearFilters: function() {
-                this.search=''; this.filterStatus='';
-                document.getElementById('searchInput').value=''; document.getElementById('filterStatus').value='';
-                this.render();
-            },
+            function setSearch(query) { _searchQuery = (query||'').toLowerCase(); render(); }
+            function setStatusFilter(status) { _statusFilter = status||''; render(); }
+            function clearFilters() { _searchQuery=''; _statusFilter=''; if ($('searchInput')) $('searchInput').value=''; if ($('filterStatusSelect')) $('filterStatusSelect').value=''; render(); }
             
-            exportCSV: function() {
-                var csv='ID,Name,Partner,Mobile,Business,Date,Commission,Status\n';
-                csv+=this.data.map(function(r){return [r.id,r.name,r.partner,r.mobile,r.business,r.date,r.commission,r.status].map(function(v){return'"'+(v||'')+'"';}).join(',');}).join('\n');
-                var b=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download='referrals.csv'; a.click();
-                this.toast('📤 Exported!','success');
-            },
+            function switchTab(tab) {
+                _currentTab = tab; document.querySelectorAll('.bottom-tab[data-tab]').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.tab===tab); if (btn.dataset.tab===tab) btn.setAttribute('aria-current','page'); else btn.removeAttribute('aria-current'); }); document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); }); const tabEl = $('tab-'+tab); if (tabEl) tabEl.classList.add('active'); render();
+            }
             
-            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
-            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; },
-            fd: function(d){ if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return d;} }
-        };
+            function exportCSV() {
+                try { if (_referrals.length===0) { showToast('No referrals to export.','warning'); return; } const headers = ['ID','Name','Partner','Mobile','Business','Date','Commission','Status']; let csv = headers.join(',')+'\n'; csv += _referrals.map(function(r) { return [r.id,r.name,r.partnerName,r.mobile,r.business,r.referralDate,r.commission,r.status].map(function(v) { return '"'+String(v||'').replace(/"/g,'""')+'"'; }).join(','); }).join('\n'); const blob = new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'}); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href=url; link.download='referrals_export.csv'; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); showToast('📤 Exported!','success'); } catch (error) { showToast('Export failed.','error'); }
+            }
+            
+            async function init() {
+                try { console.log('[ReferralsModule] Initializing...'); const hasAccess = await checkAccess(); if (!hasAccess) return; if (window.CRM_Firestore&&typeof window.CRM_Firestore.init==='function') await window.CRM_Firestore.init(); if (window.CRM_Tenant&&typeof window.CRM_Tenant.initTenantContext==='function') await window.CRM_Tenant.initTenantContext(); await loadData(); console.log('[ReferralsModule] ✅ Ready'); } catch (error) { console.error('[ReferralsModule] Init error:', error); }
+            }
+            
+            return { init, render, switchTab, openReferralForm, saveReferral, convertReferral, deleteReferral, setSearch, setStatusFilter, clearFilters, exportCSV };
+            
+        })();
         
-        document.addEventListener('DOMContentLoaded', function() { Referrals.init(); });
+        window.ReferralsModule = ReferralsModule;
+        document.addEventListener('DOMContentLoaded', function() { ReferralsModule.init().catch(function(error) { console.error('[ReferralsModule] Auto-init failed:', error); }); });
+        console.log('[ReferralsModule] Script loaded. window.ReferralsModule available.');
     </script>
 </body>
 </html>
