@@ -45,24 +45,16 @@ const CRM_Auth = (function() {
 
     function _getAuth() {
         try {
-            if (!window.firebase || !window.firebase.auth) {
-                console.warn('[CRM_Auth] Firebase SDK not loaded');
-                return null;
-            }
+            if (!window.firebase || !window.firebase.auth) return null;
             if (!window.firebase.apps || window.firebase.apps.length === 0) {
                 if (typeof window.firebase.initializeApp === 'function') {
                     window.firebase.initializeApp(FIREBASE_CONFIG);
-                    console.log('[CRM_Auth] Firebase auto-initialized');
                 } else {
-                    console.warn('[CRM_Auth] Cannot initialize Firebase');
                     return null;
                 }
             }
             return window.firebase.auth();
-        } catch (e) {
-            console.error('[CRM_Auth] _getAuth error:', e);
-            return null;
-        }
+        } catch (e) { return null; }
     }
 
     function _getFirestore() {
@@ -187,7 +179,10 @@ const CRM_Auth = (function() {
             }
             var col = CONFIG_READY() ? window.CRM_Config.firebase.collections.USERS : 'users';
             var doc = await db.collection(col).doc(uid).get();
-            if (doc.exists) return Object.assign({ id: doc.id }, doc.data());
+            if (doc.exists) {
+                var data = Object.assign({ id: doc.id }, doc.data());
+                return data;
+            }
             return null;
         } catch (e) {
             var s = _loadSession();
@@ -556,7 +551,33 @@ const CRM_Auth = (function() {
         } catch (e) { return false; }
     }
 
-    function getUser() { return _userProfile; }
+    function getUser() {
+        if (_userProfile && _userProfile.uid && _userProfile.role) {
+            return _userProfile;
+        }
+        try {
+            if (CONFIG_READY()) {
+                var cached = localStorage.getItem(window.CRM_Config.app.storageKeys.USER_DATA);
+                if (cached) {
+                    var p = JSON.parse(cached);
+                    if (p && p.uid && p.role) {
+                        return p;
+                    }
+                }
+            }
+        } catch(e) {}
+        try {
+            var cached2 = localStorage.getItem('crm_user');
+            if (cached2) {
+                var p2 = JSON.parse(cached2);
+                if (p2 && p2.uid && p2.role) {
+                    return p2;
+                }
+            }
+        } catch(e) {}
+        return _userProfile;
+    }
+
     function getTenant() { return _tenantData; }
     function isAuthenticated() { return _isAuthenticated; }
     function getAuthState() { return _authState; }
