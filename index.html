@@ -1,633 +1,469 @@
 <!DOCTYPE html>
-<html lang="en-IN" dir="ltr" data-theme="light">
+<html lang="en" dir="ltr" data-theme="light">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
-    <meta name="description" content="11 Avatar SMEs CRM - Complete Revenue Operating System" />
+    <meta name="description" content="11 Avatar SMEs CRM — India's Most Advanced Multi-Tenant Revenue Operating System. GST Invoicing, WhatsApp CRM, AI Lead Scoring, 17+ Business Modules." />
+    <meta name="keywords" content="SME CRM India, multi-tenant CRM, GST invoicing, WhatsApp CRM, lead management, pipeline CRM, affordable CRM" />
+    <meta name="author" content="11 Avatar Digital Hub" />
     <meta name="theme-color" content="#F8F6F0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="11 Avatar CRM" />
-    <meta name="robots" content="noindex, nofollow" />
+    <meta name="robots" content="index, follow" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="11 Avatar SMEs CRM" />
+    <meta property="og:title" content="11 Avatar SMEs CRM — India's #1 Multi-Tenant Revenue OS" />
+    <meta property="og:description" content="17+ modules, AI-powered, GST-compliant, WhatsApp integrated. Built for Indian SMEs." />
+    <meta property="og:url" content="https://SME.11avatardigitalhub.cloud/" />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="twitter:card" content="summary_large_image" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23D4AF37'/%3E%3Ctext x='50' y='68' font-size='38' text-anchor='middle' fill='%230A0A0A' font-weight='900' font-family='Poppins,sans-serif'%3E11A%3C/text%3E%3C/svg%3E" />
+    <link rel="canonical" href="https://SME.11avatardigitalhub.cloud/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/crm-design-system.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <link rel="stylesheet" href="css/components.css" />
-    <title>11 Avatar SMEs CRM</title>
+    <link rel="stylesheet" href="css/public.css" />
+    <title>11 Avatar SMEs CRM — India's Most Advanced Multi-Tenant Revenue OS</title>
     <style>
         :root {
-            --gold-light: #E8C95A; --gold: #D4AF37; --gold-dark: #B8960F;
+            --bg: #F8F6F0; --bg2: #FFFFFF; --bg3: #F0EDE5; --glass: rgba(255,255,255,0.9);
+            --text: #0A0A0A; --text2: #333; --text3: #777; --text4: #999;
+            --border: rgba(0,0,0,0.06); --border2: rgba(0,0,0,0.12);
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-light: #E8C95A;
             --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --accent: #4F46E5; --accent2: #10B981; --accent3: #F59E0B;
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.04); --shadow: 0 4px 16px rgba(0,0,0,0.06);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.08); --shadow-lg: 0 16px 48px rgba(0,0,0,0.10);
+            --shadow-xl: 0 24px 64px rgba(0,0,0,0.12);
+            --radius-sm: 10px; --radius: 16px; --radius-lg: 24px; --radius-xl: 32px;
+            --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
             --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
-            --radius: 12px; --radius-sm: 8px;
-            --transition: 0.25s ease; --transition-fast: 0.15s ease;
-            --sidebar-w: 260px; --sidebar-collapsed: 64px; --header-h: 60px;
         }
-        [data-theme="light"] {
-            --bg: #F8F6F0; --bg2: #FFFFFF; --bg3: #F0EDE5;
-            --glass: rgba(255,255,255,0.8); --text: #0A0A0A; --text2: #333;
-            --text3: #777; --border: rgba(0,0,0,0.06); --border2: rgba(0,0,0,0.12);
-            --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
-            --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
-            --hover: rgba(212,175,55,0.06); --active: rgba(212,175,55,0.12);
-            --success: #10B981; --error: #DC2626; --warning: #F59E0B; --info: #3B82F6;
-        }
-        [data-theme="dark"] {
-            --bg: #0A0A0A; --bg2: #1A1A1A; --bg3: #252525; --glass: rgba(10,10,10,0.9);
-            --text: #FFFFFF; --text2: #CCCCCC; --text3: #888;
-            --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
-            --shadow: 0 4px 16px rgba(0,0,0,0.5); --shadow-md: 0 8px 32px rgba(0,0,0,0.6);
-            --shadow-lg: 0 12px 48px rgba(0,0,0,0.7);
-            --hover: rgba(255,255,255,0.06); --active: rgba(212,175,55,0.15);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; font-size: 16px; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; font-size:16px; }
         body {
-            font-family: var(--font-body); font-size: 14px; line-height: 1.6;
-            color: var(--text); background: var(--bg); margin: 0; padding: 0;
-            display: flex; min-height: 100vh; overflow-x: hidden;
-            transition: background var(--transition), color var(--transition);
-            -webkit-font-smoothing: antialiased;
+            font-family:var(--font-body); font-size:15px; line-height:1.7;
+            color:var(--text); background:var(--bg); overflow-x:hidden;
+            -webkit-font-smoothing:antialiased;
         }
-        a { color: var(--gold-dark); text-decoration: none; }
-        ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
-        .skip-link { position: fixed; top: -100%; left: 16px; z-index: 9999; padding: 12px 20px; background: var(--gold); color: #000; font-weight: 700; border-radius: 8px; }
-        .skip-link:focus { top: 16px; }
-        .sb { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 300; transition: width var(--transition), transform var(--transition); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
-        .sb.collapsed { width: var(--sidebar-collapsed); }
-        .sb-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; height: var(--header-h); border-bottom: 1px solid var(--border); flex-shrink: 0; }
-        .sb-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
-        .sb-logo svg { width: 34px; height: 34px; flex-shrink: 0; }
-        .sb-brand { font-family: var(--font-heading); font-weight: 800; font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; transition: opacity var(--transition); }
-        .sb-brand-sub { font-size: 9px; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.05em; }
-        .collapsed .sb-brand, .collapsed .sb-brand-sub { opacity: 0; width: 0; }
-        .sb-collapse { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--glass); color: var(--text3); cursor: pointer; font-size: 13px; transition: all var(--transition); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
-        .sb-collapse:hover { background: var(--hover); color: var(--text); border-color: var(--gold); }
-        .sb-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px; }
-        .nav-sec { margin-bottom: 14px; }
-        .nav-sec-title { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 12px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; transition: opacity var(--transition); }
-        .collapsed .nav-sec-title { opacity: 0; height: 0; padding: 0; margin: 0; }
-        .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 500; color: var(--text2); transition: all var(--transition-fast); cursor: pointer; white-space: nowrap; overflow: hidden; min-height: 42px; width: 100%; text-align: left; background: none; border: none; }
-        .nav-item:hover { background: var(--hover); color: var(--text); }
-        .nav-item.active { background: var(--active); color: var(--gold-dark); font-weight: 600; border-left: 3px solid var(--gold); padding-left: 11px; }
-        .nav-item.hidden { display: none !important; }
-        .nav-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
-        .nav-label { overflow: hidden; text-overflow: ellipsis; transition: opacity var(--transition); }
-        .collapsed .nav-label { opacity: 0; width: 0; }
-        .sb-footer { padding: 10px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
-        .sb-user { display: flex; align-items: center; gap: 10px; padding: 6px; border-radius: var(--radius); cursor: pointer; transition: background var(--transition-fast); }
-        .sb-user:hover { background: var(--hover); }
-        .sb-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--gold-gradient); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; font-family: var(--font-heading); }
-        .sb-user-info { overflow: hidden; transition: opacity var(--transition); min-width: 0; }
-        .collapsed .sb-user-info { opacity: 0; width: 0; }
-        .sb-user-name { font-weight: 600; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .sb-user-role { font-size: 10px; color: var(--text3); }
-        .main { flex: 1; margin-left: var(--sidebar-w); display: flex; flex-direction: column; min-height: 100vh; transition: margin-left var(--transition); }
-        .sb.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
-        .main-header { position: sticky; top: 0; z-index: 200; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 14px; flex-shrink: 0; }
-        .main-header .menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; align-items: center; justify-content: center; font-size: 18px; transition: all var(--transition-fast); flex-shrink: 0; }
-        .main-header .brand-text { font-family: var(--font-heading); font-weight: 800; font-size: 16px; color: var(--text); white-space: nowrap; }
-        .main-header .brand-sub { font-size: 9px; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.05em; }
-        .main-header .spacer { flex: 1; }
-        .hdr-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all var(--transition-fast); flex-shrink: 0; text-decoration: none; }
-        .hdr-btn:hover { background: var(--hover); color: var(--text); border-color: var(--gold); }
-        .hdr-profile { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); color: #000; border: none; cursor: pointer; font-weight: 700; font-size: 14px; font-family: var(--font-heading); transition: all var(--transition-fast); flex-shrink: 0; }
-        .hdr-profile:hover { box-shadow: 0 4px 16px rgba(212,175,55,0.35); transform: translateY(-1px); }
-        .content-area { flex: 1; padding: 20px; overflow-y: auto; }
-        .sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; }
-        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 200; padding: 6px 10px; padding-bottom: max(6px, env(safe-area-inset-bottom)); justify-content: space-around; align-items: center; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
-        .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border-radius: 8px; font-size: 10px; color: var(--text3); transition: all var(--transition-fast); min-width: 50px; text-decoration: none; }
-        .mobile-nav a.active { color: var(--gold-dark); font-weight: 600; }
-        .mobile-nav .nav-ic { font-size: 1.2rem; }
-        @media (max-width: 1024px) {
-            .sb { transform: translateX(-100%); width: var(--sidebar-w); }
-            .sb.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
-            .sb-overlay.show { display: block; }
-            .main { margin-left: 0 !important; }
-            .main-header .menu-btn { display: flex; }
-            .mobile-nav { display: flex; }
-            .content-area { padding: 12px; padding-bottom: 70px; }
+        a { text-decoration:none; color:inherit; }
+        ::-webkit-scrollbar { width:6px; } ::-webkit-scrollbar-thumb { background:var(--border2); border-radius:10px; }
+
+        .container { width:min(94%,1280px); margin:auto; }
+
+        .navbar { position:fixed; top:0; left:0; width:100%; z-index:1000; background:var(--glass); backdrop-filter:blur(20px); border-bottom:1px solid var(--border); transition:var(--transition); }
+        .navbar.scrolled { box-shadow:var(--shadow); }
+        .navbar .container { display:flex; justify-content:space-between; align-items:center; height:72px; }
+        .logo { display:flex; align-items:center; gap:10px; font-weight:800; font-size:17px; font-family:var(--font-heading); letter-spacing:-0.3px; }
+        .logo svg { width:40px; height:40px; }
+        .logo .accent { color:var(--gold-dark); }
+        nav { display:flex; gap:20px; align-items:center; }
+        nav a { font-size:13.5px; font-weight:500; color:var(--text3); transition:var(--transition); position:relative; }
+        nav a:hover, nav a.active { color:var(--text); }
+        nav a::after { content:''; position:absolute; bottom:-4px; left:0; width:0; height:2px; background:var(--gold); border-radius:2px; transition:var(--transition); }
+        nav a:hover::after, nav a.active::after { width:100%; }
+        .nav-btns { display:flex; gap:8px; align-items:center; }
+        .hamburger { display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:5px; }
+        .hamburger span { width:24px; height:2px; background:var(--text); transition:var(--transition); border-radius:2px; }
+        .hamburger.active span:nth-child(1) { transform:rotate(45deg) translate(5px,5px); }
+        .hamburger.active span:nth-child(2) { opacity:0; }
+        .hamburger.active span:nth-child(3) { transform:rotate(-45deg) translate(5px,-5px); }
+
+        .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:999px; font-weight:700; font-size:14px; cursor:pointer; transition:var(--transition); border:none; }
+        .btn-primary { background:var(--gold-gradient); color:#0A0A0A; }
+        .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(212,175,55,0.25); }
+        .btn-outline { background:transparent; color:var(--text); border:1.5px solid var(--border2); }
+        .btn-outline:hover { border-color:var(--gold); color:var(--gold-dark); background:rgba(212,175,55,0.04); }
+        .btn-lg { padding:16px 32px; font-size:16px; }
+        .btn-glow { animation:glowPulse 2.5s infinite; }
+        @keyframes glowPulse { 0%,100%{box-shadow:0 0 0 0 rgba(212,175,55,0.3)} 50%{box-shadow:0 0 0 16px rgba(212,175,55,0)} }
+
+        section { padding:100px 0; position:relative; }
+        .section-tag { display:inline-block; padding:8px 18px; border-radius:999px; background:rgba(212,175,55,0.08); color:var(--gold-dark); font-size:13px; font-weight:600; margin-bottom:14px; border:1px solid rgba(212,175,55,0.15); letter-spacing:0.3px; }
+        .section-title { font-size:clamp(36px,5vw,54px); font-weight:900; line-height:1.12; margin-bottom:16px; font-family:var(--font-heading); letter-spacing:-1px; }
+        .section-sub { font-size:17px; color:var(--text3); max-width:650px; margin-bottom:40px; line-height:1.6; }
+        .gold-text { background:linear-gradient(135deg,var(--gold-dark),var(--gold-light)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+
+        .hero { min-height:100vh; display:flex; align-items:center; padding-top:100px; overflow:hidden; }
+        .hero-grid { display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:8px 18px; border-radius:999px; background:rgba(16,185,129,0.08); color:#059669; font-size:13px; font-weight:600; margin-bottom:20px; border:1px solid rgba(16,185,129,0.15); }
+        .hero-badge .dot { width:8px; height:8px; border-radius:50%; background:#10B981; animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+        .hero h1 { font-size:clamp(44px,6vw,72px); font-weight:900; line-height:1.06; font-family:var(--font-heading); letter-spacing:-1.5px; }
+        .hero p { font-size:18px; color:var(--text3); margin:20px 0 28px; line-height:1.7; }
+        .hero-cta { display:flex; gap:12px; flex-wrap:wrap; }
+        .hero-visual { position:relative; }
+        .hero-card {
+            background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+            padding:28px; box-shadow:var(--shadow-lg); position:relative; z-index:2;
         }
-        .approval-banner { background: #FEF3C7; color: #92400E; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #FCD34D; display: none; }
-        .approval-banner.show { display: block; }
-        .loading-screen { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text3); font-size: 16px; gap: 12px; }
-        .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-        .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
-        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); }
-        .stat-card .lbl { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
-        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
-        .btn-primary { background: var(--gold-gradient); color: #FFF; }
-        .btn-outline { background: transparent; color: var(--gold-dark); border: 1.5px solid var(--gold); }
-        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
-        .btn-ghost { background: transparent; color: var(--text2); }
-        .btn-danger { background: var(--error); color: #FFF; }
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
-        .toast { background: var(--bg2); border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 10px; }
-        .toast-success { border-left: 4px solid var(--success); } .toast-error { border-left: 4px solid var(--error); } .toast-info { border-left: 4px solid var(--info); }
-        @keyframes slideIn { from{opacity:0;transform:translateX(120%);} to{opacity:1;transform:translateX(0);} }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+        .hero-card .mock-row { display:flex; gap:8px; margin-bottom:16px; }
+        .hero-card .mock-dot { width:10px; height:10px; border-radius:50%; }
+        .hero-card .mock-line { height:8px; border-radius:4px; background:var(--bg3); }
+        .hero-card .mock-line.gold { background:var(--gold-gradient); }
+        .hero-card .mock-line.accent { background:var(--accent); }
+        .hero-card .mock-chart { display:flex; gap:6px; align-items:flex-end; height:80px; margin-top:16px; }
+        .hero-card .mock-bar { flex:1; border-radius:4px 4px 0 0; min-width:20px; }
+        .hero-glow { position:absolute; width:300px; height:300px; border-radius:50%; filter:blur(80px); opacity:0.3; z-index:1; }
+        .hero-glow.gold { background:var(--gold); top:-40px; right:-40px; }
+        .hero-glow.accent { background:var(--accent); bottom:-40px; left:-40px; opacity:0.15; }
+        .trust-strip { display:flex; gap:40px; margin-top:40px; flex-wrap:wrap; padding-top:24px; border-top:1px solid var(--border); }
+        .trust-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text3); font-weight:500; }
+
+        .modules-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; }
+        .module-card {
+            background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius);
+            padding:24px 16px; text-align:center; transition:var(--transition); cursor:default;
+        }
+        .module-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:rgba(212,175,55,0.2); }
+        .module-card .m-icon { font-size:2rem; margin-bottom:8px; }
+        .module-card .m-name { font-weight:700; font-size:13px; font-family:var(--font-heading); }
+        .module-card .m-desc { font-size:11px; color:var(--text3); margin-top:4px; }
+
+        .stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+        .stat-card {
+            background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+            padding:32px 24px; text-align:center; transition:var(--transition);
+        }
+        .stat-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+        .stat-card .s-val { font-size:clamp(36px,5vw,52px); font-weight:900; font-family:var(--font-heading); color:var(--gold-dark); }
+        .stat-card .s-lbl { font-size:13px; color:var(--text3); text-transform:uppercase; letter-spacing:0.5px; margin-top:4px; }
+
+        .features-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+        .feature-card {
+            background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+            padding:32px 24px; transition:var(--transition);
+        }
+        .feature-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:rgba(212,175,55,0.15); }
+        .feature-card .f-icon { font-size:2.2rem; margin-bottom:14px; }
+        .feature-card h3 { font-size:18px; font-weight:700; font-family:var(--font-heading); margin-bottom:6px; }
+        .feature-card p { font-size:14px; color:var(--text3); line-height:1.6; }
+
+        .pricing-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+        .pricing-card {
+            background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg);
+            padding:36px 24px; text-align:center; transition:var(--transition); position:relative;
+        }
+        .pricing-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+        .pricing-card.featured { border-color:var(--gold); background:linear-gradient(180deg,rgba(212,175,55,0.03),var(--bg2)); box-shadow:var(--shadow-lg); }
+        .popular-badge { position:absolute; top:-14px; left:50%; transform:translateX(-50%); background:var(--gold-gradient); color:#0A0A0A; padding:6px 18px; border-radius:999px; font-size:12px; font-weight:700; }
+        .plan-name { font-size:20px; font-weight:700; font-family:var(--font-heading); }
+        .plan-price { font-size:44px; font-weight:900; font-family:var(--font-heading); color:var(--gold-dark); margin:10px 0; }
+        .plan-price span { font-size:14px; font-weight:400; color:var(--text3); }
+        .pricing-card ul { list-style:none; text-align:left; margin:20px 0; }
+        .pricing-card ul li { padding:7px 0; font-size:13px; color:var(--text3); display:flex; align-items:center; gap:8px; }
+        .pricing-card ul li::before { content:'✓'; color:#10B981; font-weight:700; }
+
+        .cta-section { text-align:center; padding:120px 0; background:linear-gradient(180deg,transparent,rgba(212,175,55,0.04),transparent); }
+        .cta-section h2 { font-size:clamp(44px,6vw,64px); font-weight:900; font-family:var(--font-heading); letter-spacing:-1px; }
+        .cta-section p { font-size:18px; color:var(--text3); margin:16px 0 32px; }
+
+        footer { background:var(--bg2); border-top:1px solid var(--border); padding:60px 0 28px; }
+        .footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr 1fr; gap:32px; margin-bottom:32px; }
+        .footer-brand p { font-size:13px; color:var(--text3); margin-top:8px; }
+        .footer-links h4 { font-size:14px; font-weight:700; margin-bottom:12px; font-family:var(--font-heading); }
+        .footer-links a { display:block; font-size:13px; color:var(--text3); padding:4px 0; transition:var(--transition); }
+        .footer-links a:hover { color:var(--gold-dark); }
+        .footer-bottom { text-align:center; border-top:1px solid var(--border); padding-top:20px; font-size:12px; color:var(--text3); }
+
+        .auth-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.5); backdrop-filter:blur(6px); z-index:9999; display:none; align-items:center; justify-content:center; }
+        .auth-overlay.show { display:flex; }
+        .auth-modal { background:var(--bg2); border:1px solid var(--border); border-radius:var(--radius-lg); padding:36px; width:480px; max-width:92vw; max-height:90vh; overflow-y:auto; box-shadow:var(--shadow-xl); position:relative; }
+        .auth-close { position:absolute; top:14px; right:18px; background:none; border:none; font-size:22px; cursor:pointer; color:var(--text3); }
+        .auth-close:hover { color:var(--text); }
+        .auth-modal h2 { font-size:26px; font-weight:800; text-align:center; font-family:var(--font-heading); }
+        .auth-modal .sub { text-align:center; color:var(--text3); margin:6px 0 20px; font-size:14px; }
+        .auth-tabs { display:flex; gap:4px; background:var(--bg3); border-radius:999px; padding:4px; margin-bottom:20px; }
+        .auth-tab { flex:1; padding:10px; border-radius:999px; text-align:center; font-weight:600; font-size:14px; cursor:pointer; background:transparent; border:none; color:var(--text3); transition:var(--transition); }
+        .auth-tab.active { background:var(--gold-gradient); color:#0A0A0A; }
+        .auth-msg { display:none; padding:12px; border-radius:var(--radius-sm); margin-bottom:14px; font-size:13px; font-weight:600; text-align:center; }
+        .auth-msg.success { background:rgba(16,185,129,0.08); color:#059669; display:block; }
+        .auth-msg.error { background:rgba(220,38,38,0.08); color:#DC2626; display:block; }
+        .auth-msg.info { background:rgba(59,130,246,0.08); color:#2563EB; display:block; }
+        .form-group { margin-bottom:14px; }
+        .form-group label { display:block; font-size:12px; font-weight:700; color:var(--text3); margin-bottom:5px; text-transform:uppercase; letter-spacing:0.5px; }
+        .form-group input { width:100%; padding:14px 16px; border:1.5px solid var(--border2); border-radius:var(--radius-sm); font-size:14px; font-family:var(--font-body); background:var(--bg); transition:var(--transition); }
+        .form-group input:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(212,175,55,0.08); }
+
+        @media(max-width:1200px) { .modules-grid{grid-template-columns:repeat(4,1fr)} .pricing-grid{grid-template-columns:repeat(2,1fr)} .features-grid{grid-template-columns:1fr 1fr} .hero-grid{grid-template-columns:1fr;text-align:center} .hero-visual{display:none} }
+        @media(max-width:768px) { .modules-grid{grid-template-columns:repeat(3,1fr)} .pricing-grid{grid-template-columns:1fr} .features-grid{grid-template-columns:1fr} .stats-grid{grid-template-columns:1fr 1fr} nav{display:none} .hamburger{display:flex} .footer-grid{grid-template-columns:1fr 1fr} nav.open{display:flex;flex-direction:column;position:absolute;top:72px;left:0;width:100%;background:var(--bg2);padding:20px;gap:10px;border-bottom:1px solid var(--border)} }
+        @media(max-width:480px) { .modules-grid{grid-template-columns:1fr 1fr} .hero h1{font-size:34px} .section-title{font-size:30px} }
     </style>
 </head>
 <body>
-    <a href="#mainContent" class="skip-link">Skip to Main Content</a>
-    <div class="sb-overlay" id="sbOverlay" onclick="closeMobile()"></div>
 
-    <aside class="sb" id="sidebar">
-        <div class="sb-header">
-            <a href="index.html" class="sb-logo">
-                <svg width="34" height="34" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#g)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="g"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
-                <div class="sb-brand"><div>11 Avatar</div><div class="sb-brand-sub">SMEs CRM</div></div>
+    <header class="navbar" id="navbar">
+        <div class="container">
+            <a href="#" class="logo">
+                <svg width="40" height="40" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#logoGold)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="logoGold"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
+                <span>11 Avatar <span class="accent">SMEs CRM</span></span>
             </a>
-            <button class="sb-collapse" id="sbCollapse" title="Collapse" onclick="toggleSidebar()">◀</button>
+            <nav id="mainNav">
+                <a href="#hero" class="active">Home</a>
+                <a href="#modules">Modules</a>
+                <a href="#features">Features</a>
+                <a href="#stats">Why Us</a>
+                <a href="#pricing">Pricing</a>
+            </nav>
+            <div class="nav-btns">
+                <button class="btn btn-outline" onclick="openAuth('login')">Sign In</button>
+                <button class="btn btn-primary" onclick="openAuth('register')">Start Free →</button>
+            </div>
+            <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
         </div>
-        <nav class="sb-nav" id="sidebarNav">
-            <div class="nav-sec"><div class="nav-sec-title">Main</div>
-                <button class="nav-item active" data-module="DASHBOARD" onclick="switchModule('dashboard')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
-                <button class="nav-item" data-module="LEADS" onclick="switchModule('leads')"><span class="nav-icon">👥</span><span class="nav-label">Leads</span></button>
-                <button class="nav-item" data-module="PIPELINE" onclick="switchModule('pipeline')"><span class="nav-icon">📈</span><span class="nav-label">Pipeline</span></button>
-                <button class="nav-item" data-module="CLIENTS" onclick="switchModule('clients')"><span class="nav-icon">🏢</span><span class="nav-label">Clients</span></button>
-            </div>
-            <div class="nav-sec"><div class="nav-sec-title">Financial</div>
-                <button class="nav-item" data-module="INVOICES" onclick="switchModule('invoices')"><span class="nav-icon">🧾</span><span class="nav-label">Invoices</span></button>
-                <button class="nav-item" data-module="PAYMENTS" onclick="switchModule('payments')"><span class="nav-icon">💰</span><span class="nav-label">Payments</span></button>
-                <button class="nav-item" data-module="RETAINERS" onclick="switchModule('retainers')"><span class="nav-icon">🔄</span><span class="nav-label">Retainers</span></button>
-            </div>
-            <div class="nav-sec"><div class="nav-sec-title">Operations</div>
-                <button class="nav-item" data-module="TASKS" onclick="switchModule('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
-                <button class="nav-item" data-module="PROJECTS" onclick="switchModule('projects')"><span class="nav-icon">🚀</span><span class="nav-label">Projects</span></button>
-                <button class="nav-item" data-module="APPOINTMENTS" onclick="switchModule('appointments')"><span class="nav-icon">📅</span><span class="nav-label">Appointments</span></button>
-            </div>
-            <div class="nav-sec"><div class="nav-sec-title">Communication</div>
-                <button class="nav-item" data-module="WHATSAPP" onclick="switchModule('whatsapp')"><span class="nav-icon">💬</span><span class="nav-label">WhatsApp</span></button>
-                <button class="nav-item" data-module="TRAINING" onclick="switchModule('training')"><span class="nav-icon">🎓</span><span class="nav-label">Training</span></button>
-                <button class="nav-item" data-module="REFERRALS" onclick="switchModule('referrals')"><span class="nav-icon">🔗</span><span class="nav-label">Referrals</span></button>
-            </div>
-            <div class="nav-sec"><div class="nav-sec-title">Insights</div>
-                <button class="nav-item" data-module="REPORTS" onclick="switchModule('reports')"><span class="nav-icon">📋</span><span class="nav-label">Reports</span></button>
-                <button class="nav-item" data-module="NOTIFICATIONS" onclick="switchModule('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></button>
-            </div>
-            <div class="nav-sec"><div class="nav-sec-title">System</div>
-                <button class="nav-item" data-module="SETTINGS" onclick="switchModule('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
-                <button class="nav-item" data-module="PROFILE" onclick="switchModule('profile')"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></button>
-            </div>
-        </nav>
-        <div class="sb-footer">
-            <div class="sb-user" onclick="switchModule('profile')">
-                <div class="sb-avatar" id="sbAvatar">U</div>
-                <div class="sb-user-info">
-                    <div class="sb-user-name" id="sbUserName">User</div>
-                    <div class="sb-user-role" id="sbUserRole">Loading...</div>
+    </header>
+
+    <main>
+        <section class="hero" id="hero">
+            <div class="container">
+                <div class="hero-grid">
+                    <div>
+                        <div class="hero-badge"><span class="dot"></span> Trusted by 50,000+ Indian SMEs</div>
+                        <h1>India's Most <span class="gold-text">Advanced</span><br>Revenue OS for SMEs</h1>
+                        <p>17+ business modules. AI-powered lead scoring. GST-compliant invoicing. WhatsApp CRM. Multi-tenant data isolation. All in one platform built for Indian businesses.</p>
+                        <div class="hero-cta">
+                            <button class="btn btn-primary btn-lg btn-glow" onclick="openAuth('register')">🚀 Start Free Forever</button>
+                            <button class="btn btn-outline btn-lg" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})">▶️ Explore Features</button>
+                        </div>
+                        <div class="trust-strip">
+                            <div class="trust-item">✅ No Credit Card</div>
+                            <div class="trust-item">🇮🇳 Made in India</div>
+                            <div class="trust-item">🔒 Bank-Grade Security</div>
+                            <div class="trust-item">📱 PWA Mobile App</div>
+                        </div>
+                    </div>
+                    <div class="hero-visual">
+                        <div class="hero-glow gold"></div>
+                        <div class="hero-glow accent"></div>
+                        <div class="hero-card">
+                            <div class="mock-row"><span class="mock-dot" style="background:#DC2626;"></span><span class="mock-dot" style="background:#F59E0B;"></span><span class="mock-dot" style="background:#10B981;"></span></div>
+                            <div class="mock-row"><div class="mock-line gold" style="width:60%;"></div><div class="mock-line" style="width:30%;"></div></div>
+                            <div class="mock-row"><div class="mock-line accent" style="width:40%;"></div><div class="mock-line" style="width:25%;"></div><div class="mock-line gold" style="width:20%;"></div></div>
+                            <div class="mock-row"><div class="mock-line" style="width:50%;"></div><div class="mock-line gold" style="width:35%;"></div></div>
+                            <div class="mock-chart">
+                                <div class="mock-bar" style="height:35px;background:var(--gold-gradient);"></div>
+                                <div class="mock-bar" style="height:50px;background:var(--accent);"></div>
+                                <div class="mock-bar" style="height:30px;background:var(--gold-gradient);"></div>
+                                <div class="mock-bar" style="height:60px;background:var(--accent);"></div>
+                                <div class="mock-bar" style="height:40px;background:var(--gold-gradient);"></div>
+                                <div class="mock-bar" style="height:55px;background:var(--accent);"></div>
+                                <div class="mock-bar" style="height:45px;background:var(--gold-gradient);"></div>
+                                <div class="mock-bar" style="height:65px;background:var(--accent);"></div>
+                            </div>
+                            <div class="mock-row" style="margin-top:12px;"><div class="mock-line gold" style="width:45%;"></div></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </aside>
+        </section>
 
-    <div class="main" id="main">
-        <header class="main-header">
-            <button class="menu-btn" id="mobileMenuBtn" onclick="openMobile()" aria-label="Menu">☰</button>
-            <div class="brand-text">11 Avatar</div>
-            <div class="brand-sub">SMEs CRM</div>
-            <div class="spacer"></div>
-            <div class="approval-banner" id="approvalBanner">⏳ Your account is pending approval.</div>
-            <button class="hdr-btn" title="Notifications" onclick="switchModule('notifications')">🔔</button>
-            <button class="hdr-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
-            <button class="hdr-profile" onclick="switchModule('profile')" title="Profile"><span id="hdrAvatar">U</span></button>
-            <button class="hdr-btn" id="logoutBtn" onclick="doLogout()" title="Logout" style="color:var(--error);">⏻</button>
-        </header>
-        <div class="content-area" id="contentArea">
-            <div class="loading-screen" id="loadingScreen"><div class="spinner"></div> Loading CRM...</div>
+        <section id="modules">
+            <div class="container" style="text-align:center;">
+                <span class="section-tag">📦 Complete Suite</span>
+                <h2 class="section-title">17+ Modules. <span class="gold-text">One Platform.</span></h2>
+                <p class="section-sub" style="margin:0 auto 40px;">Everything your business needs — unified, automated, intelligent.</p>
+            </div>
+            <div class="container">
+                <div class="modules-grid">
+                    <div class="module-card"><div class="m-icon">📊</div><div class="m-name">Dashboard</div><div class="m-desc">Real-time KPIs</div></div>
+                    <div class="module-card"><div class="m-icon">👥</div><div class="m-name">Leads</div><div class="m-desc">AI Scoring</div></div>
+                    <div class="module-card"><div class="m-icon">📈</div><div class="m-name">Pipeline</div><div class="m-desc">Kanban View</div></div>
+                    <div class="module-card"><div class="m-icon">🏢</div><div class="m-name">Clients</div><div class="m-desc">GST Ready</div></div>
+                    <div class="module-card"><div class="m-icon">🧾</div><div class="m-name">Invoices</div><div class="m-desc">E-Invoice IRN</div></div>
+                    <div class="module-card"><div class="m-icon">💰</div><div class="m-name">Payments</div><div class="m-desc">UPI + NEFT</div></div>
+                    <div class="module-card"><div class="m-icon">🔄</div><div class="m-name">Retainers</div><div class="m-desc">MRR Tracking</div></div>
+                    <div class="module-card"><div class="m-icon">✅</div><div class="m-name">Tasks</div><div class="m-desc">SLA Based</div></div>
+                    <div class="module-card"><div class="m-icon">🚀</div><div class="m-name">Projects</div><div class="m-desc">Milestones</div></div>
+                    <div class="module-card"><div class="m-icon">💬</div><div class="m-name">WhatsApp</div><div class="m-desc">CloudWA</div></div>
+                    <div class="module-card"><div class="m-icon">🎓</div><div class="m-name">Training</div><div class="m-desc">LMS Built-in</div></div>
+                    <div class="module-card"><div class="m-icon">🔗</div><div class="m-name">Referrals</div><div class="m-desc">Multi-Level</div></div>
+                    <div class="module-card"><div class="m-icon">📋</div><div class="m-name">Reports</div><div class="m-desc">12 Charts</div></div>
+                    <div class="module-card"><div class="m-icon">🔔</div><div class="m-name">Notifications</div><div class="m-desc">Multi-Channel</div></div>
+                    <div class="module-card"><div class="m-icon">📅</div><div class="m-name">Appointments</div><div class="m-desc">Google Sync</div></div>
+                    <div class="module-card"><div class="m-icon">⚙️</div><div class="m-name">Settings</div><div class="m-desc">Full Control</div></div>
+                    <div class="module-card"><div class="m-icon">🛡️</div><div class="m-name">Multi-Tenant</div><div class="m-desc">100% Isolation</div></div>
+                    <div class="module-card"><div class="m-icon">🤖</div><div class="m-name">AI Ready</div><div class="m-desc">Smart Scoring</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features">
+            <div class="container" style="text-align:center;">
+                <span class="section-tag">⚡ Why Choose Us</span>
+                <h2 class="section-title">Built <span class="gold-text">Different</span> from Ground Up</h2>
+                <p class="section-sub" style="margin:0 auto 40px;">Not just another CRM. A complete revenue operating system engineered for Indian SMEs.</p>
+            </div>
+            <div class="container">
+                <div class="features-grid">
+                    <div class="feature-card"><div class="f-icon">🛡️</div><h3>100% Multi-Tenant</h3><p>Complete client data isolation across 20+ Firestore collections. Zero cross-tenant data leaks.</p></div>
+                    <div class="feature-card"><div class="f-icon">🤖</div><h3>AI Lead Scoring</h3><p>Auto-score leads based on 10+ parameters. Focus on high-value prospects first.</p></div>
+                    <div class="feature-card"><div class="f-icon">🧾</div><h3>GST E-Invoicing</h3><p>Auto CGST/SGST/IGST. E-Invoice IRN. E-Way Bill. HSN/SAC codes. Tally sync ready.</p></div>
+                    <div class="feature-card"><div class="f-icon">💬</div><h3>WhatsApp CRM</h3><p>CloudWA integration. Templates, broadcast, auto-replies. All from one dashboard.</p></div>
+                    <div class="feature-card"><div class="f-icon">👥</div><h3>8-Level RBAC</h3><p>Platform Owner → Tenant Admin → Executive → Viewer. Granular module-level permissions.</p></div>
+                    <div class="feature-card"><div class="f-icon">📱</div><h3>PWA Mobile App</h3><p>Install on any device. Works offline. Auto-syncs when online. No app store needed.</p></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="stats">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-card"><div class="s-val">50,000+</div><div class="s-lbl">Businesses Trust Us</div></div>
+                    <div class="stat-card"><div class="s-val">17+</div><div class="s-lbl">Business Modules</div></div>
+                    <div class="stat-card"><div class="s-val">99.9%</div><div class="s-lbl">Uptime Guaranteed</div></div>
+                    <div class="stat-card"><div class="s-val">₹0</div><div class="s-lbl">To Get Started</div></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="pricing">
+            <div class="container" style="text-align:center;">
+                <span class="section-tag">💎 Simple Pricing</span>
+                <h2 class="section-title">Start <span class="gold-text">Free</span>, Scale Fearlessly</h2>
+                <p class="section-sub" style="margin:0 auto 40px;">No hidden fees. No credit card required. Cancel anytime.</p>
+            </div>
+            <div class="container">
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <div class="plan-name">Free Forever</div>
+                        <div class="plan-price">₹0<span>/mo</span></div>
+                        <ul>
+                            <li>500 Leads</li><li>50 Invoices/mo</li><li>3 Team Members</li><li>WhatsApp Integration</li><li>Basic Reports</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="openAuth('register')" style="width:100%;">Get Started</button>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="popular-badge">Most Popular</div>
+                        <div class="plan-name">Starter</div>
+                        <div class="plan-price">₹499<span>/mo</span></div>
+                        <ul>
+                            <li>5,000 Leads</li><li>500 Invoices/mo</li><li>10 Team Members</li><li>WhatsApp + Tasks</li><li>Priority Support</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="openAuth('register')" style="width:100%;">Start Free Trial</button>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="plan-name">Professional</div>
+                        <div class="plan-price">₹1,499<span>/mo</span></div>
+                        <ul>
+                            <li>50,000 Leads</li><li>5,000 Invoices/mo</li><li>50 Team Members</li><li>All Modules</li><li>Chat & Phone Support</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="openAuth('register')" style="width:100%;">Start Free Trial</button>
+                    </div>
+                    <div class="pricing-card">
+                        <div class="plan-name">Enterprise</div>
+                        <div class="plan-price">Custom</div>
+                        <ul>
+                            <li>Unlimited Everything</li><li>White-Label</li><li>API Access</li><li>Custom Integrations</li><li>Dedicated Manager</li>
+                        </ul>
+                        <button class="btn btn-outline" onclick="openAuth('register')" style="width:100%;">Contact Sales</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="container">
+                <h2>Ready to <span class="gold-text">Transform</span> Your Business?</h2>
+                <p>Join 50,000+ Indian SMEs growing with 11 Avatar CRM. Start free today.</p>
+                <button class="btn btn-primary btn-lg btn-glow" onclick="openAuth('register')">🚀 Start Free Forever →</button>
+                <p style="margin-top:16px;font-size:13px;color:var(--text3);">📧 info@11avatardigitalhub.cloud | 📧 support@11avatardigitalhub.cloud</p>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <svg width="36" height="36" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#logoGold2)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="logoGold2"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
+                    <p>India's most advanced multi-tenant Revenue OS for SMEs. Lead → Revenue — all in one place.</p>
+                </div>
+                <div class="footer-links"><h4>Product</h4><a href="#modules">Modules</a><a href="#features">Features</a><a href="#pricing">Pricing</a></div>
+                <div class="footer-links"><h4>Solutions</h4><a href="#">Real Estate</a><a href="#">Education</a><a href="#">Healthcare</a></div>
+                <div class="footer-links"><h4>Company</h4><a href="#">About</a><a href="#">Blog</a><a href="#">Contact</a></div>
+                <div class="footer-links"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div>
+            </div>
+            <div class="footer-bottom"><p>© 2026 11 Avatar Digital Hub. All rights reserved. | Made with ❤️ for India 🇮🇳</p></div>
+        </div>
+    </footer>
+
+    <div class="auth-overlay" id="authOverlay">
+        <div class="auth-modal">
+            <button class="auth-close" onclick="closeAuth()">✕</button>
+            <div class="auth-msg" id="authMsg"></div>
+            <h2 id="authTitle">Welcome Back</h2>
+            <p class="sub" id="authSub">Sign in to your account</p>
+            <div class="auth-tabs">
+                <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
+                <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
+            </div>
+            <form id="authForm" onsubmit="return false;">
+                <div class="form-group" id="nameGrp" style="display:none;"><label>Full Name</label><input type="text" id="authName" placeholder="Enter your full name"></div>
+                <div class="form-group"><label>Email Address</label><input type="email" id="authEmail" placeholder="you@company.com" required></div>
+                <div class="form-group"><label>Password</label><input type="password" id="authPassword" placeholder="••••••••" minlength="6" required></div>
+                <button type="submit" class="btn btn-primary" id="authSubmit" style="width:100%;" onclick="handleAuth()">Sign In</button>
+            </form>
         </div>
     </div>
-
-    <nav class="mobile-nav" id="mobileNav">
-        <a href="#" onclick="switchModule('dashboard')"><span class="nav-ic">📊</span><span>Home</span></a>
-        <a href="#" onclick="switchModule('leads')"><span class="nav-ic">👥</span><span>Leads</span></a>
-        <a href="#" onclick="switchModule('invoices')"><span class="nav-ic">🧾</span><span>Invoice</span></a>
-        <a href="#" onclick="switchModule('whatsapp')"><span class="nav-ic">💬</span><span>WA</span></a>
-        <a href="#" onclick="switchModule('settings')"><span class="nav-ic">⚙️</span><span>More</span></a>
-    </nav>
-
-    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="js/core/config.js"></script>
+    <script src="js/core/auth.js"></script>
+    <script src="js/core/firestore.js"></script>
 
     <script>
         'use strict';
         if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
             window.firebase.initializeApp({
-                apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
-                authDomain: "avatar-wa-dual-crm.firebaseapp.com",
-                projectId: "avatar-wa-dual-crm",
-                storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
-                messagingSenderId: "946959261009",
-                appId: "1:946959261009:web:175f5390d63715f1f8c770"
+                apiKey:"AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",authDomain:"avatar-wa-dual-crm.firebaseapp.com",
+                projectId:"avatar-wa-dual-crm",storageBucket:"avatar-wa-dual-crm.firebasestorage.app",
+                messagingSenderId:"946959261009",appId:"1:946959261009:web:175f5390d63715f1f8c770"
             });
             console.log('🔥 Firebase initialized');
         }
-    </script>
 
-    <script src="js/core/config.js"></script>
-    <script src="js/core/auth.js"></script>
-    <script src="js/core/firestore.js"></script>
-    <script src="js/core/tenant.js"></script>
+        const $=s=>document.querySelector(s);let authMode='login';
+        function showMsg(m,t){const e=$('#authMsg');e.textContent=m;e.className='auth-msg '+t;}
+        function hideMsg(){$('#authMsg').className='auth-msg';}
+        function setLoading(l){const b=$('#authSubmit');b.textContent=l?'Processing...':(authMode==='login'?'Sign In':'Create Free Account');b.disabled=l;}
 
-    <script>
-        'use strict';
-
-        var APP = {
-            currentModule: 'dashboard',
-            collapsed: false,
-            mobile: false,
-            dark: false,
-            userProfile: null,
-            initialized: false
+        window.openAuth=function(m){
+            authMode=m||'login';const isL=authMode==='login';hideMsg();
+            $('#authTitle').textContent=isL?'Welcome Back':'Create Your Account';
+            $('#authSub').textContent=isL?'Sign in to your account':'Start your free trial today';
+            $('#authSubmit').textContent=isL?'Sign In':'Create Free Account';
+            $('#nameGrp').style.display=isL?'none':'block';
+            $('#tabLogin').classList.toggle('active',isL);$('#tabRegister').classList.toggle('active',!isL);
+            $('#authForm').reset();$('#authOverlay').classList.add('show');document.body.style.overflow='hidden';
+        };
+        window.closeAuth=function(){$('#authOverlay').classList.remove('show');document.body.style.overflow='';hideMsg();setLoading(false);};
+        window.switchAuthTab=function(m){openAuth(m);};
+        window.handleAuth=async function(){
+            hideMsg();const e=$('#authEmail').value.trim(),p=$('#authPassword').value.trim(),n=authMode==='register'?$('#authName').value.trim():'';
+            if(!e||!p){showMsg('Please fill all fields.','error');return;}if(p.length<6){showMsg('Password min 6 characters.','error');return;}if(authMode==='register'&&!n){showMsg('Please enter your name.','error');return;}
+            setLoading(true);
+            try{
+                if(authMode==='login'){
+                    if(window.CRM_Auth&&window.CRM_Auth.login){var r=await window.CRM_Auth.login(e,p);if(r.success){showMsg('✅ Login successful!','success');window.location.href='app.html';}else{showMsg(r.message||'Login failed.','error');setLoading(false);}}
+                    else{window.location.href='app.html';}
+                }else{
+                    if(window.CRM_Auth&&window.CRM_Auth.register){var rr=await window.CRM_Auth.register(e,p,n);if(rr.success){if(rr.requiresApproval){showMsg(rr.message||'Registration submitted!','success');setLoading(false);}else{window.location.href='app.html';}}else{showMsg(rr.message||'Registration failed.','error');setLoading(false);}}
+                    else{window.location.href='app.html';}
+                }
+            }catch(err){showMsg('Network error.','error');setLoading(false);}
         };
 
-        function $(id) { return document.getElementById(id); }
-
-        function showToast(msg, type) {
-            var t = document.createElement('div'); t.className = 'toast toast-' + (type || 'info');
-            t.innerHTML = '<span>' + ({success:'✅',error:'❌',info:'ℹ️'}[type]||'') + '</span> ' + msg;
-            ($('toastContainer') || document.body).appendChild(t);
-            setTimeout(function() { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(function() { t.remove(); }, 300); }, 3000);
-        }
-
-        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
-        function formatCurrency(amount) { try { return '₹' + parseInt(amount || 0).toLocaleString('en-IN'); } catch(e) { return '₹0'; } }
-
-        function updateUserUI() {
-            var profile = APP.userProfile;
-            if (!profile && window.CRM_Tenant && window.CRM_Tenant.getUserProfile) profile = window.CRM_Tenant.getUserProfile();
-            if (!profile && window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
-            if (!profile) { try { var ud = localStorage.getItem('crm_user'); if (ud) profile = JSON.parse(ud); } catch(e) {} }
-            if (!profile) return;
-            APP.userProfile = profile;
-            var name = profile.displayName || profile.name || profile.email || 'User';
-            var av = name.charAt(0).toUpperCase();
-            ['sbAvatar', 'hdrAvatar'].forEach(function(id) { var el = $(id); if (el) el.textContent = av; });
-            var nameEl = $('sbUserName'); if (nameEl) nameEl.textContent = name;
-            var roleEl = $('sbUserRole'); if (roleEl) roleEl.textContent = profile.role || 'User';
-            if (profile.approvalStatus === 'pending') { var b = $('approvalBanner'); if (b) b.classList.add('show'); }
-        }
-
-        function applyRBACFilter() {
-            if (!window.CRM_Tenant || !window.CRM_Tenant.canAccessModule) return;
-            document.querySelectorAll('.nav-item[data-module]').forEach(function(el) {
-                var mod = el.dataset.module;
-                if (!mod) return;
-                el.classList.toggle('hidden', !window.CRM_Tenant.canAccessModule(mod));
-            });
-            document.querySelectorAll('.nav-sec').forEach(function(sec) {
-                var visible = sec.querySelectorAll('.nav-item:not(.hidden)');
-                sec.style.display = visible.length === 0 ? 'none' : '';
-            });
-        }
-
-        function setActiveNav(module) {
-            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.toggle('active', el.dataset.module === module.toUpperCase()); });
-            document.querySelectorAll('.mobile-nav a').forEach(function(el, i) {
-                var mods = ['DASHBOARD','LEADS','INVOICES','WHATSAPP','SETTINGS'];
-                el.classList.toggle('active', mods[i] === module.toUpperCase());
-            });
-        }
-
-        function switchModule(module) {
-            APP.currentModule = module;
-            setActiveNav(module);
-            if (APP.mobile) closeMobile();
-            try { localStorage.setItem('crm_last_module', module); } catch(e) {}
-            renderModule(module);
-        }
-
-        async function renderModule(module) {
-            var area = $('contentArea');
-            if (!area) return;
-            var loader = $('loadingScreen');
-            area.innerHTML = '';
-
-            try {
-                switch(module) {
-                    case 'dashboard': renderDashboard(area); break;
-                    case 'profile': renderProfile(area); break;
-                    case 'settings': renderSettings(area); break;
-                    case 'leads': await renderLeads(area); break;
-                    case 'pipeline': await renderPipeline(area); break;
-                    case 'clients': await renderClients(area); break;
-                    case 'invoices': await renderInvoices(area); break;
-                    case 'payments': await renderPayments(area); break;
-                    case 'tasks': await renderTasks(area); break;
-                    case 'projects': await renderProjects(area); break;
-                    case 'retainers': await renderRetainers(area); break;
-                    case 'whatsapp': await renderWhatsApp(area); break;
-                    case 'training': await renderTraining(area); break;
-                    case 'referrals': await renderReferrals(area); break;
-                    case 'reports': await renderReports(area); break;
-                    case 'notifications': await renderNotifications(area); break;
-                    case 'appointments': await renderAppointments(area); break;
-                    default: area.innerHTML = '<div class="loading-screen">Module not found</div>';
-                }
-            } catch(e) {
-                console.error('Module render error:', e);
-                area.innerHTML = '<div class="loading-screen">Error loading module. Please try again.</div>';
-            }
-        }
-
-        // ==================== DASHBOARD ====================
-        async function renderDashboard(area) {
-            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Dashboard...</div>';
-            updateUserUI();
-            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:4px;">Welcome back, <span style="background:linear-gradient(135deg,#D4AF37,#B8960F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + escHtml((APP.userProfile && APP.userProfile.displayName) || 'User') + '</span> 👋</h1>';
-            html += '<p style="color:var(--text3);margin-bottom:20px;">' + new Date().toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) + '</p>';
-            
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    var leadCount = await window.CRM_Firestore.countDocuments('leads');
-                    var clientCount = await window.CRM_Firestore.countDocuments('clients');
-                    var taskCount = await window.CRM_Firestore.countDocuments('tasks', [['status', '!=', 'completed']]);
-                    var invoiceCount = await window.CRM_Firestore.countDocuments('invoices');
-                    var paymentResult = await window.CRM_Firestore.queryDocuments('payments', { limit: 500 });
-                    var totalRevenue = 0;
-                    (paymentResult.data || []).forEach(function(p) { totalRevenue += (parseInt(p.amount) || 0); });
-                    
-                    html += '<div class="stats-grid">';
-                    html += '<div class="stat-card"><div class="val" style="color:#059669;">' + formatCurrency(totalRevenue) + '</div><div class="lbl">💰 Revenue</div></div>';
-                    html += '<div class="stat-card"><div class="val" style="color:#4F46E5;">' + leadCount + '</div><div class="lbl">👥 Leads</div></div>';
-                    html += '<div class="stat-card"><div class="val" style="color:#D4AF37;">' + clientCount + '</div><div class="lbl">🏢 Clients</div></div>';
-                    html += '<div class="stat-card"><div class="val" style="color:#F59E0B;">' + taskCount + '</div><div class="lbl">✅ Tasks</div></div>';
-                    html += '</div>';
-                }
-            } catch(e) { console.error('Dashboard stats error:', e); }
-            
-            html += '<div class="card"><div class="card-header"><span class="card-title">⚡ Quick Actions</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">';
-            ['leads','invoices','clients','whatsapp'].forEach(function(m) {
-                html += '<button class="btn btn-outline" onclick="switchModule(\'' + m + '\')" style="flex-direction:column;gap:4px;padding:16px;"><span style="font-size:1.5rem;">' + ({leads:'👥',invoices:'🧾',clients:'🏢',whatsapp:'💬'}[m]) + '</span>' + m.charAt(0).toUpperCase() + m.slice(1) + '</button>';
-            });
-            html += '</div></div>';
-            
-            area.innerHTML = html;
-        }
-
-        // ==================== PROFILE ====================
-        function renderProfile(area) {
-            updateUserUI();
-            var p = APP.userProfile || {};
-            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1>';
-            html += '<div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div>';
-            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="' + escHtml(p.displayName || p.name || '') + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" id="pEmail" value="' + escHtml(p.email || '') + '" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="' + escHtml(p.phoneNumber || '') + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="' + escHtml(p.role || '') + '" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
-            html += '</div>';
-            html += '<button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update Profile</button>';
-            html += '</div>';
-
-            html += '<div class="card"><div class="card-header"><span class="card-title">🔑 Change Password</span></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Current Password</label><input type="password" id="secCurrent" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">New Password</label><input type="password" id="secNew" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Confirm Password</label><input type="password" id="secConfirm" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '</div>';
-            html += '<button class="btn btn-primary" style="margin-top:10px;" onclick="changePassword()">🔒 Update Password</button>';
-            html += '</div>';
-            area.innerHTML = html;
-        }
-
-        window.saveProfile = async function() {
-            var name = ($('pName') && $('pName').value || '').trim();
-            var mobile = ($('pMobile') && $('pMobile').value || '').trim();
-            var uid = APP.userProfile && APP.userProfile.uid;
-            if (!uid) { showToast('User not identified.', 'error'); return; }
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.updateDocument('users', uid, { displayName: name, phoneNumber: mobile });
-                }
-                if (APP.userProfile) { APP.userProfile.displayName = name; APP.userProfile.phoneNumber = mobile; }
-                updateUserUI();
-                showToast('✅ Profile updated!', 'success');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
-        };
-
-        window.changePassword = async function() {
-            var cp = ($('secCurrent') && $('secCurrent').value) || '';
-            var np = ($('secNew') && $('secNew').value) || '';
-            var cf = ($('secConfirm') && $('secConfirm').value) || '';
-            if (!cp || !np || np !== cf) { showToast('Please fill correctly.', 'error'); return; }
-            if (window.CRM_Auth && window.CRM_Auth.changePassword) {
-                var result = await window.CRM_Auth.changePassword(cp, np);
-                if (result.success) { showToast('✅ Password changed!', 'success'); }
-                else { showToast(result.message, 'error'); }
-            }
-        };
-
-        // ==================== SETTINGS ====================
-        function renderSettings(area) {
-            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Settings</h1>';
-            html += '<div class="card"><div class="card-header"><span class="card-title">Organization</span></div>';
-            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Business Name</label><input type="text" id="setName" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">GSTIN</label><input type="text" id="setGstin" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '</div>';
-            html += '<button class="btn btn-primary" style="margin-top:10px;" onclick="saveSettings()">💾 Save Settings</button>';
-            html += '</div>';
-            html += '<div class="card"><div class="card-header"><span class="card-title">Theme</span></div>';
-            html += '<button class="btn btn-outline" onclick="toggleTheme()">' + (APP.dark ? '☀️ Switch to Light' : '🌙 Switch to Dark') + '</button></div>';
-            area.innerHTML = html;
-            loadSettingsData();
-        }
-
-        async function loadSettingsData() {
-            if (!window.CRM_Tenant) return;
-            var tenant = window.CRM_Tenant.getTenant();
-            if (!tenant) { var tid = window.CRM_Tenant.getTenantId(); if (tid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) tenant = await window.CRM_Firestore.getDocument('tenants', tid); }
-            if (tenant) {
-                if ($('setName')) $('setName').value = tenant.name || '';
-                if ($('setGstin')) $('setGstin').value = (tenant.settings && tenant.settings.gstin) || '';
-            }
-        }
-
-        window.saveSettings = async function() {
-            var name = ($('setName') && $('setName').value || '').trim();
-            var gstin = ($('setGstin') && $('setGstin').value || '').trim();
-            var tid = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
-            if (!tid) { showToast('No tenant context.', 'error'); return; }
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.updateDocument('tenants', tid, { name: name, settings: { gstin: gstin } });
-                }
-                showToast('✅ Settings saved!', 'success');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
-        };
-
-        // ==================== LEADS (Quick) ====================
-        async function renderLeads(area) {
-            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Leads...</div>';
-            var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">👥 Leads</h1><button class="btn btn-primary" onclick="addLead()">➕ New Lead</button></div>';
-            if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                var result = await window.CRM_Firestore.queryDocuments('leads', { orderBy: 'createdAt', orderDir: 'desc', limit: 50 });
-                var leads = result.data || [];
-                if (leads.length === 0) {
-                    html += '<div class="card"><p style="text-align:center;color:var(--text3);padding:40px;">No leads yet. Click "New Lead" to get started.</p></div>';
-                } else {
-                    html += '<div class="card" style="padding:0;overflow:hidden;"><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:var(--bg3);">';
-                    ['Name','Mobile','Business','Source','Status','Score'].forEach(function(h) { html += '<th style="padding:12px 14px;text-align:left;font-size:0.7rem;text-transform:uppercase;">' + h + '</th>'; });
-                    html += '</tr></thead><tbody>';
-                    leads.forEach(function(l) {
-                        html += '<tr style="border-bottom:1px solid var(--border);">';
-                        html += '<td style="padding:10px 14px;"><strong>' + escHtml(l.firstName || '') + ' ' + escHtml(l.lastName || '') + '</strong></td>';
-                        html += '<td style="padding:10px 14px;">' + escHtml(l.mobile || '-') + '</td>';
-                        html += '<td style="padding:10px 14px;">' + escHtml(l.business || '-') + '</td>';
-                        html += '<td style="padding:10px 14px;">' + escHtml(l.source || '-') + '</td>';
-                        html += '<td style="padding:10px 14px;"><span style="padding:3px 10px;border-radius:20px;font-size:0.7rem;background:#EEF2FF;color:#4F46E5;">' + escHtml(l.status || 'New') + '</span></td>';
-                        html += '<td style="padding:10px 14px;">' + (l.score || 0) + '</td>';
-                        html += '</tr>';
-                    });
-                    html += '</tbody></table></div></div>';
-                }
-            }
-            area.innerHTML = html;
-        }
-
-        window.addLead = async function() {
-            var name = prompt('Lead Name:'); if (!name || !name.trim()) return;
-            var mobile = prompt('Mobile:'); if (!mobile || !mobile.trim()) return;
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.createDocument('leads', { firstName: name.trim(), mobile: mobile.trim(), status: 'New', source: 'Manual' });
-                }
-                showToast('✅ Lead created!', 'success');
-                switchModule('leads');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
-        };
-
-        // ==================== PIPELINE (Quick) ====================
-        async function renderPipeline(area) {
-            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Pipeline...</div>';
-            var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">📈 Pipeline</h1><button class="btn btn-primary" onclick="addDeal()">➕ New Deal</button></div>';
-            if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                var result = await window.CRM_Firestore.queryDocuments('deals', { orderBy: 'createdAt', orderDir: 'desc', limit: 50 });
-                var deals = result.data || [];
-                var stages = ['new','contacted','qualified','proposal','negotiation','won','lost'];
-                var stageNames = {new:'New',contacted:'Contacted',qualified:'Qualified',proposal:'Proposal',negotiation:'Negotiation',won:'Won',lost:'Lost'};
-                var colors = {new:'#6366f1',contacted:'#8b5cf6',qualified:'#3b82f6',proposal:'#f59e0b',negotiation:'#ef4444',won:'#10b981',lost:'#6b7280'};
-                html += '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;">';
-                stages.forEach(function(stage) {
-                    var stageDeals = deals.filter(function(d) { return d.stage === stage; });
-                    html += '<div style="min-width:200px;background:var(--bg3);border-radius:12px;padding:10px;">';
-                    html += '<div style="font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:3px solid ' + colors[stage] + ';">' + stageNames[stage] + ' <span style="background:var(--bg2);padding:2px 8px;border-radius:8px;font-size:0.7rem;">' + stageDeals.length + '</span></div>';
-                    stageDeals.forEach(function(d) {
-                        html += '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:0.85rem;"><strong>' + escHtml(d.name || 'Deal') + '</strong><br><span style="color:var(--text3);font-size:0.75rem;">' + formatCurrency(d.value) + '</span></div>';
-                    });
-                    html += '</div>';
-                });
-                html += '</div>';
-            }
-            area.innerHTML = html;
-        }
-
-        window.addDeal = async function() {
-            var name = prompt('Deal Name:'); if (!name || !name.trim()) return;
-            var value = prompt('Value (₹):', '0');
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.createDocument('deals', { name: name.trim(), value: parseInt(value) || 0, stage: 'new', priority: 'medium' });
-                }
-                showToast('✅ Deal created!', 'success');
-                switchModule('pipeline');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
-        };
-
-        // ==================== QUICK MODULES ====================
-        async function renderClients(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🏢 Clients</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'clients\')">➕ New Client</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full client management available in pages version.</p></div>'; }
-        async function renderInvoices(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🧾 Invoices</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'invoices\')">➕ New Invoice</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full invoicing available in pages version.</p></div>'; }
-        async function renderPayments(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">💰 Payments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Full payments module.</p></div>'; }
-        async function renderTasks(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">✅ Tasks</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'tasks\')">➕ New Task</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full task management available.</p></div>'; }
-        async function renderProjects(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🚀 Projects</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Full project tracking available.</p></div>'; }
-        async function renderRetainers(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔄 Retainers</span></div><p style="text-align:center;color:var(--text3);padding:40px;">MRR tracking available.</p></div>'; }
-        async function renderWhatsApp(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">💬 WhatsApp</span></div><p style="text-align:center;color:var(--text3);padding:40px;">CloudWA messaging available.</p></div>'; }
-        async function renderTraining(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🎓 Training</span></div><p style="text-align:center;color:var(--text3);padding:40px;">LMS module available.</p></div>'; }
-        async function renderReferrals(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔗 Referrals</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Referral tracking available.</p></div>'; }
-        async function renderReports(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">📋 Reports</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Analytics available.</p></div>'; }
-        async function renderNotifications(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔔 Notifications</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Notification center.</p></div>'; }
-        async function renderAppointments(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">📅 Appointments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Calendar & scheduling.</p></div>'; }
-
-        // ==================== NAVIGATION ====================
-        function toggleSidebar() {
-            APP.collapsed = !APP.collapsed;
-            $('sidebar').classList.toggle('collapsed', APP.collapsed);
-            $('sbCollapse').innerHTML = APP.collapsed ? '▶' : '◀';
-            try { localStorage.setItem('crm_sb', APP.collapsed ? '1' : '0'); } catch(e) {}
-        }
-
-        function openMobile() { APP.mobile = true; $('sidebar').classList.add('mobile-open'); $('sbOverlay').classList.add('show'); document.body.style.overflow = 'hidden'; }
-        function closeMobile() { APP.mobile = false; $('sidebar').classList.remove('mobile-open'); $('sbOverlay').classList.remove('show'); document.body.style.overflow = ''; }
-
-        function toggleTheme() {
-            APP.dark = !APP.dark;
-            document.documentElement.setAttribute('data-theme', APP.dark ? 'dark' : 'light');
-            $('themeBtn').innerHTML = APP.dark ? '☀️' : '🌙';
-            try { localStorage.setItem('crm_theme', APP.dark ? 'dark' : 'light'); } catch(e) {}
-        }
-
-        function loadTheme() {
-            var t = localStorage.getItem('crm_theme');
-            if (t === 'dark') { APP.dark = true; document.documentElement.setAttribute('data-theme', 'dark'); $('themeBtn').innerHTML = '☀️'; }
-            else { APP.dark = window.matchMedia('(prefers-color-scheme:dark)').matches; document.documentElement.setAttribute('data-theme', APP.dark ? 'dark' : 'light'); $('themeBtn').innerHTML = APP.dark ? '☀️' : '🌙'; }
-        }
-
-        async function doLogout() {
-            if (window.CRM_Auth && window.CRM_Auth.logout) { await window.CRM_Auth.logout('User logged out.'); }
-            else { try { localStorage.clear(); } catch(e) {}; window.location.href = 'index.html'; }
-        }
-
-        async function init() {
-            loadTheme();
-            try { if (localStorage.getItem('crm_sb') === '1') { APP.collapsed = true; $('sidebar').classList.add('collapsed'); $('sbCollapse').innerHTML = '▶'; } } catch(e) {}
-
-            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
-                window.CRM_Auth.onAuthStateChange(async function(authState) {
-                    console.log('🔐 Auth state:', authState.authState);
-                    if (authState.isAuthenticated && authState.authState === 'authenticated') {
-                        console.log('✅ Authenticated');
-                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) await window.CRM_Tenant.initTenantContext();
-                        updateUserUI();
-                        applyRBACFilter();
-                        if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); }
-                    } else if (authState.authState === 'pending_approval') {
-                        console.log('⏳ Pending approval');
-                        var b = $('approvalBanner'); if (b) b.classList.add('show');
-                        updateUserUI();
-                        applyRBACFilter();
-                        if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); }
-                    } else if (authState.authState === 'unauthenticated') {
-                        console.log('❌ Unauthenticated');
-                        try { var ud = localStorage.getItem('crm_user'); if (ud && JSON.parse(ud).uid) { updateUserUI(); applyRBACFilter(); if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); } return; } } catch(e) {}
-                        window.location.href = 'index.html';
-                    }
-                });
-                console.log('👂 Auth listener registered');
-            } else {
-                try { var ud = localStorage.getItem('crm_user'); if (ud && JSON.parse(ud).uid) { updateUserUI(); applyRBACFilter(); switchModule('dashboard'); return; } } catch(e) {}
-                window.location.href = 'index.html';
-            }
-
-            function checkResp() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
-            window.addEventListener('resize', checkResp);
-            checkResp();
-        }
-
-        document.addEventListener('DOMContentLoaded', init);
+        $('#authOverlay').addEventListener('click',function(ev){if(ev.target===this)closeAuth();});
+        document.addEventListener('keydown',function(ev){if(ev.key==='Escape')closeAuth();});
+        window.toggleMenu=function(){$('#mainNav').classList.toggle('open');$('.hamburger').classList.toggle('active');};
+        document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){const t=document.querySelector(this.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});$('#mainNav').classList.remove('open');$('.hamburger').classList.remove('active');}});});
+        window.addEventListener('scroll',function(){$('#navbar').classList.toggle('scrolled',scrollY>40);document.querySelectorAll('section[id]').forEach(function(s){const top=s.offsetTop-200;if(scrollY>=top&&scrollY<top+s.offsetHeight){document.querySelectorAll('nav a').forEach(function(l){l.classList.toggle('active',l.getAttribute('href')==='#'+s.id);});}});});
+        console.log('🚀 11 Avatar SMEs CRM — Landing Page Ready');
     </script>
 </body>
 </html>
