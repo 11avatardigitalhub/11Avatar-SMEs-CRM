@@ -537,39 +537,27 @@
     <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
-    <!-- ============================================================
-    SCRIPTS — Rule #18: Firebase Backend, Rule #21: Path First
-    ============================================================ -->
-    
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    
-    <!-- Core Modules — Rule #21: Full path -->
-    <script src="../js/core/config.js"></script>
-    <script src="../js/core/auth.js"></script>
-    <script src="../js/core/firestore.js"></script>
-    <script src="../js/core/tenant.js"></script>
-
     <script>
-        /**
-         * ============================================================
-         * LeadsModule — Enterprise Leads Management
-         * ============================================================
-         * Rule #1: Enterprise Grade — Full depth, production-ready
-         * Rule #2: One File At A Time — Complete module
-         * Rule #3: Scratch Writing — Fresh implementation
-         * Rule #4: Never Edit Again — 100% complete
-         * Rule #5: Deep Detailing — Full JSDoc documentation
-         * Rule #6: Error Handling — try/catch everywhere
-         * Rule #17: Multi-Tenant RBAC — tenantId filter, role check
-         * Rule #18: Firebase Backend — Live Firestore CRUD
-         * Rule #20: Export All — window.LeadsModule
-         * Rule #22: Chat Limit Tracking
-         * Rule #23: 300+ lines minimum
-         * Rule #25: Full File Replacement
-         */
+        'use strict';
+        // Inherit Firebase from parent window (dashboard.html or app.html)
+        if (window.parent && window.parent.firebase) {
+            window.firebase = window.parent.firebase;
+        }
+        if (window.parent && window.parent.CRM_Firestore) {
+            window.CRM_Firestore = window.parent.CRM_Firestore;
+        }
+        if (window.parent && window.parent.CRM_Auth) {
+            window.CRM_Auth = window.parent.CRM_Auth;
+        }
+        if (window.parent && window.parent.CRM_Tenant) {
+            window.CRM_Tenant = window.parent.CRM_Tenant;
+        }
+        if (window.parent && window.parent.CRM_Config) {
+            window.CRM_Config = window.parent.CRM_Config;
+        }
+        console.log('📦 Inherited Firebase from parent');
+    </script>
+    
         'use strict';
         
         /**
