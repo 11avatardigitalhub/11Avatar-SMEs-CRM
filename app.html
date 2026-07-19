@@ -215,12 +215,19 @@
                 appId: "1:946959261009:web:175f5390d63715f1f8c770"
             });
             console.log('🔥 Firebase initialized in app.html');
+        } else {
+            console.log('🔥 Firebase already initialized, skipping');
         }
     </script>
 
     <script src="js/core/config.js"></script>
     <script src="js/core/auth.js"></script>
-    <script src="js/core/firestore.js"></script>
+    <script>
+    'use strict';
+        if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
+            window.firebase.initializeApp({...});
+        }
+    </script>
     <script src="js/core/tenant.js"></script>
 
     <script>
