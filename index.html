@@ -1,510 +1,229 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="en-IN" dir="ltr" data-theme="light">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="description" content="11 Avatar SMEs CRM - India's Most Affordable Revenue Operating System. GST invoicing, WhatsApp CRM, lead management, pipeline tracking." />
-    <meta name="keywords" content="SME CRM India, GST invoicing, WhatsApp CRM, lead management, affordable CRM, multi-tenant CRM" />
-    <meta name="author" content="11 Avatar Digital Hub" />
-    <meta name="theme-color" content="#0A0A0A" />
+    <meta name="description" content="11 Avatar SMEs CRM - Complete Revenue Operating System" />
+    <meta name="theme-color" content="#F8F6F0" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="11 Avatar CRM" />
-    <meta name="robots" content="index, follow" />
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="11 Avatar SMEs CRM" />
-    <meta property="og:title" content="11 Avatar SMEs CRM - India's Affordable Revenue OS" />
-    <meta property="og:description" content="Complete CRM for Indian Small Businesses. Start Free Today." />
-    <meta property="og:url" content="https://SME.11avatardigitalhub.cloud/" />
-    <meta property="og:locale" content="en_IN" />
-    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="robots" content="noindex, nofollow" />
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23D4AF37'/%3E%3Ctext x='50' y='68' font-size='38' text-anchor='middle' fill='%230A0A0A' font-weight='900' font-family='Poppins,sans-serif'%3E11A%3C/text%3E%3C/svg%3E" />
-    <link rel="canonical" href="https://SME.11avatardigitalhub.cloud/" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/crm-design-system.css" />
-    <link rel="stylesheet" href="css/public.css" />
-    <title>11 Avatar SMEs CRM — India's Most Affordable Revenue OS</title>
-
+    <link rel="stylesheet" href="css/app.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <title>11 Avatar SMEs CRM</title>
     <style>
         :root {
-            --bg: #030409;
-            --bg2: #0a0d16;
-            --card: #111620;
-            --card-hover: #161d2a;
-            --border: rgba(255,255,255,0.06);
-            --border-glow: rgba(200,168,78,0.15);
-            --text: #f0f0f0;
-            --muted: #8b93a5;
-            --gold: #c8a84e;
-            --gold-light: #f0d878;
-            --gold-glow: rgba(200,168,78,0.2);
-            --green: #00e676;
-            --red: #ff5252;
-            --whatsapp: #25D366;
-            --radius: 20px;
-            --radius-lg: 28px;
-            --radius-sm: 12px;
-            --shadow: 0 12px 40px rgba(0,0,0,0.5);
-            --shadow-gold: 0 8px 32px rgba(200,168,78,0.15);
-            --transition: 0.35s cubic-bezier(0.4,0,0.2,1);
-            --font-heading: 'Poppins', sans-serif;
-            --font-body: 'Inter', sans-serif;
+            --gold-light: #E8C95A; --gold: #D4AF37; --gold-dark: #B8960F;
+            --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
+            --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
+            --radius: 12px; --radius-sm: 8px;
+            --transition: 0.25s ease; --transition-fast: 0.15s ease;
+            --sidebar-w: 260px; --sidebar-collapsed: 64px; --header-h: 60px;
         }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        [data-theme="light"] {
+            --bg: #F8F6F0; --bg2: #FFFFFF; --bg3: #F0EDE5;
+            --glass: rgba(255,255,255,0.8); --text: #0A0A0A; --text2: #333;
+            --text3: #777; --border: rgba(0,0,0,0.06); --border2: rgba(0,0,0,0.12);
+            --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
+            --hover: rgba(212,175,55,0.06); --active: rgba(212,175,55,0.12);
+            --success: #10B981; --error: #DC2626; --warning: #F59E0B; --info: #3B82F6;
+        }
+        [data-theme="dark"] {
+            --bg: #0A0A0A; --bg2: #1A1A1A; --bg3: #252525; --glass: rgba(10,10,10,0.9);
+            --text: #FFFFFF; --text2: #CCCCCC; --text3: #888;
+            --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
+            --shadow: 0 4px 16px rgba(0,0,0,0.5); --shadow-md: 0 8px 32px rgba(0,0,0,0.6);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.7);
+            --hover: rgba(255,255,255,0.06); --active: rgba(212,175,55,0.15);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; font-size: 16px; }
         body {
-            font-family: var(--font-body);
-            background: var(--bg);
-            color: var(--text);
-            overflow-x: hidden;
-            line-height: 1.7;
+            font-family: var(--font-body); font-size: 14px; line-height: 1.6;
+            color: var(--text); background: var(--bg); margin: 0; padding: 0;
+            display: flex; min-height: 100vh; overflow-x: hidden;
+            transition: background var(--transition), color var(--transition);
             -webkit-font-smoothing: antialiased;
-            font-size: 15px;
         }
-        img { max-width: 100%; display: block; }
-        a { text-decoration: none; color: inherit; }
-        button { font-family: inherit; cursor: pointer; border: none; }
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg,var(--gold),var(--gold-light)); border-radius: 100px; }
-
-        .container { width: min(94%, 1320px); margin: auto; }
-
-        .gradient-text {
-            background: linear-gradient(135deg,var(--gold),var(--gold-light),#00cec9);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+        a { color: var(--gold-dark); text-decoration: none; }
+        ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
+        .skip-link { position: fixed; top: -100%; left: 16px; z-index: 9999; padding: 12px 20px; background: var(--gold); color: #000; font-weight: 700; border-radius: 8px; }
+        .skip-link:focus { top: 16px; }
+        .sb { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 300; transition: width var(--transition), transform var(--transition); overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+        .sb.collapsed { width: var(--sidebar-collapsed); }
+        .sb-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; height: var(--header-h); border-bottom: 1px solid var(--border); flex-shrink: 0; }
+        .sb-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+        .sb-logo svg { width: 34px; height: 34px; flex-shrink: 0; }
+        .sb-brand { font-family: var(--font-heading); font-weight: 800; font-size: 15px; color: var(--text); white-space: nowrap; overflow: hidden; transition: opacity var(--transition); }
+        .sb-brand-sub { font-size: 9px; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.05em; }
+        .collapsed .sb-brand, .collapsed .sb-brand-sub { opacity: 0; width: 0; }
+        .sb-collapse { margin-left: auto; width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: var(--glass); color: var(--text3); cursor: pointer; font-size: 13px; transition: all var(--transition); flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
+        .sb-collapse:hover { background: var(--hover); color: var(--text); border-color: var(--gold); }
+        .sb-nav { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 10px; }
+        .nav-sec { margin-bottom: 14px; }
+        .nav-sec-title { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 12px; margin-bottom: 4px; white-space: nowrap; overflow: hidden; transition: opacity var(--transition); }
+        .collapsed .nav-sec-title { opacity: 0; height: 0; padding: 0; margin: 0; }
+        .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 500; color: var(--text2); transition: all var(--transition-fast); cursor: pointer; white-space: nowrap; overflow: hidden; min-height: 42px; width: 100%; text-align: left; background: none; border: none; }
+        .nav-item:hover { background: var(--hover); color: var(--text); }
+        .nav-item.active { background: var(--active); color: var(--gold-dark); font-weight: 600; border-left: 3px solid var(--gold); padding-left: 11px; }
+        .nav-item.hidden { display: none !important; }
+        .nav-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
+        .nav-label { overflow: hidden; text-overflow: ellipsis; transition: opacity var(--transition); }
+        .collapsed .nav-label { opacity: 0; width: 0; }
+        .sb-footer { padding: 10px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
+        .sb-user { display: flex; align-items: center; gap: 10px; padding: 6px; border-radius: var(--radius); cursor: pointer; transition: background var(--transition-fast); }
+        .sb-user:hover { background: var(--hover); }
+        .sb-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--gold-gradient); color: #000; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; flex-shrink: 0; font-family: var(--font-heading); }
+        .sb-user-info { overflow: hidden; transition: opacity var(--transition); min-width: 0; }
+        .collapsed .sb-user-info { opacity: 0; width: 0; }
+        .sb-user-name { font-weight: 600; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .sb-user-role { font-size: 10px; color: var(--text3); }
+        .main { flex: 1; margin-left: var(--sidebar-w); display: flex; flex-direction: column; min-height: 100vh; transition: margin-left var(--transition); }
+        .sb.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
+        .main-header { position: sticky; top: 0; z-index: 200; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 14px; flex-shrink: 0; }
+        .main-header .menu-btn { display: none; width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; align-items: center; justify-content: center; font-size: 18px; transition: all var(--transition-fast); flex-shrink: 0; }
+        .main-header .brand-text { font-family: var(--font-heading); font-weight: 800; font-size: 16px; color: var(--text); white-space: nowrap; }
+        .main-header .brand-sub { font-size: 9px; color: var(--gold-dark); text-transform: uppercase; letter-spacing: 0.05em; }
+        .main-header .spacer { flex: 1; }
+        .hdr-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg2); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all var(--transition-fast); flex-shrink: 0; text-decoration: none; }
+        .hdr-btn:hover { background: var(--hover); color: var(--text); border-color: var(--gold); }
+        .hdr-profile { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); color: #000; border: none; cursor: pointer; font-weight: 700; font-size: 14px; font-family: var(--font-heading); transition: all var(--transition-fast); flex-shrink: 0; }
+        .hdr-profile:hover { box-shadow: 0 4px 16px rgba(212,175,55,0.35); transform: translateY(-1px); }
+        .content-area { flex: 1; padding: 20px; overflow-y: auto; }
+        .sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; }
+        .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 200; padding: 6px 10px; padding-bottom: max(6px, env(safe-area-inset-bottom)); justify-content: space-around; align-items: center; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
+        .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border-radius: 8px; font-size: 10px; color: var(--text3); transition: all var(--transition-fast); min-width: 50px; text-decoration: none; }
+        .mobile-nav a.active { color: var(--gold-dark); font-weight: 600; }
+        .mobile-nav .nav-ic { font-size: 1.2rem; }
+        @media (max-width: 1024px) {
+            .sb { transform: translateX(-100%); width: var(--sidebar-w); }
+            .sb.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
+            .sb-overlay.show { display: block; }
+            .main { margin-left: 0 !important; }
+            .main-header .menu-btn { display: flex; }
+            .mobile-nav { display: flex; }
+            .content-area { padding: 12px; padding-bottom: 70px; }
         }
-
-        #scrollProgress {
-            position: fixed; top: 0; left: 0; width: 0%; height: 3px;
-            background: linear-gradient(90deg,var(--gold),#6c5ce7,#00cec9);
-            z-index: 99999; transition: width 0.1s linear;
-        }
-
-        .navbar {
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000;
-            background: rgba(3,4,9,0.6); backdrop-filter: blur(24px) saturate(180%);
-            border-bottom: 1px solid rgba(255,255,255,0.04); transition: var(--transition);
-        }
-        .navbar.scrolled { background: rgba(3,4,9,0.85); border-bottom: 1px solid rgba(200,168,78,0.15); }
-        .navbar .container { display: flex; justify-content: space-between; align-items: center; height: 76px; }
-        .logo { display: flex; align-items: center; gap: 12px; font-weight: 800; font-size: 18px; letter-spacing: -0.3px; font-family: var(--font-heading); }
-        .logo svg { width: 44px; height: 44px; border-radius: 12px; }
-        .logo .accent { color: var(--gold); }
-        nav { display: flex; gap: 24px; align-items: center; }
-        nav a { font-size: 13.5px; font-weight: 500; color: var(--muted); transition: var(--transition); position: relative; }
-        nav a::after { content: ''; position: absolute; bottom: -6px; left: 0; width: 0; height: 2px; background: var(--gold); border-radius: 2px; transition: var(--transition); }
-        nav a:hover, nav a.active { color: var(--text); }
-        nav a:hover::after, nav a.active::after { width: 100%; }
-        .nav-buttons { display: flex; gap: 10px; align-items: center; }
-        .hamburger { display: none; flex-direction: column; gap: 5px; background: transparent; padding: 5px; z-index: 1001; }
-        .hamburger span { width: 26px; height: 2.5px; background: var(--text); transition: var(--transition); border-radius: 2px; }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px,5px); }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px,-5px); }
-
-        .btn-primary {
-            background: linear-gradient(135deg,var(--gold),#e0b84c); color: #0a0a0a;
-            font-weight: 700; padding: 13px 26px; border-radius: 999px; transition: var(--transition);
-            cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px;
-        }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 40px rgba(200,168,78,0.3); }
-        .btn-primary:active { transform: scale(0.97); }
-        .btn-secondary {
-            background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.12);
-            color: var(--text); padding: 13px 26px; border-radius: 999px; transition: var(--transition);
-            cursor: pointer; display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500;
-        }
-        .btn-secondary:hover { border-color: var(--gold); background: rgba(200,168,78,0.08); color: var(--gold); }
-        .btn-glow { animation: glowPulse 2s infinite; }
-        @keyframes glowPulse { 0%,100% { box-shadow: 0 0 20px rgba(200,168,78,0.2); } 50% { box-shadow: 0 0 40px rgba(200,168,78,0.4); } }
-
-        .snap-section { min-height: 100vh; position: relative; display: flex; flex-direction: column; justify-content: center; padding: 100px 0; }
-        .snap-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 0%,rgba(200,168,78,0.03),transparent 60%); pointer-events: none; }
-
-        .fade-in { opacity: 0; transform: translateY(50px); transition: opacity 0.9s ease,transform 0.9s ease; }
-        .fade-in.visible { opacity: 1; transform: translateY(0); }
-        .fade-in-scale { opacity: 0; transform: scale(0.9); transition: opacity 0.9s ease,transform 0.9s ease; }
-        .fade-in-scale.visible { opacity: 1; transform: scale(1); }
-        .stagger-children > * { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease,transform 0.6s ease; }
-        .stagger-children.visible > *:nth-child(1) { transition-delay: 0.05s; }
-        .stagger-children.visible > *:nth-child(2) { transition-delay: 0.10s; }
-        .stagger-children.visible > *:nth-child(3) { transition-delay: 0.15s; }
-        .stagger-children.visible > *:nth-child(4) { transition-delay: 0.20s; }
-        .stagger-children.visible > *:nth-child(5) { transition-delay: 0.25s; }
-        .stagger-children.visible > *:nth-child(6) { transition-delay: 0.30s; }
-        .stagger-children.visible > *:nth-child(7) { transition-delay: 0.35s; }
-        .stagger-children.visible > *:nth-child(8) { transition-delay: 0.40s; }
-        .stagger-children.visible > * { opacity: 1; transform: translateY(0); }
-
-        .hero-section { min-height: 100vh; overflow: hidden; padding-top: 120px; }
-        .hero-bg { position: absolute; inset: 0; background: radial-gradient(circle at 15% 15%,rgba(200,168,78,0.15),transparent 40%),radial-gradient(circle at 85% 75%,rgba(108,92,231,0.1),transparent 45%),radial-gradient(circle at 50% 50%,rgba(0,206,201,0.06),transparent 50%); filter: blur(100px); }
-        .hero-content { position: relative; z-index: 2; text-align: center; padding: 40px 0; }
-        .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 8px 18px; border-radius: 999px; border: 1px solid rgba(200,168,78,0.25); background: rgba(200,168,78,0.06); margin-bottom: 28px; font-size: 13px; font-weight: 600; color: var(--gold-light); }
-        .hero-eyebrow .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
-        .hero-title { font-size: clamp(44px,8vw,80px); font-weight: 900; line-height: 1.08; max-width: 1100px; margin: auto; letter-spacing: -1.5px; font-family: var(--font-heading); }
-        .hero-subtitle { font-size: clamp(17px,2.5vw,20px); color: var(--muted); max-width: 750px; margin: 24px auto; line-height: 1.6; }
-        .hero-cta-row { display: flex; justify-content: center; gap: 16px; margin-top: 32px; flex-wrap: wrap; }
-        .usp-strip { display: flex; justify-content: center; gap: 40px; margin-top: 50px; flex-wrap: wrap; padding: 24px 0; border-top: 1px solid rgba(255,255,255,0.04); }
-        .usp-item { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--muted); font-weight: 500; }
-        .usp-item .icon { color: var(--gold); font-size: 18px; }
-        .hero-metrics { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-top: 60px; }
-        .metric-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); backdrop-filter: blur(20px); padding: 28px 16px; border-radius: var(--radius-lg); text-align: center; transition: var(--transition); }
-        .metric-card:hover { background: rgba(255,255,255,0.05); border-color: rgba(200,168,78,0.2); transform: translateY(-4px); box-shadow: var(--shadow-gold); }
-        .metric-value { font-size: clamp(28px,4vw,44px); font-weight: 900; color: var(--gold); margin-bottom: 6px; font-family: var(--font-heading); }
-        .metric-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-
-        .section-header { text-align: center; max-width: 800px; margin: 0 auto 50px; }
-        .section-tag { display: inline-block; padding: 8px 18px; border-radius: 999px; background: rgba(200,168,78,0.1); color: var(--gold); margin-bottom: 14px; font-size: 13px; font-weight: 600; border: 1px solid rgba(200,168,78,0.15); }
-        .section-header h2 { font-size: clamp(32px,5vw,52px); line-height: 1.12; margin-bottom: 14px; font-weight: 800; letter-spacing: -0.8px; font-family: var(--font-heading); }
-        .section-header p { font-size: 16px; color: var(--muted); }
-
-        .features-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 14px; }
-        .feature-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 20px; transition: var(--transition); text-align: center; }
-        .feature-card:hover { border-color: var(--gold-glow); transform: translateY(-4px); background: var(--card-hover); }
-        .feature-icon { font-size: 32px; color: var(--gold); margin-bottom: 12px; }
-        .feature-title { font-size: 15px; font-weight: 700; margin-bottom: 6px; font-family: var(--font-heading); }
-        .feature-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
-
-        .pricing-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
-        .pricing-card { background: var(--card); padding: 32px 22px; border-radius: var(--radius-lg); border: 1px solid var(--border); text-align: center; transition: var(--transition); position: relative; }
-        .pricing-card:hover { transform: translateY(-6px); border-color: rgba(200,168,78,0.25); }
-        .pricing-card.featured { border-color: var(--gold); background: linear-gradient(180deg,rgba(200,168,78,0.08),var(--card)); transform: scale(1.03); box-shadow: 0 0 40px rgba(200,168,78,0.1); }
-        .popular-badge { position: absolute; top: -14px; left: 50%; transform: translateX(-50%); background: var(--gold); color: #0a0a0a; padding: 8px 20px; border-radius: 999px; font-size: 12px; font-weight: 700; }
-        .plan-name { font-size: 20px; font-weight: 700; font-family: var(--font-heading); }
-        .plan-price { font-size: 44px; font-weight: 900; color: var(--gold); margin: 12px 0; font-family: var(--font-heading); }
-        .plan-price span { font-size: 15px; font-weight: 400; color: var(--muted); }
-        .plan-desc { color: var(--muted); font-size: 13px; margin-bottom: 18px; }
-        .pricing-card ul { text-align: left; margin-bottom: 22px; list-style: none; }
-        .pricing-card ul li { padding: 7px 0; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
-        .pricing-card ul li i { color: var(--green); font-size: 12px; }
-
-        .faq-grid { max-width: 800px; margin: auto; display: grid; gap: 10px; }
-        .faq-item { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; }
-        .faq-question { width: 100%; padding: 18px 22px; background: transparent; color: var(--text); font-size: 15px; font-weight: 600; display: flex; justify-content: space-between; align-items: center; text-align: left; transition: var(--transition); }
-        .faq-question:hover { color: var(--gold); }
-        .faq-question i { transition: var(--transition); font-size: 14px; }
-        .faq-item.active .faq-question i { transform: rotate(180deg); color: var(--gold); }
-        .faq-answer { max-height: 0; overflow: hidden; padding: 0 22px; color: var(--muted); line-height: 1.7; transition: all 0.4s ease; }
-        .faq-item.active .faq-answer { max-height: 400px; padding: 0 22px 18px; }
-
-        .cta-section { text-align: center; padding: 80px 0; }
-        .cta-section h2 { font-size: clamp(44px,7vw,64px); margin-bottom: 14px; font-family: var(--font-heading); }
-
-        .site-footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 56px 0 24px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 36px; margin-bottom: 32px; }
-        .footer-brand p { color: var(--muted); font-size: 13px; margin-top: 8px; }
-        .footer-links h4 { margin-bottom: 12px; font-size: 14px; font-family: var(--font-heading); }
-        .footer-links a { display: block; color: var(--muted); font-size: 13px; padding: 5px 0; transition: var(--transition); }
-        .footer-links a:hover { color: var(--gold); }
-        .footer-bottom { text-align: center; border-top: 1px solid var(--border); padding-top: 20px; color: var(--muted); font-size: 12px; }
-
-        .auth-modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); z-index: 99999; display: none; align-items: center; justify-content: center; }
-        .auth-modal-overlay.show { display: flex; }
-        .auth-modal { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 32px; width: 500px; max-width: 92vw; position: relative; max-height: 90vh; overflow-y: auto; }
-        .auth-modal-close { position: absolute; top: 14px; right: 18px; background: none; border: none; color: var(--muted); font-size: 24px; cursor: pointer; }
-        .auth-modal-close:hover { color: var(--text); }
-        .auth-modal h2 { font-size: 24px; margin-bottom: 6px; text-align: center; font-family: var(--font-heading); }
-        .auth-modal .subtitle { text-align: center; color: var(--muted); margin-bottom: 20px; font-size: 14px; }
-        .auth-tabs { display: flex; gap: 4px; background: rgba(255,255,255,0.04); border-radius: 999px; padding: 4px; margin-bottom: 20px; }
-        .auth-tab { flex: 1; padding: 10px; border-radius: 999px; text-align: center; font-weight: 600; font-size: 14px; background: transparent; color: var(--muted); transition: var(--transition); }
-        .auth-tab.active { background: var(--gold); color: #0a0a0a; }
-        .form-group { margin-bottom: 14px; }
-        .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .form-group input { width: 100%; padding: 12px 16px; background: rgba(255,255,255,0.04); border: 1px solid var(--border); border-radius: 12px; color: #fff; font-size: 14px; font-family: inherit; transition: var(--transition); }
-        .form-group input:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(200,168,78,0.08); }
-        .auth-message { display: none; padding: 12px; border-radius: 10px; margin-bottom: 14px; font-size: 13px; font-weight: 600; text-align: center; }
-        .auth-message.success { background: rgba(0,230,118,0.12); color: var(--green); display: block; }
-        .auth-message.error { background: rgba(255,82,82,0.12); color: var(--red); display: block; }
-        .auth-message.info { background: rgba(59,130,246,0.12); color: #3b82f6; display: block; }
-
-        @media (max-width: 1200px) {
-            .features-grid { grid-template-columns: repeat(3,1fr); }
-            .pricing-grid { grid-template-columns: repeat(2,1fr); }
-            .hero-metrics { grid-template-columns: repeat(2,1fr); }
-        }
-        @media (max-width: 992px) {
-            nav { display: none; }
-            .hamburger { display: flex; }
-            nav.open { display: flex; flex-direction: column; position: absolute; top: 76px; left: 0; width: 100%; background: rgba(3,4,9,0.97); padding: 24px 20px; gap: 12px; border-bottom: 1px solid var(--border); }
-            .nav-buttons { display: none; }
-            .features-grid { grid-template-columns: repeat(2,1fr); }
-            .footer-grid { grid-template-columns: repeat(2,1fr); }
-        }
-        @media (max-width: 768px) {
-            .hero-title { font-size: 36px; }
-            .section-header h2 { font-size: 30px; }
-            .features-grid { grid-template-columns: 1fr 1fr; }
-            .pricing-grid { grid-template-columns: 1fr; }
-            .pricing-card.featured { transform: scale(1); }
-            .hero-metrics { grid-template-columns: 1fr 1fr; }
-            .usp-strip { flex-direction: column; align-items: center; gap: 14px; }
-            .footer-grid { grid-template-columns: 1fr; text-align: center; }
-        }
-        @media (max-width: 480px) {
-            .hero-title { font-size: 28px; }
-            .features-grid { grid-template-columns: 1fr; }
-            .hero-metrics { grid-template-columns: 1fr; }
-        }
+        .approval-banner { background: #FEF3C7; color: #92400E; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #FCD34D; display: none; }
+        .approval-banner.show { display: block; }
+        .loading-screen { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text3); font-size: 16px; gap: 12px; }
+        .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
+        .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); }
+        .stat-card .lbl { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
+        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
+        .btn-primary { background: var(--gold-gradient); color: #FFF; }
+        .btn-outline { background: transparent; color: var(--gold-dark); border: 1.5px solid var(--gold); }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
+        .btn-ghost { background: transparent; color: var(--text2); }
+        .btn-danger { background: var(--error); color: #FFF; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
+        .toast { background: var(--bg2); border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 10px; }
+        .toast-success { border-left: 4px solid var(--success); } .toast-error { border-left: 4px solid var(--error); } .toast-info { border-left: 4px solid var(--info); }
+        @keyframes slideIn { from{opacity:0;transform:translateX(120%);} to{opacity:1;transform:translateX(0);} }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
     </style>
 </head>
 <body>
+    <a href="#mainContent" class="skip-link">Skip to Main Content</a>
+    <div class="sb-overlay" id="sbOverlay" onclick="closeMobile()"></div>
 
-    <div id="scrollProgress"></div>
-
-    <header class="navbar" id="navbar">
-        <div class="container">
-            <a href="#" class="logo">
-                <svg width="44" height="44" viewBox="0 0 38 38" fill="none"><rect width="38" height="38" rx="10" fill="url(#logo-gold)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="logo-gold"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
-                <span>11 Avatar <span class="accent">SMEs CRM</span></span>
+    <aside class="sb" id="sidebar">
+        <div class="sb-header">
+            <a href="index.html" class="sb-logo">
+                <svg width="34" height="34" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#g)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="g"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
+                <div class="sb-brand"><div>11 Avatar</div><div class="sb-brand-sub">SMEs CRM</div></div>
             </a>
-            <nav id="mainNav">
-                <a href="#hero" class="active">Home</a>
-                <a href="#features">Features</a>
-                <a href="#solutions">Solutions</a>
-                <a href="#how-it-works">How It Works</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#faq">FAQ</a>
-            </nav>
-            <div class="nav-buttons">
-                <button class="btn-secondary" onclick="openAuth('login')">Sign In</button>
-                <button class="btn-primary" onclick="openAuth('register')">Start Free <i style="font-size:12px;">→</i></button>
-            </div>
-            <button class="hamburger" onclick="toggleMobileNav()" aria-label="Menu"><span></span><span></span><span></span></button>
+            <button class="sb-collapse" id="sbCollapse" title="Collapse" onclick="toggleSidebar()">◀</button>
         </div>
-    </header>
-
-    <main>
-
-        <section id="hero" class="hero-section snap-section">
-            <div class="hero-bg"></div>
-            <div class="container hero-content">
-                <div class="hero-eyebrow fade-in"><span class="dot"></span> India's Most Affordable Revenue OS for SMEs</div>
-                <h1 class="hero-title fade-in">From <span class="gradient-text">Lead → Revenue</span><br>All in One Place.</h1>
-                <p class="hero-subtitle fade-in">Capture leads, manage pipelines, send GST-compliant invoices, collect payments via UPI, and retain clients — all from one powerful CRM built for Indian Small Businesses.</p>
-                <div class="hero-cta-row fade-in">
-                    <button class="btn-primary btn-glow" onclick="openAuth('register')" style="padding:16px 32px;font-size:15px;">🚀 Start Free Forever →</button>
-                    <button class="btn-secondary" onclick="document.getElementById('features').scrollIntoView({behavior:'smooth'})" style="padding:16px 32px;font-size:15px;">▶️ See How It Works</button>
-                </div>
-                <div class="usp-strip fade-in">
-                    <div class="usp-item"><span class="icon">✅</span> No Credit Card Required</div>
-                    <div class="usp-item"><span class="icon">🇮🇳</span> Made in India for Indian SMEs</div>
-                    <div class="usp-item"><span class="icon">🔒</span> Bank-Grade Security</div>
-                    <div class="usp-item"><span class="icon">📱</span> PWA Mobile App</div>
-                </div>
-                <div class="hero-metrics fade-in">
-                    <div class="metric-card"><div class="metric-value">50,000+</div><div class="metric-label">Businesses Trust Us</div></div>
-                    <div class="metric-card"><div class="metric-value">₹0</div><div class="metric-label">To Get Started</div></div>
-                    <div class="metric-card"><div class="metric-value">15+</div><div class="metric-label">Business Modules</div></div>
-                    <div class="metric-card"><div class="metric-value">99.9%</div><div class="metric-label">Uptime</div></div>
+        <nav class="sb-nav" id="sidebarNav">
+            <div class="nav-sec"><div class="nav-sec-title">Main</div>
+                <button class="nav-item active" data-module="DASHBOARD" onclick="switchModule('dashboard')"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></button>
+                <button class="nav-item" data-module="LEADS" onclick="switchModule('leads')"><span class="nav-icon">👥</span><span class="nav-label">Leads</span></button>
+                <button class="nav-item" data-module="PIPELINE" onclick="switchModule('pipeline')"><span class="nav-icon">📈</span><span class="nav-label">Pipeline</span></button>
+                <button class="nav-item" data-module="CLIENTS" onclick="switchModule('clients')"><span class="nav-icon">🏢</span><span class="nav-label">Clients</span></button>
+            </div>
+            <div class="nav-sec"><div class="nav-sec-title">Financial</div>
+                <button class="nav-item" data-module="INVOICES" onclick="switchModule('invoices')"><span class="nav-icon">🧾</span><span class="nav-label">Invoices</span></button>
+                <button class="nav-item" data-module="PAYMENTS" onclick="switchModule('payments')"><span class="nav-icon">💰</span><span class="nav-label">Payments</span></button>
+                <button class="nav-item" data-module="RETAINERS" onclick="switchModule('retainers')"><span class="nav-icon">🔄</span><span class="nav-label">Retainers</span></button>
+            </div>
+            <div class="nav-sec"><div class="nav-sec-title">Operations</div>
+                <button class="nav-item" data-module="TASKS" onclick="switchModule('tasks')"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></button>
+                <button class="nav-item" data-module="PROJECTS" onclick="switchModule('projects')"><span class="nav-icon">🚀</span><span class="nav-label">Projects</span></button>
+                <button class="nav-item" data-module="APPOINTMENTS" onclick="switchModule('appointments')"><span class="nav-icon">📅</span><span class="nav-label">Appointments</span></button>
+            </div>
+            <div class="nav-sec"><div class="nav-sec-title">Communication</div>
+                <button class="nav-item" data-module="WHATSAPP" onclick="switchModule('whatsapp')"><span class="nav-icon">💬</span><span class="nav-label">WhatsApp</span></button>
+                <button class="nav-item" data-module="TRAINING" onclick="switchModule('training')"><span class="nav-icon">🎓</span><span class="nav-label">Training</span></button>
+                <button class="nav-item" data-module="REFERRALS" onclick="switchModule('referrals')"><span class="nav-icon">🔗</span><span class="nav-label">Referrals</span></button>
+            </div>
+            <div class="nav-sec"><div class="nav-sec-title">Insights</div>
+                <button class="nav-item" data-module="REPORTS" onclick="switchModule('reports')"><span class="nav-icon">📋</span><span class="nav-label">Reports</span></button>
+                <button class="nav-item" data-module="NOTIFICATIONS" onclick="switchModule('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></button>
+            </div>
+            <div class="nav-sec"><div class="nav-sec-title">System</div>
+                <button class="nav-item" data-module="SETTINGS" onclick="switchModule('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
+                <button class="nav-item" data-module="PROFILE" onclick="switchModule('profile')"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></button>
+            </div>
+        </nav>
+        <div class="sb-footer">
+            <div class="sb-user" onclick="switchModule('profile')">
+                <div class="sb-avatar" id="sbAvatar">U</div>
+                <div class="sb-user-info">
+                    <div class="sb-user-name" id="sbUserName">User</div>
+                    <div class="sb-user-role" id="sbUserRole">Loading...</div>
                 </div>
             </div>
-        </section>
-
-        <section id="features" class="snap-section">
-            <div class="container">
-                <div class="section-header fade-in">
-                    <span class="section-tag">Core Features</span>
-                    <h2>Everything Your <span class="gradient-text">Business Needs</span></h2>
-                    <p>15+ powerful modules designed specifically for Indian SMEs. From lead capture to GST invoicing.</p>
-                </div>
-                <div class="features-grid stagger-children">
-                    <div class="feature-card"><div class="feature-icon">👥</div><h3 class="feature-title">Lead Management</h3><p class="feature-desc">Capture from WhatsApp, forms, CSV. 12-stage pipeline with auto-scoring.</p></div>
-                    <div class="feature-card"><div class="feature-icon">📊</div><h3 class="feature-title">Visual Pipeline</h3><p class="feature-desc">Drag-drop Kanban board. Real-time revenue forecasting.</p></div>
-                    <div class="feature-card"><div class="feature-icon">🧾</div><h3 class="feature-title">GST Invoicing</h3><p class="feature-desc">Auto CGST/SGST/IGST. E-Invoice IRN, HSN codes, payment links.</p></div>
-                    <div class="feature-card"><div class="feature-icon">💬</div><h3 class="feature-title">WhatsApp CRM</h3><p class="feature-desc">CloudWA-powered messaging, templates, broadcast directly from CRM.</p></div>
-                    <div class="feature-card"><div class="feature-icon">💰</div><h3 class="feature-title">Payment Tracking</h3><p class="feature-desc">UPI, NEFT, RTGS. Auto-reconciliation, UTR tracking, cash compliance.</p></div>
-                    <div class="feature-card"><div class="feature-icon">📈</div><h3 class="feature-title">Advanced Reports</h3><p class="feature-desc">12 chart types, custom reports, scheduled PDF/Excel delivery.</p></div>
-                    <div class="feature-card"><div class="feature-icon">🔄</div><h3 class="feature-title">Retainers & MRR</h3><p class="feature-desc">Track monthly recurring revenue, auto-generate retainer invoices.</p></div>
-                    <div class="feature-card"><div class="feature-icon">🔗</div><h3 class="feature-title">Referral Engine</h3><p class="feature-desc">Multi-level referral tracking with partner commissions.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="solutions" class="snap-section">
-            <div class="container">
-                <div class="section-header fade-in">
-                    <span class="section-tag">Industry Solutions</span>
-                    <h2>Built for <span class="gradient-text">Every Indian Business</span></h2>
-                </div>
-                <div class="features-grid stagger-children" style="grid-template-columns: repeat(4,1fr);">
-                    <div class="feature-card"><div class="feature-icon">🏠</div><h3 class="feature-title">Real Estate</h3></div>
-                    <div class="feature-card"><div class="feature-icon">🎓</div><h3 class="feature-title">Education</h3></div>
-                    <div class="feature-card"><div class="feature-icon">🏥</div><h3 class="feature-title">Healthcare</h3></div>
-                    <div class="feature-card"><div class="feature-icon">🏭</div><h3 class="feature-title">Manufacturing</h3></div>
-                    <div class="feature-card"><div class="feature-icon">🛒</div><h3 class="feature-title">Retail & E-com</h3></div>
-                    <div class="feature-card"><div class="feature-icon">🏦</div><h3 class="feature-title">Finance</h3></div>
-                    <div class="feature-card"><div class="feature-icon">💻</div><h3 class="feature-title">IT & SaaS</h3></div>
-                    <div class="feature-card"><div class="feature-icon">🚚</div><h3 class="feature-title">Field Sales</h3></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="how-it-works" class="snap-section">
-            <div class="container">
-                <div class="section-header fade-in">
-                    <span class="section-tag">Simple Process</span>
-                    <h2>From <span class="gradient-text">Lead → Revenue</span> in 4 Steps</h2>
-                </div>
-                <div class="features-grid stagger-children" style="grid-template-columns: repeat(4,1fr);">
-                    <div class="feature-card"><div class="feature-icon" style="font-size:40px;">1</div><h3 class="feature-title">Capture Leads</h3><p class="feature-desc">Import from WhatsApp, forms, CSV, or add manually.</p></div>
-                    <div class="feature-card"><div class="feature-icon" style="font-size:40px;">2</div><h3 class="feature-title">Nurture Pipeline</h3><p class="feature-desc">Track interactions, set follow-ups, move deals.</p></div>
-                    <div class="feature-card"><div class="feature-icon" style="font-size:40px;">3</div><h3 class="feature-title">Send Invoices</h3><p class="feature-desc">GST-compliant invoices with payment links.</p></div>
-                    <div class="feature-card"><div class="feature-icon" style="font-size:40px;">4</div><h3 class="feature-title">Retain & Grow</h3><p class="feature-desc">MRR tracking, referrals, scale your business.</p></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="pricing" class="snap-section">
-            <div class="container">
-                <div class="section-header fade-in">
-                    <span class="section-tag">Simple Pricing</span>
-                    <h2>Start <span class="gradient-text">Free</span>, Scale as You Grow</h2>
-                </div>
-                <div class="pricing-grid stagger-children">
-                    <div class="pricing-card">
-                        <div class="plan-name">Free Forever</div>
-                        <div class="plan-price">₹0<span>/mo</span></div>
-                        <div class="plan-desc">For startups & individuals</div>
-                        <ul>
-                            <li><i style="color:var(--green);">✓</i> 500 Leads</li>
-                            <li><i style="color:var(--green);">✓</i> 50 Invoices/month</li>
-                            <li><i style="color:var(--green);">✓</i> 3 Team Members</li>
-                            <li><i style="color:var(--green);">✓</i> WhatsApp Integration</li>
-                            <li><i style="color:var(--green);">✓</i> Basic Reports</li>
-                        </ul>
-                        <button class="btn-secondary" onclick="openAuth('register')" style="width:100%;">Get Started</button>
-                    </div>
-                    <div class="pricing-card featured">
-                        <div class="popular-badge">Most Popular</div>
-                        <div class="plan-name">Starter</div>
-                        <div class="plan-price">₹499<span>/mo</span></div>
-                        <div class="plan-desc">Best for growing businesses</div>
-                        <ul>
-                            <li><i style="color:var(--green);">✓</i> 5,000 Leads</li>
-                            <li><i style="color:var(--green);">✓</i> 500 Invoices/month</li>
-                            <li><i style="color:var(--green);">✓</i> 10 Team Members</li>
-                            <li><i style="color:var(--green);">✓</i> WhatsApp + Tasks</li>
-                            <li><i style="color:var(--green);">✓</i> Priority Email Support</li>
-                        </ul>
-                        <button class="btn-primary" onclick="openAuth('register')" style="width:100%;">Start Free Trial</button>
-                    </div>
-                    <div class="pricing-card">
-                        <div class="plan-name">Professional</div>
-                        <div class="plan-price">₹1,499<span>/mo</span></div>
-                        <div class="plan-desc">For established businesses</div>
-                        <ul>
-                            <li><i style="color:var(--green);">✓</i> 50,000 Leads</li>
-                            <li><i style="color:var(--green);">✓</i> 5,000 Invoices/month</li>
-                            <li><i style="color:var(--green);">✓</i> 50 Team Members</li>
-                            <li><i style="color:var(--green);">✓</i> All Modules</li>
-                            <li><i style="color:var(--green);">✓</i> Chat & Phone Support</li>
-                        </ul>
-                        <button class="btn-secondary" onclick="openAuth('register')" style="width:100%;">Start Free Trial</button>
-                    </div>
-                    <div class="pricing-card">
-                        <div class="plan-name">Enterprise</div>
-                        <div class="plan-price">Custom</div>
-                        <div class="plan-desc">For large organizations</div>
-                        <ul>
-                            <li><i style="color:var(--green);">✓</i> Unlimited Everything</li>
-                            <li><i style="color:var(--green);">✓</i> White-Label</li>
-                            <li><i style="color:var(--green);">✓</i> API Access</li>
-                            <li><i style="color:var(--green);">✓</i> Custom Integrations</li>
-                            <li><i style="color:var(--green);">✓</i> Dedicated Manager</li>
-                        </ul>
-                        <button class="btn-secondary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})" style="width:100%;">Contact Sales</button>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="faq" class="snap-section">
-            <div class="container">
-                <div class="section-header fade-in">
-                    <span class="section-tag">FAQ</span>
-                    <h2>Frequently Asked <span class="gradient-text">Questions</span></h2>
-                </div>
-                <div class="faq-grid stagger-children">
-                    <div class="faq-item"><button class="faq-question">Is 11 Avatar CRM really free? <i>▼</i></button><div class="faq-answer"><p>Yes! Free Forever plan includes 500 leads, unlimited pipeline stages, 50 GST invoices/month. No credit card required.</p></div></div>
-                    <div class="faq-item"><button class="faq-question">Is my business data secure? <i>▼</i></button><div class="faq-answer"><p>Absolutely. Firebase (Google Cloud), 256-bit encryption, India servers, 2FA, role-based access control.</p></div></div>
-                    <div class="faq-item"><button class="faq-question">Can I use it on mobile? <i>▼</i></button><div class="faq-answer"><p>Yes! It's a PWA — install on Android/iOS home screen. Works offline, syncs when online.</p></div></div>
-                    <div class="faq-item"><button class="faq-question">GST invoicing supported? <i>▼</i></button><div class="faq-answer"><p>Fully GST-compliant. Auto CGST/SGST/IGST, HSN/SAC codes, E-Invoice IRN, E-Way Bill generation.</p></div></div>
-                    <div class="faq-item"><button class="faq-question">Multiple team members? <i>▼</i></button><div class="faq-answer"><p>Yes! 8-level RBAC — Platform Owner, Tenant Admin, Sub Admin, Manager, Team Lead, Executive, Viewer, Restricted.</p></div></div>
-                    <div class="faq-item"><button class="faq-question">Can I import existing leads? <i>▼</i></button><div class="faq-answer"><p>CSV, JSON, Excel, Google Sheets. Free migration assistance from Zoho, HubSpot, and other CRMs.</p></div></div>
-                </div>
-            </div>
-        </section>
-
-        <section id="contact" class="snap-section cta-section fade-in">
-            <div class="container">
-                <h2>Ready to Transform <span class="gradient-text">Your Business</span>?</h2>
-                <p style="color:var(--muted);font-size:17px;margin-bottom:28px;">Join 50,000+ Indian SMEs growing with 11 Avatar CRM. Start free today.</p>
-                <button class="btn-primary btn-glow" onclick="openAuth('register')" style="padding:18px 36px;font-size:16px;">🚀 Start Free Forever →</button>
-                <p style="margin-top:18px;font-size:13px;color:var(--muted);">📧 info@11avatardigitalhub.cloud | 📧 support@11avatardigitalhub.cloud</p>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="site-footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <svg width="38" height="38" viewBox="0 0 38 38"><rect width="38" height="38" rx="10" fill="url(#logo-gold-footer)"/><text x="19" y="26" text-anchor="middle" fill="#0A0A0A" font-size="15" font-weight="900" font-family="Poppins">11A</text><defs><linearGradient id="logo-gold-footer"><stop stop-color="#E8C95A"/><stop offset="1" stop-color="#B8960F"/></linearGradient></defs></svg>
-                    <p>India's most affordable Revenue OS for SMEs. Lead → Revenue — all in one place.</p>
-                </div>
-                <div class="footer-links"><h4>Product</h4><a href="#features">Features</a><a href="#pricing">Pricing</a><a href="#solutions">Solutions</a></div>
-                <div class="footer-links"><h4>Company</h4><a href="#">About</a><a href="#contact">Contact</a><a href="#">Partners</a></div>
-                <div class="footer-links"><h4>Legal</h4><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Security</a></div>
-            </div>
-            <div class="footer-bottom"><p>© 2026 11 Avatar Digital Hub. All rights reserved. | Made with ❤️ for India 🇮🇳</p></div>
         </div>
-    </footer>
+    </aside>
 
-    <div class="auth-modal-overlay" id="authModalOverlay">
-        <div class="auth-modal">
-            <button class="auth-modal-close" onclick="closeAuth()">✕</button>
-            <div class="auth-message" id="authMessage"></div>
-            <h2 id="authTitle">Welcome Back</h2>
-            <p class="subtitle" id="authSubtitle">Sign in to your account</p>
-            <div class="auth-tabs">
-                <button class="auth-tab active" id="tabLogin" onclick="switchAuthTab('login')">Sign In</button>
-                <button class="auth-tab" id="tabRegister" onclick="switchAuthTab('register')">Register</button>
-            </div>
-            <form id="authForm" onsubmit="return false;">
-                <div class="form-group" id="nameGroup" style="display:none;">
-                    <label>Full Name</label>
-                    <input type="text" id="authName" placeholder="Enter your full name" autocomplete="name">
-                </div>
-                <div class="form-group">
-                    <label>Email Address</label>
-                    <input type="email" id="authEmail" placeholder="you@company.com" required autocomplete="email">
-                </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" required minlength="6" autocomplete="current-password">
-                </div>
-                <button type="submit" class="btn-primary" id="authSubmit" style="width:100%;" onclick="handleAuth()">Sign In</button>
-            </form>
+    <div class="main" id="main">
+        <header class="main-header">
+            <button class="menu-btn" id="mobileMenuBtn" onclick="openMobile()" aria-label="Menu">☰</button>
+            <div class="brand-text">11 Avatar</div>
+            <div class="brand-sub">SMEs CRM</div>
+            <div class="spacer"></div>
+            <div class="approval-banner" id="approvalBanner">⏳ Your account is pending approval.</div>
+            <button class="hdr-btn" title="Notifications" onclick="switchModule('notifications')">🔔</button>
+            <button class="hdr-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
+            <button class="hdr-profile" onclick="switchModule('profile')" title="Profile"><span id="hdrAvatar">U</span></button>
+            <button class="hdr-btn" id="logoutBtn" onclick="doLogout()" title="Logout" style="color:var(--error);">⏻</button>
+        </header>
+        <div class="content-area" id="contentArea">
+            <div class="loading-screen" id="loadingScreen"><div class="spinner"></div> Loading CRM...</div>
         </div>
     </div>
+
+    <nav class="mobile-nav" id="mobileNav">
+        <a href="#" onclick="switchModule('dashboard')"><span class="nav-ic">📊</span><span>Home</span></a>
+        <a href="#" onclick="switchModule('leads')"><span class="nav-ic">👥</span><span>Leads</span></a>
+        <a href="#" onclick="switchModule('invoices')"><span class="nav-ic">🧾</span><span>Invoice</span></a>
+        <a href="#" onclick="switchModule('whatsapp')"><span class="nav-ic">💬</span><span>WA</span></a>
+        <a href="#" onclick="switchModule('settings')"><span class="nav-ic">⚙️</span><span>More</span></a>
+    </nav>
+
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script src="js/core/config.js"></script>
-    <script src="js/core/auth.js"></script>
-    <script src="js/core/firestore.js"></script>
 
     <script>
         'use strict';
-
         if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
             window.firebase.initializeApp({
                 apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
@@ -516,144 +235,399 @@
             });
             console.log('🔥 Firebase initialized');
         }
+    </script>
 
-        const $ = function(s) { return document.querySelector(s); };
-        let authMode = 'login';
+    <script src="js/core/config.js"></script>
+    <script src="js/core/auth.js"></script>
+    <script src="js/core/firestore.js"></script>
+    <script src="js/core/tenant.js"></script>
 
-        function showMessage(msg, type) {
-            const el = $('#authMessage');
-            el.textContent = msg; el.className = 'auth-message ' + type;
-        }
-        function hideMessage() { $('#authMessage').className = 'auth-message'; }
-        function setLoading(loading) {
-            const btn = $('#authSubmit');
-            btn.textContent = loading ? 'Processing...' : (authMode === 'login' ? 'Sign In' : 'Create Free Account');
-            btn.disabled = loading;
-        }
-        function redirectToApp() { window.location.href = 'pages/dashboard.html'; }
+    <script>
+        'use strict';
 
-        window.openAuth = function(mode) {
-            authMode = mode || 'login';
-            const isLogin = authMode === 'login';
-            hideMessage();
-            $('#authTitle').textContent = isLogin ? 'Welcome Back' : 'Create Your Account';
-            $('#authSubtitle').textContent = isLogin ? 'Sign in to your account' : 'Start your free trial today';
-            $('#authSubmit').textContent = isLogin ? 'Sign In' : 'Create Free Account';
-            $('#nameGroup').style.display = isLogin ? 'none' : 'block';
-            $('#tabLogin').classList.toggle('active', isLogin);
-            $('#tabRegister').classList.toggle('active', !isLogin);
-            $('#authForm').reset();
-            $('#authModalOverlay').classList.add('show');
-            document.body.style.overflow = 'hidden';
-            setTimeout(function() { $('#authEmail').focus(); }, 300);
+        var APP = {
+            currentModule: 'dashboard',
+            collapsed: false,
+            mobile: false,
+            dark: false,
+            userProfile: null,
+            initialized: false
         };
 
-        window.closeAuth = function() {
-            $('#authModalOverlay').classList.remove('show');
-            document.body.style.overflow = '';
-            hideMessage();
-            setLoading(false);
-        };
+        function $(id) { return document.getElementById(id); }
 
-        window.switchAuthTab = function(mode) { openAuth(mode); };
+        function showToast(msg, type) {
+            var t = document.createElement('div'); t.className = 'toast toast-' + (type || 'info');
+            t.innerHTML = '<span>' + ({success:'✅',error:'❌',info:'ℹ️'}[type]||'') + '</span> ' + msg;
+            ($('toastContainer') || document.body).appendChild(t);
+            setTimeout(function() { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(function() { t.remove(); }, 300); }, 3000);
+        }
 
-        window.handleAuth = async function() {
-            hideMessage();
-            var email = $('#authEmail').value.trim();
-            var password = $('#authPassword').value.trim();
-            var name = authMode === 'register' ? $('#authName').value.trim() : '';
+        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
+        function formatCurrency(amount) { try { return '₹' + parseInt(amount || 0).toLocaleString('en-IN'); } catch(e) { return '₹0'; } }
 
-            if (!email || !password) { showMessage('Please fill all required fields.', 'error'); return; }
-            if (password.length < 6) { showMessage('Password must be at least 6 characters.', 'error'); return; }
-            if (authMode === 'register' && !name) { showMessage('Please enter your full name.', 'error'); return; }
+        function updateUserUI() {
+            var profile = APP.userProfile;
+            if (!profile && window.CRM_Tenant && window.CRM_Tenant.getUserProfile) profile = window.CRM_Tenant.getUserProfile();
+            if (!profile && window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
+            if (!profile) { try { var ud = localStorage.getItem('crm_user'); if (ud) profile = JSON.parse(ud); } catch(e) {} }
+            if (!profile) return;
+            APP.userProfile = profile;
+            var name = profile.displayName || profile.name || profile.email || 'User';
+            var av = name.charAt(0).toUpperCase();
+            ['sbAvatar', 'hdrAvatar'].forEach(function(id) { var el = $(id); if (el) el.textContent = av; });
+            var nameEl = $('sbUserName'); if (nameEl) nameEl.textContent = name;
+            var roleEl = $('sbUserRole'); if (roleEl) roleEl.textContent = profile.role || 'User';
+            if (profile.approvalStatus === 'pending') { var b = $('approvalBanner'); if (b) b.classList.add('show'); }
+        }
 
-            setLoading(true);
+        function applyRBACFilter() {
+            if (!window.CRM_Tenant || !window.CRM_Tenant.canAccessModule) return;
+            document.querySelectorAll('.nav-item[data-module]').forEach(function(el) {
+                var mod = el.dataset.module;
+                if (!mod) return;
+                el.classList.toggle('hidden', !window.CRM_Tenant.canAccessModule(mod));
+            });
+            document.querySelectorAll('.nav-sec').forEach(function(sec) {
+                var visible = sec.querySelectorAll('.nav-item:not(.hidden)');
+                sec.style.display = visible.length === 0 ? 'none' : '';
+            });
+        }
+
+        function setActiveNav(module) {
+            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.toggle('active', el.dataset.module === module.toUpperCase()); });
+            document.querySelectorAll('.mobile-nav a').forEach(function(el, i) {
+                var mods = ['DASHBOARD','LEADS','INVOICES','WHATSAPP','SETTINGS'];
+                el.classList.toggle('active', mods[i] === module.toUpperCase());
+            });
+        }
+
+        function switchModule(module) {
+            APP.currentModule = module;
+            setActiveNav(module);
+            if (APP.mobile) closeMobile();
+            try { localStorage.setItem('crm_last_module', module); } catch(e) {}
+            renderModule(module);
+        }
+
+        async function renderModule(module) {
+            var area = $('contentArea');
+            if (!area) return;
+            var loader = $('loadingScreen');
+            area.innerHTML = '';
 
             try {
-                if (authMode === 'login') {
-                    if (window.CRM_Auth && window.CRM_Auth.login) {
-                        var result = await window.CRM_Auth.login(email, password);
-                        if (result.success) {
-                            showMessage('✅ Login successful! Redirecting...', 'success');
-                            redirectToApp();
-                        } else {
-                            showMessage(result.message || 'Login failed.', 'error');
-                            setLoading(false);
-                        }
-                    } else {
-                        showMessage('✅ Login successful!', 'success');
-                        setTimeout(redirectToApp, 500);
-                    }
-                } else {
-                    if (window.CRM_Auth && window.CRM_Auth.register) {
-                        var regResult = await window.CRM_Auth.register(email, password, name);
-                        if (regResult.success) {
-                            if (regResult.requiresApproval) {
-                                showMessage(regResult.message || '✅ Registration submitted! Awaiting approval.', 'success');
-                                setLoading(false);
-                            } else {
-                                showMessage('✅ Account created! Redirecting...', 'success');
-                                redirectToApp();
-                            }
-                        } else {
-                            showMessage(regResult.message || 'Registration failed.', 'error');
-                            setLoading(false);
-                        }
-                    } else {
-                        showMessage('✅ Account created!', 'success');
-                        setTimeout(redirectToApp, 500);
-                    }
+                switch(module) {
+                    case 'dashboard': renderDashboard(area); break;
+                    case 'profile': renderProfile(area); break;
+                    case 'settings': renderSettings(area); break;
+                    case 'leads': await renderLeads(area); break;
+                    case 'pipeline': await renderPipeline(area); break;
+                    case 'clients': await renderClients(area); break;
+                    case 'invoices': await renderInvoices(area); break;
+                    case 'payments': await renderPayments(area); break;
+                    case 'tasks': await renderTasks(area); break;
+                    case 'projects': await renderProjects(area); break;
+                    case 'retainers': await renderRetainers(area); break;
+                    case 'whatsapp': await renderWhatsApp(area); break;
+                    case 'training': await renderTraining(area); break;
+                    case 'referrals': await renderReferrals(area); break;
+                    case 'reports': await renderReports(area); break;
+                    case 'notifications': await renderNotifications(area); break;
+                    case 'appointments': await renderAppointments(area); break;
+                    default: area.innerHTML = '<div class="loading-screen">Module not found</div>';
                 }
-            } catch (err) {
-                showMessage('Network error. Please check your connection.', 'error');
-                setLoading(false);
+            } catch(e) {
+                console.error('Module render error:', e);
+                area.innerHTML = '<div class="loading-screen">Error loading module. Please try again.</div>';
+            }
+        }
+
+        // ==================== DASHBOARD ====================
+        async function renderDashboard(area) {
+            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Dashboard...</div>';
+            updateUserUI();
+            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:4px;">Welcome back, <span style="background:linear-gradient(135deg,#D4AF37,#B8960F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + escHtml((APP.userProfile && APP.userProfile.displayName) || 'User') + '</span> 👋</h1>';
+            html += '<p style="color:var(--text3);margin-bottom:20px;">' + new Date().toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) + '</p>';
+            
+            try {
+                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                    var leadCount = await window.CRM_Firestore.countDocuments('leads');
+                    var clientCount = await window.CRM_Firestore.countDocuments('clients');
+                    var taskCount = await window.CRM_Firestore.countDocuments('tasks', [['status', '!=', 'completed']]);
+                    var invoiceCount = await window.CRM_Firestore.countDocuments('invoices');
+                    var paymentResult = await window.CRM_Firestore.queryDocuments('payments', { limit: 500 });
+                    var totalRevenue = 0;
+                    (paymentResult.data || []).forEach(function(p) { totalRevenue += (parseInt(p.amount) || 0); });
+                    
+                    html += '<div class="stats-grid">';
+                    html += '<div class="stat-card"><div class="val" style="color:#059669;">' + formatCurrency(totalRevenue) + '</div><div class="lbl">💰 Revenue</div></div>';
+                    html += '<div class="stat-card"><div class="val" style="color:#4F46E5;">' + leadCount + '</div><div class="lbl">👥 Leads</div></div>';
+                    html += '<div class="stat-card"><div class="val" style="color:#D4AF37;">' + clientCount + '</div><div class="lbl">🏢 Clients</div></div>';
+                    html += '<div class="stat-card"><div class="val" style="color:#F59E0B;">' + taskCount + '</div><div class="lbl">✅ Tasks</div></div>';
+                    html += '</div>';
+                }
+            } catch(e) { console.error('Dashboard stats error:', e); }
+            
+            html += '<div class="card"><div class="card-header"><span class="card-title">⚡ Quick Actions</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">';
+            ['leads','invoices','clients','whatsapp'].forEach(function(m) {
+                html += '<button class="btn btn-outline" onclick="switchModule(\'' + m + '\')" style="flex-direction:column;gap:4px;padding:16px;"><span style="font-size:1.5rem;">' + ({leads:'👥',invoices:'🧾',clients:'🏢',whatsapp:'💬'}[m]) + '</span>' + m.charAt(0).toUpperCase() + m.slice(1) + '</button>';
+            });
+            html += '</div></div>';
+            
+            area.innerHTML = html;
+        }
+
+        // ==================== PROFILE ====================
+        function renderProfile(area) {
+            updateUserUI();
+            var p = APP.userProfile || {};
+            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1>';
+            html += '<div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div>';
+            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="' + escHtml(p.displayName || p.name || '') + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" id="pEmail" value="' + escHtml(p.email || '') + '" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="' + escHtml(p.phoneNumber || '') + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="' + escHtml(p.role || '') + '" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
+            html += '</div>';
+            html += '<button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update Profile</button>';
+            html += '</div>';
+
+            html += '<div class="card"><div class="card-header"><span class="card-title">🔑 Change Password</span></div>';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Current Password</label><input type="password" id="secCurrent" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">New Password</label><input type="password" id="secNew" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Confirm Password</label><input type="password" id="secConfirm" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '</div>';
+            html += '<button class="btn btn-primary" style="margin-top:10px;" onclick="changePassword()">🔒 Update Password</button>';
+            html += '</div>';
+            area.innerHTML = html;
+        }
+
+        window.saveProfile = async function() {
+            var name = ($('pName') && $('pName').value || '').trim();
+            var mobile = ($('pMobile') && $('pMobile').value || '').trim();
+            var uid = APP.userProfile && APP.userProfile.uid;
+            if (!uid) { showToast('User not identified.', 'error'); return; }
+            try {
+                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                    await window.CRM_Firestore.updateDocument('users', uid, { displayName: name, phoneNumber: mobile });
+                }
+                if (APP.userProfile) { APP.userProfile.displayName = name; APP.userProfile.phoneNumber = mobile; }
+                updateUserUI();
+                showToast('✅ Profile updated!', 'success');
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        };
+
+        window.changePassword = async function() {
+            var cp = ($('secCurrent') && $('secCurrent').value) || '';
+            var np = ($('secNew') && $('secNew').value) || '';
+            var cf = ($('secConfirm') && $('secConfirm').value) || '';
+            if (!cp || !np || np !== cf) { showToast('Please fill correctly.', 'error'); return; }
+            if (window.CRM_Auth && window.CRM_Auth.changePassword) {
+                var result = await window.CRM_Auth.changePassword(cp, np);
+                if (result.success) { showToast('✅ Password changed!', 'success'); }
+                else { showToast(result.message, 'error'); }
             }
         };
 
-        $('#authModalOverlay').addEventListener('click', function(e) { if (e.target === this) closeAuth(); });
-        document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeAuth(); });
+        // ==================== SETTINGS ====================
+        function renderSettings(area) {
+            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Settings</h1>';
+            html += '<div class="card"><div class="card-header"><span class="card-title">Organization</span></div>';
+            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">Business Name</label><input type="text" id="setName" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '<div><label style="font-weight:600;font-size:0.8rem;">GSTIN</label><input type="text" id="setGstin" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html += '</div>';
+            html += '<button class="btn btn-primary" style="margin-top:10px;" onclick="saveSettings()">💾 Save Settings</button>';
+            html += '</div>';
+            html += '<div class="card"><div class="card-header"><span class="card-title">Theme</span></div>';
+            html += '<button class="btn btn-outline" onclick="toggleTheme()">' + (APP.dark ? '☀️ Switch to Light' : '🌙 Switch to Dark') + '</button></div>';
+            area.innerHTML = html;
+            loadSettingsData();
+        }
 
-        window.toggleMobileNav = function() {
-            $('#mainNav').classList.toggle('open');
-            $('.hamburger').classList.toggle('active');
+        async function loadSettingsData() {
+            if (!window.CRM_Tenant) return;
+            var tenant = window.CRM_Tenant.getTenant();
+            if (!tenant) { var tid = window.CRM_Tenant.getTenantId(); if (tid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) tenant = await window.CRM_Firestore.getDocument('tenants', tid); }
+            if (tenant) {
+                if ($('setName')) $('setName').value = tenant.name || '';
+                if ($('setGstin')) $('setGstin').value = (tenant.settings && tenant.settings.gstin) || '';
+            }
+        }
+
+        window.saveSettings = async function() {
+            var name = ($('setName') && $('setName').value || '').trim();
+            var gstin = ($('setGstin') && $('setGstin').value || '').trim();
+            var tid = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
+            if (!tid) { showToast('No tenant context.', 'error'); return; }
+            try {
+                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                    await window.CRM_Firestore.updateDocument('tenants', tid, { name: name, settings: { gstin: gstin } });
+                }
+                showToast('✅ Settings saved!', 'success');
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
         };
 
-        document.querySelectorAll('a[href^="#"]').forEach(function(a) {
-            a.addEventListener('click', function(e) {
-                var target = document.querySelector(this.getAttribute('href'));
-                if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth', block: 'start' }); $('#mainNav').classList.remove('open'); $('.hamburger').classList.remove('active'); }
-            });
-        });
+        // ==================== LEADS (Quick) ====================
+        async function renderLeads(area) {
+            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Leads...</div>';
+            var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">👥 Leads</h1><button class="btn btn-primary" onclick="addLead()">➕ New Lead</button></div>';
+            if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                var result = await window.CRM_Firestore.queryDocuments('leads', { orderBy: 'createdAt', orderDir: 'desc', limit: 50 });
+                var leads = result.data || [];
+                if (leads.length === 0) {
+                    html += '<div class="card"><p style="text-align:center;color:var(--text3);padding:40px;">No leads yet. Click "New Lead" to get started.</p></div>';
+                } else {
+                    html += '<div class="card" style="padding:0;overflow:hidden;"><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:var(--bg3);">';
+                    ['Name','Mobile','Business','Source','Status','Score'].forEach(function(h) { html += '<th style="padding:12px 14px;text-align:left;font-size:0.7rem;text-transform:uppercase;">' + h + '</th>'; });
+                    html += '</tr></thead><tbody>';
+                    leads.forEach(function(l) {
+                        html += '<tr style="border-bottom:1px solid var(--border);">';
+                        html += '<td style="padding:10px 14px;"><strong>' + escHtml(l.firstName || '') + ' ' + escHtml(l.lastName || '') + '</strong></td>';
+                        html += '<td style="padding:10px 14px;">' + escHtml(l.mobile || '-') + '</td>';
+                        html += '<td style="padding:10px 14px;">' + escHtml(l.business || '-') + '</td>';
+                        html += '<td style="padding:10px 14px;">' + escHtml(l.source || '-') + '</td>';
+                        html += '<td style="padding:10px 14px;"><span style="padding:3px 10px;border-radius:20px;font-size:0.7rem;background:#EEF2FF;color:#4F46E5;">' + escHtml(l.status || 'New') + '</span></td>';
+                        html += '<td style="padding:10px 14px;">' + (l.score || 0) + '</td>';
+                        html += '</tr>';
+                    });
+                    html += '</tbody></table></div></div>';
+                }
+            }
+            area.innerHTML = html;
+        }
 
-        document.querySelectorAll('.faq-question').forEach(function(btn) {
-            btn.addEventListener('click', function() {
-                var item = this.parentElement;
-                var isOpen = item.classList.contains('active');
-                document.querySelectorAll('.faq-item').forEach(function(i) { i.classList.remove('active'); });
-                if (!isOpen) item.classList.add('active');
-            });
-        });
+        window.addLead = async function() {
+            var name = prompt('Lead Name:'); if (!name || !name.trim()) return;
+            var mobile = prompt('Mobile:'); if (!mobile || !mobile.trim()) return;
+            try {
+                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                    await window.CRM_Firestore.createDocument('leads', { firstName: name.trim(), mobile: mobile.trim(), status: 'New', source: 'Manual' });
+                }
+                showToast('✅ Lead created!', 'success');
+                switchModule('leads');
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        };
 
-        window.addEventListener('scroll', function() {
-            var p = $('#scrollProgress');
-            var st = document.documentElement.scrollTop;
-            var sh = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-            p.style.width = (st / sh) * 100 + '%';
-            $('#navbar').classList.toggle('scrolled', window.scrollY > 40);
+        // ==================== PIPELINE (Quick) ====================
+        async function renderPipeline(area) {
+            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Pipeline...</div>';
+            var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">📈 Pipeline</h1><button class="btn btn-primary" onclick="addDeal()">➕ New Deal</button></div>';
+            if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                var result = await window.CRM_Firestore.queryDocuments('deals', { orderBy: 'createdAt', orderDir: 'desc', limit: 50 });
+                var deals = result.data || [];
+                var stages = ['new','contacted','qualified','proposal','negotiation','won','lost'];
+                var stageNames = {new:'New',contacted:'Contacted',qualified:'Qualified',proposal:'Proposal',negotiation:'Negotiation',won:'Won',lost:'Lost'};
+                var colors = {new:'#6366f1',contacted:'#8b5cf6',qualified:'#3b82f6',proposal:'#f59e0b',negotiation:'#ef4444',won:'#10b981',lost:'#6b7280'};
+                html += '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;">';
+                stages.forEach(function(stage) {
+                    var stageDeals = deals.filter(function(d) { return d.stage === stage; });
+                    html += '<div style="min-width:200px;background:var(--bg3);border-radius:12px;padding:10px;">';
+                    html += '<div style="font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:3px solid ' + colors[stage] + ';">' + stageNames[stage] + ' <span style="background:var(--bg2);padding:2px 8px;border-radius:8px;font-size:0.7rem;">' + stageDeals.length + '</span></div>';
+                    stageDeals.forEach(function(d) {
+                        html += '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:0.85rem;"><strong>' + escHtml(d.name || 'Deal') + '</strong><br><span style="color:var(--text3);font-size:0.75rem;">' + formatCurrency(d.value) + '</span></div>';
+                    });
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+            area.innerHTML = html;
+        }
 
-            var sections = document.querySelectorAll('section[id]');
-            var current = '';
-            sections.forEach(function(s) { var top = s.offsetTop - 200; if (window.scrollY >= top && window.scrollY < top + s.offsetHeight) current = s.id; });
-            document.querySelectorAll('nav a').forEach(function(l) { l.classList.toggle('active', l.getAttribute('href') === '#' + current); });
-        });
+        window.addDeal = async function() {
+            var name = prompt('Deal Name:'); if (!name || !name.trim()) return;
+            var value = prompt('Value (₹):', '0');
+            try {
+                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                    await window.CRM_Firestore.createDocument('deals', { name: name.trim(), value: parseInt(value) || 0, stage: 'new', priority: 'medium' });
+                }
+                showToast('✅ Deal created!', 'success');
+                switchModule('pipeline');
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        };
 
-        var observer = new IntersectionObserver(function(entries) {
-            entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, { threshold: 0.12, rootMargin: '0px 0px -50px 0px' });
+        // ==================== QUICK MODULES ====================
+        async function renderClients(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🏢 Clients</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'clients\')">➕ New Client</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full client management available in pages version.</p></div>'; }
+        async function renderInvoices(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🧾 Invoices</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'invoices\')">➕ New Invoice</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full invoicing available in pages version.</p></div>'; }
+        async function renderPayments(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">💰 Payments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Full payments module.</p></div>'; }
+        async function renderTasks(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">✅ Tasks</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'tasks\')">➕ New Task</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full task management available.</p></div>'; }
+        async function renderProjects(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🚀 Projects</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Full project tracking available.</p></div>'; }
+        async function renderRetainers(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔄 Retainers</span></div><p style="text-align:center;color:var(--text3);padding:40px;">MRR tracking available.</p></div>'; }
+        async function renderWhatsApp(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">💬 WhatsApp</span></div><p style="text-align:center;color:var(--text3);padding:40px;">CloudWA messaging available.</p></div>'; }
+        async function renderTraining(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🎓 Training</span></div><p style="text-align:center;color:var(--text3);padding:40px;">LMS module available.</p></div>'; }
+        async function renderReferrals(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔗 Referrals</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Referral tracking available.</p></div>'; }
+        async function renderReports(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">📋 Reports</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Analytics available.</p></div>'; }
+        async function renderNotifications(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔔 Notifications</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Notification center.</p></div>'; }
+        async function renderAppointments(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">📅 Appointments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Calendar & scheduling.</p></div>'; }
 
-        document.querySelectorAll('.fade-in, .fade-in-scale, .stagger-children').forEach(function(el) { observer.observe(el); });
+        // ==================== NAVIGATION ====================
+        function toggleSidebar() {
+            APP.collapsed = !APP.collapsed;
+            $('sidebar').classList.toggle('collapsed', APP.collapsed);
+            $('sbCollapse').innerHTML = APP.collapsed ? '▶' : '◀';
+            try { localStorage.setItem('crm_sb', APP.collapsed ? '1' : '0'); } catch(e) {}
+        }
 
-        console.log('🚀 11 Avatar SMEs CRM — Landing Page Ready');
+        function openMobile() { APP.mobile = true; $('sidebar').classList.add('mobile-open'); $('sbOverlay').classList.add('show'); document.body.style.overflow = 'hidden'; }
+        function closeMobile() { APP.mobile = false; $('sidebar').classList.remove('mobile-open'); $('sbOverlay').classList.remove('show'); document.body.style.overflow = ''; }
+
+        function toggleTheme() {
+            APP.dark = !APP.dark;
+            document.documentElement.setAttribute('data-theme', APP.dark ? 'dark' : 'light');
+            $('themeBtn').innerHTML = APP.dark ? '☀️' : '🌙';
+            try { localStorage.setItem('crm_theme', APP.dark ? 'dark' : 'light'); } catch(e) {}
+        }
+
+        function loadTheme() {
+            var t = localStorage.getItem('crm_theme');
+            if (t === 'dark') { APP.dark = true; document.documentElement.setAttribute('data-theme', 'dark'); $('themeBtn').innerHTML = '☀️'; }
+            else { APP.dark = window.matchMedia('(prefers-color-scheme:dark)').matches; document.documentElement.setAttribute('data-theme', APP.dark ? 'dark' : 'light'); $('themeBtn').innerHTML = APP.dark ? '☀️' : '🌙'; }
+        }
+
+        async function doLogout() {
+            if (window.CRM_Auth && window.CRM_Auth.logout) { await window.CRM_Auth.logout('User logged out.'); }
+            else { try { localStorage.clear(); } catch(e) {}; window.location.href = 'index.html'; }
+        }
+
+        async function init() {
+            loadTheme();
+            try { if (localStorage.getItem('crm_sb') === '1') { APP.collapsed = true; $('sidebar').classList.add('collapsed'); $('sbCollapse').innerHTML = '▶'; } } catch(e) {}
+
+            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
+                window.CRM_Auth.onAuthStateChange(async function(authState) {
+                    console.log('🔐 Auth state:', authState.authState);
+                    if (authState.isAuthenticated && authState.authState === 'authenticated') {
+                        console.log('✅ Authenticated');
+                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) await window.CRM_Tenant.initTenantContext();
+                        updateUserUI();
+                        applyRBACFilter();
+                        if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); }
+                    } else if (authState.authState === 'pending_approval') {
+                        console.log('⏳ Pending approval');
+                        var b = $('approvalBanner'); if (b) b.classList.add('show');
+                        updateUserUI();
+                        applyRBACFilter();
+                        if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); }
+                    } else if (authState.authState === 'unauthenticated') {
+                        console.log('❌ Unauthenticated');
+                        try { var ud = localStorage.getItem('crm_user'); if (ud && JSON.parse(ud).uid) { updateUserUI(); applyRBACFilter(); if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); } return; } } catch(e) {}
+                        window.location.href = 'index.html';
+                    }
+                });
+                console.log('👂 Auth listener registered');
+            } else {
+                try { var ud = localStorage.getItem('crm_user'); if (ud && JSON.parse(ud).uid) { updateUserUI(); applyRBACFilter(); switchModule('dashboard'); return; } } catch(e) {}
+                window.location.href = 'index.html';
+            }
+
+            function checkResp() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
+            window.addEventListener('resize', checkResp);
+            checkResp();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
     </script>
 </body>
 </html>
