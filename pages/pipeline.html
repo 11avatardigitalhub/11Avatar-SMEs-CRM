@@ -4,31 +4,42 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F6F0" />
-    <title>Pipeline - 11 Avatar Digital Hub</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="Pipeline Management - 11 Avatar SMEs CRM. Drag-drop Kanban board with multi-tenant isolation." />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Pipeline — 11 Avatar SMEs CRM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../css/crm-design-system.css" />
     <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     
     <style>
         :root {
+            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
         }
+        
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            font-family: var(--font-body); font-size: 14px; line-height: 1.6;
             color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
             min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+            overflow-x: hidden;
         }
         
-        .pipeline-container { max-width: 100%; margin: 0; padding: 16px; padding-bottom: 90px; }
+        .pipeline-container { max-width: 100%; margin: 0; padding: 16px; padding-bottom: 100px; }
         
+        /* Bottom Submenu */
         .bottom-submenu {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.08);
             box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
             padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
             display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
@@ -36,224 +47,444 @@
         }
         .bottom-submenu::-webkit-scrollbar { display: none; }
         .bottom-tab {
-            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
             padding: 10px 16px; border-radius: 12px; cursor: pointer;
             font-size: 0.7rem; font-weight: 500; color: #777;
-            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 70px; min-height: 44px;
             border: 1.5px solid transparent; background: transparent;
+            justify-content: center;
         }
         .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
         .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
-        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        .bottom-tab .tab-icon { font-size: 1.3rem; line-height: 1; }
         
+        /* Page Header */
         .page-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
-            padding: 20px 24px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
+            padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 16px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-        .page-header h1 { font-size: 1.5rem; font-weight: 800; margin: 0; }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        /* Buttons */
+        .btn { 
+            display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; 
+            border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; 
+            transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px;
+        }
+        .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
         .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
         .btn-outline:hover { background: rgba(212,175,55,0.08); }
-        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
-        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
+        .btn-xs { padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; min-height: 30px; }
         .btn-ghost { background: transparent; color: #666; }
         .btn-ghost:hover { background: #F5F5F5; }
         .btn-danger { background: #DC2626; color: #FFF; }
+        .btn-danger:hover { background: #B91C1C; }
         
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
-        .tab-content.active { display: block; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
-        
-        .pipeline-stats { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+        /* Pipeline Stats */
+        .pipeline-stats { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); 
+            gap: 10px; margin-bottom: 16px; 
+        }
         .pipe-stat {
-            background: #FFF; border-radius: 10px; padding: 10px 14px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.04); flex: 1; min-width: 90px;
-            text-align: center; border-left: 3px solid var(--s-color);
+            background: #FFF; border-radius: 12px; padding: 14px 16px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04); text-align: center;
+            border-left: 4px solid var(--s-color); transition: var(--transition);
+            cursor: pointer;
         }
-        .pipe-stat .num { font-size: 18px; font-weight: 700; font-family: 'Poppins',sans-serif; }
-        .pipe-stat .lbl { font-size: 9px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .pipe-stat:hover { transform: translateY(-2px); box-shadow: var(--card-hover); }
+        .pipe-stat .num { font-size: 1.3rem; font-weight: 800; font-family: var(--font-heading); line-height: 1.2; }
+        .pipe-stat .lbl { font-size: 0.7rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
         
-        .pipeline-board { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; min-height: 55vh; }
-        .pipeline-col {
-            background: #f0f2f5; border-radius: 12px; padding: 8px;
-            min-width: 230px; max-width: 280px; flex: 1; display: flex; flex-direction: column;
+        /* Kanban Board */
+        .pipeline-board { 
+            display: flex; gap: 10px; overflow-x: auto; padding-bottom: 12px; 
+            min-height: 60vh; -webkit-overflow-scrolling: touch;
         }
+        .pipeline-col {
+            background: #f0f2f5; border-radius: 14px; padding: 10px;
+            min-width: 240px; max-width: 290px; flex: 1; display: flex; flex-direction: column;
+            transition: background 0.2s ease;
+        }
+        .pipeline-col:hover { background: #e8ecf1; }
         .pipeline-col-header {
             display: flex; justify-content: space-between; align-items: center;
-            margin-bottom: 6px; padding-bottom: 6px; border-bottom: 3px solid var(--col-color);
+            margin-bottom: 8px; padding-bottom: 8px; border-bottom: 3px solid var(--col-color);
         }
-        .pipeline-col-header h6 { font-size: 12px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: 4px; }
-        .pipeline-col-header .count { font-size: 10px; background: #FFF; padding: 2px 8px; border-radius: 8px; font-weight: 600; }
-        .pipeline-cards { flex: 1; min-height: 50px; display: flex; flex-direction: column; gap: 4px; }
+        .pipeline-col-header h6 { 
+            font-size: 0.8rem; font-weight: 700; margin: 0; 
+            display: flex; align-items: center; gap: 6px; font-family: var(--font-heading);
+        }
+        .pipeline-col-header .count { 
+            font-size: 0.7rem; background: #FFF; padding: 2px 10px; 
+            border-radius: 10px; font-weight: 700; 
+        }
+        .pipeline-cards { flex: 1; min-height: 60px; display: flex; flex-direction: column; gap: 6px; }
         
+        /* Deal Cards */
         .pipe-card {
-            background: #FFF; border: 1px solid #e0e0e0; border-radius: 6px;
-            padding: 8px 10px; cursor: grab; transition: all 0.15s; font-size: 0.82rem;
-            user-select: none;
+            background: #FFF; border: 1px solid #e0e0e0; border-radius: 10px;
+            padding: 10px 12px; cursor: grab; transition: all 0.2s ease; font-size: 0.84rem;
+            user-select: none; box-shadow: 0 1px 3px rgba(0,0,0,0.04);
         }
         .pipe-card:active { cursor: grabbing; }
-        .pipe-card:hover { box-shadow: 0 4px 10px rgba(0,0,0,0.06); border-color: #D4AF37; }
-        .pipe-card.dragging { opacity: 0.35; transform: rotate(1deg); background: #FFF3CD; }
-        .pipe-card .card-name { font-weight: 600; font-size: 0.85rem; }
-        .pipe-card .card-detail { font-size: 0.72rem; color: #888; margin-top: 2px; }
-        .pipe-card .card-badges { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 3px; }
-        .pipe-card .card-badge { font-size: 9px; padding: 1px 5px; border-radius: 6px; }
+        .pipe-card:hover { 
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08); border-color: #D4AF37; 
+            transform: translateY(-2px);
+        }
+        .pipe-card.dragging { opacity: 0.4; transform: rotate(2deg); background: #FFF3CD; }
+        .pipe-card .card-name { font-weight: 700; font-size: 0.88rem; color: #0A0A0A; }
+        .pipe-card .card-detail { font-size: 0.74rem; color: #888; margin-top: 3px; }
+        .pipe-card .card-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+        .pipe-card .card-badge { 
+            font-size: 0.6rem; padding: 2px 7px; border-radius: 8px; 
+            font-weight: 600; text-transform: uppercase; letter-spacing: 0.3px;
+        }
         .card-badge.priority-high { background: #FEE2E2; color: #DC2626; }
         .card-badge.priority-medium { background: #FEF3C7; color: #D97706; }
         .card-badge.priority-low { background: #E0F2FE; color: #0284C7; }
         .card-badge.followup { background: #DCFCE7; color: #166534; }
         
-        .drag-over { background: #E8F4FD !important; border: 2px dashed #D4AF37 !important; border-radius: 8px; }
+        .drag-over { background: #E8F4FD !important; border: 2px dashed #D4AF37 !important; border-radius: 10px; }
         
+        /* Quick Add */
         .quick-add-btn {
-            background: none; border: 1px dashed #c0c0c0; border-radius: 6px;
-            padding: 6px; width: 100%; cursor: pointer; font-size: 10px; color: #888;
-            text-align: center; margin-top: 3px;
+            background: none; border: 1.5px dashed #c8ccd0; border-radius: 8px;
+            padding: 8px; width: 100%; cursor: pointer; font-size: 0.7rem; color: #999;
+            text-align: center; margin-top: 6px; min-height: 36px; transition: all 0.2s ease;
         }
         .quick-add-btn:hover { background: #e7f3ff; border-color: #D4AF37; color: #B8960F; }
-        .quick-add-form { display: flex; gap: 3px; margin-top: 3px; flex-wrap: wrap; }
-        .quick-add-form input { flex: 1; padding: 4px 6px; border: 1px solid #dadde1; border-radius: 4px; font-size: 10px; min-width: 50px; }
+        .quick-add-form { display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap; }
+        .quick-add-form input { 
+            flex: 1; padding: 6px 10px; border: 1.5px solid #dadde1; 
+            border-radius: 6px; font-size: 0.75rem; min-width: 60px; min-height: 36px;
+            font-family: var(--font-body);
+        }
+        .quick-add-form input:focus { border-color: #D4AF37; outline: none; }
         
-        .detail-backdrop { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.3); z-index: 2999; }
+        /* Detail Panel */
+        .detail-backdrop { 
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(2px); z-index: 2999; 
+        }
         .detail-panel {
-            position: fixed; top: 0; right: 0; width: 420px; max-width: 95vw; height: 100vh;
-            background: #FFF; box-shadow: -4px 0 20px rgba(0,0,0,0.15);
-            z-index: 3000; overflow-y: auto; padding: 20px; animation: slideIn 0.2s ease;
+            position: fixed; top: 0; right: 0; width: 440px; max-width: 95vw; height: 100vh;
+            background: #FFF; box-shadow: -8px 0 30px rgba(0,0,0,0.15);
+            z-index: 3000; overflow-y: auto; padding: 24px; 
+            animation: slideInRight 0.25s cubic-bezier(0.4,0,0.2,1);
         }
-        @keyframes slideIn { from{transform:translateX(100%);} to{transform:translateX(0);} }
+        @keyframes slideInRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
         
-        .modal-overlay { position: fixed; inset: 0; z-index: 3100; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
-        .modal-box { background: #FFF; border-radius: 16px; padding: 20px; width: 100%; max-width: 420px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+        /* Modal */
+        .modal-overlay { 
+            position: fixed; inset: 0; z-index: 3100; background: rgba(0,0,0,0.5); 
+            backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; 
+            animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .modal-box { 
+            background: #FFF; border-radius: 18px; padding: 28px; width: 100%; 
+            max-width: 480px; box-shadow: 0 20px 60px rgba(0,0,0,0.25); 
+            animation: slideUp 0.3s cubic-bezier(0.4,0,0.2,1); max-height: 85vh; overflow-y: auto;
+        }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .form-group { margin-bottom: 10px; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.75rem; color: #333; margin-bottom: 3px; }
+        /* Form Elements */
+        .form-group { margin-bottom: 14px; }
+        .form-group label { 
+            display: block; font-weight: 600; font-size: 0.78rem; color: #333; 
+            margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.03em;
+        }
         .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 8px 12px; border: 1.5px solid #E5E5E5; border-radius: 8px;
-            font-size: 0.85rem; font-family: 'Inter',sans-serif;
+            width: 100%; padding: 10px 14px; border: 1.5px solid #E5E5E5; 
+            border-radius: 10px; font-size: 0.88rem; font-family: var(--font-body);
+            background: #FFF; transition: all 0.2s ease; min-height: 44px;
         }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #D4AF37; outline: none; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { 
+            border-color: #D4AF37; outline: none; box-shadow: 0 0 0 3px rgba(212,175,55,0.1); 
+        }
+        .form-group textarea { resize: vertical; min-height: 70px; }
         
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
-        .toast { background: #FFF; border-radius: 12px; padding: 12px 16px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.85rem; font-weight: 500; animation: toastIn 0.3s ease; }
-        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
-        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        /* Toast */
+        .toast-container { 
+            position: fixed; top: 20px; right: 20px; z-index: 9999; 
+            display: flex; flex-direction: column; gap: 8px; max-width: 380px; 
+        }
+        .toast { 
+            background: #FFF; border-radius: 12px; padding: 14px 20px; 
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; 
+            font-weight: 500; animation: toastSlideIn 0.3s cubic-bezier(0.68,-0.55,0.265,1.55);
+            display: flex; align-items: center; gap: 10px;
+        }
+        .toast-success { border-left: 4px solid #10B981; }
+        .toast-error { border-left: 4px solid #DC2626; }
+        .toast-info { border-left: 4px solid #3B82F6; }
+        .toast-warning { border-left: 4px solid #F59E0B; }
+        @keyframes toastSlideIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
         
+        /* Utility */
         .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; }
         .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
-        .text-xs { font-size: 0.72rem; } .text-muted { color: #888; }
+        .text-xs { font-size: 0.75rem; } .text-muted { color: #888; }
+        .mt-1 { margin-top: 4px; } .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        .w-full { width: 100%; }
         
-        @media(max-width:768px){ .pipeline-board{flex-direction:column;} .pipeline-col{max-width:100%;min-width:100%;} .detail-panel{width:100%;} }
+        /* Responsive */
+        @media (max-width: 1920px) { .pipeline-container { max-width: 1600px; margin: 0 auto; } }
+        @media (max-width: 1440px) { .pipeline-container { max-width: 1300px; } }
+        @media (max-width: 1280px) { .pipeline-container { max-width: 100%; } }
+        @media (max-width: 1024px) { .page-header { padding: 20px; } .pipeline-col { min-width: 210px; } }
+        @media (max-width: 768px) { 
+            .pipeline-board { flex-direction: column; } 
+            .pipeline-col { max-width: 100%; min-width: 100%; } 
+            .detail-panel { width: 100%; }
+            .page-header { padding: 16px; flex-direction: column; text-align: center; }
+        }
+        @media (max-width: 425px) { 
+            .pipeline-container { padding: 10px; padding-bottom: 100px; } 
+            .page-header { padding: 12px; }
+            .pipeline-col { padding: 6px; }
+        }
     </style>
 </head>
 <body>
 
     <div class="pipeline-container">
         
-        <div class="page-header">
-            <div><h1>📈 <span class="gold">Pipeline</span> Kanban</h1></div>
-            <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="Pipeline.render()">🔄 Refresh</button>
-                <button class="btn btn-primary btn-sm" onclick="Pipeline.showAddForm()">➕ Add Deal</button>
+        <header class="page-header" role="banner">
+            <div>
+                <h1>📈 <span class="gold">Pipeline</span> Kanban Board</h1>
+                <p style="color:#888;font-size:0.85rem;">Drag & drop deals between stages</p>
             </div>
-        </div>
+            <div class="flex gap-2 flex-wrap">
+                <button class="btn btn-outline btn-sm" onclick="PipelineModule.refresh()" aria-label="Refresh pipeline">
+                    🔄 Refresh
+                </button>
+                <button class="btn btn-primary" onclick="PipelineModule.showAddModal()" aria-label="Add new deal">
+                    ➕ Add Deal
+                </button>
+            </div>
+        </header>
         
-        <div class="pipeline-stats" id="pipelineStats"></div>
-        <div class="pipeline-board" id="kanbanBoard"></div>
+        <div class="pipeline-stats" id="pipelineStats" role="region" aria-label="Pipeline statistics"></div>
+        <div class="pipeline-board" id="kanbanBoard" role="region" aria-label="Kanban board"></div>
         <div id="modalContainer"></div>
         <div id="detailPanel"></div>
         
     </div>
     
-    <div class="bottom-submenu">
-        <div class="bottom-tab active" onclick="Pipeline.render()"><span class="tab-icon">📌</span> Kanban</div>
-        <div class="bottom-tab" onclick="Pipeline.showAddForm()"><span class="tab-icon">➕</span> Add Deal</div>
-        <div class="bottom-tab" onclick="window.location.href='leads.html'"><span class="tab-icon">👥</span> Leads</div>
-        <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
-    </div>
+    <nav class="bottom-submenu" role="navigation" aria-label="Pipeline navigation">
+        <button class="bottom-tab active" data-tab="kanban" onclick="PipelineModule.render()" aria-current="page">
+            <span class="tab-icon">📌</span> Kanban
+        </button>
+        <button class="bottom-tab" onclick="PipelineModule.showAddModal()">
+            <span class="tab-icon">➕</span> Add Deal
+        </button>
+        <button class="bottom-tab" onclick="if(window.parent&&window.parent.navigatePage)window.parent.navigatePage('leads')">
+            <span class="tab-icon">👥</span> Leads
+        </button>
+        <button class="bottom-tab" onclick="if(window.parent&&window.parent.navigatePage)window.parent.navigatePage('clients')">
+            <span class="tab-icon">🏢</span> Clients
+        </button>
+    </nav>
 
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
 
     <script>
         'use strict';
         
-        var Pipeline = {
-            stages: [
-                { id:'new', name:'New Lead', color:'#6366f1', icon:'⭐' },
-                { id:'contacted', name:'Contacted', color:'#8b5cf6', icon:'📞' },
-                { id:'qualified', name:'Qualified', color:'#3b82f6', icon:'✅' },
-                { id:'proposal', name:'Proposal', color:'#f59e0b', icon:'📄' },
-                { id:'negotiation', name:'Negotiation', color:'#ef4444', icon:'🤝' },
-                { id:'won', name:'Won', color:'#10b981', icon:'🏆' },
-                { id:'lost', name:'Lost', color:'#6b7280', icon:'❌' }
-            ],
-            deals: [],
-            draggedId: null,
-            selectedCard: null,
+        const PipelineModule = (function() {
             
-            init: function() {
-                this.deals = JSON.parse(localStorage.getItem('crm_deals') || '[]');
-                if (this.deals.length === 0) this.seedData();
-                this.render();
-            },
+            const PIPELINE_STAGES = [
+                { id: 'new', name: 'New Lead', color: '#6366f1', icon: '⭐' },
+                { id: 'contacted', name: 'Contacted', color: '#8b5cf6', icon: '📞' },
+                { id: 'qualified', name: 'Qualified', color: '#3b82f6', icon: '✅' },
+                { id: 'proposal', name: 'Proposal Sent', color: '#f59e0b', icon: '📄' },
+                { id: 'negotiation', name: 'Negotiation', color: '#ef4444', icon: '🤝' },
+                { id: 'won', name: 'Closed Won', color: '#10b981', icon: '🏆' },
+                { id: 'lost', name: 'Closed Lost', color: '#6b7280', icon: '❌' }
+            ];
             
-            seedData: function() {
-                this.deals = [
-                    { id:'DL001',name:'Website Redesign',contact:'Rajesh Kumar',company:'Kumar Enterprises',stage:'proposal',value:150000,priority:'high',notes:'Complete redesign',followup:new Date(Date.now()+86400000*3).toISOString().split('T')[0],created:new Date().toISOString() },
-                    { id:'DL002',name:'SEO Package',contact:'Priya Sharma',company:'Sharma Textiles',stage:'qualified',value:80000,priority:'medium',notes:'6-month',followup:new Date().toISOString().split('T')[0],created:new Date().toISOString() },
-                    { id:'DL003',name:'Social Media',contact:'Amit Patel',company:'Patel Construction',stage:'new',value:45000,priority:'low',notes:'',followup:'',created:new Date().toISOString() },
-                    { id:'DL004',name:'Google Ads',contact:'Sunita Verma',company:'Verma Exports',stage:'negotiation',value:200000,priority:'high',notes:'Quarterly',followup:new Date(Date.now()+86400000).toISOString().split('T')[0],created:new Date().toISOString() },
-                    { id:'DL005',name:'Annual Maintenance',contact:'Vikram Singh',company:'ABC Corp',stage:'won',value:450000,priority:'high',notes:'Signed',followup:'',created:new Date(Date.now()-86400000*7).toISOString() }
-                ];
-                this.save();
-            },
+            let _deals = [];
+            let _draggedDealId = null;
+            let _selectedDealId = null;
+            let _isLoading = false;
             
-            save: function() { try { localStorage.setItem('crm_deals', JSON.stringify(this.deals)); } catch(e) {} },
+            const $ = function(id) { return document.getElementById(id); };
             
-            totalValue: function() {
-                return this.deals.reduce(function(s,d){return s+(parseInt(d.value)||0);},0).toLocaleString('en-IN');
-            },
+            function showToast(message, type) {
+                try {
+                    type = type || 'info';
+                    const container = $('toastContainer') || document.body;
+                    const toast = document.createElement('div');
+                    toast.className = 'toast toast-' + type;
+                    toast.setAttribute('role', 'alert');
+                    toast.innerHTML = '<span>' + ({ success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' }[type] || '') + '</span> ' + escapeHtml(message);
+                    container.appendChild(toast);
+                    setTimeout(function() {
+                        toast.style.opacity = '0';
+                        toast.style.transform = 'translateX(120%)';
+                        toast.style.transition = 'all 0.3s ease';
+                        setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+                    }, 3500);
+                } catch (error) { console.error('[PipelineModule] Toast error:', error); }
+            }
             
-            render: function() {
-                var self = this;
+            function escapeHtml(str) {
+                if (!str) return '';
+                return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+            }
+            
+            function formatCurrency(amount) {
+                try { return '₹' + parseInt(amount || 0).toLocaleString('en-IN'); } catch(e) { return '₹0'; }
+            }
+            
+            function formatDate(dateInput) {
+                if (!dateInput) return '';
+                try { const d = new Date(dateInput); return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); } catch(e) { return ''; }
+            }
+            
+            async function checkAccess() {
+                try {
+                    if (!window.CRM_Auth || typeof window.CRM_Auth.isAuthenticated !== 'function') {
+                        showToast('Authentication system not available.', 'error');
+                        return false;
+                    }
+                    if (!window.CRM_Auth.isAuthenticated()) {
+                        if (window.parent && window.parent.location) window.parent.location.href = '../index.html';
+                        return false;
+                    }
+                    if (window.CRM_Tenant && typeof window.CRM_Tenant.canAccessModule === 'function') {
+                        if (!window.CRM_Tenant.canAccessModule('PIPELINE')) {
+                            showToast('You do not have access to Pipeline module.', 'error');
+                            if (window.parent && window.parent.navigatePage) window.parent.navigatePage('dashboard');
+                            return false;
+                        }
+                    }
+                    return true;
+                } catch (error) { console.error('[PipelineModule] Access check error:', error); return false; }
+            }
+            
+            async function loadDeals() {
+                try {
+                    _isLoading = true;
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) {
+                        _deals = [];
+                        render();
+                        return;
+                    }
+                    const result = await window.CRM_Firestore.queryDocuments('deals', {
+                        orderBy: 'createdAt', orderDir: 'desc', limit: 500
+                    });
+                    _deals = result.data || [];
+                    console.log('[PipelineModule] Loaded ' + _deals.length + ' deals from Firestore');
+                    render();
+                } catch (error) {
+                    console.error('[PipelineModule] Load deals error:', error);
+                    showToast('Failed to load deals.', 'error');
+                    _deals = [];
+                    render();
+                } finally { _isLoading = false; }
+            }
+            
+            function getStats() {
+                const total = _deals.length;
+                const active = _deals.filter(function(d) { return ['new','contacted','qualified'].indexOf(d.stage) !== -1; }).length;
+                const negotiating = _deals.filter(function(d) { return ['proposal','negotiation'].indexOf(d.stage) !== -1; }).length;
+                const won = _deals.filter(function(d) { return d.stage === 'won'; }).length;
+                const lost = _deals.filter(function(d) { return d.stage === 'lost'; }).length;
+                const totalValue = _deals.reduce(function(s, d) { return s + (parseInt(d.value) || 0); }, 0);
+                return { total, active, negotiating, won, lost, totalValue };
+            }
+            
+            function renderStats() {
+                try {
+                    const stats = getStats();
+                    const statEl = $('pipelineStats');
+                    if (!statEl) return;
+                    statEl.innerHTML = [
+                        { color: '#6366f1', num: stats.total, lbl: 'Total Deals' },
+                        { color: '#3b82f6', num: stats.active, lbl: 'Active' },
+                        { color: '#f59e0b', num: stats.negotiating, lbl: 'Negotiating' },
+                        { color: '#10b981', num: stats.won, lbl: 'Won' },
+                        { color: '#ef4444', num: stats.lost, lbl: 'Lost' },
+                        { color: '#D4AF37', num: formatCurrency(stats.totalValue), lbl: 'Pipeline Value' }
+                    ].map(function(s) {
+                        return '<div class="pipe-stat" style="--s-color:' + s.color + ';" onclick="PipelineModule.filterByStage(\'' + (s.lbl === 'Total Deals' ? '' : s.lbl === 'Active' ? 'active' : s.lbl === 'Negotiating' ? 'negotiating' : s.lbl === 'Won' ? 'won' : s.lbl === 'Lost' ? 'lost' : '') + '\')" tabindex="0" role="button"><div class="num">' + s.num + '</div><div class="lbl">' + s.lbl + '</div></div>';
+                    }).join('');
+                } catch (error) { console.error('[PipelineModule] Stats render error:', error); }
+            }
+            
+            function renderBoard() {
+                try {
+                    const board = $('kanbanBoard');
+                    if (!board) return;
+                    
+                    let html = '';
+                    const self = this;
+                    
+                    PIPELINE_STAGES.forEach(function(stage) {
+                        const stageDeals = _deals.filter(function(d) { return d.stage === stage.id; });
+                        html += '<div class="pipeline-col" data-stage="' + stage.id + '" style="--col-color:' + stage.color + ';">';
+                        html += '<div class="pipeline-col-header"><h6><span style="color:' + stage.color + ';">' + stage.icon + '</span> ' + stage.name + '</h6><span class="count">' + stageDeals.length + '</span></div>';
+                        html += '<div class="pipeline-cards" data-stage="' + stage.id + '">';
+                        stageDeals.forEach(function(deal) {
+                            html += renderDealCard(deal);
+                        });
+                        html += '</div>';
+                        html += '<button class="quick-add-btn" onclick="PipelineModule.showQuickAdd(\'' + stage.id + '\', event)" aria-label="Quick add deal to ' + stage.name + '">+ Quick Add</button>';
+                        html += '</div>';
+                    });
+                    
+                    board.innerHTML = html;
+                    
+                    setTimeout(bindDragDropEvents, 200);
+                    
+                } catch (error) { console.error('[PipelineModule] Board render error:', error); }
+            }
+            
+            function renderDealCard(deal) {
+                let badges = '';
+                if (deal.priority === 'high') badges += '<span class="card-badge priority-high">🔴 High</span>';
+                else if (deal.priority === 'medium') badges += '<span class="card-badge priority-medium">🟡 Med</span>';
+                else if (deal.priority === 'low') badges += '<span class="card-badge priority-low">🔵 Low</span>';
+                if (deal.followup) badges += '<span class="card-badge followup">📅 ' + formatDate(deal.followup) + '</span>';
                 
-                document.getElementById('pipelineStats').innerHTML = 
-                    '<div class="pipe-stat" style="--s-color:#6366f1;"><div class="num">'+this.deals.length+'</div><div class="lbl">Total</div></div>'+
-                    '<div class="pipe-stat" style="--s-color:#3b82f6;"><div class="num">'+this.deals.filter(function(d){return ['new','contacted','qualified'].includes(d.stage);}).length+'</div><div class="lbl">Active</div></div>'+
-                    '<div class="pipe-stat" style="--s-color:#f59e0b;"><div class="num">'+this.deals.filter(function(d){return ['proposal','negotiation'].includes(d.stage);}).length+'</div><div class="lbl">Negotiating</div></div>'+
-                    '<div class="pipe-stat" style="--s-color:#10b981;"><div class="num">'+this.deals.filter(function(d){return d.stage==='won';}).length+'</div><div class="lbl">Won</div></div>'+
-                    '<div class="pipe-stat" style="--s-color:#ef4444;"><div class="num">₹'+this.totalValue()+'</div><div class="lbl">Value</div></div>';
-                
-                var board = document.getElementById('kanbanBoard');
-                board.innerHTML = this.stages.map(function(stage) {
-                    var items = self.deals.filter(function(d){return d.stage===stage.id;});
-                    return '<div class="pipeline-col" data-stage="'+stage.id+'" style="--col-color:'+stage.color+';">'+
-                        '<div class="pipeline-col-header"><h6><span style="color:'+stage.color+';">'+stage.icon+'</span> '+stage.name+'</h6><span class="count">'+items.length+'</span></div>'+
-                        '<div class="pipeline-cards" data-stage="'+stage.id+'">'+
-                            items.map(function(d){return self.renderCard(d);}).join('')+
-                        '</div>'+
-                        '<div class="quick-add-btn" onclick="Pipeline.showQuickAdd(\''+stage.id+'\',event)">+ Quick Add</div>'+
-                    '</div>';
-                }).join('');
-                
-                // BIND DRAG-DROP EVENTS DIRECTLY
-                setTimeout(function() {
+                return '<div class="pipe-card" data-id="' + escapeHtml(deal.id) + '" onclick="PipelineModule.openDetail(\'' + deal.id + '\')" tabindex="0" role="button" aria-label="Deal: ' + escapeHtml(deal.name || 'Unnamed') + '">' +
+                    '<div class="card-name">' + escapeHtml(deal.name || 'Unnamed Deal') + '</div>' +
+                    '<div class="card-detail">' + escapeHtml(deal.contact || '') + (deal.company ? ' · ' + escapeHtml(deal.company) : '') + '</div>' +
+                    (deal.value ? '<div class="card-detail" style="font-weight:700;color:#059669;">' + formatCurrency(deal.value) + '</div>' : '') +
+                    (badges ? '<div class="card-badges">' + badges + '</div>' : '') +
+                '</div>';
+            }
+            
+            function bindDragDropEvents() {
+                try {
                     document.querySelectorAll('.pipe-card').forEach(function(card) {
                         card.setAttribute('draggable', 'true');
                         card.addEventListener('dragstart', function(e) {
-                            Pipeline.draggedId = this.dataset.id;
+                            _draggedDealId = this.dataset.id;
                             this.classList.add('dragging');
                             e.dataTransfer.effectAllowed = 'move';
                             e.dataTransfer.setData('text/plain', this.dataset.id);
                         });
                         card.addEventListener('dragend', function() {
                             this.classList.remove('dragging');
-                            document.querySelectorAll('.pipeline-cards').forEach(function(c){c.classList.remove('drag-over');});
+                            document.querySelectorAll('.pipeline-cards').forEach(function(c) { c.classList.remove('drag-over'); });
                         });
                     });
                     
@@ -266,132 +497,211 @@
                         container.addEventListener('dragleave', function(e) {
                             if (!this.contains(e.relatedTarget)) this.classList.remove('drag-over');
                         });
-                        container.addEventListener('drop', function(e) {
+                        container.addEventListener('drop', async function(e) {
                             e.preventDefault();
                             this.classList.remove('drag-over');
-                            var stage = this.dataset.stage;
-                            var dealId = Pipeline.draggedId;
-                            if (stage && dealId) {
-                                var d = Pipeline.deals.find(function(x){return x.id===dealId;});
-                                if (d && d.stage !== stage) {
-                                    d.stage = stage;
-                                    Pipeline.save();
-                                    Pipeline.render();
-                                    Pipeline.toast('✅ Moved to '+stage,'success');
-                                }
+                            const newStage = this.dataset.stage;
+                            const dealId = _draggedDealId;
+                            if (newStage && dealId) {
+                                await moveDeal(dealId, newStage);
                             }
-                            Pipeline.draggedId = null;
+                            _draggedDealId = null;
                         });
                     });
-                }, 150);
-                
-                if (this.selectedCard) {
-                    var self2 = this;
-                    setTimeout(function(){ self2.openDetailPanel(self2.selectedCard); }, 200);
+                } catch (error) { console.error('[PipelineModule] Drag-drop bind error:', error); }
+            }
+            
+            async function moveDeal(dealId, newStage) {
+                try {
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    await window.CRM_Firestore.updateDocument('deals', dealId, { stage: newStage, updatedAt: new Date().toISOString() });
+                    const deal = _deals.find(function(d) { return d.id === dealId; });
+                    if (deal) deal.stage = newStage;
+                    showToast('✅ Moved to ' + newStage, 'success');
+                    render();
+                } catch (error) {
+                    console.error('[PipelineModule] Move deal error:', error);
+                    showToast('Failed to move deal.', 'error');
                 }
-            },
+            }
             
-            renderCard: function(d) {
-                var badges = '';
-                if (d.priority==='high') badges += '<span class="card-badge priority-high">🔴 High</span>';
-                else if (d.priority==='low') badges += '<span class="card-badge priority-low">🔵 Low</span>';
-                if (d.followup) badges += '<span class="card-badge followup">📅</span>';
-                
-                return '<div class="pipe-card" data-id="'+d.id+'">'+
-                    '<div class="card-name">'+this.esc(d.name)+'</div>'+
-                    '<div class="card-detail">'+this.esc(d.contact||'')+' · '+this.esc(d.company||'')+'</div>'+
-                    (d.value ? '<div class="card-detail"><strong>₹'+parseInt(d.value).toLocaleString('en-IN')+'</strong></div>' : '')+
-                    (badges ? '<div class="card-badges">'+badges+'</div>' : '')+
-                '</div>';
-            },
+            async function updateDealField(dealId, field, value) {
+                try {
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    const updates = {}; updates[field] = value; updates.updatedAt = new Date().toISOString();
+                    await window.CRM_Firestore.updateDocument('deals', dealId, updates);
+                    const deal = _deals.find(function(d) { return d.id === dealId; });
+                    if (deal) deal[field] = value;
+                    if (field === 'stage') render();
+                } catch (error) { console.error('[PipelineModule] Update field error:', error); }
+            }
             
-            openCardDetail: function(id) { this.selectedCard = {id:id}; this.render(); },
-            closeDetail: function() { this.selectedCard = null; document.getElementById('detailPanel').innerHTML = ''; this.render(); },
+            async function deleteDeal(dealId) {
+                try {
+                    if (!confirm('Delete this deal permanently?')) return;
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    await window.CRM_Firestore.deleteDocument('deals', dealId);
+                    _deals = _deals.filter(function(d) { return d.id !== dealId; });
+                    closeDetail();
+                    showToast('🗑️ Deal deleted.', 'info');
+                    render();
+                } catch (error) { console.error('[PipelineModule] Delete error:', error); showToast('Failed to delete.', 'error'); }
+            }
             
-            openDetailPanel: function(card) {
-                var self = this;
-                var d = this.deals.find(function(x){return x.id===card.id;});
-                if (!d) return;
-                var stageOpts = this.stages.map(function(s){return '<option value="'+s.id+'" '+(d.stage===s.id?'selected':'')+'>'+s.name+'</option>';}).join('');
-                
-                var h = '<div class="detail-backdrop" onclick="Pipeline.closeDetail()"></div><div class="detail-panel">';
-                h += '<div class="flex-between mb-2"><h5 style="margin:0;">'+self.esc(d.name)+'</h5><div><button class="btn btn-danger btn-xs" onclick="Pipeline.deleteDeal(\''+d.id+'\')">🗑️</button> <button class="btn btn-ghost btn-xs" onclick="Pipeline.closeDetail()">✕</button></div></div>';
-                h += '<div class="form-group"><label>Status</label><select onchange="Pipeline.updateField(\''+d.id+'\',\'stage\',this.value)">'+stageOpts+'</select></div>';
-                h += '<div class="form-group"><label>Priority</label><select onchange="Pipeline.updateField(\''+d.id+'\',\'priority\',this.value)"><option value="high" '+(d.priority==='high'?'selected':'')+'>🔴 High</option><option value="medium" '+(d.priority==='medium'?'selected':'')+'>🟡 Medium</option><option value="low" '+(d.priority==='low'?'selected':'')+'>🔵 Low</option></select></div>';
-                h += '<div class="form-group"><label>Contact</label><input type="text" value="'+self.esc(d.contact||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'contact\',this.value)"></div>';
-                h += '<div class="form-group"><label>Company</label><input type="text" value="'+self.esc(d.company||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'company\',this.value)"></div>';
-                h += '<div class="form-group"><label>Deal Value (₹)</label><input type="number" value="'+(d.value||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'value\',this.value)"></div>';
-                h += '<div class="form-group"><label>📅 Follow-up Date</label><input type="date" value="'+(d.followup||'')+'" onchange="Pipeline.updateField(\''+d.id+'\',\'followup\',this.value)"></div>';
-                h += '<div class="form-group"><label>📝 Notes</label><textarea rows="2" id="detailNotes">'+self.esc(d.notes||'')+'</textarea><button class="btn btn-outline btn-xs mt-1" onclick="Pipeline.saveNotes(\''+d.id+'\')">Save Notes</button></div>';
-                h += '</div>';
-                document.getElementById('detailPanel').innerHTML = h;
-            },
+            function showQuickAdd(stage, event) {
+                try {
+                    event.stopPropagation();
+                    const btn = event.target.closest('.quick-add-btn');
+                    if (!btn) return;
+                    btn.outerHTML = '<div class="quick-add-form" onclick="event.stopPropagation()"><input type="text" id="quickName_' + stage + '" placeholder="Deal name..." onkeydown="if(event.key===\'Enter\')PipelineModule.quickAddDeal(\'' + stage + '\')" aria-label="Quick deal name"><button class="btn btn-primary btn-xs" onclick="PipelineModule.quickAddDeal(\'' + stage + '\')">+</button></div>';
+                    setTimeout(function() {
+                        const inp = document.getElementById('quickName_' + stage);
+                        if (inp) inp.focus();
+                    }, 100);
+                } catch (error) { console.error('[PipelineModule] Quick add error:', error); }
+            }
             
-            updateField: function(id, field, value) {
-                var d = this.deals.find(function(x){return x.id===id;});
-                if (d) { d[field] = value; this.save(); if (field==='stage') this.render(); }
-            },
+            async function quickAddDeal(stage) {
+                try {
+                    const inp = document.getElementById('quickName_' + stage);
+                    const name = inp ? inp.value.trim() : '';
+                    if (!name) { showToast('Deal name is required!', 'error'); return; }
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    const newDeal = { name: name, stage: stage, contact: '', company: '', value: 0, priority: 'medium', notes: '', followup: '', createdAt: new Date().toISOString() };
+                    const created = await window.CRM_Firestore.createDocument('deals', newDeal);
+                    _deals.unshift(created);
+                    showToast('✅ Deal added!', 'success');
+                    render();
+                } catch (error) { console.error('[PipelineModule] Quick add save error:', error); showToast('Failed to add deal.', 'error'); }
+            }
             
-            saveNotes: function(id) {
-                var notes = document.getElementById('detailNotes')?.value || '';
-                var d = this.deals.find(function(x){return x.id===id;});
-                if (d) { d.notes = notes; this.save(); this.closeDetail(); this.toast('✅ Notes saved','success'); }
-            },
+            function showAddModal() {
+                try {
+                    const stageOptions = PIPELINE_STAGES.map(function(s) { return '<option value="' + s.id + '">' + s.icon + ' ' + s.name + '</option>'; }).join('');
+                    const html = '<div class="modal-overlay" id="addDealModal" onclick="if(event.target===this)document.getElementById(\'modalContainer\').innerHTML=\'\'"><div class="modal-box" onclick="event.stopPropagation()"><h3 style="margin-bottom:16px;font-family:var(--font-heading);font-weight:700;">➕ Add New Deal</h3>' +
+                        '<div class="form-group"><label>Deal Name *</label><input type="text" id="addName" placeholder="Enter deal name" required></div>' +
+                        '<div class="form-group"><label>Contact Person</label><input type="text" id="addContact" placeholder="Contact name"></div>' +
+                        '<div class="form-group"><label>Company</label><input type="text" id="addCompany" placeholder="Company name"></div>' +
+                        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="form-group"><label>Deal Value (₹)</label><input type="number" id="addValue" min="0" placeholder="Amount"></div><div class="form-group"><label>Stage</label><select id="addStage">' + stageOptions + '</select></div></div>' +
+                        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="form-group"><label>Priority</label><select id="addPriority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🔵 Low</option></select></div><div class="form-group"><label>Follow-up Date</label><input type="date" id="addFollowup"></div></div>' +
+                        '<div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" onclick="PipelineModule.saveNewDeal()">💾 Save Deal</button><button class="btn btn-ghost" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'">Cancel</button></div></div></div>';
+                    $('modalContainer').innerHTML = html;
+                    setTimeout(function() { const inp = $('addName'); if (inp) inp.focus(); }, 200);
+                } catch (error) { console.error('[PipelineModule] Show modal error:', error); }
+            }
             
-            deleteDeal: function(id) {
-                if (!confirm('Delete this deal?')) return;
-                this.deals = this.deals.filter(function(d){return d.id!==id;});
-                this.save(); this.closeDetail(); this.toast('🗑️ Deleted','info');
-            },
+            async function saveNewDeal() {
+                try {
+                    const name = ($('addName') && $('addName').value || '').trim();
+                    if (!name) { showToast('Deal name is required.', 'error'); return; }
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    const dealData = {
+                        name: name,
+                        contact: ($('addContact') && $('addContact').value || '').trim(),
+                        company: ($('addCompany') && $('addCompany').value || '').trim(),
+                        value: parseInt(($('addValue') && $('addValue').value) || '0') || 0,
+                        stage: ($('addStage') && $('addStage').value) || 'new',
+                        priority: ($('addPriority') && $('addPriority').value) || 'medium',
+                        followup: ($('addFollowup') && $('addFollowup').value) || '',
+                        notes: '',
+                        createdAt: new Date().toISOString()
+                    };
+                    const created = await window.CRM_Firestore.createDocument('deals', dealData);
+                    _deals.unshift(created);
+                    $('modalContainer').innerHTML = '';
+                    showToast('✅ Deal created!', 'success');
+                    render();
+                } catch (error) { console.error('[PipelineModule] Save deal error:', error); showToast('Failed to save deal.', 'error'); }
+            }
             
-            showQuickAdd: function(stage, e) {
-                e.stopPropagation();
-                var btn = e.target.closest('.quick-add-btn');
-                if (!btn) return;
-                btn.outerHTML = '<div class="quick-add-form" onclick="event.stopPropagation()"><input type="text" id="qName_'+stage+'" placeholder="Name" onkeydown="if(event.key===\'Enter\')Pipeline.quickAdd(\''+stage+'\')"><button class="btn btn-primary btn-xs" onclick="Pipeline.quickAdd(\''+stage+'\')">+</button></div>';
-                setTimeout(function(){var inp=document.getElementById('qName_'+stage);if(inp)inp.focus();},100);
-            },
+            function openDetail(dealId) {
+                try {
+                    _selectedDealId = dealId;
+                    const deal = _deals.find(function(d) { return d.id === dealId; });
+                    if (!deal) { showToast('Deal not found.', 'error'); return; }
+                    
+                    const stageOpts = PIPELINE_STAGES.map(function(s) { return '<option value="' + s.id + '" ' + (deal.stage === s.id ? 'selected' : '') + '>' + s.icon + ' ' + s.name + '</option>'; }).join('');
+                    
+                    let html = '<div class="detail-backdrop" onclick="PipelineModule.closeDetail()"></div><div class="detail-panel">';
+                    html += '<div class="flex-between mb-2" style="align-items:flex-start;"><h3 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:1.1rem;">' + escapeHtml(deal.name || 'Deal') + '</h3><div style="display:flex;gap:6px;"><button class="btn btn-danger btn-xs" onclick="PipelineModule.deleteDeal(\'' + deal.id + '\')" aria-label="Delete deal">🗑️</button><button class="btn btn-ghost btn-xs" onclick="PipelineModule.closeDetail()" aria-label="Close panel" style="font-size:1rem;">✕</button></div></div>';
+                    html += '<div class="form-group"><label>Stage</label><select onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'stage\',this.value)" aria-label="Deal stage">' + stageOpts + '</select></div>';
+                    html += '<div class="form-group"><label>Priority</label><select onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'priority\',this.value)" aria-label="Deal priority"><option value="high" ' + (deal.priority === 'high' ? 'selected' : '') + '>🔴 High</option><option value="medium" ' + (deal.priority === 'medium' ? 'selected' : '') + '>🟡 Medium</option><option value="low" ' + (deal.priority === 'low' ? 'selected' : '') + '>🔵 Low</option></select></div>';
+                    html += '<div class="form-group"><label>Contact Person</label><input type="text" value="' + escapeHtml(deal.contact || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'contact\',this.value)" aria-label="Contact person">';
+                    html += '<div class="form-group"><label>Company</label><input type="text" value="' + escapeHtml(deal.company || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'company\',this.value)" aria-label="Company">';
+                    html += '<div class="form-group"><label>Deal Value (₹)</label><input type="number" value="' + (deal.value || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'value\',parseInt(this.value)||0)" aria-label="Deal value">';
+                    html += '<div class="form-group"><label>Follow-up Date</label><input type="date" value="' + (deal.followup || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'followup\',this.value)" aria-label="Follow-up date">';
+                    html += '<div class="form-group"><label>Notes</label><textarea rows="3" id="detailNotes" aria-label="Deal notes">' + escapeHtml(deal.notes || '') + '</textarea><button class="btn btn-outline btn-xs mt-1" onclick="PipelineModule.saveNotes(\'' + deal.id + '\')">💾 Save Notes</button></div>';
+                    html += '</div>';
+                    
+                    $('detailPanel').innerHTML = html;
+                } catch (error) { console.error('[PipelineModule] Open detail error:', error); }
+            }
             
-            quickAdd: function(stage) {
-                var inp = document.getElementById('qName_'+stage);
-                var name = inp?.value?.trim() || '';
-                if (!name) { this.toast('Name required!','error'); return; }
-                this.deals.unshift({id:'DL'+String(this.deals.length+1).padStart(3,'0'),name:name,contact:'',company:'',stage:stage,value:0,priority:'medium',notes:'',followup:'',created:new Date().toISOString()});
-                this.save(); this.render(); this.toast('✅ Added!','success');
-            },
+            function closeDetail() {
+                _selectedDealId = null;
+                $('detailPanel').innerHTML = '';
+            }
             
-            showAddForm: function() {
-                var h = '<div class="modal-overlay" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'"><div class="modal-box" onclick="event.stopPropagation()"><h5 style="margin-bottom:12px;">➕ Add New Deal</h5>';
-                h += '<div class="form-group"><label>Deal Name *</label><input type="text" id="kName"></div>';
-                h += '<div class="form-group"><label>Contact</label><input type="text" id="kContact"></div>';
-                h += '<div class="form-group"><label>Company</label><input type="text" id="kCompany"></div>';
-                h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="form-group"><label>Value (₹)</label><input type="number" id="kValue"></div><div class="form-group"><label>Stage</label><select id="kStage">'+this.stages.map(function(s){return'<option value="'+s.id+'">'+s.name+'</option>';}).join('')+'</select></div></div>';
-                h += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;"><div class="form-group"><label>Priority</label><select id="kPriority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🔵 Low</option></select></div><div class="form-group"><label>Follow-up</label><input type="date" id="kFollowup"></div></div>';
-                h += '<div style="display:flex;gap:8px;margin-top:10px;"><button class="btn btn-primary btn-sm" onclick="Pipeline.addDeal()">💾 Save</button><button class="btn btn-ghost btn-sm" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'">Cancel</button></div></div></div>';
-                document.getElementById('modalContainer').innerHTML = h;
-            },
+            async function saveNotes(dealId) {
+                try {
+                    const notesEl = $('detailNotes');
+                    const notes = notesEl ? notesEl.value.trim() : '';
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    await window.CRM_Firestore.updateDocument('deals', dealId, { notes: notes, updatedAt: new Date().toISOString() });
+                    const deal = _deals.find(function(d) { return d.id === dealId; });
+                    if (deal) deal.notes = notes;
+                    showToast('✅ Notes saved.', 'success');
+                    closeDetail();
+                    render();
+                } catch (error) { console.error('[PipelineModule] Save notes error:', error); showToast('Failed to save notes.', 'error'); }
+            }
             
-            addDeal: function() {
-                var name = document.getElementById('kName')?.value?.trim();
-                if (!name) { this.toast('Name required!','error'); return; }
-                this.deals.unshift({
-                    id:'DL'+String(this.deals.length+1).padStart(3,'0'),name:name,
-                    contact:document.getElementById('kContact')?.value?.trim()||'',
-                    company:document.getElementById('kCompany')?.value?.trim()||'',
-                    value:parseInt(document.getElementById('kValue')?.value)||0,
-                    stage:document.getElementById('kStage')?.value||'new',
-                    priority:document.getElementById('kPriority')?.value||'medium',
-                    followup:document.getElementById('kFollowup')?.value||'',
-                    notes:'',created:new Date().toISOString()
-                });
-                this.save();document.getElementById('modalContainer').innerHTML='';this.render();this.toast('✅ Added!','success');
-            },
+            function filterByStage(filterType) {
+                showToast('Filter: ' + (filterType || 'All deals'), 'info');
+                render();
+            }
             
-            toast: function(m,t){t=t||'info';var d=document.createElement('div');d.className='toast toast-'+t;d.textContent=m;(document.getElementById('toastContainer')||document.body).appendChild(d);setTimeout(function(){d.remove();},3000);},
-            esc: function(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):'';}
-        };
+            function render() {
+                renderStats();
+                renderBoard();
+            }
+            
+            function refresh() {
+                loadDeals();
+                showToast('🔄 Pipeline refreshed.', 'info');
+            }
+            
+            async function init() {
+                try {
+                    console.log('[PipelineModule] Initializing...');
+                    const hasAccess = await checkAccess();
+                    if (!hasAccess) return;
+                    if (window.CRM_Firestore && typeof window.CRM_Firestore.init === 'function') await window.CRM_Firestore.init();
+                    if (window.CRM_Tenant && typeof window.CRM_Tenant.initTenantContext === 'function') await window.CRM_Tenant.initTenantContext();
+                    await loadDeals();
+                    console.log('[PipelineModule] ✅ Ready');
+                } catch (error) { console.error('[PipelineModule] Init error:', error); }
+            }
+            
+            return {
+                init, render, refresh, loadDeals,
+                showAddModal, saveNewDeal, quickAddDeal, showQuickAdd,
+                openDetail, closeDetail, saveNotes, deleteDeal,
+                updateDealField, moveDeal, filterByStage,
+                getDeals: function() { return _deals; }
+            };
+            
+        })();
         
-        document.addEventListener('DOMContentLoaded', function() { Pipeline.init(); });
+        window.PipelineModule = PipelineModule;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            PipelineModule.init().catch(function(error) {
+                console.error('[PipelineModule] Auto-init failed:', error);
+            });
+        });
+        
+        console.log('[PipelineModule] Script loaded. window.PipelineModule available.');
     </script>
 </body>
 </html>
