@@ -300,17 +300,41 @@
         }
 
         async function checkAuth() {
-            if (window.CRM_Auth && window.CRM_Auth.isAuthenticated) {
-                if (!window.CRM_Auth.isAuthenticated()) {
-                    window.location.href = 'index.html';
+            // Wait for Firebase Auth to initialize
+            var maxRetries = 10;
+            var retryCount = 0;
+            
+            while (retryCount < maxRetries) {
+                if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function') {
+                    if (window.CRM_Auth.isAuthenticated()) {
+                        // Authenticated — proceed
+                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                            await window.CRM_Tenant.initTenantContext();
+                        }
+                        updateUserUI();
+                        applyRBACFilter();
+                        return;
+                    }
+                }
+                // Wait and retry
+                await new Promise(function(resolve) { setTimeout(resolve, 500); });
+                retryCount++;
+            }
+            
+            // After 5 seconds, if still not authenticated — check once more
+            if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function') {
+                if (window.CRM_Auth.isAuthenticated()) {
+                    if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                        await window.CRM_Tenant.initTenantContext();
+                    }
+                    updateUserUI();
+                    applyRBACFilter();
                     return;
                 }
             }
-            if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                await window.CRM_Tenant.initTenantContext();
-            }
-            updateUserUI();
-            applyRBACFilter();
+            
+            // Still not authenticated — redirect to login
+            window.location.href = 'index.html';
         }
 
         function init() {
