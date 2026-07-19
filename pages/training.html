@@ -248,6 +248,27 @@
 
     <script>
         'use strict';
+        // Inherit Firebase from parent window (dashboard.html or app.html)
+        if (window.parent && window.parent.firebase) {
+            window.firebase = window.parent.firebase;
+        }
+        if (window.parent && window.parent.CRM_Firestore) {
+            window.CRM_Firestore = window.parent.CRM_Firestore;
+        }
+        if (window.parent && window.parent.CRM_Auth) {
+            window.CRM_Auth = window.parent.CRM_Auth;
+        }
+        if (window.parent && window.parent.CRM_Tenant) {
+            window.CRM_Tenant = window.parent.CRM_Tenant;
+        }
+        if (window.parent && window.parent.CRM_Config) {
+            window.CRM_Config = window.parent.CRM_Config;
+        }
+        console.log('📦 Inherited Firebase from parent');
+    </script>
+
+    <script>
+        'use strict';
         
         var Training = {
             currentTab: 'courses',
