@@ -23,7 +23,7 @@
             --gold-light: #E8C95A; --gold: #D4AF37; --gold-dark: #B8960F;
             --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
-            --radius: 12px; --radius-sm: 8px;
+            --radius: 12px; --radius-sm: 8px; --radius-lg: 20px;
             --transition: 0.25s ease; --transition-fast: 0.15s ease;
             --sidebar-w: 260px; --sidebar-collapsed: 64px; --header-h: 60px;
         }
@@ -102,7 +102,6 @@
         .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 200; padding: 6px 10px; padding-bottom: max(6px, env(safe-area-inset-bottom)); justify-content: space-around; align-items: center; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
         .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border-radius: 8px; font-size: 10px; color: var(--text3); transition: all var(--transition-fast); min-width: 50px; text-decoration: none; }
         .mobile-nav a.active { color: var(--gold-dark); font-weight: 600; }
-        .mobile-nav .nav-ic { font-size: 1.2rem; }
         @media (max-width: 1024px) {
             .sb { transform: translateX(-100%); width: var(--sidebar-w); }
             .sb.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
@@ -114,14 +113,14 @@
         }
         .approval-banner { background: #FEF3C7; color: #92400E; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #FCD34D; display: none; }
         .approval-banner.show { display: block; }
-        .loading-screen { display: flex; align-items: center; justify-content: center; height: 100%; color: var(--text3); font-size: 16px; gap: 12px; }
+        .loading-screen { display: flex; align-items: center; justify-content: center; height: 200px; color: var(--text3); font-size: 16px; gap: 12px; }
         .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--gold); border-radius: 50%; animation: spin 0.8s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
         .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
         .stat-card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 16px 18px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); }
         .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); }
         .stat-card .lbl { font-size: 0.72rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.5px; }
-        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: 20px; padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 20px; }
+        .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 2px 4px rgba(0,0,0,0.04); margin-bottom: 20px; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
         .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
         .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
@@ -130,11 +129,28 @@
         .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
         .btn-ghost { background: transparent; color: var(--text2); }
         .btn-danger { background: var(--error); color: #FFF; }
+        .btn-success { background: var(--success); color: #FFF; }
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+        .badge-pending { background: #FEF3C7; color: #92400E; }
+        .badge-approved { background: #D1FAE5; color: #065F46; }
+        .badge-rejected { background: #FEE2E2; color: #991B1B; }
+        .badge-admin { background: #EDE9FE; color: #5B21B6; }
+        .badge-manager { background: #DBEAFE; color: #1E40AF; }
+        .badge-executive { background: #D1FAE5; color: #065F46; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        table th { text-align: left; padding: 12px 14px; font-weight: 600; color: var(--text3); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; background: var(--bg3); border-bottom: 2px solid var(--border); white-space: nowrap; }
+        table td { padding: 12px 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        table tbody tr:hover { background: var(--hover); }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; color: var(--text2); margin-bottom: 4px; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 0.88rem; font-family: var(--font-body); background: var(--bg); }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--gold); }
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
         .toast { background: var(--bg2); border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 10px; }
         .toast-success { border-left: 4px solid var(--success); } .toast-error { border-left: 4px solid var(--error); } .toast-info { border-left: 4px solid var(--info); }
         @keyframes slideIn { from{opacity:0;transform:translateX(120%);} to{opacity:1;transform:translateX(0);} }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } }
+        @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .form-row { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
@@ -174,6 +190,10 @@
             <div class="nav-sec"><div class="nav-sec-title">Insights</div>
                 <button class="nav-item" data-module="REPORTS" onclick="switchModule('reports')"><span class="nav-icon">📋</span><span class="nav-label">Reports</span></button>
                 <button class="nav-item" data-module="NOTIFICATIONS" onclick="switchModule('notifications')"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></button>
+            </div>
+            <div class="nav-sec"><div class="nav-sec-title">Admin</div>
+                <button class="nav-item" data-module="PLATFORM_ADMIN" onclick="switchModule('platform-admin')"><span class="nav-icon">🛡️</span><span class="nav-label">Platform Admin</span></button>
+                <button class="nav-item" data-module="TENANT_ADMIN" onclick="switchModule('tenant-admin')"><span class="nav-icon">⚙️</span><span class="nav-label">Tenant Admin</span></button>
             </div>
             <div class="nav-sec"><div class="nav-sec-title">System</div>
                 <button class="nav-item" data-module="SETTINGS" onclick="switchModule('settings')"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></button>
@@ -221,22 +241,13 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-
     <script>
         'use strict';
         if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
-            window.firebase.initializeApp({
-                apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
-                authDomain: "avatar-wa-dual-crm.firebaseapp.com",
-                projectId: "avatar-wa-dual-crm",
-                storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
-                messagingSenderId: "946959261009",
-                appId: "1:946959261009:web:175f5390d63715f1f8c770"
-            });
+            window.firebase.initializeApp({apiKey:"AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",authDomain:"avatar-wa-dual-crm.firebaseapp.com",projectId:"avatar-wa-dual-crm",storageBucket:"avatar-wa-dual-crm.firebasestorage.app",messagingSenderId:"946959261009",appId:"1:946959261009:web:175f5390d63715f1f8c770"});
             console.log('🔥 Firebase initialized');
         }
     </script>
-
     <script src="js/core/config.js"></script>
     <script src="js/core/auth.js"></script>
     <script src="js/core/firestore.js"></script>
@@ -244,390 +255,247 @@
 
     <script>
         'use strict';
+        var APP={currentModule:'dashboard',collapsed:false,mobile:false,dark:false,userProfile:null,initialized:false};
+        function $(id){return document.getElementById(id);}
+        function showToast(msg,type){var t=document.createElement('div');t.className='toast toast-'+(type||'info');t.innerHTML='<span>'+({success:'✅',error:'❌',info:'ℹ️'}[type]||'')+'</span> '+msg;($('toastContainer')||document.body).appendChild(t);setTimeout(function(){t.style.opacity='0';t.style.transition='0.3s';setTimeout(function(){t.remove();},300);},3000);}
+        function escHtml(s){return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'):'';}
+        function formatCurrency(a){try{return'₹'+parseInt(a||0).toLocaleString('en-IN');}catch(e){return'₹0';}}
+        function formatDate(d){if(!d)return'-';try{var dt=new Date(d);return dt.toLocaleDateString('en-IN',{year:'numeric',month:'short',day:'numeric'});}catch(e){return d;}}
 
-        var APP = {
-            currentModule: 'dashboard',
-            collapsed: false,
-            mobile: false,
-            dark: false,
-            userProfile: null,
-            initialized: false
-        };
-
-        function $(id) { return document.getElementById(id); }
-
-        function showToast(msg, type) {
-            var t = document.createElement('div'); t.className = 'toast toast-' + (type || 'info');
-            t.innerHTML = '<span>' + ({success:'✅',error:'❌',info:'ℹ️'}[type]||'') + '</span> ' + msg;
-            ($('toastContainer') || document.body).appendChild(t);
-            setTimeout(function() { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(function() { t.remove(); }, 300); }, 3000);
+        function updateUserUI(){
+            var profile=null;
+            if(window.firebase&&window.firebase.auth&&window.firebase.auth().currentUser){
+                var fbUser=window.firebase.auth().currentUser;
+                profile={uid:fbUser.uid,email:fbUser.email,displayName:fbUser.displayName,phoneNumber:fbUser.phoneNumber};
+            }
+            if(window.CRM_Tenant&&window.CRM_Tenant.getUserProfile){var tp=window.CRM_Tenant.getUserProfile();if(tp&&tp.uid){profile=profile||{};for(var key in tp){if(tp.hasOwnProperty(key))profile[key]=tp[key];}}}
+            if((!profile||!profile.role)&&window.CRM_Auth&&window.CRM_Auth.getUser){var ap=window.CRM_Auth.getUser();if(ap&&ap.uid){profile=profile||{};for(var key in ap){if(ap.hasOwnProperty(key))profile[key]=ap[key];}}}
+            if(!profile||!profile.uid){try{var ud=localStorage.getItem('crm_user');if(ud)profile=JSON.parse(ud);}catch(e){}}
+            if(!profile)return;
+            APP.userProfile=profile;
+            var name=profile.displayName||profile.name||profile.email||'User';
+            var av=name.charAt(0).toUpperCase();
+            var role=profile.role||'Executive';
+            ['sbAvatar','hdrAvatar'].forEach(function(id){var el=$(id);if(el)el.textContent=av;});
+            var nameEl=$('sbUserName');if(nameEl)nameEl.textContent=name;
+            var roleEl=$('sbUserRole');if(roleEl)roleEl.textContent=role;
+            if(profile.approvalStatus==='pending'){var b=$('approvalBanner');if(b)b.classList.add('show');}
         }
 
-        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
-        function formatCurrency(amount) { try { return '₹' + parseInt(amount || 0).toLocaleString('en-IN'); } catch(e) { return '₹0'; } }
-
-        function updateUserUI() {
-            var profile = APP.userProfile;
-            if (!profile && window.CRM_Tenant && window.CRM_Tenant.getUserProfile) profile = window.CRM_Tenant.getUserProfile();
-            if (!profile && window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
-            if (!profile) { try { var ud = localStorage.getItem('crm_user'); if (ud) profile = JSON.parse(ud); } catch(e) {} }
-            if (!profile) return;
-            APP.userProfile = profile;
-            var name = profile.displayName || profile.name || profile.email || 'User';
-            var av = name.charAt(0).toUpperCase();
-            ['sbAvatar', 'hdrAvatar'].forEach(function(id) { var el = $(id); if (el) el.textContent = av; });
-            var nameEl = $('sbUserName'); if (nameEl) nameEl.textContent = name;
-            var roleEl = $('sbUserRole'); if (roleEl) roleEl.textContent = profile.role || 'User';
-            if (profile.approvalStatus === 'pending') { var b = $('approvalBanner'); if (b) b.classList.add('show'); }
+        function applyRBACFilter(){
+            if(!window.CRM_Tenant||!window.CRM_Tenant.canAccessModule)return;
+            document.querySelectorAll('.nav-item[data-module]').forEach(function(el){var mod=el.dataset.module;if(!mod)return;if(mod==='PLATFORM_ADMIN'){el.classList.toggle('hidden',!window.CRM_Tenant.hasMinRole('PLATFORM_OWNER'));return;}if(mod==='TENANT_ADMIN'){el.classList.toggle('hidden',!window.CRM_Tenant.hasMinRole('TENANT_ADMIN'));return;}el.classList.toggle('hidden',!window.CRM_Tenant.canAccessModule(mod));});
+            document.querySelectorAll('.nav-sec').forEach(function(sec){var visible=sec.querySelectorAll('.nav-item:not(.hidden)');sec.style.display=visible.length===0?'none':'';});
         }
 
-        function applyRBACFilter() {
-            if (!window.CRM_Tenant || !window.CRM_Tenant.canAccessModule) return;
-            document.querySelectorAll('.nav-item[data-module]').forEach(function(el) {
-                var mod = el.dataset.module;
-                if (!mod) return;
-                el.classList.toggle('hidden', !window.CRM_Tenant.canAccessModule(mod));
-            });
-            document.querySelectorAll('.nav-sec').forEach(function(sec) {
-                var visible = sec.querySelectorAll('.nav-item:not(.hidden)');
-                sec.style.display = visible.length === 0 ? 'none' : '';
-            });
+        function setActiveNav(module){
+            document.querySelectorAll('.nav-item').forEach(function(el){el.classList.toggle('active',el.dataset.module===module.toUpperCase()||el.dataset.module===module);});
+            document.querySelectorAll('.mobile-nav a').forEach(function(el,i){var mods=['DASHBOARD','LEADS','INVOICES','WHATSAPP','SETTINGS'];el.classList.toggle('active',mods[i]===module.toUpperCase());});
         }
 
-        function setActiveNav(module) {
-            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.toggle('active', el.dataset.module === module.toUpperCase()); });
-            document.querySelectorAll('.mobile-nav a').forEach(function(el, i) {
-                var mods = ['DASHBOARD','LEADS','INVOICES','WHATSAPP','SETTINGS'];
-                el.classList.toggle('active', mods[i] === module.toUpperCase());
-            });
-        }
-
-        function switchModule(module) {
-            APP.currentModule = module;
-            setActiveNav(module);
-            if (APP.mobile) closeMobile();
-            try { localStorage.setItem('crm_last_module', module); } catch(e) {}
+        function switchModule(module){
+            APP.currentModule=module;setActiveNav(module);if(APP.mobile)closeMobile();
+            try{localStorage.setItem('crm_last_module',module);}catch(e){}
             renderModule(module);
         }
 
-        async function renderModule(module) {
-            var area = $('contentArea');
-            if (!area) return;
-            var loader = $('loadingScreen');
-            area.innerHTML = '';
-
-            try {
-                switch(module) {
-                    case 'dashboard': renderDashboard(area); break;
-                    case 'profile': renderProfile(area); break;
-                    case 'settings': renderSettings(area); break;
-                    case 'leads': await renderLeads(area); break;
-                    case 'pipeline': await renderPipeline(area); break;
-                    case 'clients': await renderClients(area); break;
-                    case 'invoices': await renderInvoices(area); break;
-                    case 'payments': await renderPayments(area); break;
-                    case 'tasks': await renderTasks(area); break;
-                    case 'projects': await renderProjects(area); break;
-                    case 'retainers': await renderRetainers(area); break;
-                    case 'whatsapp': await renderWhatsApp(area); break;
-                    case 'training': await renderTraining(area); break;
-                    case 'referrals': await renderReferrals(area); break;
-                    case 'reports': await renderReports(area); break;
-                    case 'notifications': await renderNotifications(area); break;
-                    case 'appointments': await renderAppointments(area); break;
-                    default: area.innerHTML = '<div class="loading-screen">Module not found</div>';
+        async function renderModule(module){
+            var area=$('contentArea');if(!area)return;area.innerHTML='';
+            try{
+                switch(module){
+                    case'dashboard':await renderDashboard(area);break;case'profile':renderProfile(area);break;
+                    case'settings':renderSettings(area);break;case'leads':await renderLeads(area);break;
+                    case'pipeline':await renderPipeline(area);break;case'clients':await renderClients(area);break;
+                    case'invoices':await renderInvoices(area);break;case'payments':await renderPayments(area);break;
+                    case'tasks':await renderTasks(area);break;case'projects':await renderProjects(area);break;
+                    case'retainers':await renderRetainers(area);break;case'whatsapp':await renderWhatsApp(area);break;
+                    case'training':await renderTraining(area);break;case'referrals':await renderReferrals(area);break;
+                    case'reports':await renderReports(area);break;case'notifications':await renderNotifications(area);break;
+                    case'appointments':await renderAppointments(area);break;
+                    case'platform-admin':await renderPlatformAdmin(area);break;
+                    case'tenant-admin':await renderTenantAdmin(area);break;
+                    default:area.innerHTML='<div class="loading-screen">Module not found</div>';
                 }
-            } catch(e) {
-                console.error('Module render error:', e);
-                area.innerHTML = '<div class="loading-screen">Error loading module. Please try again.</div>';
-            }
+            }catch(e){console.error('Module error:',e);area.innerHTML='<div class="loading-screen">Error loading module.</div>';}
         }
 
         // ==================== DASHBOARD ====================
-        async function renderDashboard(area) {
-            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Dashboard...</div>';
+        async function renderDashboard(area){
+            area.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading Dashboard...</div>';
             updateUserUI();
-            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:4px;">Welcome back, <span style="background:linear-gradient(135deg,#D4AF37,#B8960F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + escHtml((APP.userProfile && APP.userProfile.displayName) || 'User') + '</span> 👋</h1>';
-            html += '<p style="color:var(--text3);margin-bottom:20px;">' + new Date().toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' }) + '</p>';
-            
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    var leadCount = await window.CRM_Firestore.countDocuments('leads');
-                    var clientCount = await window.CRM_Firestore.countDocuments('clients');
-                    var taskCount = await window.CRM_Firestore.countDocuments('tasks', [['status', '!=', 'completed']]);
-                    var invoiceCount = await window.CRM_Firestore.countDocuments('invoices');
-                    var paymentResult = await window.CRM_Firestore.queryDocuments('payments', { limit: 500 });
-                    var totalRevenue = 0;
-                    (paymentResult.data || []).forEach(function(p) { totalRevenue += (parseInt(p.amount) || 0); });
-                    
-                    html += '<div class="stats-grid">';
-                    html += '<div class="stat-card"><div class="val" style="color:#059669;">' + formatCurrency(totalRevenue) + '</div><div class="lbl">💰 Revenue</div></div>';
-                    html += '<div class="stat-card"><div class="val" style="color:#4F46E5;">' + leadCount + '</div><div class="lbl">👥 Leads</div></div>';
-                    html += '<div class="stat-card"><div class="val" style="color:#D4AF37;">' + clientCount + '</div><div class="lbl">🏢 Clients</div></div>';
-                    html += '<div class="stat-card"><div class="val" style="color:#F59E0B;">' + taskCount + '</div><div class="lbl">✅ Tasks</div></div>';
-                    html += '</div>';
+            var html='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:4px;">Welcome back, <span style="background:linear-gradient(135deg,#D4AF37,#B8960F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">'+escHtml((APP.userProfile&&APP.userProfile.displayName)||'User')+'</span> 👋</h1>';
+            html+='<p style="color:var(--text3);margin-bottom:20px;">'+new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'})+'</p>';
+            try{
+                if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){
+                    var lc=await window.CRM_Firestore.countDocuments('leads');
+                    var cc=await window.CRM_Firestore.countDocuments('clients');
+                    var tc=await window.CRM_Firestore.countDocuments('tasks',[['status','!=','completed']]);
+                    var pr=await window.CRM_Firestore.queryDocuments('payments',{limit:500});var tr=0;(pr.data||[]).forEach(function(p){tr+=(parseInt(p.amount)||0);});
+                    html+='<div class="stats-grid">';
+                    html+='<div class="stat-card"><div class="val" style="color:#059669;">'+formatCurrency(tr)+'</div><div class="lbl">💰 Revenue</div></div>';
+                    html+='<div class="stat-card"><div class="val" style="color:#4F46E5;">'+lc+'</div><div class="lbl">👥 Leads</div></div>';
+                    html+='<div class="stat-card"><div class="val" style="color:#D4AF37;">'+cc+'</div><div class="lbl">🏢 Clients</div></div>';
+                    html+='<div class="stat-card"><div class="val" style="color:#F59E0B;">'+tc+'</div><div class="lbl">✅ Tasks</div></div>';
+                    html+='</div>';
                 }
-            } catch(e) { console.error('Dashboard stats error:', e); }
-            
-            html += '<div class="card"><div class="card-header"><span class="card-title">⚡ Quick Actions</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">';
-            ['leads','invoices','clients','whatsapp'].forEach(function(m) {
-                html += '<button class="btn btn-outline" onclick="switchModule(\'' + m + '\')" style="flex-direction:column;gap:4px;padding:16px;"><span style="font-size:1.5rem;">' + ({leads:'👥',invoices:'🧾',clients:'🏢',whatsapp:'💬'}[m]) + '</span>' + m.charAt(0).toUpperCase() + m.slice(1) + '</button>';
-            });
-            html += '</div></div>';
-            
-            area.innerHTML = html;
+            }catch(e){}
+            html+='<div class="card"><div class="card-header"><span class="card-title">⚡ Quick Actions</span></div><div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">';
+            ['leads','invoices','clients','whatsapp'].forEach(function(m){html+='<button class="btn btn-outline" onclick="switchModule(\''+m+'\')" style="flex-direction:column;gap:4px;padding:16px;"><span style="font-size:1.5rem;">'+({leads:'👥',invoices:'🧾',clients:'🏢',whatsapp:'💬'}[m])+'</span>'+m.charAt(0).toUpperCase()+m.slice(1)+'</button>';});
+            html+='</div></div>';
+            area.innerHTML=html;
         }
 
         // ==================== PROFILE ====================
-        function renderProfile(area) {
-            updateUserUI();
-            var p = APP.userProfile || {};
-            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1>';
-            html += '<div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div>';
-            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="' + escHtml(p.displayName || p.name || '') + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" id="pEmail" value="' + escHtml(p.email || '') + '" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="' + escHtml(p.phoneNumber || '') + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="' + escHtml(p.role || '') + '" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
-            html += '</div>';
-            html += '<button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update Profile</button>';
-            html += '</div>';
-
-            html += '<div class="card"><div class="card-header"><span class="card-title">🔑 Change Password</span></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Current Password</label><input type="password" id="secCurrent" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;">';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">New Password</label><input type="password" id="secNew" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Confirm Password</label><input type="password" id="secConfirm" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '</div>';
-            html += '<button class="btn btn-primary" style="margin-top:10px;" onclick="changePassword()">🔒 Update Password</button>';
-            html += '</div>';
-            area.innerHTML = html;
+        function renderProfile(area){
+            updateUserUI();var p=APP.userProfile||{};
+            var html='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">👤 My Profile</h1>';
+            html+='<div class="card"><div class="card-header"><span class="card-title">Personal Information</span></div>';
+            html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
+            html+='<div><label style="font-weight:600;font-size:0.8rem;">Full Name</label><input type="text" id="pName" value="'+escHtml(p.displayName||p.name||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html+='<div><label style="font-weight:600;font-size:0.8rem;">Email</label><input type="email" value="'+escHtml(p.email||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
+            html+='<div><label style="font-weight:600;font-size:0.8rem;">Mobile</label><input type="tel" id="pMobile" value="'+escHtml(p.phoneNumber||'')+'" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html+='<div><label style="font-weight:600;font-size:0.8rem;">Role</label><input type="text" value="'+escHtml(p.role||'')+'" disabled style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;background:var(--bg3);margin-top:4px;"></div>';
+            html+='</div><button class="btn btn-primary" style="margin-top:14px;" onclick="saveProfile()">💾 Update Profile</button></div>';
+            html+='<div class="card"><div class="card-header"><span class="card-title">🔑 Change Password</span></div>';
+            html+='<div><label style="font-weight:600;font-size:0.8rem;">Current Password</label><input type="password" id="secCurrent" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
+            html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:10px;"><div><label style="font-weight:600;font-size:0.8rem;">New Password</label><input type="password" id="secNew" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">Confirm</label><input type="password" id="secConfirm" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div></div>';
+            html+='<button class="btn btn-primary" style="margin-top:10px;" onclick="changePassword()">🔒 Update Password</button></div>';
+            area.innerHTML=html;
         }
 
-        window.saveProfile = async function() {
-            var name = ($('pName') && $('pName').value || '').trim();
-            var mobile = ($('pMobile') && $('pMobile').value || '').trim();
-            var uid = APP.userProfile && APP.userProfile.uid;
-            if (!uid) { showToast('User not identified.', 'error'); return; }
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.updateDocument('users', uid, { displayName: name, phoneNumber: mobile });
-                }
-                if (APP.userProfile) { APP.userProfile.displayName = name; APP.userProfile.phoneNumber = mobile; }
-                updateUserUI();
-                showToast('✅ Profile updated!', 'success');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        window.saveProfile=async function(){
+            var name=($('pName')&&$('pName').value||'').trim();var mobile=($('pMobile')&&$('pMobile').value||'').trim();
+            var uid=APP.userProfile&&APP.userProfile.uid;if(!uid){showToast('User not identified.','error');return;}
+            try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.updateDocument('users',uid,{displayName:name,phoneNumber:mobile});}
+            if(APP.userProfile){APP.userProfile.displayName=name;APP.userProfile.phoneNumber=mobile;}updateUserUI();showToast('✅ Profile updated!','success');}catch(e){showToast('Error: '+e.message,'error');}
         };
-
-        window.changePassword = async function() {
-            var cp = ($('secCurrent') && $('secCurrent').value) || '';
-            var np = ($('secNew') && $('secNew').value) || '';
-            var cf = ($('secConfirm') && $('secConfirm').value) || '';
-            if (!cp || !np || np !== cf) { showToast('Please fill correctly.', 'error'); return; }
-            if (window.CRM_Auth && window.CRM_Auth.changePassword) {
-                var result = await window.CRM_Auth.changePassword(cp, np);
-                if (result.success) { showToast('✅ Password changed!', 'success'); }
-                else { showToast(result.message, 'error'); }
-            }
+        window.changePassword=async function(){
+            var cp=($('secCurrent')&&$('secCurrent').value)||'';var np=($('secNew')&&$('secNew').value)||'';var cf=($('secConfirm')&&$('secConfirm').value)||'';
+            if(!cp||!np||np!==cf){showToast('Please fill correctly.','error');return;}
+            if(window.CRM_Auth&&window.CRM_Auth.changePassword){var r=await window.CRM_Auth.changePassword(cp,np);if(r.success){showToast('✅ Password changed!','success');}else{showToast(r.message,'error');}}
         };
 
         // ==================== SETTINGS ====================
-        function renderSettings(area) {
-            var html = '<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Settings</h1>';
-            html += '<div class="card"><div class="card-header"><span class="card-title">Organization</span></div>';
-            html += '<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">Business Name</label><input type="text" id="setName" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '<div><label style="font-weight:600;font-size:0.8rem;">GSTIN</label><input type="text" id="setGstin" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div>';
-            html += '</div>';
-            html += '<button class="btn btn-primary" style="margin-top:10px;" onclick="saveSettings()">💾 Save Settings</button>';
-            html += '</div>';
-            html += '<div class="card"><div class="card-header"><span class="card-title">Theme</span></div>';
-            html += '<button class="btn btn-outline" onclick="toggleTheme()">' + (APP.dark ? '☀️ Switch to Light' : '🌙 Switch to Dark') + '</button></div>';
-            area.innerHTML = html;
-            loadSettingsData();
+        function renderSettings(area){
+            var html='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Settings</h1>';
+            html+='<div class="card"><div class="card-header"><span class="card-title">Organization</span></div>';
+            html+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;"><div><label style="font-weight:600;font-size:0.8rem;">Business Name</label><input type="text" id="setName" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div><div><label style="font-weight:600;font-size:0.8rem;">GSTIN</label><input type="text" id="setGstin" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;margin-top:4px;"></div></div>';
+            html+='<button class="btn btn-primary" style="margin-top:10px;" onclick="saveSettings()">💾 Save Settings</button></div>';
+            html+='<div class="card"><div class="card-header"><span class="card-title">Theme</span></div><button class="btn btn-outline" onclick="toggleTheme()">'+(APP.dark?'☀️ Switch to Light':'🌙 Switch to Dark')+'</button></div>';
+            area.innerHTML=html;loadSettingsData();
         }
-
-        async function loadSettingsData() {
-            if (!window.CRM_Tenant) return;
-            var tenant = window.CRM_Tenant.getTenant();
-            if (!tenant) { var tid = window.CRM_Tenant.getTenantId(); if (tid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) tenant = await window.CRM_Firestore.getDocument('tenants', tid); }
-            if (tenant) {
-                if ($('setName')) $('setName').value = tenant.name || '';
-                if ($('setGstin')) $('setGstin').value = (tenant.settings && tenant.settings.gstin) || '';
-            }
+        async function loadSettingsData(){
+            if(!window.CRM_Tenant)return;var t=window.CRM_Tenant.getTenant();if(!t){var tid=window.CRM_Tenant.getTenantId();if(tid&&window.CRM_Firestore&&window.CRM_Firestore.isAvailable())t=await window.CRM_Firestore.getDocument('tenants',tid);}
+            if(t){if($('setName'))$('setName').value=t.name||'';if($('setGstin'))$('setGstin').value=(t.settings&&t.settings.gstin)||'';}
         }
-
-        window.saveSettings = async function() {
-            var name = ($('setName') && $('setName').value || '').trim();
-            var gstin = ($('setGstin') && $('setGstin').value || '').trim();
-            var tid = window.CRM_Tenant ? window.CRM_Tenant.getTenantId() : null;
-            if (!tid) { showToast('No tenant context.', 'error'); return; }
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.updateDocument('tenants', tid, { name: name, settings: { gstin: gstin } });
-                }
-                showToast('✅ Settings saved!', 'success');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        window.saveSettings=async function(){
+            var name=($('setName')&&$('setName').value||'').trim();var gstin=($('setGstin')&&$('setGstin').value||'').trim();
+            var tid=window.CRM_Tenant?window.CRM_Tenant.getTenantId():null;if(!tid){showToast('No tenant context.','error');return;}
+            try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.updateDocument('tenants',tid,{name:name,settings:{gstin:gstin}});}showToast('✅ Settings saved!','success');}catch(e){showToast('Error: '+e.message,'error');}
         };
 
-        // ==================== LEADS (Quick) ====================
-        async function renderLeads(area) {
-            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Leads...</div>';
-            var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">👥 Leads</h1><button class="btn btn-primary" onclick="addLead()">➕ New Lead</button></div>';
-            if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                var result = await window.CRM_Firestore.queryDocuments('leads', { orderBy: 'createdAt', orderDir: 'desc', limit: 50 });
-                var leads = result.data || [];
-                if (leads.length === 0) {
-                    html += '<div class="card"><p style="text-align:center;color:var(--text3);padding:40px;">No leads yet. Click "New Lead" to get started.</p></div>';
-                } else {
-                    html += '<div class="card" style="padding:0;overflow:hidden;"><div style="overflow-x:auto;"><table style="width:100%;border-collapse:collapse;"><thead><tr style="background:var(--bg3);">';
-                    ['Name','Mobile','Business','Source','Status','Score'].forEach(function(h) { html += '<th style="padding:12px 14px;text-align:left;font-size:0.7rem;text-transform:uppercase;">' + h + '</th>'; });
-                    html += '</tr></thead><tbody>';
-                    leads.forEach(function(l) {
-                        html += '<tr style="border-bottom:1px solid var(--border);">';
-                        html += '<td style="padding:10px 14px;"><strong>' + escHtml(l.firstName || '') + ' ' + escHtml(l.lastName || '') + '</strong></td>';
-                        html += '<td style="padding:10px 14px;">' + escHtml(l.mobile || '-') + '</td>';
-                        html += '<td style="padding:10px 14px;">' + escHtml(l.business || '-') + '</td>';
-                        html += '<td style="padding:10px 14px;">' + escHtml(l.source || '-') + '</td>';
-                        html += '<td style="padding:10px 14px;"><span style="padding:3px 10px;border-radius:20px;font-size:0.7rem;background:#EEF2FF;color:#4F46E5;">' + escHtml(l.status || 'New') + '</span></td>';
-                        html += '<td style="padding:10px 14px;">' + (l.score || 0) + '</td>';
-                        html += '</tr>';
-                    });
-                    html += '</tbody></table></div></div>';
+        // ==================== PLATFORM ADMIN ====================
+        async function renderPlatformAdmin(area){
+            area.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading Platform Admin...</div>';
+            if(!window.CRM_Tenant||!window.CRM_Tenant.hasMinRole||!window.CRM_Tenant.hasMinRole('PLATFORM_OWNER')){area.innerHTML='<div class="card"><p style="text-align:center;padding:40px;color:var(--text3);">🔒 Access denied. Platform Owner only.</p></div>';return;}
+            var html='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">🛡️ Platform Admin Panel</h1>';
+            try{
+                var approvals=[];var allUsers=[];var allTenants=[];
+                if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){
+                    var ar=await window.CRM_Firestore.queryDocuments('users',{filters:[['approvalStatus','==','pending']],orderBy:'createdAt',orderDir:'asc',limit:50});approvals=ar.data||[];
+                    var ur=await window.CRM_Firestore.queryDocuments('users',{orderBy:'createdAt',orderDir:'desc',limit:100});allUsers=ur.data||[];
+                    var tr=await window.CRM_Firestore.queryDocuments('tenants',{orderBy:'createdAt',orderDir:'desc',limit:50});allTenants=tr.data||[];
                 }
-            }
-            area.innerHTML = html;
+                html+='<div class="stats-grid"><div class="stat-card"><div class="val" style="color:#F59E0B;">'+approvals.length+'</div><div class="lbl">⏳ Pending</div></div><div class="stat-card"><div class="val">'+allUsers.length+'</div><div class="lbl">👥 Users</div></div><div class="stat-card"><div class="val">'+allTenants.length+'</div><div class="lbl">🏢 Tenants</div></div></div>';
+                html+='<div class="card"><div class="card-header"><span class="card-title">⏳ Pending Approvals</span></div><div style="overflow-x:auto;"><table><thead><tr><th>Name</th><th>Email</th><th>Date</th><th>Actions</th></tr></thead><tbody>';
+                if(approvals.length===0){html+='<tr><td colspan="4" style="text-align:center;padding:20px;">No pending approvals</td></tr>';}
+                else{approvals.forEach(function(a){html+='<tr><td><strong>'+escHtml(a.displayName||'N/A')+'</strong></td><td>'+escHtml(a.email||'')+'</td><td>'+formatDate(a.createdAt)+'</td><td><button class="btn btn-success btn-sm" onclick="approveUser(\''+(a.id||a.uid)+'\')">✅ Approve</button> <button class="btn btn-danger btn-sm" onclick="rejectUser(\''+(a.id||a.uid)+'\')">❌ Reject</button></td></tr>';});}
+                html+='</tbody></table></div></div>';
+                html+='<div class="card"><div class="card-header"><span class="card-title">🏢 Tenants</span><button class="btn btn-primary btn-sm" onclick="addTenant()">+ New</button></div><div style="overflow-x:auto;"><table><thead><tr><th>Name</th><th>Plan</th><th>Status</th><th>Actions</th></tr></thead><tbody>';
+                allTenants.forEach(function(t){html+='<tr><td>'+escHtml(t.name||'N/A')+'</td><td><span class="badge">'+escHtml(t.plan||'free')+'</span></td><td>'+escHtml(t.status||'active')+'</td><td><button class="btn btn-danger btn-sm" onclick="deleteTenant(\''+t.id+'\')">🗑️</button></td></tr>';});
+                html+='</tbody></table></div></div>';
+            }catch(e){html+='<p style="color:var(--error);">Error loading data.</p>';}
+            area.innerHTML=html;
         }
 
-        window.addLead = async function() {
-            var name = prompt('Lead Name:'); if (!name || !name.trim()) return;
-            var mobile = prompt('Mobile:'); if (!mobile || !mobile.trim()) return;
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.createDocument('leads', { firstName: name.trim(), mobile: mobile.trim(), status: 'New', source: 'Manual' });
-                }
-                showToast('✅ Lead created!', 'success');
-                switchModule('leads');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
-        };
+        window.approveUser=async function(uid){if(!confirm('Approve this user?'))return;try{await window.CRM_Firestore.updateDocument('users',uid,{approvalStatus:'approved',approvedAt:new Date().toISOString(),status:'active'});showToast('✅ Approved!','success');switchModule('platform-admin');}catch(e){showToast('Error: '+e.message,'error');}};
+        window.rejectUser=async function(uid){if(!confirm('Reject this user?'))return;try{await window.CRM_Firestore.updateDocument('users',uid,{approvalStatus:'rejected',updatedAt:new Date().toISOString()});showToast('Rejected.','info');switchModule('platform-admin');}catch(e){showToast('Error: '+e.message,'error');}};
+        window.addTenant=async function(){var name=prompt('Tenant Name:');if(!name||!name.trim())return;var plan=prompt('Plan (free/starter/professional/enterprise):','free');if(!plan)return;try{await window.CRM_Firestore.createDocument('tenants',{name:name.trim(),plan:plan,status:'active',settings:{currency:'₹',timezone:'Asia/Kolkata'},moduleAccess:['DASHBOARD','LEADS','PIPELINE','CLIENTS']});showToast('✅ Tenant created!','success');switchModule('platform-admin');}catch(e){showToast('Error: '+e.message,'error');}};
+        window.deleteTenant=async function(tid){if(!confirm('Delete this tenant permanently?'))return;try{await window.CRM_Firestore.deleteDocument('tenants',tid,true);showToast('🗑️ Deleted.','info');switchModule('platform-admin');}catch(e){showToast('Error: '+e.message,'error');}};
 
-        // ==================== PIPELINE (Quick) ====================
-        async function renderPipeline(area) {
-            area.innerHTML = '<div class="loading-screen"><div class="spinner"></div> Loading Pipeline...</div>';
-            var html = '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">📈 Pipeline</h1><button class="btn btn-primary" onclick="addDeal()">➕ New Deal</button></div>';
-            if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                var result = await window.CRM_Firestore.queryDocuments('deals', { orderBy: 'createdAt', orderDir: 'desc', limit: 50 });
-                var deals = result.data || [];
-                var stages = ['new','contacted','qualified','proposal','negotiation','won','lost'];
-                var stageNames = {new:'New',contacted:'Contacted',qualified:'Qualified',proposal:'Proposal',negotiation:'Negotiation',won:'Won',lost:'Lost'};
-                var colors = {new:'#6366f1',contacted:'#8b5cf6',qualified:'#3b82f6',proposal:'#f59e0b',negotiation:'#ef4444',won:'#10b981',lost:'#6b7280'};
-                html += '<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;">';
-                stages.forEach(function(stage) {
-                    var stageDeals = deals.filter(function(d) { return d.stage === stage; });
-                    html += '<div style="min-width:200px;background:var(--bg3);border-radius:12px;padding:10px;">';
-                    html += '<div style="font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:3px solid ' + colors[stage] + ';">' + stageNames[stage] + ' <span style="background:var(--bg2);padding:2px 8px;border-radius:8px;font-size:0.7rem;">' + stageDeals.length + '</span></div>';
-                    stageDeals.forEach(function(d) {
-                        html += '<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:0.85rem;"><strong>' + escHtml(d.name || 'Deal') + '</strong><br><span style="color:var(--text3);font-size:0.75rem;">' + formatCurrency(d.value) + '</span></div>';
-                    });
-                    html += '</div>';
-                });
-                html += '</div>';
-            }
-            area.innerHTML = html;
+        // ==================== TENANT ADMIN ====================
+        async function renderTenantAdmin(area){
+            area.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading Tenant Admin...</div>';
+            if(!window.CRM_Tenant||!window.CRM_Tenant.hasMinRole||!window.CRM_Tenant.hasMinRole('TENANT_ADMIN')){area.innerHTML='<div class="card"><p style="text-align:center;padding:40px;color:var(--text3);">🔒 Access denied. Tenant Admin or above required.</p></div>';return;}
+            var html='<h1 style="font-size:1.6rem;font-weight:800;margin-bottom:20px;">⚙️ Tenant Admin Panel</h1>';
+            try{
+                var teamMembers=[];var currentTenant=null;
+                if(window.CRM_Tenant&&window.CRM_Tenant.getTeamMembers){teamMembers=window.CRM_Tenant.getTeamMembers();}
+                if(window.CRM_Tenant&&window.CRM_Tenant.getTenant){currentTenant=window.CRM_Tenant.getTenant();}
+                if(teamMembers.length===0&&window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){var tid=window.CRM_Tenant?window.CRM_Tenant.getTenantId():null;if(tid){var mr=await window.CRM_Firestore.queryDocuments('users',{filters:[['tenantId','==',tid]],limit:100});teamMembers=mr.data||[];}}
+                var allMods=['DASHBOARD','LEADS','PIPELINE','CLIENTS','INVOICES','PAYMENTS','RETAINERS','TASKS','PROJECTS','APPOINTMENTS','WHATSAPP','TRAINING','REFERRALS','REPORTS','NOTIFICATIONS','SETTINGS','PROFILE'];
+                html+='<div class="stats-grid"><div class="stat-card"><div class="val">'+teamMembers.length+'</div><div class="lbl">Team</div></div></div>';
+                html+='<div class="card"><div class="card-header"><span class="card-title">👥 Team Members</span></div><div style="overflow-x:auto;"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr></thead><tbody>';
+                if(teamMembers.length===0){html+='<tr><td colspan="4" style="text-align:center;padding:20px;">No team members</td></tr>';}
+                else{teamMembers.forEach(function(m){var rb=m.role==='SUB_ADMIN'?'badge-admin':(m.role==='MANAGER'?'badge-manager':'badge-executive');html+='<tr><td><strong>'+escHtml(m.displayName||m.name||'N/A')+'</strong></td><td>'+escHtml(m.email||'')+'</td><td><span class="badge '+rb+'">'+escHtml(m.role||'N/A')+'</span></td><td><button class="btn btn-outline btn-sm" onclick="changeRole(\''+(m.id||m.uid)+'\',\''+escHtml(m.role||'EXECUTIVE')+'\')">✏️ Role</button> <button class="btn btn-danger btn-sm" onclick="removeMember(\''+(m.id||m.uid)+'\')">🗑️</button></td></tr>';});}
+                html+='</tbody></table></div></div>';
+                html+='<div class="card"><div class="card-header"><span class="card-title">📨 Invite Member</span></div><div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="invEmail" placeholder="colleague@company.com"></div><div class="form-group"><label>Role</label><select id="invRole"><option value="SUB_ADMIN">Sub Admin</option><option value="MANAGER">Manager</option><option value="TEAM_LEADER">Team Leader</option><option value="EXECUTIVE" selected>Executive</option><option value="VIEWER">Viewer</option></select></div></div><div class="form-group"><label>Module Access</label><div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;" id="invModules">';
+                allMods.forEach(function(mod){html+='<label style="display:flex;align-items:center;gap:6px;font-size:12px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;"><input type="checkbox" value="'+mod+'" checked> '+mod+'</label>';});
+                html+='</div></div><button class="btn btn-primary" onclick="sendInvite()">📨 Send Invitation</button></div>';
+            }catch(e){html+='<p style="color:var(--error);">Error loading data.</p>';}
+            area.innerHTML=html;
         }
 
-        window.addDeal = async function() {
-            var name = prompt('Deal Name:'); if (!name || !name.trim()) return;
-            var value = prompt('Value (₹):', '0');
-            try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                    await window.CRM_Firestore.createDocument('deals', { name: name.trim(), value: parseInt(value) || 0, stage: 'new', priority: 'medium' });
-                }
-                showToast('✅ Deal created!', 'success');
-                switchModule('pipeline');
-            } catch(e) { showToast('Error: ' + e.message, 'error'); }
-        };
+        window.changeRole=function(uid,currentRole){var roles=['SUB_ADMIN','MANAGER','TEAM_LEADER','EXECUTIVE','VIEWER','RESTRICTED'];var opts=roles.map(function(r){return r+(r===currentRole?' (current)':'');}).join('\n');var nr=prompt('Select new role:\n\n'+opts,currentRole);if(!nr||!roles.includes(nr))return;try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){window.CRM_Firestore.updateDocument('users',uid,{role:nr});}showToast('✅ Role updated!','success');switchModule('tenant-admin');}catch(e){showToast('Error: '+e.message,'error');}};
+        window.removeMember=async function(uid){if(!confirm('Remove this member?'))return;try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.updateDocument('users',uid,{tenantId:null,status:'inactive'});}showToast('🗑️ Removed.','info');switchModule('tenant-admin');}catch(e){showToast('Error: '+e.message,'error');}};
+        window.sendInvite=async function(){var email=($('invEmail')&&$('invEmail').value||'').trim();var role=($('invRole')&&$('invRole').value)||'EXECUTIVE';var mods=[];document.querySelectorAll('#invModules input:checked').forEach(function(cb){mods.push(cb.value);});if(!email){showToast('Email required.','error');return;}if(window.CRM_Tenant&&window.CRM_Tenant.inviteTeamMember){var r=await window.CRM_Tenant.inviteTeamMember({email:email,role:role,moduleAccess:mods});if(r.success){showToast(r.message,'success');}else{showToast(r.message,'error');}}else{showToast('Invite system not available.','error');}};
+
+        // ==================== LEADS ====================
+        async function renderLeads(area){area.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading Leads...</div>';var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">👥 Leads</h1><button class="btn btn-primary" onclick="addLead()">➕ New Lead</button></div>';if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){var r=await window.CRM_Firestore.queryDocuments('leads',{orderBy:'createdAt',orderDir:'desc',limit:50});var leads=r.data||[];if(leads.length===0){html+='<div class="card"><p style="text-align:center;color:var(--text3);padding:40px;">No leads yet.</p></div>';}else{html+='<div class="card" style="padding:0;overflow:hidden;"><div style="overflow-x:auto;"><table><thead><tr><th>Name</th><th>Mobile</th><th>Business</th><th>Source</th><th>Status</th><th>Score</th></tr></thead><tbody>';leads.forEach(function(l){html+='<tr><td><strong>'+escHtml(l.firstName||'')+' '+escHtml(l.lastName||'')+'</strong></td><td>'+escHtml(l.mobile||'-')+'</td><td>'+escHtml(l.business||'-')+'</td><td>'+escHtml(l.source||'-')+'</td><td><span style="padding:3px 10px;border-radius:20px;font-size:0.7rem;background:#EEF2FF;color:#4F46E5;">'+escHtml(l.status||'New')+'</span></td><td>'+(l.score||0)+'</td></tr>';});html+='</tbody></table></div></div>';}}area.innerHTML=html;}
+        window.addLead=async function(){var name=prompt('Lead Name:');if(!name||!name.trim())return;var mobile=prompt('Mobile:');if(!mobile||!mobile.trim())return;try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.createDocument('leads',{firstName:name.trim(),mobile:mobile.trim(),status:'New',source:'Manual'});}showToast('✅ Lead created!','success');switchModule('leads');}catch(e){showToast('Error: '+e.message,'error');}};
+
+        // ==================== PIPELINE ====================
+        async function renderPipeline(area){area.innerHTML='<div class="loading-screen"><div class="spinner"></div> Loading Pipeline...</div>';var html='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;"><h1 style="font-size:1.6rem;font-weight:800;">📈 Pipeline</h1><button class="btn btn-primary" onclick="addDeal()">➕ New Deal</button></div>';if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){var r=await window.CRM_Firestore.queryDocuments('deals',{orderBy:'createdAt',orderDir:'desc',limit:50});var deals=r.data||[];var stages=['new','contacted','qualified','proposal','negotiation','won','lost'];var sn={new:'New',contacted:'Contacted',qualified:'Qualified',proposal:'Proposal',negotiation:'Negotiation',won:'Won',lost:'Lost'};var sc={new:'#6366f1',contacted:'#8b5cf6',qualified:'#3b82f6',proposal:'#f59e0b',negotiation:'#ef4444',won:'#10b981',lost:'#6b7280'};html+='<div style="display:flex;gap:10px;overflow-x:auto;padding-bottom:12px;">';stages.forEach(function(s){var sd=deals.filter(function(d){return d.stage===s;});html+='<div style="min-width:200px;background:var(--bg3);border-radius:12px;padding:10px;"><div style="font-weight:700;margin-bottom:8px;padding-bottom:6px;border-bottom:3px solid '+sc[s]+';">'+sn[s]+' <span style="background:var(--bg2);padding:2px 8px;border-radius:8px;font-size:0.7rem;">'+sd.length+'</span></div>';sd.forEach(function(d){html+='<div style="background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 10px;margin-bottom:6px;font-size:0.85rem;"><strong>'+escHtml(d.name||'Deal')+'</strong><br><span style="color:var(--text3);font-size:0.75rem;">'+formatCurrency(d.value)+'</span></div>';});html+='</div>';});html+='</div>';}area.innerHTML=html;}
+        window.addDeal=async function(){var name=prompt('Deal Name:');if(!name||!name.trim())return;var value=prompt('Value (₹):','0');try{if(window.CRM_Firestore&&window.CRM_Firestore.isAvailable()){await window.CRM_Firestore.createDocument('deals',{name:name.trim(),value:parseInt(value)||0,stage:'new',priority:'medium'});}showToast('✅ Deal created!','success');switchModule('pipeline');}catch(e){showToast('Error: '+e.message,'error');}};
 
         // ==================== QUICK MODULES ====================
-        async function renderClients(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🏢 Clients</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'clients\')">➕ New Client</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full client management available in pages version.</p></div>'; }
-        async function renderInvoices(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🧾 Invoices</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'invoices\')">➕ New Invoice</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full invoicing available in pages version.</p></div>'; }
-        async function renderPayments(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">💰 Payments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Full payments module.</p></div>'; }
-        async function renderTasks(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">✅ Tasks</span><button class="btn btn-primary btn-sm" onclick="switchModule(\'tasks\')">➕ New Task</button></div><p style="text-align:center;color:var(--text3);padding:40px;">Full task management available.</p></div>'; }
-        async function renderProjects(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🚀 Projects</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Full project tracking available.</p></div>'; }
-        async function renderRetainers(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔄 Retainers</span></div><p style="text-align:center;color:var(--text3);padding:40px;">MRR tracking available.</p></div>'; }
-        async function renderWhatsApp(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">💬 WhatsApp</span></div><p style="text-align:center;color:var(--text3);padding:40px;">CloudWA messaging available.</p></div>'; }
-        async function renderTraining(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🎓 Training</span></div><p style="text-align:center;color:var(--text3);padding:40px;">LMS module available.</p></div>'; }
-        async function renderReferrals(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔗 Referrals</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Referral tracking available.</p></div>'; }
-        async function renderReports(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">📋 Reports</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Analytics available.</p></div>'; }
-        async function renderNotifications(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">🔔 Notifications</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Notification center.</p></div>'; }
-        async function renderAppointments(area) { area.innerHTML = '<div class="card"><div class="card-header"><span class="card-title">📅 Appointments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Calendar & scheduling.</p></div>'; }
+        async function renderClients(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🏢 Clients</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Client management — full version coming soon.</p></div>';}
+        async function renderInvoices(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🧾 Invoices</span></div><p style="text-align:center;color:var(--text3);padding:40px;">GST invoicing — full version coming soon.</p></div>';}
+        async function renderPayments(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">💰 Payments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Payment tracking — full version coming soon.</p></div>';}
+        async function renderTasks(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">✅ Tasks</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Task management — full version coming soon.</p></div>';}
+        async function renderProjects(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🚀 Projects</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Project tracking — full version coming soon.</p></div>';}
+        async function renderRetainers(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🔄 Retainers</span></div><p style="text-align:center;color:var(--text3);padding:40px;">MRR tracking — full version coming soon.</p></div>';}
+        async function renderWhatsApp(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">💬 WhatsApp</span></div><p style="text-align:center;color:var(--text3);padding:40px;">CloudWA messaging — full version coming soon.</p></div>';}
+        async function renderTraining(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🎓 Training</span></div><p style="text-align:center;color:var(--text3);padding:40px;">LMS module — full version coming soon.</p></div>';}
+        async function renderReferrals(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🔗 Referrals</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Referral tracking — full version coming soon.</p></div>';}
+        async function renderReports(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">📋 Reports</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Analytics — full version coming soon.</p></div>';}
+        async function renderNotifications(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">🔔 Notifications</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Notification center — full version coming soon.</p></div>';}
+        async function renderAppointments(area){area.innerHTML='<div class="card"><div class="card-header"><span class="card-title">📅 Appointments</span></div><p style="text-align:center;color:var(--text3);padding:40px;">Calendar — full version coming soon.</p></div>';}
 
         // ==================== NAVIGATION ====================
-        function toggleSidebar() {
-            APP.collapsed = !APP.collapsed;
-            $('sidebar').classList.toggle('collapsed', APP.collapsed);
-            $('sbCollapse').innerHTML = APP.collapsed ? '▶' : '◀';
-            try { localStorage.setItem('crm_sb', APP.collapsed ? '1' : '0'); } catch(e) {}
-        }
+        function toggleSidebar(){APP.collapsed=!APP.collapsed;$('sidebar').classList.toggle('collapsed',APP.collapsed);$('sbCollapse').innerHTML=APP.collapsed?'▶':'◀';try{localStorage.setItem('crm_sb',APP.collapsed?'1':'0');}catch(e){}}
+        function openMobile(){APP.mobile=true;$('sidebar').classList.add('mobile-open');$('sbOverlay').classList.add('show');document.body.style.overflow='hidden';}
+        function closeMobile(){APP.mobile=false;$('sidebar').classList.remove('mobile-open');$('sbOverlay').classList.remove('show');document.body.style.overflow='';}
+        function toggleTheme(){APP.dark=!APP.dark;document.documentElement.setAttribute('data-theme',APP.dark?'dark':'light');$('themeBtn').innerHTML=APP.dark?'☀️':'🌙';try{localStorage.setItem('crm_theme',APP.dark?'dark':'light');}catch(e){}}
+        function loadTheme(){var t=localStorage.getItem('crm_theme');if(t==='dark'){APP.dark=true;document.documentElement.setAttribute('data-theme','dark');$('themeBtn').innerHTML='☀️';}else{APP.dark=window.matchMedia('(prefers-color-scheme:dark)').matches;document.documentElement.setAttribute('data-theme',APP.dark?'dark':'light');$('themeBtn').innerHTML=APP.dark?'☀️':'🌙';}}
+        async function doLogout(){if(window.CRM_Auth&&window.CRM_Auth.logout){await window.CRM_Auth.logout('User logged out.');}else{try{localStorage.clear();}catch(e){}window.location.href='index.html';}}
 
-        function openMobile() { APP.mobile = true; $('sidebar').classList.add('mobile-open'); $('sbOverlay').classList.add('show'); document.body.style.overflow = 'hidden'; }
-        function closeMobile() { APP.mobile = false; $('sidebar').classList.remove('mobile-open'); $('sbOverlay').classList.remove('show'); document.body.style.overflow = ''; }
-
-        function toggleTheme() {
-            APP.dark = !APP.dark;
-            document.documentElement.setAttribute('data-theme', APP.dark ? 'dark' : 'light');
-            $('themeBtn').innerHTML = APP.dark ? '☀️' : '🌙';
-            try { localStorage.setItem('crm_theme', APP.dark ? 'dark' : 'light'); } catch(e) {}
-        }
-
-        function loadTheme() {
-            var t = localStorage.getItem('crm_theme');
-            if (t === 'dark') { APP.dark = true; document.documentElement.setAttribute('data-theme', 'dark'); $('themeBtn').innerHTML = '☀️'; }
-            else { APP.dark = window.matchMedia('(prefers-color-scheme:dark)').matches; document.documentElement.setAttribute('data-theme', APP.dark ? 'dark' : 'light'); $('themeBtn').innerHTML = APP.dark ? '☀️' : '🌙'; }
-        }
-
-        async function doLogout() {
-            if (window.CRM_Auth && window.CRM_Auth.logout) { await window.CRM_Auth.logout('User logged out.'); }
-            else { try { localStorage.clear(); } catch(e) {}; window.location.href = 'index.html'; }
-        }
-
-        async function init() {
+        async function init(){
             loadTheme();
-            try { if (localStorage.getItem('crm_sb') === '1') { APP.collapsed = true; $('sidebar').classList.add('collapsed'); $('sbCollapse').innerHTML = '▶'; } } catch(e) {}
-
-            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
-                window.CRM_Auth.onAuthStateChange(async function(authState) {
-                    console.log('🔐 Auth state:', authState.authState);
-                    if (authState.isAuthenticated && authState.authState === 'authenticated') {
-                        console.log('✅ Authenticated');
-                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) await window.CRM_Tenant.initTenantContext();
-                        updateUserUI();
-                        applyRBACFilter();
-                        if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); }
-                    } else if (authState.authState === 'pending_approval') {
-                        console.log('⏳ Pending approval');
-                        var b = $('approvalBanner'); if (b) b.classList.add('show');
-                        updateUserUI();
-                        applyRBACFilter();
-                        if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); }
-                    } else if (authState.authState === 'unauthenticated') {
-                        console.log('❌ Unauthenticated');
-                        try { var ud = localStorage.getItem('crm_user'); if (ud && JSON.parse(ud).uid) { updateUserUI(); applyRBACFilter(); if (!APP.initialized) { APP.initialized = true; switchModule('dashboard'); } return; } } catch(e) {}
-                        window.location.href = 'index.html';
-                    }
+            try{if(localStorage.getItem('crm_sb')==='1'){APP.collapsed=true;$('sidebar').classList.add('collapsed');$('sbCollapse').innerHTML='▶';}}catch(e){}
+            if(window.CRM_Auth&&window.CRM_Auth.onAuthStateChange){
+                window.CRM_Auth.onAuthStateChange(async function(authState){
+                    console.log('🔐 Auth:',authState.authState);
+                    if(authState.isAuthenticated&&authState.authState==='authenticated'){console.log('✅ Authenticated');if(window.CRM_Tenant&&window.CRM_Tenant.initTenantContext)await window.CRM_Tenant.initTenantContext();updateUserUI();applyRBACFilter();if(!APP.initialized){APP.initialized=true;switchModule('dashboard');}}
+                    else if(authState.authState==='pending_approval'){console.log('⏳ Pending');var b=$('approvalBanner');if(b)b.classList.add('show');updateUserUI();applyRBACFilter();if(!APP.initialized){APP.initialized=true;switchModule('dashboard');}}
+                    else if(authState.authState==='unauthenticated'){console.log('❌ Unauthenticated');try{var ud=localStorage.getItem('crm_user');if(ud&&JSON.parse(ud).uid){updateUserUI();applyRBACFilter();if(!APP.initialized){APP.initialized=true;switchModule('dashboard');}return;}}catch(e){}window.location.href='index.html';}
                 });
-                console.log('👂 Auth listener registered');
-            } else {
-                try { var ud = localStorage.getItem('crm_user'); if (ud && JSON.parse(ud).uid) { updateUserUI(); applyRBACFilter(); switchModule('dashboard'); return; } } catch(e) {}
-                window.location.href = 'index.html';
-            }
-
-            function checkResp() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
-            window.addEventListener('resize', checkResp);
-            checkResp();
+                console.log('👂 Auth listener active');
+            }else{try{var ud=localStorage.getItem('crm_user');if(ud&&JSON.parse(ud).uid){updateUserUI();applyRBACFilter();switchModule('dashboard');return;}}catch(e){}window.location.href='index.html';}
+            function checkResp(){var m=window.innerWidth<=1024;$('mobileMenuBtn').style.display=m?'flex':'none';$('mobileNav').style.display=m?'flex':'none';}
+            window.addEventListener('resize',checkResp);checkResp();
         }
-
-        document.addEventListener('DOMContentLoaded', init);
+        document.addEventListener('DOMContentLoaded',init);
     </script>
 </body>
 </html>
