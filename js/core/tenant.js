@@ -1,85 +1,24 @@
 /**
- * ============================================================
- * 11 AVATAR SMEs CRM - MULTI-TENANT MODULE
- * ============================================================
- * 
- * @file       js/tenant.js
- * @path       C:\Users\rudra\Downloads\11 Avatar\11-Avatar-SMEs-CRM-main\js\tenant.js
- * @author     11 Avatar Digital Hub
- * @email      info@11avatardigitalhub.cloud
- * @repo       https://github.com/11avatardigitalhub/11Avatar-SMEs-CRM.git
- * 
- * PURPOSE:
- * Complete multi-tenant management system handling tenant context,
- * RBAC enforcement, module access control, cross-SaaS user sync
- * (WhatsApp CRM ↔ SMEs CRM), team hierarchy management, and
- * registration approval workflow.
- * 
- * DEPENDENCIES:
- * - js/config.js (CRM_Config)
- * - js/auth.js (CRM_Auth)
- * - js/firestore.js (CRM_Firestore) - optional, graceful fallback
- * 
- * RULES COMPLIANCE:
- * ✅ Rule #1  - Enterprise Grade
- * ✅ Rule #2  - One File At A Time
- * ✅ Rule #5  - Deep Detailing: full JSDoc
- * ✅ Rule #6  - Error Handling: try/catch everywhere
- * ✅ Rule #17 - Multi-Tenant RBAC (8 role levels)
- * ✅ Rule #18 - Firebase Backend
- * ✅ Rule #20 - Export All: window.CRM_Tenant
- * ✅ Rule #21 - Path First
- * ✅ Rule #23 - 300+ lines
- * ✅ Rule #25 - Full File Replacement
- * ============================================================
+ * 11 Avatar SMEs CRM — Multi-Tenant & RBAC Module
+ * @file js/core/tenant.js
  */
-
 'use strict';
 
-/**
- * @namespace CRM_Tenant
- * @description Multi-Tenant management service for 11 Avatar SMEs CRM
- */
 const CRM_Tenant = (function() {
     'use strict';
 
-    // ============================================================
-    // PRIVATE STATE
-    // ============================================================
-    /** @type {Object|null} Current tenant context */
     let _currentTenant = null;
-
-    /** @type {Object|null} Current user's full profile with permissions */
     let _currentUserProfile = null;
-
-    /** @type {Array<Object>} Team members cache */
     let _teamMembers = [];
-
-    /** @type {Array<Object>} Pending registration approvals */
     let _pendingApprovals = [];
-
-    /** @type {Object|null} Cross-SaaS sync state */
     let _crossSaasState = null;
-
-    /** @type {Array<Function>} Tenant change listeners */
     const _tenantListeners = [];
-
-    /** @type {boolean} Whether tenant module is initialized */
     let _initialized = false;
-
-    /** @type {Object} Module access cache */
     const _moduleAccessCache = {};
-
-    /** @type {Object} Permission check cache */
     const _permissionCache = {};
-
-    // ============================================================
-    // CONSTANTS
-    // ============================================================
-    const CACHE_TTL = 60000; // 1 minute cache TTL
+    const CACHE_TTL = 60000;
     const MAX_TEAM_MEMBERS_PER_PAGE = 50;
 
-    // Cross-SaaS configuration
     const CROSS_SAAS_CONFIG = {
         enabled: true,
         apps: {
@@ -101,199 +40,47 @@ const CRM_Tenant = (function() {
         accessTypes: ['whatsapp_only', 'smes_only', 'both'],
     };
 
-    // ============================================================
-    // FIREBASE HELPERS
-    // ============================================================
-    /**
-     * Get Firestore instance safely
-     * @returns {Object|null}
-     */
-    function _getFirestore() {
-        try {
-            if (window.firebase && window.firebase.firestore) {
-                return window.firebase.firestore();
-            }
-            return null;
-        } catch (error) {
-            console.error('[CRM_Tenant] Firestore not available:', error);
-            return null;
-        }
+    function _configReady() {
+        return typeof window.CRM_Config !== 'undefined' && window.CRM_Config.app;
     }
 
-    /**
-     * Get current user UID
-     * @returns {string|null}
-     */
+    function _getFirestore() {
+        try {
+            if (!window.firebase || !window.firebase.firestore) return null;
+            if (!window.firebase.apps || window.firebase.apps.length === 0) return null;
+            return window.firebase.firestore();
+        } catch (e) { return null; }
+    }
+
     function _getCurrentUid() {
         try {
             if (window.CRM_Auth && window.CRM_Auth.getCurrentUser) {
-                const user = window.CRM_Auth.getCurrentUser();
-                return user ? user.uid : null;
+                var u = window.CRM_Auth.getCurrentUser();
+                return u ? u.uid : null;
             }
             if (window.CRM_Auth && window.CRM_Auth.getUser) {
-                const profile = window.CRM_Auth.getUser();
-                return profile ? profile.uid : null;
+                var p = window.CRM_Auth.getUser();
+                return p ? p.uid : null;
             }
             return null;
-        } catch (error) {
-            console.error('[CRM_Tenant] Get UID error:', error);
-            return null;
-        }
+        } catch (e) { return null; }
     }
 
-    // ============================================================
-    // TENANT CONTEXT MANAGEMENT
-    // ============================================================
-    /**
-     * Initialize tenant context
-     * Called after successful authentication
-     * @returns {Promise<Object>} Tenant context
-     */
-    async function initTenantContext() {
-        try {
-            if (!window.CRM_Auth || !window.CRM_Auth.isAuthenticated()) {
-                console.warn('[CRM_Tenant] User not authenticated. Skipping tenant init.');
-                return null;
-            }
-
-            const userProfile = window.CRM_Auth.getUser();
-            const tenantData = window.CRM_Auth.getTenant();
-
-            if (!userProfile) {
-                console.warn('[CRM_Tenant] No user profile available.');
-                return null;
-            }
-
-            _currentUserProfile = userProfile;
-            _currentTenant = tenantData;
-
-            // If user has tenantId but no tenant data, fetch it
-            if (!_currentTenant && userProfile.tenantId) {
-                _currentTenant = await _fetchTenantById(userProfile.tenantId);
-            }
-
-            // If user has no tenant, they might be pending approval
-            if (!_currentTenant) {
-                _currentTenant = await _createDefaultTenantContext(userProfile);
-            }
-
-            // Load team members
-            await _loadTeamMembers();
-
-            // Set up cross-SaaS sync if applicable
-            if (CROSS_SAAS_CONFIG.enabled && userProfile.saasAccess) {
-                await _setupCrossSaasSync(userProfile);
-            }
-
-            // Clear caches
-            _clearCaches();
-
-            // Notify listeners
-            _notifyListeners();
-
-            _initialized = true;
-
-            console.log('[CRM_Tenant] Tenant context initialized.');
-            console.log(`[CRM_Tenant] Tenant: ${_currentTenant?.name || 'N/A'} (${_currentTenant?.plan || 'free'})`);
-            console.log(`[CRM_Tenant] Role: ${userProfile.role}, Team: ${_teamMembers.length} members`);
-
-            return _currentTenant;
-        } catch (error) {
-            console.error('[CRM_Tenant] Init error:', error);
-            return null;
-        }
-    }
-
-    /**
-     * Fetch tenant by ID from Firestore
-     * @param {string} tenantId - Tenant ID
-     * @returns {Promise<Object|null>}
-     */
-    async function _fetchTenantById(tenantId) {
-        try {
-            const db = _getFirestore();
-            if (!db) {
-                // Fallback: return cached
-                const cached = localStorage.getItem(CRM_Config.app.storageKeys.TENANT_DATA);
-                if (cached) {
-                    const parsed = JSON.parse(cached);
-                    if (parsed.id === tenantId) return parsed;
-                }
-                return _getDefaultTenantData(tenantId);
-            }
-
-            const doc = await db.collection(CRM_Config.firebase.collections.TENANTS)
-                .doc(tenantId).get();
-
-            if (doc.exists) {
-                const data = { id: doc.id, ...doc.data() };
-                // Cache in localStorage
-                localStorage.setItem(CRM_Config.app.storageKeys.TENANT_DATA, JSON.stringify(data));
-                return data;
-            }
-
-            return _getDefaultTenantData(tenantId);
-        } catch (error) {
-            console.error('[CRM_Tenant] Fetch tenant error:', error);
-            return _getDefaultTenantData(tenantId);
-        }
-    }
-
-    /**
-     * Create default tenant context for users without tenant
-     * @param {Object} userProfile - User profile
-     * @returns {Promise<Object>}
-     */
-    async function _createDefaultTenantContext(userProfile) {
-        const tenantData = {
-            id: userProfile.tenantId || 'pending',
-            name: userProfile.companyName || 'My Business',
-            plan: CRM_Config.tenants.defaultPlan,
-            status: userProfile.approvalStatus || 'pending',
-            createdAt: userProfile.createdAt || new Date().toISOString(),
-            settings: {
-                currency: '₹',
-                timezone: 'Asia/Kolkata',
-                language: 'en-IN',
-                dateFormat: 'DD/MM/YYYY',
-                gstin: '',
-                pan: '',
-                address: {},
-            },
-            moduleAccess: userProfile.moduleAccess || CRM_Config.tenants.defaultModuleAccess,
-            features: {},
-            quotas: {},
-            branding: {
-                logo: null,
-                primaryColor: '#D4AF37',
-            },
+    function _notifyListeners() {
+        var state = {
+            tenant: _currentTenant,
+            userProfile: _currentUserProfile,
+            teamMembers: _teamMembers,
+            crossSaas: _crossSaasState,
         };
-
-        // Apply plan-based quotas
-        const planConfig = CRM_Config.getPlan(tenantData.plan);
-        if (planConfig) {
-            tenantData.quotas = {
-                maxUsers: planConfig.maxUsers,
-                maxLeads: planConfig.maxLeads,
-                maxInvoices: planConfig.maxInvoices,
-                maxStorage: planConfig.maxStorage,
-            };
-            tenantData.features = planConfig.features.reduce((acc, f) => {
-                acc[f] = true;
-                return acc;
-            }, {});
-        }
-
-        _currentTenant = tenantData;
-        localStorage.setItem(CRM_Config.app.storageKeys.TENANT_DATA, JSON.stringify(tenantData));
-        return tenantData;
+        _tenantListeners.forEach(function(fn) { try { fn(state); } catch (e) {} });
     }
 
-    /**
-     * Get default tenant data for fallback
-     * @param {string} tenantId
-     * @returns {Object}
-     */
+    function _clearCaches() {
+        for (var key in _permissionCache) { if (_permissionCache.hasOwnProperty(key)) delete _permissionCache[key]; }
+        for (var key in _moduleAccessCache) { if (_moduleAccessCache.hasOwnProperty(key)) delete _moduleAccessCache[key]; }
+    }
+
     function _getDefaultTenantData(tenantId) {
         return {
             id: tenantId,
@@ -301,881 +88,488 @@ const CRM_Tenant = (function() {
             plan: 'free',
             status: 'active',
             createdAt: new Date().toISOString(),
-            settings: {
-                currency: '₹',
-                timezone: 'Asia/Kolkata',
-                language: 'en-IN',
-            },
-            moduleAccess: CRM_Config.tenants.defaultModuleAccess,
+            settings: { currency: '₹', timezone: 'Asia/Kolkata', language: 'en-IN' },
+            moduleAccess: _configReady() ? window.CRM_Config.tenants.defaultModuleAccess : ['DASHBOARD', 'LEADS', 'PIPELINE', 'CLIENTS'],
             features: {},
             quotas: { maxUsers: 3, maxLeads: 500, maxInvoices: 50 },
         };
     }
 
-    // ============================================================
-    // RBAC & PERMISSIONS
-    // ============================================================
-    /**
-     * Check if current user has specific permission
-     * @param {string} permission - Permission key
-     * @returns {boolean}
-     */
-    function hasPermission(permission) {
+    async function _fetchTenantById(tenantId) {
         try {
-            // Check cache
-            const cacheKey = `${_getCurrentUid()}_${permission}`;
-            const cached = _permissionCache[cacheKey];
-            if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
-                return cached.value;
-            }
-
-            if (!_currentUserProfile) {
-                // Try CRM_Auth
-                if (window.CRM_Auth && window.CRM_Auth.hasPermission) {
-                    const result = window.CRM_Auth.hasPermission(permission);
-                    _permissionCache[cacheKey] = { value: result, timestamp: Date.now() };
-                    return result;
+            var db = _getFirestore();
+            if (!db) {
+                if (_configReady()) {
+                    var cached = localStorage.getItem(window.CRM_Config.app.storageKeys.TENANT_DATA);
+                    if (cached) {
+                        try { var p = JSON.parse(cached); if (p.id === tenantId) return p; } catch (e) {}
+                    }
                 }
-                return false;
+                return _getDefaultTenantData(tenantId);
             }
-
-            const role = CRM_Config.getRole(_currentUserProfile.role);
-            if (!role) return false;
-
-            // Level 0 (Platform Owner) and Level 1 (Tenant Admin) have all permissions
-            if (role.level <= 1) {
-                _permissionCache[cacheKey] = { value: true, timestamp: Date.now() };
-                return true;
-            }
-
-            // Check specific permission
-            const hasPerm = role.permissions.includes(permission) || role.permissions.includes('*');
-            _permissionCache[cacheKey] = { value: hasPerm, timestamp: Date.now() };
-            return hasPerm;
-        } catch (error) {
-            console.error('[CRM_Tenant] hasPermission error:', error);
-            return false;
-        }
-    }
-
-    /**
-     * Check if user can access a module
-     * @param {string} moduleName - Module name
-     * @returns {boolean}
-     */
-    function canAccessModule(moduleName) {
-        try {
-            const cacheKey = `${_getCurrentUid()}_module_${moduleName}`;
-            const cached = _moduleAccessCache[cacheKey];
-            if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) {
-                return cached.value;
-            }
-
-            // Platform Owner and Tenant Admin can access everything
-            if (hasMinRole('TENANT_ADMIN')) {
-                _moduleAccessCache[cacheKey] = { value: true, timestamp: Date.now() };
-                return true;
-            }
-
-            // Check tenant-level module access
-            if (_currentTenant && _currentTenant.moduleAccess) {
-                const moduleKey = moduleName.toUpperCase();
-                const hasAccess = _currentTenant.moduleAccess.includes(moduleKey);
-                _moduleAccessCache[cacheKey] = { value: hasAccess, timestamp: Date.now() };
-                return hasAccess;
-            }
-
-            // Check user-level module access
-            if (_currentUserProfile && _currentUserProfile.moduleAccess) {
-                const moduleKey = moduleName.toUpperCase();
-                const hasAccess = _currentUserProfile.moduleAccess.includes(moduleKey);
-                _moduleAccessCache[cacheKey] = { value: hasAccess, timestamp: Date.now() };
-                return hasAccess;
-            }
-
-            // Check feature flags
-            const featureKey = moduleName.toUpperCase();
-            if (CRM_Config.features[featureKey] !== undefined) {
-                const enabled = CRM_Config.features[featureKey] === true;
-                _moduleAccessCache[cacheKey] = { value: enabled, timestamp: Date.now() };
-                return enabled;
-            }
-
-            return false;
-        } catch (error) {
-            console.error('[CRM_Tenant] canAccessModule error:', error);
-            return false;
-        }
-    }
-
-    /**
-     * Check if user's role is at or above specified level
-     * @param {string} roleName - Minimum role required
-     * @returns {boolean}
-     */
-    function hasMinRole(roleName) {
-        try {
-            if (!_currentUserProfile) {
-                if (window.CRM_Auth && window.CRM_Auth.hasMinRole) {
-                    return window.CRM_Auth.hasMinRole(roleName);
+            var col = _configReady() ? window.CRM_Config.firebase.collections.TENANTS : 'tenants';
+            var doc = await db.collection(col).doc(tenantId).get();
+            if (doc.exists) {
+                var data = Object.assign({ id: doc.id }, doc.data());
+                if (_configReady()) {
+                    try { localStorage.setItem(window.CRM_Config.app.storageKeys.TENANT_DATA, JSON.stringify(data)); } catch (e) {}
                 }
-                return false;
+                return data;
             }
-
-            const userRole = CRM_Config.getRole(_currentUserProfile.role);
-            const requiredRole = CRM_Config.getRole(roleName);
-
-            if (!userRole || !requiredRole) return false;
-            return userRole.level <= requiredRole.level;
-        } catch (error) {
-            console.error('[CRM_Tenant] hasMinRole error:', error);
-            return false;
-        }
+            return _getDefaultTenantData(tenantId);
+        } catch (e) { return _getDefaultTenantData(tenantId); }
     }
 
-    /**
-     * Get all permissions for current user
-     * @returns {Array<string>}
-     */
-    function getUserPermissions() {
-        try {
-            if (!_currentUserProfile) return [];
-            const role = CRM_Config.getRole(_currentUserProfile.role);
-            return role ? role.permissions : [];
-        } catch (error) {
-            console.error('[CRM_Tenant] getUserPermissions error:', error);
-            return [];
+    async function _createDefaultTenantContext(userProfile) {
+        var plan = _configReady() ? window.CRM_Config.tenants.defaultPlan : 'free';
+        var planConfig = _configReady() ? window.CRM_Config.getPlan(plan) : { maxUsers: 3, maxLeads: 500, maxInvoices: 50, maxStorage: 104857600, features: [] };
+        var tenantData = {
+            id: userProfile.tenantId || 'pending',
+            name: userProfile.companyName || 'My Business',
+            plan: plan,
+            status: userProfile.approvalStatus || 'pending',
+            createdAt: userProfile.createdAt || new Date().toISOString(),
+            settings: { currency: '₹', timezone: 'Asia/Kolkata', language: 'en-IN', dateFormat: 'DD/MM/YYYY', gstin: '', pan: '', address: {} },
+            moduleAccess: userProfile.moduleAccess || (_configReady() ? window.CRM_Config.tenants.defaultModuleAccess : ['DASHBOARD', 'LEADS', 'PIPELINE', 'CLIENTS']),
+            features: {},
+            quotas: { maxUsers: planConfig.maxUsers, maxLeads: planConfig.maxLeads, maxInvoices: planConfig.maxInvoices, maxStorage: planConfig.maxStorage },
+            branding: { logo: null, primaryColor: '#D4AF37' },
+        };
+        if (planConfig.features) {
+            planConfig.features.forEach(function(f) { tenantData.features[f] = true; });
         }
+        _currentTenant = tenantData;
+        if (_configReady()) {
+            try { localStorage.setItem(window.CRM_Config.app.storageKeys.TENANT_DATA, JSON.stringify(tenantData)); } catch (e) {}
+        }
+        return tenantData;
     }
 
-    /**
-     * Get accessible modules for current user
-     * @returns {Array<string>}
-     */
-    function getAccessibleModules() {
-        try {
-            // Admin sees everything
-            if (hasMinRole('TENANT_ADMIN')) {
-                return Object.keys(CRM_Config.modules);
-            }
-
-            // Tenant-level access
-            if (_currentTenant && _currentTenant.moduleAccess) {
-                return _currentTenant.moduleAccess;
-            }
-
-            // User-level access
-            if (_currentUserProfile && _currentUserProfile.moduleAccess) {
-                return _currentUserProfile.moduleAccess;
-            }
-
-            return CRM_Config.tenants.defaultModuleAccess || [];
-        } catch (error) {
-            console.error('[CRM_Tenant] getAccessibleModules error:', error);
-            return [];
-        }
-    }
-
-    // ============================================================
-    // TEAM MANAGEMENT
-    // ============================================================
-    /**
-     * Load team members for current tenant
-     * @returns {Promise<Array>}
-     */
     async function _loadTeamMembers() {
         try {
-            const db = _getFirestore();
-            const tenantId = getTenantId();
-
-            if (!db || !tenantId) {
-                _teamMembers = [];
-                return _teamMembers;
-            }
-
-            const snapshot = await db.collection(CRM_Config.firebase.collections.USERS)
+            var db = _getFirestore();
+            var tenantId = getTenantId();
+            if (!db || !tenantId) { _teamMembers = []; return _teamMembers; }
+            var col = _configReady() ? window.CRM_Config.firebase.collections.USERS : 'users';
+            var snapshot = await db.collection(col)
                 .where('tenantId', '==', tenantId)
                 .where('status', '==', 'active')
                 .limit(MAX_TEAM_MEMBERS_PER_PAGE)
                 .get();
-
-            _teamMembers = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-
-            return _teamMembers;
-        } catch (error) {
-            console.error('[CRM_Tenant] Load team error:', error);
             _teamMembers = [];
+            snapshot.docs.forEach(function(doc) {
+                _teamMembers.push(Object.assign({ id: doc.id }, doc.data()));
+            });
             return _teamMembers;
-        }
+        } catch (e) { _teamMembers = []; return _teamMembers; }
     }
 
-    /**
-     * Get team members
-     * @param {Object} [filters] - Optional filters
-     * @returns {Array<Object>}
-     */
-    function getTeamMembers(filters = {}) {
+    async function _setupCrossSaasSync(userProfile) {
         try {
-            let members = [..._teamMembers];
-
-            if (filters.role) {
-                members = members.filter(m => m.role === filters.role);
-            }
-            if (filters.status) {
-                members = members.filter(m => m.status === filters.status);
-            }
-            if (filters.search) {
-                const search = filters.search.toLowerCase();
-                members = members.filter(m =>
-                    (m.displayName && m.displayName.toLowerCase().includes(search)) ||
-                    (m.email && m.email.toLowerCase().includes(search))
-                );
-            }
-
-            return members;
-        } catch (error) {
-            console.error('[CRM_Tenant] getTeamMembers error:', error);
-            return [];
-        }
+            if (!userProfile.saasAccess) return;
+            _crossSaasState = { access: userProfile.saasAccess, lastSync: null, syncStatus: 'idle' };
+            if (userProfile.saasAccess === 'both') await _syncCrossSaasData();
+        } catch (e) {}
     }
 
-    /**
-     * Get team hierarchy tree
-     * @returns {Object} Hierarchy tree
-     */
+    async function _syncCrossSaasData() {
+        try {
+            _crossSaasState.syncStatus = 'syncing';
+            var db = _getFirestore();
+            if (!db) { _crossSaasState.syncStatus = 'offline'; return { success: false, message: 'Offline.' }; }
+            var uid = _getCurrentUid();
+            if (!uid) { _crossSaasState.syncStatus = 'error'; return { success: false, message: 'Not authenticated.' }; }
+            var smesDoc = await db.collection(CROSS_SAAS_CONFIG.apps.SMES_CRM.firebaseCollection).doc(uid).get();
+            var waDoc = await db.collection(CROSS_SAAS_CONFIG.apps.WHATSAPP_CRM.firebaseCollection).doc(uid).get();
+            var syncData = {};
+            CROSS_SAAS_CONFIG.apps.SMES_CRM.syncFields.forEach(function(field) {
+                if (smesDoc.exists && smesDoc.data()[field] !== undefined) syncData[field] = smesDoc.data()[field];
+                else if (waDoc.exists && waDoc.data()[field] !== undefined) syncData[field] = waDoc.data()[field];
+            });
+            var batch = db.batch();
+            syncData.lastSyncedAt = new Date().toISOString();
+            if (smesDoc.exists) batch.update(smesDoc.ref, syncData);
+            if (waDoc.exists) batch.update(waDoc.ref, syncData);
+            await batch.commit();
+            _crossSaasState.lastSync = new Date().toISOString();
+            _crossSaasState.syncStatus = 'synced';
+            return { success: true, message: 'Synced.' };
+        } catch (e) { _crossSaasState.syncStatus = 'error'; return { success: false, message: 'Sync failed.' }; }
+    }
+
+    async function initTenantContext() {
+        try {
+            if (!window.CRM_Auth || !window.CRM_Auth.isAuthenticated()) return null;
+            var userProfile = window.CRM_Auth.getUser();
+            var tenantData = window.CRM_Auth.getTenant();
+            if (!userProfile) return null;
+            _currentUserProfile = userProfile;
+            _currentTenant = tenantData;
+            if (!_currentTenant && userProfile.tenantId) _currentTenant = await _fetchTenantById(userProfile.tenantId);
+            if (!_currentTenant) _currentTenant = await _createDefaultTenantContext(userProfile);
+            await _loadTeamMembers();
+            if (CROSS_SAAS_CONFIG.enabled && userProfile.saasAccess) await _setupCrossSaasSync(userProfile);
+            _clearCaches();
+            _notifyListeners();
+            _initialized = true;
+            return _currentTenant;
+        } catch (e) { return null; }
+    }
+
+    function hasPermission(permission) {
+        try {
+            var cacheKey = (_getCurrentUid() || 'anon') + '_' + permission;
+            var cached = _permissionCache[cacheKey];
+            if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) return cached.value;
+            if (!_currentUserProfile) {
+                if (window.CRM_Auth && window.CRM_Auth.hasPermission) {
+                    var r = window.CRM_Auth.hasPermission(permission);
+                    _permissionCache[cacheKey] = { value: r, timestamp: Date.now() };
+                    return r;
+                }
+                return false;
+            }
+            if (!_configReady()) return false;
+            var role = window.CRM_Config.getRole(_currentUserProfile.role);
+            if (!role) { _permissionCache[cacheKey] = { value: false, timestamp: Date.now() }; return false; }
+            if (role.level <= 1) { _permissionCache[cacheKey] = { value: true, timestamp: Date.now() }; return true; }
+            var has = role.permissions.indexOf(permission) !== -1 || role.permissions.indexOf('*') !== -1;
+            _permissionCache[cacheKey] = { value: has, timestamp: Date.now() };
+            return has;
+        } catch (e) { return false; }
+    }
+
+    function canAccessModule(moduleName) {
+        try {
+            var cacheKey = (_getCurrentUid() || 'anon') + '_module_' + moduleName;
+            var cached = _moduleAccessCache[cacheKey];
+            if (cached && (Date.now() - cached.timestamp) < CACHE_TTL) return cached.value;
+            if (hasMinRole('TENANT_ADMIN')) { _moduleAccessCache[cacheKey] = { value: true, timestamp: Date.now() }; return true; }
+            var moduleKey = moduleName.toUpperCase();
+            if (_currentTenant && _currentTenant.moduleAccess) {
+                var has = _currentTenant.moduleAccess.indexOf(moduleKey) !== -1;
+                _moduleAccessCache[cacheKey] = { value: has, timestamp: Date.now() };
+                return has;
+            }
+            if (_currentUserProfile && _currentUserProfile.moduleAccess) {
+                var hasU = _currentUserProfile.moduleAccess.indexOf(moduleKey) !== -1;
+                _moduleAccessCache[cacheKey] = { value: hasU, timestamp: Date.now() };
+                return hasU;
+            }
+            if (_configReady()) {
+                var feat = window.CRM_Config.features[moduleKey];
+                if (feat !== undefined) { _moduleAccessCache[cacheKey] = { value: !!feat, timestamp: Date.now() }; return !!feat; }
+            }
+            return false;
+        } catch (e) { return false; }
+    }
+
+    function hasMinRole(roleName) {
+        try {
+            if (!_currentUserProfile) {
+                if (window.CRM_Auth && window.CRM_Auth.hasMinRole) return window.CRM_Auth.hasMinRole(roleName);
+                return false;
+            }
+            if (!_configReady()) return false;
+            var userRole = window.CRM_Config.getRole(_currentUserProfile.role);
+            var requiredRole = window.CRM_Config.getRole(roleName);
+            if (!userRole || !requiredRole) return false;
+            return userRole.level <= requiredRole.level;
+        } catch (e) { return false; }
+    }
+
+    function getUserPermissions() {
+        try {
+            if (!_currentUserProfile || !_configReady()) return [];
+            var role = window.CRM_Config.getRole(_currentUserProfile.role);
+            return role ? role.permissions : [];
+        } catch (e) { return []; }
+    }
+
+    function getAccessibleModules() {
+        try {
+            if (hasMinRole('TENANT_ADMIN') && _configReady()) return Object.keys(window.CRM_Config.modules);
+            if (_currentTenant && _currentTenant.moduleAccess) return _currentTenant.moduleAccess;
+            if (_currentUserProfile && _currentUserProfile.moduleAccess) return _currentUserProfile.moduleAccess;
+            return _configReady() ? window.CRM_Config.tenants.defaultModuleAccess : [];
+        } catch (e) { return []; }
+    }
+
+    function getTeamMembers(filters) {
+        filters = filters || {};
+        try {
+            var members = _teamMembers.slice();
+            if (filters.role) members = members.filter(function(m) { return m.role === filters.role; });
+            if (filters.status) members = members.filter(function(m) { return m.status === filters.status; });
+            if (filters.search) {
+                var s = filters.search.toLowerCase();
+                members = members.filter(function(m) {
+                    return (m.displayName && m.displayName.toLowerCase().indexOf(s) !== -1) ||
+                           (m.email && m.email.toLowerCase().indexOf(s) !== -1);
+                });
+            }
+            return members;
+        } catch (e) { return []; }
+    }
+
     function getTeamHierarchy() {
         try {
-            const hierarchy = {
-                owner: null,
-                admins: [],
-                managers: [],
-                teamLeaders: [],
-                executives: [],
-                viewers: [],
-            };
-
-            _teamMembers.forEach(member => {
+            var h = { owner: null, admins: [], managers: [], teamLeaders: [], executives: [], viewers: [] };
+            _teamMembers.forEach(function(member) {
                 switch (member.role) {
-                    case 'TENANT_ADMIN':
-                        hierarchy.owner = member;
-                        break;
-                    case 'SUB_ADMIN':
-                        hierarchy.admins.push(member);
-                        break;
-                    case 'MANAGER':
-                        hierarchy.managers.push(member);
-                        break;
-                    case 'TEAM_LEADER':
-                        hierarchy.teamLeaders.push(member);
-                        break;
-                    case 'EXECUTIVE':
-                        hierarchy.executives.push(member);
-                        break;
-                    case 'VIEWER':
-                        hierarchy.viewers.push(member);
-                        break;
+                    case 'TENANT_ADMIN': h.owner = member; break;
+                    case 'SUB_ADMIN': h.admins.push(member); break;
+                    case 'MANAGER': h.managers.push(member); break;
+                    case 'TEAM_LEADER': h.teamLeaders.push(member); break;
+                    case 'EXECUTIVE': h.executives.push(member); break;
+                    case 'VIEWER': h.viewers.push(member); break;
                 }
             });
-
-            return hierarchy;
-        } catch (error) {
-            console.error('[CRM_Tenant] getTeamHierarchy error:', error);
-            return {};
-        }
+            return h;
+        } catch (e) { return {}; }
     }
 
-    /**
-     * Invite a team member (requires Tenant Admin)
-     * @param {Object} inviteData - {email, role, moduleAccess}
-     * @returns {Promise<Object>} Result
-     */
     async function inviteTeamMember(inviteData) {
         try {
-            if (!hasMinRole('TENANT_ADMIN')) {
-                return { success: false, message: 'Only Tenant Admin can invite team members.', error: 'UNAUTHORIZED' };
+            if (!hasMinRole('TENANT_ADMIN')) return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
+            var email = inviteData.email;
+            var role = inviteData.role || 'EXECUTIVE';
+            var moduleAccess = inviteData.moduleAccess || (_configReady() ? window.CRM_Config.tenants.defaultModuleAccess : null);
+            if (!email) return { success: false, message: 'Email required.', error: 'VALIDATION_ERROR' };
+            var quota = _currentTenant && _currentTenant.quotas ? _currentTenant.quotas.maxUsers : 3;
+            if (quota > 0 && _teamMembers.length >= quota) {
+                return { success: false, message: 'User limit reached. Upgrade plan.', error: 'QUOTA_EXCEEDED' };
             }
-
-            const { email, role = 'EXECUTIVE', moduleAccess = null } = inviteData;
-            if (!email) {
-                return { success: false, message: 'Email is required.', error: 'VALIDATION_ERROR' };
-            }
-
-            // Check quota
-            const planQuota = _currentTenant?.quotas?.maxUsers;
-            if (planQuota && planQuota > 0 && _teamMembers.length >= planQuota) {
-                return {
-                    success: false,
-                    message: `Team member limit (${planQuota}) reached. Upgrade your plan to add more.`,
-                    error: 'QUOTA_EXCEEDED',
-                };
-            }
-
-            const db = _getFirestore();
-            if (!db) {
-                return { success: false, message: 'Service temporarily unavailable.', error: 'SERVICE_UNAVAILABLE' };
-            }
-
-            const tenantId = getTenantId();
-            const inviteRef = await db.collection('team_invites').add({
-                email: email.toLowerCase(),
-                tenantId,
-                role,
-                moduleAccess: moduleAccess || CRM_Config.tenants.defaultModuleAccess,
-                invitedBy: _getCurrentUid(),
-                invitedAt: new Date().toISOString(),
-                status: 'pending',
-                expiresAt: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(), // 7 days
+            var db = _getFirestore();
+            if (!db) return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
+            var inviteRef = await db.collection('team_invites').add({
+                email: email.toLowerCase(), tenantId: getTenantId(), role: role,
+                moduleAccess: moduleAccess, invitedBy: _getCurrentUid(),
+                invitedAt: new Date().toISOString(), status: 'pending',
+                expiresAt: new Date(Date.now() + 604800000).toISOString(),
             });
-
-            // Send email via worker
-            if (window.CRM_Config) {
-                const workerUrl = CRM_Config.api.buildUrl('/users/invite');
-                fetch(workerUrl, {
+            if (_configReady()) {
+                var url = window.CRM_Config.api.buildUrl('/users/invite');
+                fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ inviteId: inviteRef.id, email, role, tenantId }),
-                }).catch(err => console.warn('[CRM_Tenant] Invite email send failed:', err));
+                    body: JSON.stringify({ inviteId: inviteRef.id, email: email, role: role, tenantId: getTenantId() }),
+                }).catch(function() {});
             }
-
-            console.log('[CRM_Tenant] Team invite sent:', inviteRef.id);
-            return { success: true, message: `Invitation sent to ${email}.`, inviteId: inviteRef.id };
-        } catch (error) {
-            console.error('[CRM_Tenant] Invite error:', error);
-            return { success: false, message: 'Failed to send invitation.', error: error.code || 'UNKNOWN' };
-        }
+            return { success: true, message: 'Invitation sent to ' + email + '.', inviteId: inviteRef.id };
+        } catch (e) { return { success: false, message: 'Failed to send invitation.', error: e.code || 'UNKNOWN' }; }
     }
 
-    /**
-     * Update team member role
-     * @param {string} memberUid - Member's UID
-     * @param {string} newRole - New role
-     * @returns {Promise<Object>}
-     */
     async function updateMemberRole(memberUid, newRole) {
         try {
-            if (!hasMinRole('TENANT_ADMIN')) {
-                return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
+            if (!hasMinRole('TENANT_ADMIN')) return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
+            if (!_configReady()) return { success: false, message: 'Config not loaded.', error: 'SERVICE_UNAVAILABLE' };
+            var roleConfig = window.CRM_Config.getRole(newRole);
+            if (!roleConfig) return { success: false, message: 'Invalid role.', error: 'INVALID_ROLE' };
+            if (memberUid === _getCurrentUid()) return { success: false, message: 'Cannot change own role.', error: 'SELF_DEMOTE' };
+            var db = _getFirestore();
+            if (!db) return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
+            var col = window.CRM_Config.firebase.collections.USERS;
+            await db.collection(col).doc(memberUid).update({
+                role: newRole, updatedAt: new Date().toISOString(), updatedBy: _getCurrentUid(),
+            });
+            var member = null;
+            for (var i = 0; i < _teamMembers.length; i++) {
+                if (_teamMembers[i].uid === memberUid || _teamMembers[i].id === memberUid) { member = _teamMembers[i]; break; }
             }
-
-            const roleConfig = CRM_Config.getRole(newRole);
-            if (!roleConfig) {
-                return { success: false, message: 'Invalid role.', error: 'INVALID_ROLE' };
-            }
-
-            // Cannot demote self
-            if (memberUid === _getCurrentUid()) {
-                return { success: false, message: 'You cannot change your own role.', error: 'SELF_DEMOTE' };
-            }
-
-            const db = _getFirestore();
-            if (!db) {
-                return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
-            }
-
-            await db.collection(CRM_Config.firebase.collections.USERS)
-                .doc(memberUid).update({
-                    role: newRole,
-                    updatedAt: new Date().toISOString(),
-                    updatedBy: _getCurrentUid(),
-                });
-
-            // Update local cache
-            const member = _teamMembers.find(m => m.uid === memberUid || m.id === memberUid);
             if (member) member.role = newRole;
-
-            await _loadTeamMembers(); // Refresh
-            return { success: true, message: 'Role updated successfully.' };
-        } catch (error) {
-            console.error('[CRM_Tenant] Update role error:', error);
-            return { success: false, message: 'Failed to update role.', error: error.code || 'UNKNOWN' };
-        }
+            await _loadTeamMembers();
+            return { success: true, message: 'Role updated.' };
+        } catch (e) { return { success: false, message: 'Failed to update role.', error: e.code || 'UNKNOWN' }; }
     }
 
-    /**
-     * Remove team member from tenant
-     * @param {string} memberUid - Member UID
-     * @returns {Promise<Object>}
-     */
     async function removeTeamMember(memberUid) {
         try {
-            if (!hasMinRole('TENANT_ADMIN')) {
-                return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
-            }
-
-            if (memberUid === _getCurrentUid()) {
-                return { success: false, message: 'You cannot remove yourself.', error: 'SELF_REMOVE' };
-            }
-
-            const db = _getFirestore();
-            if (!db) {
-                return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
-            }
-
-            await db.collection(CRM_Config.firebase.collections.USERS)
-                .doc(memberUid).update({
-                    tenantId: null,
-                    status: 'inactive',
-                    moduleAccess: [],
-                    updatedAt: new Date().toISOString(),
-                    removedBy: _getCurrentUid(),
-                });
-
-            _teamMembers = _teamMembers.filter(m => (m.uid || m.id) !== memberUid);
-            return { success: true, message: 'Team member removed.' };
-        } catch (error) {
-            console.error('[CRM_Tenant] Remove member error:', error);
-            return { success: false, message: 'Failed to remove member.', error: error.code || 'UNKNOWN' };
-        }
+            if (!hasMinRole('TENANT_ADMIN')) return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
+            if (memberUid === _getCurrentUid()) return { success: false, message: 'Cannot remove yourself.', error: 'SELF_REMOVE' };
+            var db = _getFirestore();
+            if (!db) return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
+            var col = _configReady() ? window.CRM_Config.firebase.collections.USERS : 'users';
+            await db.collection(col).doc(memberUid).update({
+                tenantId: null, status: 'inactive', moduleAccess: [],
+                updatedAt: new Date().toISOString(), removedBy: _getCurrentUid(),
+            });
+            _teamMembers = _teamMembers.filter(function(m) { return (m.uid || m.id) !== memberUid; });
+            return { success: true, message: 'Member removed.' };
+        } catch (e) { return { success: false, message: 'Failed to remove.', error: e.code || 'UNKNOWN' }; }
     }
 
-    // ============================================================
-    // REGISTRATION APPROVAL WORKFLOW
-    // ============================================================
-    /**
-     * Get pending registration approvals (Platform Owner only)
-     * @returns {Promise<Array>}
-     */
     async function getPendingApprovals() {
         try {
-            if (!hasMinRole('PLATFORM_OWNER')) {
-                return [];
-            }
-
-            const db = _getFirestore();
+            if (!hasMinRole('PLATFORM_OWNER')) return [];
+            var db = _getFirestore();
             if (!db) return _pendingApprovals;
-
-            const snapshot = await db.collection(CRM_Config.firebase.collections.USERS)
+            var col = _configReady() ? window.CRM_Config.firebase.collections.USERS : 'users';
+            var snapshot = await db.collection(col)
                 .where('approvalStatus', '==', 'pending')
                 .orderBy('createdAt', 'asc')
                 .limit(100)
                 .get();
-
-            _pendingApprovals = snapshot.docs.map(doc => ({
-                id: doc.id,
-                ...doc.data(),
-            }));
-
+            _pendingApprovals = [];
+            snapshot.docs.forEach(function(doc) {
+                _pendingApprovals.push(Object.assign({ id: doc.id }, doc.data()));
+            });
             return _pendingApprovals;
-        } catch (error) {
-            console.error('[CRM_Tenant] Pending approvals error:', error);
-            return _pendingApprovals;
-        }
+        } catch (e) { return _pendingApprovals; }
     }
 
-    /**
-     * Approve or reject a registration
-     * @param {string} userUid - User UID
-     * @param {boolean} approved - Whether to approve
-     * @param {Object} [options] - Approval options
-     * @param {string} [options.role] - Assigned role
-     * @param {Array} [options.moduleAccess] - Module access list
-     * @param {string} [options.saasAccess] - 'whatsapp_only' | 'smes_only' | 'both'
-     * @param {string} [options.tenantId] - Assign to existing tenant
-     * @returns {Promise<Object>}
-     */
-    async function approveRegistration(userUid, approved, options = {}) {
+    async function approveRegistration(userUid, approved, options) {
+        options = options || {};
         try {
-            if (!hasMinRole('PLATFORM_OWNER')) {
-                return { success: false, message: 'Only Platform Owner can approve registrations.', error: 'UNAUTHORIZED' };
-            }
-
-            const db = _getFirestore();
-            if (!db) {
-                return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
-            }
-
-            const updates = {
+            if (!hasMinRole('PLATFORM_OWNER')) return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
+            var db = _getFirestore();
+            if (!db) return { success: false, message: 'Service unavailable.', error: 'SERVICE_UNAVAILABLE' };
+            if (!_configReady()) return { success: false, message: 'Config not loaded.', error: 'SERVICE_UNAVAILABLE' };
+            var updates = {
                 approvalStatus: approved ? 'approved' : 'rejected',
-                approvedAt: new Date().toISOString(),
-                approvedBy: _getCurrentUid(),
+                approvedAt: new Date().toISOString(), approvedBy: _getCurrentUid(),
                 updatedAt: new Date().toISOString(),
             };
-
             if (approved) {
                 updates.role = options.role || 'EXECUTIVE';
-                updates.moduleAccess = options.moduleAccess || CRM_Config.tenants.defaultModuleAccess;
+                updates.moduleAccess = options.moduleAccess || window.CRM_Config.tenants.defaultModuleAccess;
                 updates.saasAccess = options.saasAccess || 'smes_only';
                 updates.status = 'active';
-
-                // Create or assign tenant
                 if (options.tenantId) {
                     updates.tenantId = options.tenantId;
                 } else {
-                    // Create new tenant
-                    const tenantRef = await db.collection(CRM_Config.firebase.collections.TENANTS).add({
-                        name: 'New Organization',
-                        plan: 'free',
-                        status: 'active',
-                        createdAt: new Date().toISOString(),
-                        createdBy: userUid,
-                        settings: {
-                            currency: '₹',
-                            timezone: 'Asia/Kolkata',
-                            language: 'en-IN',
-                        },
-                        moduleAccess: options.moduleAccess || CRM_Config.tenants.defaultModuleAccess,
+                    var tenantRef = await db.collection(window.CRM_Config.firebase.collections.TENANTS).add({
+                        name: 'New Organization', plan: 'free', status: 'active',
+                        createdAt: new Date().toISOString(), createdBy: userUid,
+                        settings: { currency: '₹', timezone: 'Asia/Kolkata', language: 'en-IN' },
+                        moduleAccess: options.moduleAccess || window.CRM_Config.tenants.defaultModuleAccess,
                     });
                     updates.tenantId = tenantRef.id;
                 }
             } else {
                 updates.status = 'rejected';
-                updates.rejectionReason = options.reason || 'Registration rejected by platform owner.';
+                updates.rejectionReason = options.reason || 'Registration rejected.';
             }
-
-            await db.collection(CRM_Config.firebase.collections.USERS)
-                .doc(userUid).update(updates);
-
-            // Remove from pending list
-            _pendingApprovals = _pendingApprovals.filter(a => a.id !== userUid);
-
-            // Send notification email
-            const workerUrl = CRM_Config.api.buildUrl('/notifications/send');
-            fetch(workerUrl, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: userUid,
-                    type: approved ? 'registration_approved' : 'registration_rejected',
-                    channel: 'email',
-                    data: updates,
-                }),
-            }).catch(err => console.warn('[CRM_Tenant] Notification send failed:', err));
-
-            return {
-                success: true,
-                message: approved ? 'Registration approved successfully.' : 'Registration rejected.',
-            };
-        } catch (error) {
-            console.error('[CRM_Tenant] Approval error:', error);
-            return { success: false, message: 'Failed to process approval.', error: error.code || 'UNKNOWN' };
-        }
+            var col = window.CRM_Config.firebase.collections.USERS;
+            await db.collection(col).doc(userUid).update(updates);
+            _pendingApprovals = _pendingApprovals.filter(function(a) { return a.id !== userUid; });
+            try {
+                var notifyUrl = window.CRM_Config.api.buildUrl('/notifications/send');
+                fetch(notifyUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        userId: userUid,
+                        type: approved ? 'registration_approved' : 'registration_rejected',
+                        channel: 'email', data: updates,
+                    }),
+                }).catch(function() {});
+            } catch (e) {}
+            return { success: true, message: approved ? 'Registration approved.' : 'Registration rejected.' };
+        } catch (e) { return { success: false, message: 'Approval failed.', error: e.code || 'UNKNOWN' }; }
     }
 
-    // ============================================================
-    // CROSS-SAAS SYNC (WhatsApp CRM ↔ SMEs CRM)
-    // ============================================================
-    /**
-     * Set up cross-SaaS synchronization
-     * @param {Object} userProfile - User profile with saasAccess
-     */
-    async function _setupCrossSaasSync(userProfile) {
-        try {
-            if (!userProfile.saasAccess) return;
+    function syncNow() { return _syncCrossSaasData(); }
+    function getCrossSaasState() { return _crossSaasState; }
 
-            _crossSaasState = {
-                access: userProfile.saasAccess, // 'whatsapp_only' | 'smes_only' | 'both'
-                lastSync: null,
-                syncStatus: 'idle',
-            };
-
-            // If user has access to both, sync data
-            if (userProfile.saasAccess === 'both') {
-                await _syncCrossSaasData();
-            }
-
-            console.log('[CRM_Tenant] Cross-SaaS sync configured:', userProfile.saasAccess);
-        } catch (error) {
-            console.error('[CRM_Tenant] Cross-SaaS setup error:', error);
-        }
-    }
-
-    /**
-     * Sync data between WhatsApp CRM and SMEs CRM
-     * @returns {Promise<Object>}
-     */
-    async function _syncCrossSaasData() {
-        try {
-            _crossSaasState.syncStatus = 'syncing';
-
-            const db = _getFirestore();
-            if (!db) {
-                _crossSaasState.syncStatus = 'offline';
-                return { success: false, message: 'Offline - sync when online.' };
-            }
-
-            const uid = _getCurrentUid();
-            if (!uid) {
-                _crossSaasState.syncStatus = 'error';
-                return { success: false, message: 'Not authenticated.' };
-            }
-
-            // Fetch user data from both collections
-            const [smesDoc, waDoc] = await Promise.all([
-                db.collection(CROSS_SAAS_CONFIG.apps.SMES_CRM.firebaseCollection).doc(uid).get(),
-                db.collection(CROSS_SAAS_CONFIG.apps.WHATSAPP_CRM.firebaseCollection).doc(uid).get(),
-            ]);
-
-            const syncData = {};
-            CROSS_SAAS_CONFIG.apps.SMES_CRM.syncFields.forEach(field => {
-                if (smesDoc.exists && smesDoc.data()[field] !== undefined) {
-                    syncData[field] = smesDoc.data()[field];
-                } else if (waDoc.exists && waDoc.data()[field] !== undefined) {
-                    syncData[field] = waDoc.data()[field];
-                }
-            });
-
-            // Update both collections with merged data
-            const batch = db.batch();
-            if (smesDoc.exists) batch.update(smesDoc.ref, { ...syncData, lastSyncedAt: new Date().toISOString() });
-            if (waDoc.exists) batch.update(waDoc.ref, { ...syncData, lastSyncedAt: new Date().toISOString() });
-            await batch.commit();
-
-            _crossSaasState.lastSync = new Date().toISOString();
-            _crossSaasState.syncStatus = 'synced';
-
-            console.log('[CRM_Tenant] Cross-SaaS sync completed.');
-            return { success: true, message: 'Data synced across platforms.' };
-        } catch (error) {
-            console.error('[CRM_Tenant] Cross-SaaS sync error:', error);
-            _crossSaasState.syncStatus = 'error';
-            return { success: false, message: 'Sync failed.', error: error.code || 'UNKNOWN' };
-        }
-    }
-
-    /**
-     * Manually trigger cross-SaaS sync
-     * @returns {Promise<Object>}
-     */
-    function syncNow() {
-        return _syncCrossSaasData();
-    }
-
-    /**
-     * Get cross-SaaS state
-     * @returns {Object|null}
-     */
-    function getCrossSaasState() {
-        return _crossSaasState;
-    }
-
-    /**
-     * Check if user can access a specific SaaS app
-     * @param {string} appId - 'whatsapp-crm' | 'smes-crm'
-     * @returns {boolean}
-     */
     function canAccessSaasApp(appId) {
         try {
             if (!_crossSaasState) {
-                // Check user profile directly
                 if (_currentUserProfile && _currentUserProfile.saasAccess) {
                     if (_currentUserProfile.saasAccess === 'both') return true;
                     if (_currentUserProfile.saasAccess === 'whatsapp_only' && appId === 'whatsapp-crm') return true;
                     if (_currentUserProfile.saasAccess === 'smes_only' && appId === 'smes-crm') return true;
                 }
-                // Default: can access current app
                 return appId === 'smes-crm';
             }
-
             if (_crossSaasState.access === 'both') return true;
             if (_crossSaasState.access === 'whatsapp_only') return appId === 'whatsapp-crm';
             if (_crossSaasState.access === 'smes_only') return appId === 'smes-crm';
             return false;
-        } catch (error) {
-            console.error('[CRM_Tenant] canAccessSaasApp error:', error);
-            return false;
-        }
+        } catch (e) { return false; }
     }
 
-    // ============================================================
-    // TENANT SETTINGS
-    // ============================================================
-    /**
-     * Get tenant setting
-     * @param {string} key - Setting key (dot notation supported)
-     * @param {*} defaultValue - Default if not set
-     * @returns {*}
-     */
-    function getSetting(key, defaultValue = null) {
+    function getSetting(key, defaultValue) {
+        defaultValue = defaultValue || null;
         try {
             if (!_currentTenant || !_currentTenant.settings) return defaultValue;
-
-            const keys = key.split('.');
-            let value = _currentTenant.settings;
-
-            for (const k of keys) {
-                if (value && typeof value === 'object' && k in value) {
-                    value = value[k];
-                } else {
-                    return defaultValue;
-                }
+            var keys = key.split('.');
+            var value = _currentTenant.settings;
+            for (var i = 0; i < keys.length; i++) {
+                if (value && typeof value === 'object' && keys[i] in value) value = value[keys[i]];
+                else return defaultValue;
             }
-
             return value !== undefined ? value : defaultValue;
-        } catch (error) {
-            console.error('[CRM_Tenant] getSetting error:', error);
-            return defaultValue;
-        }
+        } catch (e) { return defaultValue; }
     }
 
-    /**
-     * Update tenant settings
-     * @param {Object} updates - Key-value pairs to update
-     * @returns {Promise<Object>}
-     */
     async function updateSettings(updates) {
         try {
-            if (!hasMinRole('TENANT_ADMIN')) {
-                return { success: false, message: 'Only Tenant Admin can update settings.', error: 'UNAUTHORIZED' };
+            if (!hasMinRole('TENANT_ADMIN')) return { success: false, message: 'Unauthorized.', error: 'UNAUTHORIZED' };
+            var tenantId = getTenantId();
+            if (!tenantId) return { success: false, message: 'No tenant context.', error: 'NO_TENANT' };
+            var db = _getFirestore();
+            if (db && _configReady()) {
+                await db.collection(window.CRM_Config.firebase.collections.TENANTS).doc(tenantId).update({
+                    settings: updates, updatedAt: new Date().toISOString(), updatedBy: _getCurrentUid(),
+                });
             }
-
-            const tenantId = getTenantId();
-            if (!tenantId) {
-                return { success: false, message: 'No tenant context.', error: 'NO_TENANT' };
-            }
-
-            const db = _getFirestore();
-            if (db) {
-                await db.collection(CRM_Config.firebase.collections.TENANTS)
-                    .doc(tenantId).update({
-                        settings: updates,
-                        updatedAt: new Date().toISOString(),
-                        updatedBy: _getCurrentUid(),
-                    });
-            }
-
-            // Update local cache
             if (!_currentTenant.settings) _currentTenant.settings = {};
-            Object.assign(_currentTenant.settings, updates);
-            localStorage.setItem(CRM_Config.app.storageKeys.TENANT_DATA, JSON.stringify(_currentTenant));
-
+            for (var key in updates) { if (updates.hasOwnProperty(key)) _currentTenant.settings[key] = updates[key]; }
+            if (_configReady()) {
+                try { localStorage.setItem(window.CRM_Config.app.storageKeys.TENANT_DATA, JSON.stringify(_currentTenant)); } catch (e) {}
+            }
             return { success: true, message: 'Settings updated.' };
-        } catch (error) {
-            console.error('[CRM_Tenant] Update settings error:', error);
-            return { success: false, message: 'Failed to update settings.', error: error.code || 'UNKNOWN' };
-        }
+        } catch (e) { return { success: false, message: 'Failed to update settings.', error: e.code || 'UNKNOWN' }; }
     }
 
-    /**
-     * Get tenant quotas and usage
-     * @returns {Object} {max, used, remaining}
-     */
     function getQuotaUsage() {
         try {
-            const quotas = _currentTenant?.quotas || {};
+            var quotas = _currentTenant && _currentTenant.quotas ? _currentTenant.quotas : {};
             return {
-                users: {
-                    max: quotas.maxUsers || 3,
-                    used: _teamMembers.length,
-                    remaining: (quotas.maxUsers || 3) - _teamMembers.length,
-                },
-                leads: {
-                    max: quotas.maxLeads || 500,
-                    used: 0, // To be updated by leads module
-                    remaining: quotas.maxLeads || 500,
-                },
-                invoices: {
-                    max: quotas.maxInvoices || 50,
-                    used: 0,
-                    remaining: quotas.maxInvoices || 50,
-                },
-                storage: {
-                    max: quotas.maxStorage || 104857600,
-                    used: 0,
-                    remaining: quotas.maxStorage || 104857600,
-                    unit: 'bytes',
-                },
+                users: { max: quotas.maxUsers || 3, used: _teamMembers.length, remaining: (quotas.maxUsers || 3) - _teamMembers.length },
+                leads: { max: quotas.maxLeads || 500, used: 0, remaining: quotas.maxLeads || 500 },
+                invoices: { max: quotas.maxInvoices || 50, used: 0, remaining: quotas.maxInvoices || 50 },
+                storage: { max: quotas.maxStorage || 104857600, used: 0, remaining: quotas.maxStorage || 104857600, unit: 'bytes' },
             };
-        } catch (error) {
-            console.error('[CRM_Tenant] getQuotaUsage error:', error);
-            return {};
-        }
+        } catch (e) { return {}; }
     }
 
-    /**
-     * Check if a quota is exceeded
-     * @param {string} quotaType - 'users' | 'leads' | 'invoices' | 'storage'
-     * @returns {boolean}
-     */
     function isQuotaExceeded(quotaType) {
         try {
-            const usage = getQuotaUsage();
+            var usage = getQuotaUsage();
             if (!usage[quotaType]) return false;
-            const quota = usage[quotaType];
-            if (quota.max === -1) return false; // Unlimited
-            return quota.used >= quota.max;
-        } catch (error) {
-            console.error('[CRM_Tenant] isQuotaExceeded error:', error);
-            return false;
-        }
+            var q = usage[quotaType];
+            if (q.max === -1) return false;
+            return q.used >= q.max;
+        } catch (e) { return false; }
     }
 
-    // ============================================================
-    // UTILITY METHODS
-    // ============================================================
-    /**
-     * Clear permission and module caches
-     */
-    function _clearCaches() {
-        Object.keys(_permissionCache).forEach(key => delete _permissionCache[key]);
-        Object.keys(_moduleAccessCache).forEach(key => delete _moduleAccessCache[key]);
-    }
-
-    /**
-     * Notify all tenant change listeners
-     */
-    function _notifyListeners() {
-        const state = {
-            tenant: _currentTenant,
-            userProfile: _currentUserProfile,
-            teamMembers: _teamMembers,
-            crossSaas: _crossSaasState,
-        };
-        _tenantListeners.forEach(listener => {
-            try { listener(state); } catch (e) { console.error('[CRM_Tenant] Listener error:', e); }
-        });
-    }
-
-    /** @returns {string|null} Current tenant ID */
     function getTenantId() {
-        return _currentTenant?.id || (window.CRM_Auth?.getTenantId ? window.CRM_Auth.getTenantId() : null);
+        return (_currentTenant && _currentTenant.id) || (window.CRM_Auth && window.CRM_Auth.getTenantId ? window.CRM_Auth.getTenantId() : null);
     }
-
-    /** @returns {Object|null} Current tenant */
     function getTenant() { return _currentTenant; }
-
-    /** @returns {Object|null} Current user profile */
     function getUserProfile() { return _currentUserProfile; }
-
-    /** @returns {string|null} Current tenant plan */
-    function getPlan() { return _currentTenant?.plan || 'free'; }
-
-    /** @returns {boolean} Whether tenant is initialized */
+    function getPlan() { return _currentTenant && _currentTenant.plan ? _currentTenant.plan : 'free'; }
     function isInitialized() { return _initialized; }
 
-    /**
-     * Subscribe to tenant changes
-     * @param {Function} listener - Callback(state)
-     * @returns {Function} Unsubscribe
-     */
     function onTenantChange(listener) {
         _tenantListeners.push(listener);
         if (_initialized) {
-            listener({
-                tenant: _currentTenant,
-                userProfile: _currentUserProfile,
-                teamMembers: _teamMembers,
-                crossSaas: _crossSaasState,
-            });
+            listener({ tenant: _currentTenant, userProfile: _currentUserProfile, teamMembers: _teamMembers, crossSaas: _crossSaasState });
         }
-        return () => {
-            const i = _tenantListeners.indexOf(listener);
+        return function() {
+            var i = _tenantListeners.indexOf(listener);
             if (i > -1) _tenantListeners.splice(i, 1);
         };
     }
 
-    // ============================================================
-    // INITIALIZATION
-    // ============================================================
     function init() {
         try {
-            // Listen for auth changes to re-init tenant context
             if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
-                window.CRM_Auth.onAuthStateChange(async (authState) => {
+                window.CRM_Auth.onAuthStateChange(function(authState) {
                     if (authState.isAuthenticated && authState.authState === 'authenticated') {
-                        await initTenantContext();
+                        initTenantContext().catch(function() {});
                     } else {
                         _currentTenant = null;
                         _currentUserProfile = null;
@@ -1185,80 +579,31 @@ const CRM_Tenant = (function() {
                     }
                 });
             }
-
-            // Try to init immediately if already authenticated
             if (window.CRM_Auth && window.CRM_Auth.isAuthenticated()) {
-                initTenantContext().catch(err => console.error('[CRM_Tenant] Auto-init error:', err));
+                initTenantContext().catch(function() {});
             }
-
-            console.log('[CRM_Tenant] Module loaded.');
-        } catch (error) {
-            console.error('[CRM_Tenant] Init error:', error);
-        }
+        } catch (e) {}
     }
 
-    // Auto-init
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => setTimeout(init, 200));
+        document.addEventListener('DOMContentLoaded', function() { setTimeout(init, 200); });
     } else {
         setTimeout(init, 200);
     }
 
-    // ============================================================
-    // PUBLIC API EXPORT
-    // ============================================================
     return {
-        // Init
-        init,
-        initTenantContext,
-
-        // RBAC
-        hasPermission,
-        canAccessModule,
-        hasMinRole,
-        getUserPermissions,
-        getAccessibleModules,
-
-        // Team
-        getTeamMembers,
-        getTeamHierarchy,
-        inviteTeamMember,
-        updateMemberRole,
-        removeTeamMember,
-
-        // Approvals
-        getPendingApprovals,
-        approveRegistration,
-
-        // Cross-SaaS
-        syncNow,
-        getCrossSaasState,
-        canAccessSaasApp,
-
-        // Settings
-        getSetting,
-        updateSettings,
-        getQuotaUsage,
-        isQuotaExceeded,
-
-        // State
-        getTenantId,
-        getTenant,
-        getUserProfile,
-        getPlan,
-        isInitialized,
-        onTenantChange,
+        init: init, initTenantContext: initTenantContext,
+        hasPermission: hasPermission, canAccessModule: canAccessModule, hasMinRole: hasMinRole,
+        getUserPermissions: getUserPermissions, getAccessibleModules: getAccessibleModules,
+        getTeamMembers: getTeamMembers, getTeamHierarchy: getTeamHierarchy,
+        inviteTeamMember: inviteTeamMember, updateMemberRole: updateMemberRole, removeTeamMember: removeTeamMember,
+        getPendingApprovals: getPendingApprovals, approveRegistration: approveRegistration,
+        syncNow: syncNow, getCrossSaasState: getCrossSaasState, canAccessSaasApp: canAccessSaasApp,
+        getSetting: getSetting, updateSettings: updateSettings, getQuotaUsage: getQuotaUsage, isQuotaExceeded: isQuotaExceeded,
+        getTenantId: getTenantId, getTenant: getTenant, getUserProfile: getUserProfile, getPlan: getPlan,
+        isInitialized: isInitialized, onTenantChange: onTenantChange,
     };
 })();
 
-// ============================================================
-// EXPORT TO GLOBAL (Rule #20)
-// ============================================================
 window.CRM_Tenant = CRM_Tenant;
-
-// ES Module export
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = CRM_Tenant;
-}
-
-console.log('[CRM_Tenant] Module loaded. window.CRM_Tenant available.');
+if (typeof module !== 'undefined' && module.exports) module.exports = CRM_Tenant;
