@@ -8,22 +8,16 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="default" />
     <meta name="apple-mobile-web-app-title" content="11 Avatar CRM" />
-    <meta name="application-name" content="11 Avatar SMEs CRM" />
     <meta name="robots" content="noindex, nofollow" />
-
     <link rel="manifest" href="manifest.json" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23D4AF37'/%3E%3Ctext x='50' y='68' font-size='38' text-anchor='middle' fill='%230A0A0A' font-weight='900' font-family='Poppins,sans-serif'%3E11A%3C/text%3E%3C/svg%3E" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&family=Fira+Code:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="css/crm-design-system.css" />
     <link rel="stylesheet" href="css/app.css" />
     <link rel="stylesheet" href="css/components.css" />
-
     <title>11 Avatar SMEs CRM</title>
-
     <style>
         :root {
             --gold-light: #E8C95A; --gold: #D4AF37; --gold-dark: #B8960F;
@@ -35,30 +29,22 @@
         }
         [data-theme="light"] {
             --bg: #F8F6F0; --bg2: #FFFFFF; --bg3: #F0EDE5;
-            --glass: rgba(255,255,255,0.8);
-            --text: #0A0A0A; --text2: #333; --text3: #777; --text4: #999;
-            --border: rgba(0,0,0,0.06); --border2: rgba(0,0,0,0.12);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow: 0 4px 16px rgba(0,0,0,0.08);
-            --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
-            --shadow-lg: 0 12px 48px rgba(0,0,0,0.12);
-            --shadow-xl: 0 20px 60px rgba(0,0,0,0.15);
-            --input-bg: #FFFFFF; --hover: rgba(212,175,55,0.06); --active: rgba(212,175,55,0.12);
+            --glass: rgba(255,255,255,0.8); --text: #0A0A0A; --text2: #333;
+            --text3: #777; --text4: #999; --border: rgba(0,0,0,0.06);
+            --border2: rgba(0,0,0,0.12); --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --shadow-lg: 0 12px 48px rgba(0,0,0,0.12); --input-bg: #FFFFFF;
+            --hover: rgba(212,175,55,0.06); --active: rgba(212,175,55,0.12);
             --success: #10B981; --error: #DC2626; --warning: #F59E0B; --info: #3B82F6;
         }
         [data-theme="dark"] {
-            --bg: #0A0A0A; --bg2: #1A1A1A; --bg3: #252525;
-            --glass: rgba(10,10,10,0.9);
+            --bg: #0A0A0A; --bg2: #1A1A1A; --bg3: #252525; --glass: rgba(10,10,10,0.9);
             --text: #FFFFFF; --text2: #CCCCCC; --text3: #888; --text4: #666;
             --border: rgba(255,255,255,0.08); --border2: rgba(255,255,255,0.15);
-            --shadow-sm: 0 2px 8px rgba(0,0,0,0.4);
-            --shadow: 0 4px 16px rgba(0,0,0,0.5);
-            --shadow-md: 0 8px 32px rgba(0,0,0,0.6);
-            --shadow-lg: 0 12px 48px rgba(0,0,0,0.7);
-            --shadow-xl: 0 20px 60px rgba(0,0,0,0.8);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.4); --shadow: 0 4px 16px rgba(0,0,0,0.5);
+            --shadow-md: 0 8px 32px rgba(0,0,0,0.6); --shadow-lg: 0 12px 48px rgba(0,0,0,0.7);
             --input-bg: #1E1E1E; --hover: rgba(255,255,255,0.06); --active: rgba(212,175,55,0.15);
         }
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
         html { scroll-behavior: smooth; -webkit-tap-highlight-color: transparent; font-size: 16px; }
         body {
@@ -69,13 +55,9 @@
             -webkit-font-smoothing: antialiased;
         }
         a { color: var(--gold-dark); text-decoration: none; }
-        a:hover { color: var(--gold); }
         ::-webkit-scrollbar { width: 5px; } ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 10px; }
-
-        .skip-link { position: fixed; top: -100%; left: 16px; z-index: 9999; padding: 12px 20px; background: var(--gold); color: #000; font-weight: 700; border-radius: 8px; font-size: 14px; transition: top 0.15s; }
+        .skip-link { position: fixed; top: -100%; left: 16px; z-index: 9999; padding: 12px 20px; background: var(--gold); color: #000; font-weight: 700; border-radius: 8px; transition: top 0.15s; }
         .skip-link:focus { top: 16px; }
-
-        /* SIDEBAR */
         .sb { position: fixed; top: 0; left: 0; bottom: 0; width: var(--sidebar-w); background: var(--bg2); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 300; transition: width var(--transition), transform var(--transition); overflow: hidden; box-shadow: var(--shadow-sm); }
         .sb.collapsed { width: var(--sidebar-collapsed); }
         .sb-header { display: flex; align-items: center; gap: 10px; padding: 12px 16px; height: var(--header-h); border-bottom: 1px solid var(--border); flex-shrink: 0; }
@@ -93,6 +75,7 @@
         .nav-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-radius: var(--radius); font-size: 13px; font-weight: 500; color: var(--text2); text-decoration: none; transition: all var(--transition-fast); cursor: pointer; white-space: nowrap; overflow: hidden; min-height: 42px; width: 100%; text-align: left; background: none; border: none; }
         .nav-item:hover { background: var(--hover); color: var(--text); }
         .nav-item.active { background: var(--active); color: var(--gold-dark); font-weight: 600; border-left: 3px solid var(--gold); padding-left: 11px; }
+        .nav-item.hidden { display: none !important; }
         .nav-icon { font-size: 16px; flex-shrink: 0; width: 22px; text-align: center; }
         .nav-label { overflow: hidden; text-overflow: ellipsis; transition: opacity var(--transition); }
         .collapsed .nav-label { opacity: 0; width: 0; }
@@ -104,8 +87,6 @@
         .collapsed .sb-user-info { opacity: 0; width: 0; }
         .sb-user-name { font-weight: 600; font-size: 13px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .sb-user-role { font-size: 10px; color: var(--text3); }
-
-        /* MAIN */
         .main { flex: 1; margin-left: var(--sidebar-w); display: flex; flex-direction: column; min-height: 100vh; transition: margin-left var(--transition); }
         .sb.collapsed ~ .main { margin-left: var(--sidebar-collapsed); }
         .main-header { position: sticky; top: 0; z-index: 200; background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); height: var(--header-h); display: flex; align-items: center; padding: 0 20px; gap: 14px; flex-shrink: 0; }
@@ -118,19 +99,12 @@
         .hdr-btn:hover { background: var(--hover); color: var(--text); border-color: var(--gold); }
         .hdr-profile { width: 40px; height: 40px; border-radius: 50%; background: var(--gold-gradient); color: #000; border: none; cursor: pointer; font-weight: 700; font-size: 14px; font-family: var(--font-heading); transition: all var(--transition-fast); flex-shrink: 0; }
         .hdr-profile:hover { box-shadow: 0 4px 16px rgba(212,175,55,0.35); transform: translateY(-1px); }
-
-        /* IFRAME CONTENT */
         .content-frame { flex: 1; border: none; width: 100%; min-height: calc(100vh - var(--header-h)); }
-
-        /* OVERLAYS */
         .sb-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 299; }
-
-        /* MOBILE BOTTOM NAV */
         .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 200; padding: 6px 10px; padding-bottom: max(6px, env(safe-area-inset-bottom)); justify-content: space-around; align-items: center; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
         .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border-radius: 8px; font-size: 10px; color: var(--text3); transition: all var(--transition-fast); min-width: 50px; text-decoration: none; }
         .mobile-nav a.active { color: var(--gold-dark); font-weight: 600; }
         .mobile-nav .nav-ic { font-size: 1.2rem; }
-
         @media (max-width: 1024px) {
             .sb { transform: translateX(-100%); width: var(--sidebar-w); }
             .sb.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
@@ -144,16 +118,14 @@
             .main-header { padding: 0 10px; gap: 8px; }
             .main-header .brand-sub { display: none; }
         }
+        .approval-banner { background: #FEF3C7; color: #92400E; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #FCD34D; display: none; }
+        .approval-banner.show { display: block; }
     </style>
 </head>
 <body>
-
     <a href="#mainContent" class="skip-link">Skip to Main Content</a>
     <div class="sb-overlay" id="sbOverlay" onclick="closeMobile()"></div>
 
-    <!-- ============================================================
-    SIDEBAR — Links to individual module pages
-    ============================================================ -->
     <aside class="sb" id="sidebar">
         <div class="sb-header">
             <a href="index.html" class="sb-logo">
@@ -162,153 +134,95 @@
             </a>
             <button class="sb-collapse" id="sbCollapse" title="Collapse" onclick="toggleSidebar()">◀</button>
         </div>
-
-        <nav class="sb-nav">
-            <div class="nav-sec"><div class="nav-sec-title">Main</div>
-                <a href="pages/dashboard.html" class="nav-item" data-page="dashboard" onclick="navigatePage('dashboard', event)">
-                    <span class="nav-icon">📊</span><span class="nav-label">Dashboard</span>
-                </a>
-                <a href="pages/leads.html" class="nav-item" data-page="leads" onclick="navigatePage('leads', event)">
-                    <span class="nav-icon">👥</span><span class="nav-label">Leads</span>
-                </a>
-                <a href="pages/pipeline.html" class="nav-item" data-page="pipeline" onclick="navigatePage('pipeline', event)">
-                    <span class="nav-icon">📈</span><span class="nav-label">Pipeline</span>
-                </a>
-                <a href="pages/clients.html" class="nav-item" data-page="clients" onclick="navigatePage('clients', event)">
-                    <span class="nav-icon">🏢</span><span class="nav-label">Clients</span>
-                </a>
+        <nav class="sb-nav" id="sidebarNav">
+            <div class="nav-sec" data-section="main"><div class="nav-sec-title">Main</div>
+                <a href="pages/dashboard.html" class="nav-item" data-page="dashboard" data-module="DASHBOARD" onclick="navigatePage('dashboard', event)"><span class="nav-icon">📊</span><span class="nav-label">Dashboard</span></a>
+                <a href="pages/leads.html" class="nav-item" data-page="leads" data-module="LEADS" onclick="navigatePage('leads', event)"><span class="nav-icon">👥</span><span class="nav-label">Leads</span></a>
+                <a href="pages/pipeline.html" class="nav-item" data-page="pipeline" data-module="PIPELINE" onclick="navigatePage('pipeline', event)"><span class="nav-icon">📈</span><span class="nav-label">Pipeline</span></a>
+                <a href="pages/clients.html" class="nav-item" data-page="clients" data-module="CLIENTS" onclick="navigatePage('clients', event)"><span class="nav-icon">🏢</span><span class="nav-label">Clients</span></a>
             </div>
-            <div class="nav-sec"><div class="nav-sec-title">Financial</div>
-                <a href="pages/invoices.html" class="nav-item" data-page="invoices" onclick="navigatePage('invoices', event)">
-                    <span class="nav-icon">🧾</span><span class="nav-label">Invoices</span>
-                </a>
-                <a href="pages/payments.html" class="nav-item" data-page="payments" onclick="navigatePage('payments', event)">
-                    <span class="nav-icon">💰</span><span class="nav-label">Payments</span>
-                </a>
-                <a href="pages/retainers.html" class="nav-item" data-page="retainers" onclick="navigatePage('retainers', event)">
-                    <span class="nav-icon">🔄</span><span class="nav-label">Retainers</span>
-                </a>
+            <div class="nav-sec" data-section="financial"><div class="nav-sec-title">Financial</div>
+                <a href="pages/invoices.html" class="nav-item" data-page="invoices" data-module="INVOICES" onclick="navigatePage('invoices', event)"><span class="nav-icon">🧾</span><span class="nav-label">Invoices</span></a>
+                <a href="pages/payments.html" class="nav-item" data-page="payments" data-module="PAYMENTS" onclick="navigatePage('payments', event)"><span class="nav-icon">💰</span><span class="nav-label">Payments</span></a>
+                <a href="pages/retainers.html" class="nav-item" data-page="retainers" data-module="RETAINERS" onclick="navigatePage('retainers', event)"><span class="nav-icon">🔄</span><span class="nav-label">Retainers</span></a>
             </div>
-            <div class="nav-sec"><div class="nav-sec-title">Operations</div>
-                <a href="pages/tasks.html" class="nav-item" data-page="tasks" onclick="navigatePage('tasks', event)">
-                    <span class="nav-icon">✅</span><span class="nav-label">Tasks</span>
-                </a>
-                <a href="pages/projects.html" class="nav-item" data-page="projects" onclick="navigatePage('projects', event)">
-                    <span class="nav-icon">🚀</span><span class="nav-label">Projects</span>
-                </a>
-                <a href="pages/appointments.html" class="nav-item" data-page="appointments" onclick="navigatePage('appointments', event)">
-                    <span class="nav-icon">📅</span><span class="nav-label">Appointments</span>
-                </a>
+            <div class="nav-sec" data-section="operations"><div class="nav-sec-title">Operations</div>
+                <a href="pages/tasks.html" class="nav-item" data-page="tasks" data-module="TASKS" onclick="navigatePage('tasks', event)"><span class="nav-icon">✅</span><span class="nav-label">Tasks</span></a>
+                <a href="pages/projects.html" class="nav-item" data-page="projects" data-module="PROJECTS" onclick="navigatePage('projects', event)"><span class="nav-icon">🚀</span><span class="nav-label">Projects</span></a>
+                <a href="pages/appointments.html" class="nav-item" data-page="appointments" data-module="APPOINTMENTS" onclick="navigatePage('appointments', event)"><span class="nav-icon">📅</span><span class="nav-label">Appointments</span></a>
             </div>
-            <div class="nav-sec"><div class="nav-sec-title">Communication</div>
-                <a href="pages/whatsapp.html" class="nav-item" data-page="whatsapp" onclick="navigatePage('whatsapp', event)">
-                    <span class="nav-icon">💬</span><span class="nav-label">WhatsApp</span>
-                </a>
-                <a href="pages/training.html" class="nav-item" data-page="training" onclick="navigatePage('training', event)">
-                    <span class="nav-icon">🎓</span><span class="nav-label">Training</span>
-                </a>
-                <a href="pages/referrals.html" class="nav-item" data-page="referrals" onclick="navigatePage('referrals', event)">
-                    <span class="nav-icon">🔗</span><span class="nav-label">Referrals</span>
-                </a>
+            <div class="nav-sec" data-section="communication"><div class="nav-sec-title">Communication</div>
+                <a href="pages/whatsapp.html" class="nav-item" data-page="whatsapp" data-module="WHATSAPP" onclick="navigatePage('whatsapp', event)"><span class="nav-icon">💬</span><span class="nav-label">WhatsApp</span></a>
+                <a href="pages/training.html" class="nav-item" data-page="training" data-module="TRAINING" onclick="navigatePage('training', event)"><span class="nav-icon">🎓</span><span class="nav-label">Training</span></a>
+                <a href="pages/referrals.html" class="nav-item" data-page="referrals" data-module="REFERRALS" onclick="navigatePage('referrals', event)"><span class="nav-icon">🔗</span><span class="nav-label">Referrals</span></a>
             </div>
-            <div class="nav-sec"><div class="nav-sec-title">Insights</div>
-                <a href="pages/reports.html" class="nav-item" data-page="reports" onclick="navigatePage('reports', event)">
-                    <span class="nav-icon">📋</span><span class="nav-label">Reports</span>
-                </a>
-                <a href="pages/notifications.html" class="nav-item" data-page="notifications" onclick="navigatePage('notifications', event)">
-                    <span class="nav-icon">🔔</span><span class="nav-label">Notifications</span>
-                </a>
+            <div class="nav-sec" data-section="insights"><div class="nav-sec-title">Insights</div>
+                <a href="pages/reports.html" class="nav-item" data-page="reports" data-module="REPORTS" onclick="navigatePage('reports', event)"><span class="nav-icon">📋</span><span class="nav-label">Reports</span></a>
+                <a href="pages/notifications.html" class="nav-item" data-page="notifications" data-module="NOTIFICATIONS" onclick="navigatePage('notifications', event)"><span class="nav-icon">🔔</span><span class="nav-label">Notifications</span></a>
             </div>
-            <div class="nav-sec"><div class="nav-sec-title">System</div>
-                <a href="pages/settings.html" class="nav-item" data-page="settings" onclick="navigatePage('settings', event)">
-                    <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
-                </a>
+            <div class="nav-sec" data-section="system"><div class="nav-sec-title">System</div>
+                <a href="pages/settings.html" class="nav-item" data-page="settings" data-module="SETTINGS" onclick="navigatePage('settings', event)"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+                <a href="pages/profile.html" class="nav-item" data-page="profile" data-module="PROFILE" onclick="navigatePage('profile', event)"><span class="nav-icon">👤</span><span class="nav-label">Profile</span></a>
             </div>
         </nav>
-
         <div class="sb-footer">
             <div class="sb-user" id="sbUser" onclick="openProfile()">
-                <div class="sb-avatar" id="sbAvatar">DU</div>
+                <div class="sb-avatar" id="sbAvatar">U</div>
                 <div class="sb-user-info">
-                    <div class="sb-user-name" id="sbUserName">Demo User</div>
-                    <div class="sb-user-role" id="sbUserRole">Executive</div>
+                    <div class="sb-user-name" id="sbUserName">User</div>
+                    <div class="sb-user-role" id="sbUserRole">Loading...</div>
                 </div>
             </div>
         </div>
     </aside>
 
-    <!-- ============================================================
-    MAIN CONTENT — Loads module pages in iframe
-    ============================================================ -->
     <div class="main" id="main">
         <header class="main-header">
             <button class="menu-btn" id="mobileMenuBtn" onclick="openMobile()" aria-label="Menu">☰</button>
             <div class="brand-text">11 Avatar</div>
             <div class="brand-sub">SMEs CRM</div>
             <div class="spacer"></div>
-            <a href="pages/notifications.html" class="hdr-btn" title="Notifications">🔔</a>
+            <div class="approval-banner" id="approvalBanner">⏳ Your account is pending approval. Some features are limited.</div>
+            <a href="#" class="hdr-btn" title="Notifications" onclick="navigatePage('notifications', event)">🔔</a>
             <button class="hdr-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle theme">🌓</button>
-            <button class="hdr-profile" onclick="openProfile()" title="Profile"><span id="hdrAvatar">DU</span></button>
+            <button class="hdr-profile" onclick="openProfile()" title="Profile"><span id="hdrAvatar">U</span></button>
+            <button class="hdr-btn" id="logoutBtn" onclick="doLogout()" title="Logout" style="color:var(--error);">⏻</button>
         </header>
-
         <iframe id="contentFrame" class="content-frame" src="pages/dashboard.html" title="Module Content"></iframe>
     </div>
 
-    <!-- ============================================================
-    MOBILE BOTTOM NAV
-    ============================================================ -->
     <nav class="mobile-nav" id="mobileNav">
-        <a href="pages/dashboard.html" class="active" data-page="dashboard" onclick="navigatePage('dashboard', event)">
-            <span class="nav-ic">📊</span><span>Home</span>
-        </a>
-        <a href="pages/leads.html" data-page="leads" onclick="navigatePage('leads', event)">
-            <span class="nav-ic">👥</span><span>Leads</span>
-        </a>
-        <a href="pages/invoices.html" data-page="invoices" onclick="navigatePage('invoices', event)">
-            <span class="nav-ic">🧾</span><span>Invoice</span>
-        </a>
-        <a href="pages/whatsapp.html" data-page="whatsapp" onclick="navigatePage('whatsapp', event)">
-            <span class="nav-ic">💬</span><span>WA</span>
-        </a>
-        <a href="pages/settings.html" data-page="settings" onclick="navigatePage('settings', event)">
-            <span class="nav-ic">⚙️</span><span>More</span>
-        </a>
+        <a href="pages/dashboard.html" data-page="dashboard" data-module="DASHBOARD" onclick="navigatePage('dashboard', event)"><span class="nav-ic">📊</span><span>Home</span></a>
+        <a href="pages/leads.html" data-page="leads" data-module="LEADS" onclick="navigatePage('leads', event)"><span class="nav-ic">👥</span><span>Leads</span></a>
+        <a href="pages/invoices.html" data-page="invoices" data-module="INVOICES" onclick="navigatePage('invoices', event)"><span class="nav-ic">🧾</span><span>Invoice</span></a>
+        <a href="pages/whatsapp.html" data-page="whatsapp" data-module="WHATSAPP" onclick="navigatePage('whatsapp', event)"><span class="nav-ic">💬</span><span>WA</span></a>
+        <a href="pages/settings.html" data-page="settings" data-module="SETTINGS" onclick="navigatePage('settings', event)"><span class="nav-ic">⚙️</span><span>More</span></a>
     </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="js/core/config.js"></script>
+    <script src="js/core/auth.js"></script>
+    <script src="js/core/firestore.js"></script>
+    <script src="js/core/tenant.js"></script>
 
     <script>
         'use strict';
-        var S = { collapsed: false, mobile: false, dark: false, currentPage: 'dashboard', user: { name: 'Demo User', email: 'demo@11avatar.cloud', role: 'Executive', avatar: 'DU' } };
-
+        var S = { collapsed: false, mobile: false, dark: false, currentPage: 'dashboard', pendingApproval: false };
         function $(id) { return document.getElementById(id); }
 
-        // ============================================================
-        // NAVIGATION — Load page in iframe + update active states
-        // ============================================================
         function navigatePage(page, event) {
             if (event) event.preventDefault();
+            if (page === S.currentPage) return;
             S.currentPage = page;
             $('contentFrame').src = 'pages/' + page + '.html';
-
-            // Update sidebar active
-            document.querySelectorAll('.nav-item').forEach(function(el) {
-                el.classList.toggle('active', el.dataset.page === page);
-            });
-
-            // Update mobile nav active
-            document.querySelectorAll('.mobile-nav a').forEach(function(el) {
-                el.classList.toggle('active', el.dataset.page === page);
-            });
-
-            // Close mobile sidebar
+            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.toggle('active', el.dataset.page === page); });
+            document.querySelectorAll('.mobile-nav a').forEach(function(el) { el.classList.toggle('active', el.dataset.page === page); });
             if (S.mobile) closeMobile();
-
-            // Save last page
             try { localStorage.setItem('crm_last_page', page); } catch(e) {}
         }
 
-        // ============================================================
-        // SIDEBAR
-        // ============================================================
         function toggleSidebar() {
             S.collapsed = !S.collapsed;
             $('sidebar').classList.toggle('collapsed', S.collapsed);
@@ -316,23 +230,9 @@
             try { localStorage.setItem('crm_sb', S.collapsed ? '1' : '0'); } catch(e) {}
         }
 
-        function openMobile() {
-            S.mobile = true;
-            $('sidebar').classList.add('mobile-open');
-            $('sbOverlay').classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }
+        function openMobile() { S.mobile = true; $('sidebar').classList.add('mobile-open'); $('sbOverlay').classList.add('show'); document.body.style.overflow = 'hidden'; }
+        function closeMobile() { S.mobile = false; $('sidebar').classList.remove('mobile-open'); $('sbOverlay').classList.remove('show'); document.body.style.overflow = ''; }
 
-        function closeMobile() {
-            S.mobile = false;
-            $('sidebar').classList.remove('mobile-open');
-            $('sbOverlay').classList.remove('show');
-            document.body.style.overflow = '';
-        }
-
-        // ============================================================
-        // THEME
-        // ============================================================
         function toggleTheme() {
             S.dark = !S.dark;
             document.documentElement.setAttribute('data-theme', S.dark ? 'dark' : 'light');
@@ -347,80 +247,85 @@
             else { S.dark = window.matchMedia('(prefers-color-scheme:dark)').matches; document.documentElement.setAttribute('data-theme', S.dark ? 'dark' : 'light'); $('themeBtn').innerHTML = S.dark ? '☀️' : '🌙'; }
         }
 
-        // ============================================================
-        // USER
-        // ============================================================
-        function loadUser() {
-            try { var u = localStorage.getItem('crm_user'); if (u) S.user = JSON.parse(u); } catch(e) {}
-            updateUserUI();
-        }
-
         function updateUserUI() {
-            var av = (S.user.name || 'U').charAt(0).toUpperCase();
+            var profile = null;
+            if (window.CRM_Tenant && window.CRM_Tenant.getUserProfile) profile = window.CRM_Tenant.getUserProfile();
+            if (!profile && window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
+            if (!profile) return;
+            var name = profile.displayName || profile.email || 'User';
+            var av = name.charAt(0).toUpperCase();
+            var role = profile.role || 'User';
             var els = ['sbAvatar', 'hdrAvatar'];
             els.forEach(function(id) { var el = $(id); if (el) el.textContent = av; });
-            var nameEls = ['sbUserName'];
-            nameEls.forEach(function(id) { var el = $(id); if (el) el.textContent = S.user.name || 'Demo User'; });
-            var roleEl = $('sbUserRole'); if (roleEl) roleEl.textContent = S.user.role || 'Executive';
+            var nameEl = $('sbUserName'); if (nameEl) nameEl.textContent = name;
+            var roleEl = $('sbUserRole'); if (roleEl) roleEl.textContent = role;
+
+            if (profile.approvalStatus === 'pending') {
+                S.pendingApproval = true;
+                var banner = $('approvalBanner');
+                if (banner) { banner.classList.add('show'); banner.textContent = '⏳ Your account is pending approval. Limited access until approved.'; }
+            } else {
+                S.pendingApproval = false;
+                var b2 = $('approvalBanner'); if (b2) b2.classList.remove('show');
+            }
         }
 
-        function openProfile() {
-            var h = '<div class="modal-overlay show" id="profileModal" onclick="if(event.target===this)closeProfile()" style="position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;">';
-            h += '<div class="modal-box" style="background:var(--bg2);border-radius:16px;padding:28px;max-width:500px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.3);">';
-            h += '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;"><h3 style="margin:0;">👤 My Profile</h3><button onclick="closeProfile()" style="width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--bg3);cursor:pointer;font-size:16px;">✕</button></div>';
-            h += '<div class="form-group"><label style="display:block;font-weight:600;margin-bottom:4px;">Full Name</label><input type="text" id="pName" value="' + escHtml(S.user.name) + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;"></div>';
-            h += '<div class="form-group"><label style="display:block;font-weight:600;margin-bottom:4px;">Email</label><input type="email" id="pEmail" value="' + escHtml(S.user.email) + '" style="width:100%;padding:10px;border:1.5px solid var(--border2);border-radius:8px;"></div>';
-            h += '<button onclick="saveProfile()" style="padding:10px 24px;background:var(--gold-gradient);color:#000;border:none;border-radius:8px;font-weight:600;cursor:pointer;margin-top:12px;">💾 Save</button>';
-            h += '</div></div>';
-            document.body.insertAdjacentHTML('beforeend', h);
+        function applyRBACFilter() {
+            if (!window.CRM_Tenant || !window.CRM_Tenant.canAccessModule) return;
+            document.querySelectorAll('.nav-item[data-module], .mobile-nav a[data-module]').forEach(function(el) {
+                var mod = el.dataset.module;
+                if (!mod) return;
+                if (window.CRM_Tenant.canAccessModule(mod)) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            document.querySelectorAll('.nav-sec').forEach(function(sec) {
+                var visible = sec.querySelectorAll('.nav-item:not(.hidden)');
+                if (visible.length === 0) sec.style.display = 'none';
+                else sec.style.display = '';
+            });
         }
 
-        function closeProfile() { var el = document.getElementById('profileModal'); if (el) el.remove(); }
+        function openProfile() { navigatePage('profile'); }
 
-        function saveProfile() {
-            S.user.name = document.getElementById('pName').value || S.user.name;
-            S.user.email = document.getElementById('pEmail').value || S.user.email;
-            try { localStorage.setItem('crm_user', JSON.stringify(S.user)); } catch(e) {}
+        async function doLogout() {
+            if (window.CRM_Auth && window.CRM_Auth.logout) {
+                await window.CRM_Auth.logout('User logged out.');
+            } else {
+                try { localStorage.clear(); } catch(e) {}
+                window.location.href = 'index.html';
+            }
+        }
+
+        async function checkAuth() {
+            if (window.CRM_Auth && window.CRM_Auth.isAuthenticated) {
+                if (!window.CRM_Auth.isAuthenticated()) {
+                    window.location.href = 'index.html';
+                    return;
+                }
+            }
+            if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                await window.CRM_Tenant.initTenantContext();
+            }
             updateUserUI();
-            closeProfile();
+            applyRBACFilter();
         }
 
-        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
-
-        // ============================================================
-        // INIT
-        // ============================================================
         function init() {
             loadTheme();
-            loadUser();
-
-            // Sidebar state
             try { if (localStorage.getItem('crm_sb') === '1') { S.collapsed = true; $('sidebar').classList.add('collapsed'); $('sbCollapse').innerHTML = '▶'; } } catch(e) {}
-
-            // Last page
             var lastPage = 'dashboard';
             try { lastPage = localStorage.getItem('crm_last_page') || 'dashboard'; } catch(e) {}
-
-            // Set initial active
             document.querySelectorAll('.nav-item[data-page="' + lastPage + '"]').forEach(function(el) { el.classList.add('active'); });
             document.querySelectorAll('.mobile-nav a[data-page="' + lastPage + '"]').forEach(function(el) { el.classList.add('active'); });
-
-            // Load page
             $('contentFrame').src = 'pages/' + lastPage + '.html';
             S.currentPage = lastPage;
-
-            // Responsive
-            function checkResp() {
-                var m = window.innerWidth <= 1024;
-                $('mobileMenuBtn').style.display = m ? 'flex' : 'none';
-                $('mobileNav').style.display = m ? 'flex' : 'none';
-            }
+            function checkResp() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
             window.addEventListener('resize', checkResp);
             checkResp();
-
-            console.log('🚀 11 Avatar CRM Shell Ready');
-            console.log('📄 Current page: ' + S.currentPage);
-            console.log('🌓 Theme: ' + (S.dark ? 'Dark' : 'Light'));
+            setTimeout(checkAuth, 500);
         }
 
         document.addEventListener('DOMContentLoaded', init);
