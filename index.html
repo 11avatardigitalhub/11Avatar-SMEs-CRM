@@ -221,6 +221,22 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        'use strict';
+        if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
+            window.firebase.initializeApp({
+                apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
+                authDomain: "avatar-wa-dual-crm.firebaseapp.com",
+                projectId: "avatar-wa-dual-crm",
+                storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
+                messagingSenderId: "946959261009",
+                appId: "1:946959261009:web:175f5390d63715f1f8c770"
+            });
+            console.log('🔥 Firebase initialized');
+        }
+    </script>
+
     <script src="js/core/config.js"></script>
     <script src="js/core/auth.js"></script>
     <script src="js/core/firestore.js"></script>
