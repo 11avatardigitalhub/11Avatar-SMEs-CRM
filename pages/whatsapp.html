@@ -4,13 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F6F0" />
-    <title>WhatsApp - 11 Avatar Digital Hub</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="WhatsApp Connect - 11 Avatar SMEs CRM. CloudWA-powered messaging with multi-tenant isolation." />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>WhatsApp — 11 Avatar SMEs CRM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../css/crm-design-system.css" />
     <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     
     <style>
         :root {
@@ -19,20 +24,22 @@
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --wa-green: #25D366; --wa-dark: #128C7E; --wa-gradient: linear-gradient(135deg, #25D366, #128C7E);
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            font-family: var(--font-body); font-size: 14px; line-height: 1.6;
             color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
             min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+            overflow-x: hidden;
         }
         
-        .wa-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 90px; }
+        .wa-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
         
         .bottom-submenu {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.08);
             box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
             padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
             display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
@@ -40,74 +47,70 @@
         }
         .bottom-submenu::-webkit-scrollbar { display: none; }
         .bottom-tab {
-            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
             padding: 10px 16px; border-radius: 12px; cursor: pointer;
             font-size: 0.7rem; font-weight: 500; color: #777;
-            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
-            border: 1.5px solid transparent; background: transparent;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 70px; min-height: 44px;
+            border: 1.5px solid transparent; background: transparent; justify-content: center;
         }
         .bottom-tab:hover { background: rgba(37,211,102,0.05); color: #333; }
         .bottom-tab.active { background: rgba(37,211,102,0.1); color: #128C7E; font-weight: 600; border-color: rgba(37,211,102,0.3); }
-        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        .bottom-tab .tab-icon { font-size: 1.3rem; line-height: 1; }
         
         .page-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
             padding: 24px 28px; background: linear-gradient(135deg, #FFF, #F0FAF4, #E8F5EF);
             border: 1px solid rgba(37,211,102,0.2); border-radius: 20px;
-            box-shadow: var(--card-3d); margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .wa-text { background: linear-gradient(135deg, #25D366, #128C7E); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
         
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
+        .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
         .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
         .btn-wa { background: var(--wa-gradient); color: #FFF; }
         .btn-wa:hover { box-shadow: 0 4px 20px rgba(37,211,102,0.3); transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #128C7E; border: 1.5px solid #25D366; }
         .btn-outline:hover { background: rgba(37,211,102,0.08); }
-        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
-        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
+        .btn-xs { padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; min-height: 30px; }
         .btn-ghost { background: transparent; color: #666; }
         .btn-ghost:hover { background: #F5F5F5; }
         
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content { display: none; animation: fadeSlideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         
-        .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 20px; }
-        @media(max-width:768px){ .stats-row{grid-template-columns:repeat(2,1fr);} }
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
+        @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
+        @media (max-width: 375px) { .stats-row { grid-template-columns: 1fr; } }
+        
         .stat-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
             padding: 16px 18px; cursor: pointer; transition: var(--transition);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
-        .stat-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(37,211,102,0.2); }
-        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: 'Poppins',sans-serif; }
-        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--card-hover); border-color: rgba(37,211,102,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); line-height: 1.2; }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
         
-        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
         
-        /* Chat Interface */
         .chat-container { display: flex; gap: 0; border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.08); min-height: 500px; max-height: 70vh; }
         .chat-sidebar { width: 300px; background: #FAFAFA; border-right: 1px solid rgba(0,0,0,0.06); display: flex; flex-direction: column; flex-shrink: 0; }
-        .chat-sidebar-header { padding: 16px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+        .chat-sidebar-header { padding: 16px; border-bottom: 1px solid rgba(0,0,0,0.06); font-weight: 700; }
         .chat-sidebar-search { padding: 10px 14px; }
-        .chat-sidebar-search input { width: 100%; padding: 9px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.85rem; }
+        .chat-sidebar-search input { width: 100%; padding: 9px 14px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.85rem; min-height: 40px; }
         .chat-sidebar-search input:focus { border-color: #25D366; outline: none; }
         .chat-contacts { flex: 1; overflow-y: auto; }
-        .chat-contact {
-            display: flex; align-items: center; gap: 12px; padding: 14px 16px;
-            cursor: pointer; transition: all 0.15s ease; border-bottom: 1px solid rgba(0,0,0,0.03);
-        }
+        .chat-contact { display: flex; align-items: center; gap: 12px; padding: 14px 16px; cursor: pointer; transition: all 0.15s ease; border-bottom: 1px solid rgba(0,0,0,0.03); }
         .chat-contact:hover, .chat-contact.active { background: rgba(37,211,102,0.06); }
-        .chat-contact-avatar {
-            width: 44px; height: 44px; border-radius: 50%; background: var(--wa-gradient);
-            color: #FFF; display: flex; align-items: center; justify-content: center;
-            font-weight: 700; font-size: 1rem; flex-shrink: 0;
-        }
+        .chat-contact-avatar { width: 44px; height: 44px; border-radius: 50%; background: var(--wa-gradient); color: #FFF; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
         .chat-contact-info { flex: 1; min-width: 0; }
         .chat-contact-name { font-weight: 600; font-size: 0.9rem; }
         .chat-contact-last { font-size: 0.78rem; color: #888; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -116,368 +119,353 @@
         .chat-main { flex: 1; display: flex; flex-direction: column; background: #FFF; }
         .chat-main-header { padding: 16px 20px; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; align-items: center; gap: 12px; }
         .chat-messages { flex: 1; overflow-y: auto; padding: 20px; display: flex; flex-direction: column; gap: 8px; background: #F5F5F5; }
-        .chat-msg {
-            max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 0.9rem;
-            line-height: 1.5; position: relative; word-wrap: break-word;
-        }
+        .chat-msg { max-width: 75%; padding: 12px 16px; border-radius: 16px; font-size: 0.9rem; line-height: 1.5; position: relative; word-wrap: break-word; }
         .chat-msg.sent { align-self: flex-end; background: #DCF8C6; border-bottom-right-radius: 4px; }
         .chat-msg.received { align-self: flex-start; background: #FFF; border-bottom-left-radius: 4px; border: 1px solid #E5E5E5; }
         .chat-msg .msg-time { font-size: 0.68rem; color: #888; margin-top: 4px; text-align: right; }
-        .chat-msg .msg-status { font-size: 0.68rem; color: #34B7F1; }
         .chat-input-area { padding: 14px 20px; border-top: 1px solid rgba(0,0,0,0.06); display: flex; gap: 10px; align-items: center; background: #FFF; }
-        .chat-input-area input { flex: 1; padding: 12px 18px; border: 1.5px solid #E5E5E5; border-radius: 24px; font-size: 0.9rem; }
+        .chat-input-area input { flex: 1; padding: 12px 18px; border: 1.5px solid #E5E5E5; border-radius: 24px; font-size: 0.9rem; min-height: 44px; }
         .chat-input-area input:focus { border-color: #25D366; outline: none; }
-        .chat-send-btn {
-            width: 44px; height: 44px; border-radius: 50%; background: var(--wa-gradient);
-            color: #FFF; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
-            font-size: 1.2rem; transition: all 0.2s ease; flex-shrink: 0;
-        }
+        .chat-send-btn { width: 44px; height: 44px; border-radius: 50%; background: var(--wa-gradient); color: #FFF; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: all 0.2s ease; flex-shrink: 0; }
         .chat-send-btn:hover { box-shadow: 0 4px 16px rgba(37,211,102,0.3); transform: scale(1.05); }
         
-        /* Template Cards */
         .template-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
-        .template-card {
-            background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
-            padding: 18px; transition: var(--transition); cursor: pointer;
-        }
+        .template-card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px; padding: 18px; transition: var(--transition); cursor: pointer; }
         .template-card:hover { transform: translateY(-2px); box-shadow: var(--card-hover); border-color: rgba(37,211,102,0.3); }
         .template-card .t-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 6px; }
         .template-card .t-preview { font-size: 0.82rem; color: #888; margin-bottom: 10px; line-height: 1.5; background: #F5F5F5; padding: 10px; border-radius: 8px; }
         .template-card .t-footer { display: flex; justify-content: space-between; align-items: center; }
         
-        /* Filters */
         .filter-row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; }
-        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; }
+        .filter-row input { flex: 1; min-width: 200px; padding: 10px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; min-height: 44px; }
         .filter-row input:focus { border-color: #25D366; outline: none; }
         
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
-        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
-        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
-        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.78rem; color: #333; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; font-family: var(--font-body); background: #FFF; transition: all 0.2s ease; min-height: 44px; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #25D366; outline: none; box-shadow: 0 0 0 3px rgba(37,211,102,0.1); }
+        .form-group textarea { resize: vertical; min-height: 80px; }
         
-        .empty-state { text-align: center; padding: 50px; color: #999; }
-        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastSlideIn 0.3s cubic-bezier(0.68,-0.55,0.265,1.55); display: flex; align-items: center; gap: 10px; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; } .toast-warning { border-left: 4px solid #F59E0B; }
+        @keyframes toastSlideIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
         
-        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
-        .font-semibold { font-weight: 600; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 12px; opacity: 0.5; }
+        
         .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
         .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
         .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
         
-        @media(max-width:768px){ .wa-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} .chat-container{flex-direction:column;min-height:400px;} .chat-sidebar{width:100%;max-height:200px;} .chat-msg{max-width:90%;} }
+        @media (max-width: 1920px) { .wa-container { max-width: 1600px; margin: 0 auto; } }
+        @media (max-width: 1440px) { .wa-container { max-width: 1300px; } }
+        @media (max-width: 1280px) { .wa-container { max-width: 100%; } }
+        @media (max-width: 1024px) { .page-header { padding: 20px; } }
+        @media (max-width: 768px) { .wa-container { padding: 12px; padding-bottom: 100px; } .page-header { padding: 16px; flex-direction: column; text-align: center; } .chat-container { flex-direction: column; min-height: 400px; } .chat-sidebar { width: 100%; max-height: 200px; } .chat-msg { max-width: 90%; } .card { padding: 16px; } }
+        @media (max-width: 425px) { .page-header { padding: 12px; } .btn { padding: 8px 14px; font-size: 0.8rem; } }
     </style>
 </head>
 <body>
 
     <div class="wa-container">
         
-        <div class="page-header">
+        <header class="page-header" role="banner">
             <div>
                 <h1>💬 <span class="wa-text">WhatsApp</span> Connect</h1>
-                <p id="waCountText">CloudWA-powered messaging</p>
+                <p id="waCountText" aria-live="polite">CloudWA-powered messaging</p>
             </div>
             <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="WhatsApp.currentTab='templates';WhatsApp.render()">📝 Templates</button>
-                <button class="btn btn-wa btn-sm" onclick="WhatsApp.openNewChat()">💬 New Chat</button>
+                <button class="btn btn-outline btn-sm" onclick="WhatsAppModule.switchTab('templates')">📝 Templates</button>
+                <button class="btn btn-wa btn-sm" onclick="WhatsAppModule.openNewChat()">💬 New Chat</button>
             </div>
-        </div>
+        </header>
         
-        <div class="stats-row">
-            <div class="stat-card"><div class="val" id="stat-sent" style="color:#25D366;">0</div><div class="lbl">Messages Sent</div></div>
+        <div class="stats-row" role="region" aria-label="WhatsApp statistics">
+            <div class="stat-card"><div class="val" id="stat-sent" style="color:#25D366;">0</div><div class="lbl">📤 Sent</div></div>
             <div class="stat-card"><div class="val" id="stat-delivered" style="color:#128C7E;">0</div><div class="lbl">✅ Delivered</div></div>
             <div class="stat-card"><div class="val" id="stat-templates">0</div><div class="lbl">📝 Templates</div></div>
-            <div class="stat-card"><div class="val" id="stat-contacts">0</div><div class="lbl">👥 Active Chats</div></div>
+            <div class="stat-card"><div class="val" id="stat-contacts">0</div><div class="lbl">👥 Chats</div></div>
         </div>
         
-        <!-- TAB: Chat -->
-        <div id="tab-chat" class="tab-content active">
+        <div id="tab-chat" class="tab-content active" role="tabpanel" aria-label="Chat interface">
             <div class="chat-container">
                 <div class="chat-sidebar">
-                    <div class="chat-sidebar-header"><strong>💬 Conversations</strong></div>
-                    <div class="chat-sidebar-search"><input type="search" id="contactSearch" placeholder="🔍 Search contacts..." oninput="WhatsApp.filterContacts()"></div>
+                    <div class="chat-sidebar-header">💬 Conversations</div>
+                    <div class="chat-sidebar-search"><input type="search" id="contactSearch" placeholder="🔍 Search contacts..." oninput="WhatsAppModule.renderContactList()" aria-label="Search contacts"></div>
                     <div class="chat-contacts" id="contactList"></div>
                 </div>
                 <div class="chat-main" id="chatMain">
-                    <div class="empty-state">
-                        <div class="empty-icon">💬</div>
-                        <h4>Select a conversation</h4>
-                        <p class="text-muted">Choose a contact from the left to start messaging</p>
-                    </div>
+                    <div class="empty-state"><div class="empty-icon">💬</div><h3>Select a conversation</h3><p class="text-muted">Choose a contact to start messaging</p></div>
                 </div>
             </div>
         </div>
         
-        <!-- TAB: Templates -->
-        <div id="tab-templates" class="tab-content">
+        <div id="tab-templates" class="tab-content" role="tabpanel" aria-label="Message templates">
             <div class="filter-row">
-                <input type="search" id="templateSearch" placeholder="🔍 Search templates..." oninput="WhatsApp.filterTemplates()">
-                <button class="btn btn-outline btn-sm" onclick="WhatsApp.addTemplate()">➕ New Template</button>
+                <input type="search" id="templateSearch" placeholder="🔍 Search templates..." oninput="WhatsAppModule.renderTemplates()" aria-label="Search templates">
+                <button class="btn btn-outline btn-sm" onclick="WhatsAppModule.addTemplate()">➕ New Template</button>
             </div>
             <div class="template-grid" id="templateGrid"></div>
         </div>
         
-        <!-- TAB: Broadcast -->
-        <div id="tab-broadcast" class="tab-content">
+        <div id="tab-broadcast" class="tab-content" role="tabpanel" aria-label="Broadcast message">
             <div class="card" style="max-width:700px;">
                 <div class="card-header"><span class="card-title">📢 Broadcast Message</span></div>
                 <div class="form-group"><label>Select Recipients</label><div id="broadcastContacts" class="flex flex-wrap gap-2"></div></div>
-                <div class="form-group"><label>Message</label><textarea id="broadcastMsg" rows="4" placeholder="Type your broadcast message..."></textarea></div>
-                <button class="btn btn-wa mt-2" onclick="WhatsApp.sendBroadcast()">📢 Send Broadcast</button>
+                <div class="form-group"><label for="broadcastMsg">Message</label><textarea id="broadcastMsg" rows="4" placeholder="Type your broadcast message..."></textarea></div>
+                <button class="btn btn-wa mt-2" onclick="WhatsAppModule.sendBroadcast()">📢 Send Broadcast</button>
             </div>
         </div>
         
     </div>
     
-    <!-- Bottom Submenu -->
-    <div class="bottom-submenu">
-        <div class="bottom-tab active" onclick="WhatsApp.currentTab='chat';WhatsApp.render()"><span class="tab-icon">💬</span> Chat</div>
-        <div class="bottom-tab" onclick="WhatsApp.currentTab='templates';WhatsApp.render()"><span class="tab-icon">📝</span> Templates</div>
-        <div class="bottom-tab" onclick="WhatsApp.currentTab='broadcast';WhatsApp.render()"><span class="tab-icon">📢</span> Broadcast</div>
-        <div class="bottom-tab" onclick="window.location.href='leads.html'"><span class="tab-icon">👥</span> Leads</div>
-        <div class="bottom-tab" onclick="window.location.href='clients.html'"><span class="tab-icon">🏢</span> Clients</div>
-    </div>
+    <nav class="bottom-submenu" role="navigation" aria-label="WhatsApp navigation">
+        <button class="bottom-tab active" data-tab="chat" onclick="WhatsAppModule.switchTab('chat')" aria-current="page"><span class="tab-icon">💬</span> Chat</button>
+        <button class="bottom-tab" data-tab="templates" onclick="WhatsAppModule.switchTab('templates')"><span class="tab-icon">📝</span> Templates</button>
+        <button class="bottom-tab" data-tab="broadcast" onclick="WhatsAppModule.switchTab('broadcast')"><span class="tab-icon">📢</span> Broadcast</button>
+    </nav>
 
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
 
     <script>
         'use strict';
         
-        var WhatsApp = {
-            currentTab: 'chat',
-            activeChat: null,
-            contactSearch: '',
-            templateSearch: '',
+        const WhatsAppModule = (function() {
             
-            init: function() {
-                this.messages = JSON.parse(localStorage.getItem('crm_wa_messages') || '[]');
-                this.templates = JSON.parse(localStorage.getItem('crm_wa_templates') || '[]');
-                if (this.templates.length === 0) this.seedTemplates();
-                this.contacts = this.getContacts();
-                this.render();
-            },
+            let _messages = [];
+            let _templates = [];
+            let _contacts = [];
+            let _currentTab = 'chat';
+            let _activeChatId = null;
+            let _isLoading = false;
             
-            getContacts: function() {
-                var contacts = [];
-                var leads = JSON.parse(localStorage.getItem('crm_leads') || '[]');
-                var clients = JSON.parse(localStorage.getItem('crm_clients') || '[]');
-                leads.forEach(function(l) { if (l.mobile) contacts.push({ id: l.id, name: l.name, mobile: l.mobile, type: 'lead', business: l.business || '' }); });
-                clients.forEach(function(c) { if (c.mobile) contacts.push({ id: c.id, name: c.name, mobile: c.mobile, type: 'client', business: c.business || '' }); });
-                return contacts;
-            },
+            const $ = function(id) { return document.getElementById(id); };
             
-            seedTemplates: function() {
-                this.templates = [
-                    { id: 'TPL001', title: 'Welcome Message', body: 'Hi {{name}}, thank you for connecting with 11 Avatar Digital Hub! We look forward to working with you. 🚀', category: 'Welcome' },
-                    { id: 'TPL002', title: 'Payment Reminder', body: 'Dear {{name}}, this is a gentle reminder that your payment of ₹{{amount}} for {{service}} is due on {{date}}. Please process at your earliest convenience. 🙏', category: 'Payment' },
-                    { id: 'TPL003', title: 'Follow-up', body: 'Hi {{name}}, just following up on our previous conversation about {{topic}}. Let me know if you have any questions! 😊', category: 'Follow-up' },
-                    { id: 'TPL004', title: 'Invoice Sent', body: 'Dear {{name}}, your invoice #{{invoice}} for ₹{{amount}} has been generated. You can view it here: {{link}} 📄', category: 'Invoice' },
-                    { id: 'TPL005', title: 'Meeting Confirmation', body: 'Hi {{name}}, confirming our meeting on {{date}} at {{time}}. Looking forward to discussing {{topic}} with you! 📅', category: 'Meeting' }
-                ];
-                localStorage.setItem('crm_wa_templates', JSON.stringify(this.templates));
-            },
+            function showToast(message, type) {
+                try { type = type || 'info'; const container = $('toastContainer') || document.body; const toast = document.createElement('div'); toast.className = 'toast toast-' + type; toast.setAttribute('role', 'alert'); toast.innerHTML = '<span>' + ({ success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' }[type] || '') + '</span> ' + escapeHtml(message); container.appendChild(toast); setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(120%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300); }, 3500); } catch (error) {}
+            }
             
-            saveMessages: function() { try { localStorage.setItem('crm_wa_messages', JSON.stringify(this.messages)); } catch(e) {} },
+            function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+            function timeAgo(dateStr) { if (!dateStr) return ''; const sec = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000); if (sec < 60) return 'Now'; if (sec < 3600) return Math.floor(sec / 60) + 'm'; if (sec < 86400) return Math.floor(sec / 3600) + 'h'; return Math.floor(sec / 86400) + 'd'; }
             
-            getChats: function() {
-                var self = this;
-                var chats = {};
-                this.messages.forEach(function(m) {
-                    var key = m.contactId;
-                    if (!chats[key]) chats[key] = { contactId: m.contactId, contactName: m.contactName, contactMobile: m.contactMobile, lastMsg: m, unread: 0 };
-                    chats[key].lastMsg = m;
+            async function checkAccess() {
+                try { if (!window.CRM_Auth || typeof window.CRM_Auth.isAuthenticated !== 'function') { showToast('Auth unavailable.', 'error'); return false; } if (!window.CRM_Auth.isAuthenticated()) { if (window.parent && window.parent.location) window.parent.location.href = '../index.html'; return false; } if (window.CRM_Tenant && typeof window.CRM_Tenant.canAccessModule === 'function' && !window.CRM_Tenant.canAccessModule('WHATSAPP')) { showToast('Access denied.', 'error'); if (window.parent && window.parent.navigatePage) window.parent.navigatePage('dashboard'); return false; } return true; } catch (error) { return false; }
+            }
+            
+            async function loadData() {
+                try {
+                    _isLoading = true;
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) { render(); return; }
+                    const [msgResult, tplResult, leadResult, clientResult] = await Promise.all([
+                        window.CRM_Firestore.queryDocuments('whatsapp_messages', { orderBy: 'createdAt', orderDir: 'desc', limit: 500 }),
+                        window.CRM_Firestore.queryDocuments('whatsapp_templates', { orderBy: 'createdAt', orderDir: 'desc', limit: 100 }),
+                        window.CRM_Firestore.queryDocuments('leads', { orderBy: 'firstName', orderDir: 'asc', limit: 300 }),
+                        window.CRM_Firestore.queryDocuments('clients', { orderBy: 'name', orderDir: 'asc', limit: 300 })
+                    ]);
+                    _messages = msgResult.data || [];
+                    _templates = tplResult.data || [];
+                    _contacts = [];
+                    (leadResult.data || []).forEach(function(l) { if (l.mobile) _contacts.push({ id: l.id, name: (l.firstName || '') + ' ' + (l.lastName || ''), mobile: l.mobile, type: 'lead', business: l.business || '' }); });
+                    (clientResult.data || []).forEach(function(c) { if (c.mobile) _contacts.push({ id: c.id, name: c.name || '', mobile: c.mobile, type: 'client', business: c.business || '' }); });
+                    console.log('[WhatsAppModule] Loaded ' + _messages.length + ' msgs, ' + _templates.length + ' templates, ' + _contacts.length + ' contacts');
+                    render();
+                } catch (error) { showToast('Failed to load data.', 'error'); render(); }
+                finally { _isLoading = false; }
+            }
+            
+            function getChats() {
+                const chats = {};
+                _messages.forEach(function(m) {
+                    const key = m.contactId;
+                    if (!chats[key]) chats[key] = { contactId: m.contactId, contactName: m.contactName, contactMobile: m.contactMobile, lastMsg: m };
+                    if (new Date(m.createdAt || m.time) > new Date((chats[key].lastMsg && chats[key].lastMsg.createdAt) || 0)) chats[key].lastMsg = m;
                 });
-                return Object.values(chats).sort(function(a, b) { return new Date(b.lastMsg.time) - new Date(a.lastMsg.time); });
-            },
+                return Object.values(chats).sort(function(a, b) { return new Date((b.lastMsg && b.lastMsg.createdAt) || 0) - new Date((a.lastMsg && a.lastMsg.createdAt) || 0); });
+            }
             
-            getChatMessages: function(contactId) {
-                return this.messages.filter(function(m) { return m.contactId === contactId; }).sort(function(a, b) { return new Date(a.time) - new Date(b.time); });
-            },
+            function getChatMessages(contactId) {
+                return _messages.filter(function(m) { return m.contactId === contactId; }).sort(function(a, b) { return new Date(a.createdAt || a.time) - new Date(b.createdAt || b.time); });
+            }
             
-            render: function() {
-                var tabs = ['chat', 'templates', 'broadcast'];
-                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
-                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === WhatsApp.currentTab);
-                });
-                
-                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-                var tabEl = document.getElementById('tab-' + this.currentTab);
-                if (tabEl) tabEl.classList.add('active');
-                
-                document.getElementById('stat-sent').textContent = this.messages.length;
-                document.getElementById('stat-delivered').textContent = this.messages.filter(function(m) { return m.status === 'delivered'; }).length;
-                document.getElementById('stat-templates').textContent = this.templates.length;
-                document.getElementById('stat-contacts').textContent = this.getChats().length;
-                
-                if (this.currentTab === 'chat') this.renderChat();
-                if (this.currentTab === 'templates') this.renderTemplates();
-                if (this.currentTab === 'broadcast') this.renderBroadcast();
-            },
+            function updateStats() {
+                try { $('stat-sent').textContent = _messages.length; $('stat-delivered').textContent = _messages.filter(function(m) { return m.status === 'delivered'; }).length; $('stat-templates').textContent = _templates.length; $('stat-contacts').textContent = getChats().length; $('waCountText').textContent = getChats().length + ' active conversations'; } catch (error) {}
+            }
             
-            renderChat: function() {
-                var self = this;
-                var chats = this.getChats();
-                var contactList = document.getElementById('contactList');
-                
-                contactList.innerHTML = chats.length === 0 ? '<div class="empty-state" style="padding:30px;"><p class="text-muted">No conversations yet</p></div>' :
-                    chats.map(function(chat) {
-                        var isActive = self.activeChat === chat.contactId;
-                        return '<div class="chat-contact' + (isActive ? ' active' : '') + '" onclick="WhatsApp.openChat(\'' + chat.contactId + '\')">' +
+            function renderContactList() {
+                try {
+                    const chats = getChats();
+                    const search = ($('contactSearch') && $('contactSearch').value || '').toLowerCase();
+                    const filtered = search ? chats.filter(function(c) { return (c.contactName || '').toLowerCase().indexOf(search) !== -1 || (c.contactMobile || '').indexOf(search) !== -1; }) : chats;
+                    const list = $('contactList');
+                    if (!list) return;
+                    if (filtered.length === 0) { list.innerHTML = '<div class="empty-state" style="padding:30px;"><p class="text-muted">No conversations</p></div>'; return; }
+                    list.innerHTML = filtered.map(function(chat) {
+                        const isActive = _activeChatId === chat.contactId;
+                        return '<div class="chat-contact' + (isActive ? ' active' : '') + '" onclick="WhatsAppModule.openChat(\'' + chat.contactId + '\')" tabindex="0" role="button">' +
                             '<div class="chat-contact-avatar">' + (chat.contactName || '?').charAt(0).toUpperCase() + '</div>' +
-                            '<div class="chat-contact-info"><div class="chat-contact-name">' + self.esc(chat.contactName) + '</div>' +
-                            '<div class="chat-contact-last">' + self.esc(chat.lastMsg ? (chat.lastMsg.type === 'sent' ? 'You: ' : '') + chat.lastMsg.text : '') + '</div></div>' +
-                            '<div class="chat-contact-time">' + self.timeAgo(chat.lastMsg ? chat.lastMsg.time : '') + '</div></div>';
+                            '<div class="chat-contact-info"><div class="chat-contact-name">' + escapeHtml(chat.contactName || 'Unknown') + '</div>' +
+                            '<div class="chat-contact-last">' + escapeHtml(chat.lastMsg ? (chat.lastMsg.direction === 'sent' ? 'You: ' : '') + (chat.lastMsg.text || chat.lastMsg.body || '') : '') + '</div></div>' +
+                            '<div class="chat-contact-time">' + timeAgo(chat.lastMsg ? (chat.lastMsg.createdAt || chat.lastMsg.time) : '') + '</div></div>';
                     }).join('');
-                
-                if (this.activeChat) this.renderChatMessages(this.activeChat);
-            },
+                } catch (error) {}
+            }
             
-            openChat: function(contactId) {
-                this.activeChat = contactId;
-                this.renderChat();
-            },
+            function openChat(contactId) {
+                _activeChatId = contactId;
+                renderChatMessages(contactId);
+                renderContactList();
+            }
             
-            renderChatMessages: function(contactId) {
-                var self = this;
-                var contact = this.contacts.find(function(c) { return c.id === contactId; });
-                var msgs = this.getChatMessages(contactId);
-                var chatMain = document.getElementById('chatMain');
-                
-                chatMain.innerHTML = '<div class="chat-main-header"><div class="chat-contact-avatar">' + (contact ? contact.name.charAt(0) : '?') + '</div><div><strong>' + self.esc(contact ? contact.name : 'Unknown') + '</strong><br><span class="text-xs text-muted">' + (contact ? contact.mobile : '') + '</span></div></div>' +
-                    '<div class="chat-messages" id="chatMessages">' +
-                        (msgs.length === 0 ? '<div class="empty-state"><p>Start the conversation! 👋</p></div>' : msgs.map(function(m) {
-                            return '<div class="chat-msg ' + (m.type === 'sent' ? 'sent' : 'received') + '">' +
-                                '<div>' + self.esc(m.text) + '</div>' +
-                                '<div class="msg-time">' + self.timeAgo(m.time) + (m.type === 'sent' ? ' <span class="msg-status">✓✓</span>' : '') + '</div></div>';
-                        }).join('')) +
-                    '</div>' +
-                    '<div class="chat-input-area"><input type="text" id="msgInput" placeholder="Type a message..." onkeydown="if(event.key===\'Enter\')WhatsApp.sendMessage()"><button class="chat-send-btn" onclick="WhatsApp.sendMessage()">➤</button></div>';
-                
-                setTimeout(function() {
-                    var msgContainer = document.getElementById('chatMessages');
-                    if (msgContainer) msgContainer.scrollTop = msgContainer.scrollHeight;
-                }, 100);
-            },
+            function renderChatMessages(contactId) {
+                try {
+                    const contact = _contacts.find(function(c) { return c.id === contactId; });
+                    const msgs = getChatMessages(contactId);
+                    const main = $('chatMain');
+                    if (!main) return;
+                    main.innerHTML = '<div class="chat-main-header"><div class="chat-contact-avatar">' + (contact ? (contact.name || '?').charAt(0) : '?') + '</div><div><strong>' + escapeHtml(contact ? contact.name : 'Unknown') + '</strong><br><span class="text-xs text-muted">' + escapeHtml(contact ? contact.mobile : '') + '</span></div></div>' +
+                        '<div class="chat-messages" id="chatMessages">' + (msgs.length === 0 ? '<div class="empty-state"><p>Start the conversation! 👋</p></div>' : msgs.map(function(m) {
+                            return '<div class="chat-msg ' + (m.direction === 'sent' ? 'sent' : 'received') + '"><div>' + escapeHtml(m.text || m.body || '') + '</div><div class="msg-time">' + timeAgo(m.createdAt || m.time) + (m.direction === 'sent' ? ' ✓✓' : '') + '</div></div>';
+                        }).join('')) + '</div>' +
+                        '<div class="chat-input-area"><input type="text" id="msgInput" placeholder="Type a message..." onkeydown="if(event.key===\'Enter\')WhatsAppModule.sendMessage()" aria-label="Message input"><button class="chat-send-btn" onclick="WhatsAppModule.sendMessage()" aria-label="Send">➤</button></div>';
+                    setTimeout(function() { const mc = $('chatMessages'); if (mc) mc.scrollTop = mc.scrollHeight; }, 150);
+                } catch (error) {}
+            }
             
-            sendMessage: function() {
-                var input = document.getElementById('msgInput');
-                var text = input?.value?.trim();
-                if (!text || !this.activeChat) return;
-                
-                var contact = this.contacts.find(function(c) { return c.id === WhatsApp.activeChat; });
-                this.messages.push({
-                    id: 'MSG' + Date.now(),
-                    contactId: this.activeChat,
-                    contactName: contact ? contact.name : 'Unknown',
-                    contactMobile: contact ? contact.mobile : '',
-                    text: text,
-                    type: 'sent',
-                    status: 'delivered',
-                    time: new Date().toISOString()
-                });
-                this.saveMessages();
-                input.value = '';
-                this.renderChatMessages(this.activeChat);
-                this.render();
-            },
+            async function sendMessage() {
+                try {
+                    const input = $('msgInput');
+                    const text = input ? input.value.trim() : '';
+                    if (!text || !_activeChatId) return;
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    const contact = _contacts.find(function(c) { return c.id === _activeChatId; });
+                    const msgData = { contactId: _activeChatId, contactName: contact ? contact.name : 'Unknown', contactMobile: contact ? contact.mobile : '', text: text, direction: 'sent', status: 'delivered', createdAt: new Date().toISOString() };
+                    await window.CRM_Firestore.createDocument('whatsapp_messages', msgData);
+                    _messages.unshift(msgData);
+                    if (input) input.value = '';
+                    renderChatMessages(_activeChatId);
+                    updateStats();
+                } catch (error) { showToast('Failed to send.', 'error'); }
+            }
             
-            openNewChat: function() {
-                var self = this;
-                var contacts = this.contacts;
-                var h = '<div style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><div class="card" style="width:400px;max-width:90vw;max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()"><div class="card-header"><span class="card-title">💬 New Chat</span><button class="btn btn-ghost btn-xs" onclick="this.closest(\'div[style]\').remove()">✕</button></div>' +
-                    '<input type="search" placeholder="🔍 Search contacts..." style="width:100%;margin-bottom:12px;padding:10px;border:1.5px solid #E5E5E5;border-radius:8px;" oninput="var s=this.value.toLowerCase();document.querySelectorAll(\'.nc-contact\').forEach(function(c){c.style.display=c.textContent.toLowerCase().includes(s)?\'flex\':\'none\';})">' +
-                    contacts.map(function(c) {
-                        return '<div class="nc-contact" style="display:flex;align-items:center;gap:10px;padding:10px;cursor:pointer;border-radius:8px;" onclick="WhatsApp.activeChat=\'' + c.id + '\';WhatsApp.currentTab=\'chat\';WhatsApp.render();this.closest(\'div[style]\').remove();" onmouseover="this.style.background=\'#F5F5F5\'" onmouseout="this.style.background=\'transparent\'">' +
-                            '<div style="width:38px;height:38px;border-radius:50%;background:var(--wa-gradient);color:#FFF;display:flex;align-items:center;justify-content:center;font-weight:700;">' + c.name.charAt(0) + '</div>' +
-                            '<div><strong>' + self.esc(c.name) + '</strong><br><span class="text-xs text-muted">📱 ' + c.mobile + ' · ' + c.type + '</span></div></div>';
-                    }).join('') + '</div></div>';
-                document.body.insertAdjacentHTML('beforeend', h);
-            },
+            function openNewChat() {
+                try {
+                    let html = '<div style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><div class="card" style="width:420px;max-width:90vw;max-height:80vh;overflow-y:auto;" onclick="event.stopPropagation()"><div class="card-header"><span class="card-title">💬 New Chat</span><button class="btn btn-ghost btn-xs" onclick="this.closest(\'div[style]\').remove()">✕</button></div>' +
+                        '<input type="search" placeholder="🔍 Search contacts..." style="width:100%;margin-bottom:12px;padding:10px;border:1.5px solid #E5E5E5;border-radius:8px;min-height:44px;" oninput="var s=this.value.toLowerCase();document.querySelectorAll(\'.nc-contact\').forEach(function(c){c.style.display=c.textContent.toLowerCase().indexOf(s)!==-1?\'flex\':\'none\';})">' +
+                        _contacts.map(function(c) { return '<div class="nc-contact" style="display:flex;align-items:center;gap:10px;padding:10px;cursor:pointer;border-radius:8px;" onclick="WhatsAppModule._activeChatId=\'' + c.id + '\';WhatsAppModule.switchTab(\'chat\');WhatsAppModule.openChat(\'' + c.id + '\');this.closest(\'div[style]\').remove();" onmouseover="this.style.background=\'#F5F5F5\'" onmouseout="this.style.background=\'transparent\'"><div style="width:38px;height:38px;border-radius:50%;background:var(--wa-gradient);color:#FFF;display:flex;align-items:center;justify-content:center;font-weight:700;">' + (c.name || '?').charAt(0) + '</div><div><strong>' + escapeHtml(c.name) + '</strong><br><span class="text-xs text-muted">📱 ' + c.mobile + ' · ' + c.type + '</span></div></div>'; }).join('') + '</div></div>';
+                    document.body.insertAdjacentHTML('beforeend', html);
+                } catch (error) {}
+            }
             
-            renderTemplates: function() {
-                var self = this;
-                var search = (document.getElementById('templateSearch')?.value || '').toLowerCase();
-                var filtered = this.templates.filter(function(t) { return !search || t.title.toLowerCase().includes(search) || t.body.toLowerCase().includes(search); });
-                document.getElementById('templateGrid').innerHTML = filtered.map(function(t) {
-                    return '<div class="template-card" onclick="WhatsApp.useTemplate(\'' + t.id + '\')">' +
-                        '<div class="t-title">' + self.esc(t.title) + '</div>' +
-                        '<div class="t-preview">' + self.esc(t.body.substring(0, 120)) + '...</div>' +
-                        '<div class="t-footer"><span class="text-xs text-muted">📂 ' + self.esc(t.category) + '</span><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();WhatsApp.useTemplate(\'' + t.id + '\')">Use</button></div></div>';
-                }).join('');
-            },
+            function renderTemplates() {
+                try {
+                    const search = ($('templateSearch') && $('templateSearch').value || '').toLowerCase();
+                    const filtered = _templates.filter(function(t) { return !search || (t.title && t.title.toLowerCase().indexOf(search) !== -1) || (t.body && t.body.toLowerCase().indexOf(search) !== -1); });
+                    const grid = $('templateGrid'); if (!grid) return;
+                    grid.innerHTML = filtered.map(function(t) {
+                        return '<div class="template-card" onclick="WhatsAppModule.useTemplate(\'' + t.id + '\')" tabindex="0" role="button">' +
+                            '<div class="t-title">' + escapeHtml(t.title || 'Untitled') + '</div>' +
+                            '<div class="t-preview">' + escapeHtml((t.body || '').substring(0, 120)) + '...</div>' +
+                            '<div class="t-footer"><span class="text-xs text-muted">📂 ' + escapeHtml(t.category || 'General') + '</span><button class="btn btn-outline btn-xs" onclick="event.stopPropagation();WhatsAppModule.useTemplate(\'' + t.id + '\')">Use</button></div></div>';
+                    }).join('');
+                } catch (error) {}
+            }
             
-            useTemplate: function(templateId) {
-                var t = this.templates.find(function(x) { return x.id === templateId; });
-                if (!t) return;
-                var contacts = this.contacts;
-                var h = '<div style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><div class="card" style="width:450px;max-width:90vw;" onclick="event.stopPropagation()"><div class="card-header"><span class="card-title">📝 Use Template: ' + this.esc(t.title) + '</span><button class="btn btn-ghost btn-xs" onclick="this.closest(\'div[style]\').remove()">✕</button></div>' +
-                    '<div class="form-group"><label>To</label><select id="tplContact" style="width:100%;padding:10px;border:1.5px solid #E5E5E5;border-radius:8px;">' + contacts.map(function(c) { return '<option value="' + c.id + '">' + c.name + ' - ' + c.mobile + '</option>'; }).join('') + '</select></div>' +
-                    '<div class="form-group"><label>Message</label><textarea id="tplMsg" rows="4" style="width:100%;padding:10px;border:1.5px solid #E5E5E5;border-radius:8px;">' + this.esc(t.body) + '</textarea></div>' +
-                    '<button class="btn btn-wa btn-sm" onclick="WhatsApp.sendTemplate(\'' + templateId + '\')">📤 Send</button></div></div>';
-                document.body.insertAdjacentHTML('beforeend', h);
-            },
+            function useTemplate(templateId) {
+                try {
+                    const t = _templates.find(function(x) { return x.id === templateId; }); if (!t) return;
+                    let html = '<div style="position:fixed;inset:0;z-index:999;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;" onclick="this.remove()"><div class="card" style="width:460px;max-width:90vw;" onclick="event.stopPropagation()"><div class="card-header"><span class="card-title">📝 Use: ' + escapeHtml(t.title) + '</span><button class="btn btn-ghost btn-xs" onclick="this.closest(\'div[style]\').remove()">✕</button></div>' +
+                        '<div class="form-group"><label>To</label><select id="tplContact" style="width:100%;padding:10px;border:1.5px solid #E5E5E5;border-radius:8px;min-height:44px;">' + _contacts.map(function(c) { return '<option value="' + c.id + '">' + escapeHtml(c.name) + ' - ' + c.mobile + '</option>'; }).join('') + '</select></div>' +
+                        '<div class="form-group"><label>Message</label><textarea id="tplMsg" rows="4" style="width:100%;padding:10px;border:1.5px solid #E5E5E5;border-radius:8px;">' + escapeHtml(t.body) + '</textarea></div>' +
+                        '<button class="btn btn-wa btn-sm" onclick="WhatsAppModule.sendTemplateMsg(\'' + templateId + '\')">📤 Send</button></div></div>';
+                    document.body.insertAdjacentHTML('beforeend', html);
+                } catch (error) {}
+            }
             
-            sendTemplate: function(templateId) {
-                var contactId = document.getElementById('tplContact')?.value;
-                var text = document.getElementById('tplMsg')?.value?.trim();
-                if (!contactId || !text) return;
-                var contact = this.contacts.find(function(c) { return c.id === contactId; });
-                this.messages.push({ id: 'MSG' + Date.now(), contactId: contactId, contactName: contact ? contact.name : 'Unknown', contactMobile: contact ? contact.mobile : '', text: text, type: 'sent', status: 'delivered', time: new Date().toISOString() });
-                this.saveMessages();
-                this.currentTab = 'chat';
-                this.activeChat = contactId;
-                this.render();
-                this.toast('✅ Template sent!', 'success');
-                document.querySelector('#tplContact')?.closest('div[style]')?.remove();
-            },
+            async function sendTemplateMsg(templateId) {
+                try {
+                    const contactId = $('tplContact') ? $('tplContact').value : ''; const text = $('tplMsg') ? $('tplMsg').value.trim() : '';
+                    if (!contactId || !text) return;
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    const contact = _contacts.find(function(c) { return c.id === contactId; });
+                    const msgData = { contactId: contactId, contactName: contact ? contact.name : 'Unknown', contactMobile: contact ? contact.mobile : '', text: text, direction: 'sent', status: 'delivered', templateId: templateId, createdAt: new Date().toISOString() };
+                    await window.CRM_Firestore.createDocument('whatsapp_messages', msgData);
+                    _messages.unshift(msgData);
+                    const modal = document.querySelector('#tplContact')?.closest('div[style]'); if (modal) modal.remove();
+                    _activeChatId = contactId; switchTab('chat'); openChat(contactId);
+                    showToast('✅ Template sent!', 'success');
+                } catch (error) { showToast('Failed to send.', 'error'); }
+            }
             
-            addTemplate: function() {
-                var title = prompt('Template name:');
-                if (!title?.trim()) return;
-                var body = prompt('Template message (use {{name}}, {{amount}} etc.):');
-                if (!body?.trim()) return;
-                this.templates.unshift({ id: 'TPL' + String(this.templates.length + 1).padStart(3, '0'), title: title.trim(), body: body.trim(), category: 'Custom' });
-                localStorage.setItem('crm_wa_templates', JSON.stringify(this.templates));
-                this.renderTemplates();
-                this.toast('✅ Template added!', 'success');
-            },
+            async function addTemplate() {
+                try {
+                    const title = prompt('Template name:'); if (!title || !title.trim()) return;
+                    const body = prompt('Template message (use {{name}}, {{amount}} etc.):'); if (!body || !body.trim()) return;
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    const tplData = { title: title.trim(), body: body.trim(), category: 'Custom', createdAt: new Date().toISOString() };
+                    await window.CRM_Firestore.createDocument('whatsapp_templates', tplData);
+                    _templates.unshift(tplData);
+                    renderTemplates();
+                    showToast('✅ Template added!', 'success');
+                } catch (error) { showToast('Failed to add.', 'error'); }
+            }
             
-            renderBroadcast: function() {
-                var self = this;
-                var container = document.getElementById('broadcastContacts');
-                container.innerHTML = this.contacts.slice(0, 20).map(function(c) {
-                    return '<label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:#F5F5F5;border-radius:8px;font-size:0.82rem;cursor:pointer;">' +
-                        '<input type="checkbox" class="bc-check" value="' + c.id + '"> ' + self.esc(c.name) + ' (' + c.mobile + ')</label>';
-                }).join('');
-            },
+            function renderBroadcastContacts() {
+                try {
+                    const container = $('broadcastContacts'); if (!container) return;
+                    container.innerHTML = _contacts.slice(0, 30).map(function(c) {
+                        return '<label style="display:flex;align-items:center;gap:6px;padding:6px 12px;background:#F5F5F5;border-radius:8px;font-size:0.82rem;cursor:pointer;"><input type="checkbox" class="bc-check" value="' + c.id + '"> ' + escapeHtml(c.name) + ' (' + c.mobile + ')</label>';
+                    }).join('');
+                } catch (error) {}
+            }
             
-            sendBroadcast: function() {
-                var self = this;
-                var text = document.getElementById('broadcastMsg')?.value?.trim();
-                if (!text) { this.toast('Enter a message!', 'error'); return; }
-                var selected = [];
-                document.querySelectorAll('.bc-check:checked').forEach(function(cb) { selected.push(cb.value); });
-                if (selected.length === 0) { this.toast('Select at least one recipient!', 'error'); return; }
-                
-                selected.forEach(function(contactId) {
-                    var contact = self.contacts.find(function(c) { return c.id === contactId; });
-                    if (contact) {
-                        self.messages.push({ id: 'MSG' + Date.now() + Math.random(), contactId: contactId, contactName: contact.name, contactMobile: contact.mobile, text: text, type: 'sent', status: 'delivered', time: new Date().toISOString() });
+            async function sendBroadcast() {
+                try {
+                    const text = $('broadcastMsg') ? $('broadcastMsg').value.trim() : ''; if (!text) { showToast('Enter a message!', 'error'); return; }
+                    const selected = []; document.querySelectorAll('.bc-check:checked').forEach(function(cb) { selected.push(cb.value); });
+                    if (selected.length === 0) { showToast('Select recipients!', 'error'); return; }
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    for (const contactId of selected) {
+                        const contact = _contacts.find(function(c) { return c.id === contactId; });
+                        if (contact) {
+                            const msgData = { contactId: contactId, contactName: contact.name, contactMobile: contact.mobile, text: text, direction: 'sent', status: 'delivered', isBroadcast: true, createdAt: new Date().toISOString() };
+                            await window.CRM_Firestore.createDocument('whatsapp_messages', msgData);
+                            _messages.unshift(msgData);
+                        }
                     }
-                });
-                this.saveMessages();
-                document.getElementById('broadcastMsg').value = '';
-                this.toast('📢 Broadcast sent to ' + selected.length + ' contacts!', 'success');
-            },
+                    if ($('broadcastMsg')) $('broadcastMsg').value = '';
+                    showToast('📢 Broadcast sent to ' + selected.length + ' contacts!', 'success');
+                    updateStats();
+                } catch (error) { showToast('Failed to send.', 'error'); }
+            }
             
-            filterContacts: function() { this.renderChat(); },
-            filterTemplates: function() { this.renderTemplates(); },
+            function render() { updateStats(); if (_currentTab === 'chat') { renderContactList(); if (_activeChatId) renderChatMessages(_activeChatId); } if (_currentTab === 'templates') renderTemplates(); if (_currentTab === 'broadcast') renderBroadcastContacts(); }
             
-            toast: function(m, t) { t = t || 'info'; var d = document.createElement('div'); d.className = 'toast toast-' + t; d.textContent = m; (document.getElementById('toastContainer') || document.body).appendChild(d); setTimeout(function() { d.remove(); }, 3000); },
-            esc: function(s) { return s ? String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;') : ''; },
-            timeAgo: function(d) { if (!d) return ''; var s = Math.floor((Date.now() - new Date(d).getTime()) / 1000); if (s < 60) return 'Just now'; if (s < 3600) return Math.floor(s / 60) + 'm ago'; if (s < 86400) return Math.floor(s / 3600) + 'h ago'; return Math.floor(s / 86400) + 'd ago'; }
-        };
+            function switchTab(tab) {
+                _currentTab = tab; document.querySelectorAll('.bottom-tab[data-tab]').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.tab === tab); if (btn.dataset.tab === tab) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current'); }); document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); }); const tabEl = $('tab-' + tab); if (tabEl) tabEl.classList.add('active'); render();
+            }
+            
+            async function init() {
+                try { console.log('[WhatsAppModule] Initializing...'); const hasAccess = await checkAccess(); if (!hasAccess) return; if (window.CRM_Firestore && typeof window.CRM_Firestore.init === 'function') await window.CRM_Firestore.init(); if (window.CRM_Tenant && typeof window.CRM_Tenant.initTenantContext === 'function') await window.CRM_Tenant.initTenantContext(); await loadData(); console.log('[WhatsAppModule] ✅ Ready'); } catch (error) { console.error('[WhatsAppModule] Init error:', error); }
+            }
+            
+            return { init, render, switchTab, openChat, sendMessage, openNewChat, renderTemplates, useTemplate, sendTemplateMsg, addTemplate, sendBroadcast, renderContactList, _activeChatId, getChats, getChatMessages };
+            
+        })();
         
-        document.addEventListener('DOMContentLoaded', function() { WhatsApp.init(); });
+        window.WhatsAppModule = WhatsAppModule;
+        document.addEventListener('DOMContentLoaded', function() { WhatsAppModule.init().catch(function(error) { console.error('[WhatsAppModule] Auto-init failed:', error); }); });
+        console.log('[WhatsAppModule] Script loaded. window.WhatsAppModule available.');
     </script>
 </body>
 </html>
