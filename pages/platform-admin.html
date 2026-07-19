@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en-IN" dir="ltr" data-theme="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Platform Admin — 11 Avatar SMEs CRM</title>
+    <style>
+        :root {
+            --gold: #D4AF37; --gold-dark: #B8960F; --gold-light: #E8C95A;
+            --bg: #F8F6F0; --bg2: #FFFFFF; --bg3: #F0EDE5;
+            --text: #0A0A0A; --text2: #333; --text3: #777; --text4: #999;
+            --border: rgba(0,0,0,0.06); --border2: rgba(0,0,0,0.12);
+            --shadow: 0 4px 16px rgba(0,0,0,0.08); --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+            --radius: 12px; --radius-sm: 8px;
+            --success: #10B981; --error: #DC2626; --warning: #F59E0B; --info: #3B82F6;
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: var(--font); font-size: 14px; line-height: 1.6;
+            color: var(--text); background: var(--bg);
+            -webkit-font-smoothing: antialiased; min-height: 100vh;
+        }
+        a { color: var(--gold-dark); text-decoration: none; }
+
+        .page-wrap { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+        .page-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; margin-bottom: 24px; }
+        .page-header h1 { font-size: 22px; font-weight: 800; display: flex; align-items: center; gap: 10px; }
+        .page-header h1 i { color: var(--gold-dark); }
+
+        .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .stat-card { background: var(--bg2); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); border: 1px solid var(--border); }
+        .stat-value { font-size: 28px; font-weight: 800; color: var(--text); }
+        .stat-label { font-size: 12px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+        .stat-card.pending { border-left: 4px solid var(--warning); }
+        .stat-card.total { border-left: 4px solid var(--gold); }
+        .stat-card.approved { border-left: 4px solid var(--success); }
+
+        .tab-bar { display: flex; gap: 4px; background: var(--bg3); border-radius: var(--radius); padding: 4px; margin-bottom: 20px; width: fit-content; }
+        .tab-btn { padding: 10px 20px; border-radius: var(--radius-sm); border: none; background: transparent; cursor: pointer; font-size: 13px; font-weight: 600; color: var(--text3); transition: all 0.2s; white-space: nowrap; min-height: 40px; }
+        .tab-btn.active { background: var(--bg2); color: var(--text); box-shadow: var(--shadow); }
+        .tab-btn:hover:not(.active) { color: var(--text); }
+
+        .card { background: var(--bg2); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; }
+        .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .card-header h2 { font-size: 16px; font-weight: 700; }
+        .card-body { padding: 20px; }
+        .card-body.no-padding { padding: 0; }
+
+        .search-box { display: flex; align-items: center; gap: 8px; background: var(--bg3); border-radius: var(--radius-sm); padding: 8px 14px; min-width: 240px; }
+        .search-box input { border: none; background: transparent; font-size: 13px; color: var(--text); outline: none; width: 100%; min-height: 28px; }
+        .search-box i { color: var(--text3); }
+
+        table { width: 100%; border-collapse: collapse; }
+        table thead th { background: var(--bg3); padding: 12px 16px; text-align: left; font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text3); border-bottom: 2px solid var(--border); white-space: nowrap; }
+        table tbody td { padding: 12px 16px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+        table tbody tr:hover { background: rgba(212,175,55,0.03); }
+        table tbody tr:last-child td { border-bottom: none; }
+
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+        .badge-pending { background: #FEF3C7; color: #92400E; }
+        .badge-approved { background: #D1FAE5; color: #065F46; }
+        .badge-rejected { background: #FEE2E2; color: #991B1B; }
+        .badge-free { background: #EDE9FE; color: #5B21B6; }
+        .badge-starter { background: #DBEAFE; color: #1E40AF; }
+        .badge-pro { background: #D1FAE5; color: #065F46; }
+
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; border: none; cursor: pointer; transition: all 0.2s; min-height: 40px; white-space: nowrap; }
+        .btn-sm { padding: 5px 10px; font-size: 11px; min-height: 32px; }
+        .btn-primary { background: var(--gold); color: #000; }
+        .btn-primary:hover { background: var(--gold-light); }
+        .btn-success { background: var(--success); color: #fff; }
+        .btn-success:hover { opacity: 0.9; }
+        .btn-danger { background: var(--error); color: #fff; }
+        .btn-danger:hover { opacity: 0.9; }
+        .btn-outline { background: var(--bg2); border: 1.5px solid var(--border2); color: var(--text2); }
+        .btn-outline:hover { border-color: var(--gold); color: var(--gold-dark); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; pointer-events: none; }
+
+        .empty-state { text-align: center; padding: 40px 20px; color: var(--text3); }
+        .empty-state i { font-size: 40px; display: block; margin-bottom: 12px; }
+        .empty-state p { font-size: 14px; }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; font-weight: 700; font-size: 12px; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; color: var(--text3); }
+        .form-group input, .form-group select { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border2); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; background: var(--bg2); color: var(--text); min-height: 42px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+
+        .toast { position: fixed; top: 20px; right: 20px; z-index: 9999; padding: 12px 20px; border-radius: var(--radius-sm); color: #fff; font-weight: 600; font-size: 13px; box-shadow: var(--shadow-md); animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 8px; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--error); }
+
+        @media (max-width: 768px) {
+            .page-wrap { padding: 16px; }
+            .form-row { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: 1fr 1fr; }
+            table { font-size: 12px; }
+            table thead th, table tbody td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-wrap">
+        <div class="page-header">
+            <h1><span>🛡️</span> Platform Admin Panel</h1>
+            <div style="display:flex;gap:8px;">
+                <button class="btn btn-outline btn-sm" onclick="refreshData()">🔄 Refresh</button>
+            </div>
+        </div>
+
+        <div class="stats-row" id="statsRow">
+            <div class="stat-card pending"><div class="stat-value" id="statPending">0</div><div class="stat-label">Pending Approvals</div></div>
+            <div class="stat-card total"><div class="stat-value" id="statTotalUsers">0</div><div class="stat-label">Total Users</div></div>
+            <div class="stat-card total"><div class="stat-value" id="statTenants">0</div><div class="stat-label">Total Tenants</div></div>
+            <div class="stat-card approved"><div class="stat-value" id="statApproved">0</div><div class="stat-label">Approved Today</div></div>
+        </div>
+
+        <div class="tab-bar" id="tabBar">
+            <button class="tab-btn active" data-tab="approvals">⏳ Pending Approvals</button>
+            <button class="tab-btn" data-tab="users">👥 All Users</button>
+            <button class="tab-btn" data-tab="tenants">🏢 Tenants</button>
+        </div>
+
+        <div id="tabApprovals" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Registration Approvals</h2>
+                    <div class="search-box"><i>🔍</i><input type="text" id="searchApprovals" placeholder="Search by name or email..." oninput="renderApprovals()"></div>
+                </div>
+                <div class="card-body no-padding">
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead><tr><th>Name</th><th>Email</th><th>Phone</th><th>Registered</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="approvalsTableBody"><tr><td colspan="6"><div class="empty-state"><i>📋</i><p>Loading...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabUsers" class="tab-content" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Users</h2>
+                    <div class="search-box"><i>🔍</i><input type="text" id="searchUsers" placeholder="Search users..." oninput="renderUsers()"></div>
+                </div>
+                <div class="card-body no-padding">
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Tenant</th><th>Status</th><th>Actions</th></tr></thead>
+                            <tbody id="usersTableBody"><tr><td colspan="6"><div class="empty-state"><i>👥</i><p>Loading...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tabTenants" class="tab-content" style="display:none;">
+            <div class="card">
+                <div class="card-header">
+                    <h2>All Tenants</h2>
+                    <button class="btn btn-primary btn-sm" onclick="openAddTenantModal()">+ New Tenant</button>
+                </div>
+                <div class="card-body no-padding">
+                    <div style="overflow-x:auto;">
+                        <table>
+                            <thead><tr><th>Name</th><th>Plan</th><th>Users</th><th>Status</th><th>Created</th><th>Actions</th></tr></thead>
+                            <tbody id="tenantsTableBody"><tr><td colspan="6"><div class="empty-state"><i>🏢</i><p>Loading...</p></div></td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
+    <script>
+        'use strict';
+        var approvals = [], users = [], tenants = [], currentTab = 'approvals';
+
+        function $(id) { return document.getElementById(id); }
+
+        function showToast(msg, type) {
+            var t = document.createElement('div'); t.className = 'toast toast-' + (type || 'success');
+            t.textContent = msg; document.body.appendChild(t);
+            setTimeout(function() { t.style.opacity = '0'; t.style.transition = '0.3s'; setTimeout(function() { t.remove(); }, 300); }, 3000);
+        }
+
+        async function checkAccess() {
+            if (!window.CRM_Auth || !window.CRM_Auth.isAuthenticated || !window.CRM_Auth.isAuthenticated()) {
+                if (window.parent && window.parent.location) window.parent.location.href = '../index.html';
+                return false;
+            }
+            if (!window.CRM_Tenant || !window.CRM_Tenant.hasMinRole || !window.CRM_Tenant.hasMinRole('PLATFORM_OWNER')) {
+                showToast('Access denied. Platform Owner only.', 'error');
+                setTimeout(function() { if (window.parent) window.parent.navigatePage('dashboard'); }, 1500);
+                return false;
+            }
+            return true;
+        }
+
+        async function loadApprovals() {
+            try {
+                if (window.CRM_Tenant && window.CRM_Tenant.getPendingApprovals) {
+                    approvals = await window.CRM_Tenant.getPendingApprovals();
+                } else {
+                    var result = await window.CRM_Firestore.queryDocuments('users', { filters: [['approvalStatus', '==', 'pending']], orderBy: 'createdAt', orderDir: 'asc', limit: 100 });
+                    approvals = result.data;
+                }
+            } catch(e) { approvals = []; }
+            renderApprovals();
+        }
+
+        async function loadUsers() {
+            try {
+                var result = await window.CRM_Firestore.queryDocuments('users', { orderBy: 'createdAt', orderDir: 'desc', limit: 200 });
+                users = result.data;
+            } catch(e) { users = []; }
+            renderUsers();
+        }
+
+        async function loadTenants() {
+            try {
+                var result = await window.CRM_Firestore.queryDocuments('tenants', { orderBy: 'createdAt', orderDir: 'desc', limit: 100 });
+                tenants = result.data;
+            } catch(e) { tenants = []; }
+            renderTenants();
+        }
+
+        function updateStats() {
+            var pending = approvals.filter(function(a) { return a.approvalStatus === 'pending'; }).length;
+            $('statPending').textContent = pending;
+            $('statTotalUsers').textContent = users.length;
+            $('statTenants').textContent = tenants.length;
+            var today = new Date().toISOString().split('T')[0];
+            var approvedToday = users.filter(function(u) { return u.approvalStatus === 'approved' && u.approvedAt && u.approvedAt.indexOf(today) === 0; }).length;
+            $('statApproved').textContent = approvedToday;
+        }
+
+        function renderApprovals() {
+            var search = ($('searchApprovals') && $('searchApprovals').value || '').toLowerCase();
+            var filtered = approvals.filter(function(a) {
+                if (!search) return a.approvalStatus === 'pending';
+                return (a.approvalStatus === 'pending') && ((a.displayName && a.displayName.toLowerCase().indexOf(search) !== -1) || (a.email && a.email.toLowerCase().indexOf(search) !== -1));
+            });
+            var html = '';
+            if (filtered.length === 0) {
+                html = '<tr><td colspan="6"><div class="empty-state"><i>✅</i><p>No pending approvals.</p></div></td></tr>';
+            } else {
+                filtered.forEach(function(a) {
+                    html += '<tr>';
+                    html += '<td><strong>' + escHtml(a.displayName || 'N/A') + '</strong></td>';
+                    html += '<td>' + escHtml(a.email || '') + '</td>';
+                    html += '<td>' + escHtml(a.phoneNumber || '-') + '</td>';
+                    html += '<td>' + formatDate(a.createdAt) + '</td>';
+                    html += '<td><span class="badge badge-pending">Pending</span></td>';
+                    html += '<td style="display:flex;gap:6px;flex-wrap:wrap;">';
+                    html += '<button class="btn btn-success btn-sm" onclick="approveUser(\'' + (a.id || a.uid) + '\')">✅ Approve</button>';
+                    html += '<button class="btn btn-danger btn-sm" onclick="rejectUser(\'' + (a.id || a.uid) + '\')">❌ Reject</button>';
+                    html += '</td></tr>';
+                });
+            }
+            $('approvalsTableBody').innerHTML = html;
+            updateStats();
+        }
+
+        function renderUsers() {
+            var search = ($('searchUsers') && $('searchUsers').value || '').toLowerCase();
+            var filtered = users;
+            if (search) filtered = users.filter(function(u) { return (u.displayName && u.displayName.toLowerCase().indexOf(search) !== -1) || (u.email && u.email.toLowerCase().indexOf(search) !== -1); });
+            var html = '';
+            if (filtered.length === 0) {
+                html = '<tr><td colspan="6"><div class="empty-state"><i>👥</i><p>No users found.</p></div></td></tr>';
+            } else {
+                filtered.forEach(function(u) {
+                    var badge = u.approvalStatus === 'approved' ? 'badge-approved' : (u.approvalStatus === 'rejected' ? 'badge-rejected' : 'badge-pending');
+                    html += '<tr>';
+                    html += '<td><strong>' + escHtml(u.displayName || 'N/A') + '</strong></td>';
+                    html += '<td>' + escHtml(u.email || '') + '</td>';
+                    html += '<td><span class="badge">' + escHtml(u.role || 'EXECUTIVE') + '</span></td>';
+                    html += '<td>' + escHtml(u.tenantId || 'Unassigned') + '</td>';
+                    html += '<td><span class="badge ' + badge + '">' + escHtml(u.approvalStatus || 'pending') + '</span></td>';
+                    html += '<td><button class="btn btn-outline btn-sm" onclick="viewUser(\'' + (u.id || u.uid) + '\')">👁️ View</button></td>';
+                    html += '</tr>';
+                });
+            }
+            $('usersTableBody').innerHTML = html;
+        }
+
+        function renderTenants() {
+            var html = '';
+            if (tenants.length === 0) {
+                html = '<tr><td colspan="6"><div class="empty-state"><i>🏢</i><p>No tenants found.</p></div></td></tr>';
+            } else {
+                tenants.forEach(function(t) {
+                    var planBadge = t.plan === 'free' ? 'badge-free' : (t.plan === 'starter' ? 'badge-starter' : 'badge-pro');
+                    html += '<tr>';
+                    html += '<td><strong>' + escHtml(t.name || 'Unnamed') + '</strong></td>';
+                    html += '<td><span class="badge ' + planBadge + '">' + escHtml(t.plan || 'free') + '</span></td>';
+                    html += '<td>' + (t.userCount || 0) + '</td>';
+                    html += '<td><span class="badge ' + (t.status === 'active' ? 'badge-approved' : 'badge-pending') + '">' + escHtml(t.status || 'active') + '</span></td>';
+                    html += '<td>' + formatDate(t.createdAt) + '</td>';
+                    html += '<td><button class="btn btn-outline btn-sm" onclick="viewTenant(\'' + t.id + '\')">👁️ View</button> <button class="btn btn-danger btn-sm" onclick="deleteTenant(\'' + t.id + '\')">🗑️</button></td>';
+                    html += '</tr>';
+                });
+            }
+            $('tenantsTableBody').innerHTML = html;
+            updateStats();
+        }
+
+        async function approveUser(uid) {
+            if (!confirm('Approve this user?')) return;
+            try {
+                var result;
+                if (window.CRM_Tenant && window.CRM_Tenant.approveRegistration) {
+                    result = await window.CRM_Tenant.approveRegistration(uid, true, { role: 'EXECUTIVE' });
+                } else {
+                    await window.CRM_Firestore.updateDocument('users', uid, { approvalStatus: 'approved', approvedAt: new Date().toISOString(), status: 'active' });
+                    result = { success: true };
+                }
+                if (result.success) { showToast('User approved successfully.', 'success'); await refreshData(); }
+                else { showToast(result.message || 'Approval failed.', 'error'); }
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        async function rejectUser(uid) {
+            var reason = prompt('Rejection reason (optional):');
+            if (reason === null) return;
+            try {
+                var result;
+                if (window.CRM_Tenant && window.CRM_Tenant.approveRegistration) {
+                    result = await window.CRM_Tenant.approveRegistration(uid, false, { reason: reason || 'Rejected by admin.' });
+                } else {
+                    await window.CRM_Firestore.updateDocument('users', uid, { approvalStatus: 'rejected', rejectionReason: reason || 'Rejected.', updatedAt: new Date().toISOString() });
+                    result = { success: true };
+                }
+                if (result.success) { showToast('User rejected.', 'success'); await refreshData(); }
+                else { showToast(result.message || 'Rejection failed.', 'error'); }
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        function viewUser(uid) {
+            var u = users.find(function(x) { return (x.id || x.uid) === uid; });
+            if (!u) return;
+            alert('User: ' + (u.displayName || 'N/A') + '\nEmail: ' + (u.email || '') + '\nRole: ' + (u.role || 'N/A') + '\nTenant: ' + (u.tenantId || 'None') + '\nStatus: ' + (u.approvalStatus || 'N/A'));
+        }
+
+        function viewTenant(tid) {
+            var t = tenants.find(function(x) { return x.id === tid; });
+            if (!t) return;
+            alert('Tenant: ' + (t.name || 'N/A') + '\nPlan: ' + (t.plan || 'free') + '\nStatus: ' + (t.status || 'active') + '\nCreated: ' + formatDate(t.createdAt));
+        }
+
+        async function deleteTenant(tid) {
+            if (!confirm('Delete this tenant? This action cannot be undone.')) return;
+            try {
+                await window.CRM_Firestore.deleteDocument('tenants', tid, true);
+                showToast('Tenant deleted.', 'success');
+                await loadTenants();
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        function openAddTenantModal() {
+            var name = prompt('Enter tenant/organization name:');
+            if (!name) return;
+            var plan = prompt('Plan (free/starter/professional/enterprise):', 'free');
+            if (!plan) return;
+            addTenant(name, plan);
+        }
+
+        async function addTenant(name, plan) {
+            try {
+                await window.CRM_Firestore.createDocument('tenants', {
+                    name: name, plan: plan || 'free', status: 'active',
+                    settings: { currency: '₹', timezone: 'Asia/Kolkata', language: 'en-IN' },
+                    moduleAccess: ['DASHBOARD', 'LEADS', 'PIPELINE', 'CLIENTS', 'INVOICES', 'PAYMENTS'],
+                });
+                showToast('Tenant created.', 'success');
+                await loadTenants();
+            } catch(e) { showToast('Error: ' + e.message, 'error'); }
+        }
+
+        function formatDate(d) {
+            if (!d) return '-';
+            try { var dt = new Date(d); return dt.toLocaleDateString('en-IN', { year:'numeric', month:'short', day:'numeric' }); } catch(e) { return d; }
+        }
+
+        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;') : ''; }
+
+        async function refreshData() {
+            await Promise.all([loadApprovals(), loadUsers(), loadTenants()]);
+            updateStats();
+        }
+
+        document.querySelectorAll('.tab-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+                btn.classList.add('active');
+                currentTab = btn.dataset.tab;
+                $('tabApprovals').style.display = currentTab === 'approvals' ? '' : 'none';
+                $('tabUsers').style.display = currentTab === 'users' ? '' : 'none';
+                $('tabTenants').style.display = currentTab === 'tenants' ? '' : 'none';
+            });
+        });
+
+        (async function init() {
+            var hasAccess = await checkAccess();
+            if (!hasAccess) return;
+            await window.CRM_Firestore.init();
+            if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) await window.CRM_Tenant.initTenantContext();
+            await refreshData();
+        })();
+    </script>
+</body>
+</html>
