@@ -240,3 +240,6 @@ docker-compose.override.yml
 # Keep example env files
 !.env.example
 !.env.sample
+
+.dev.vars*
+!.dev.vars.example
