@@ -4,13 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover" />
     <meta name="theme-color" content="#F8F6F0" />
-    <title>Notifications - 11 Avatar Digital Hub</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="description" content="Notifications Center - 11 Avatar SMEs CRM. Real-time alerts with multi-tenant isolation." />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Notifications — 11 Avatar SMEs CRM</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../css/crm-design-system.css" />
     <link rel="stylesheet" href="../css/app.css" />
+    <link rel="stylesheet" href="../css/components.css" />
     
     <style>
         :root {
@@ -18,20 +23,22 @@
             --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
             --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+            --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
         }
         
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-            font-family: 'Inter', sans-serif; font-size: 14px; line-height: 1.6;
+            font-family: var(--font-body); font-size: 14px; line-height: 1.6;
             color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
             min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
+            overflow-x: hidden;
         }
         
-        .notif-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 90px; }
+        .notif-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
         
         .bottom-submenu {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
-            background: #FFF; border-top: 1px solid rgba(0,0,0,0.08);
+            background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.08);
             box-shadow: 0 -4px 20px rgba(0,0,0,0.06);
             padding: 8px 16px; padding-bottom: max(8px, env(safe-area-inset-bottom));
             display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
@@ -39,46 +46,46 @@
         }
         .bottom-submenu::-webkit-scrollbar { display: none; }
         .bottom-tab {
-            display: flex; flex-direction: column; align-items: center; gap: 3px;
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
             padding: 10px 16px; border-radius: 12px; cursor: pointer;
             font-size: 0.7rem; font-weight: 500; color: #777;
-            transition: all 0.2s ease; white-space: nowrap; min-width: 65px;
-            border: 1.5px solid transparent; background: transparent;
+            transition: all 0.2s ease; white-space: nowrap; min-width: 70px; min-height: 44px;
+            border: 1.5px solid transparent; background: transparent; justify-content: center;
         }
         .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
         .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
-        .bottom-tab .tab-icon { font-size: 1.3rem; }
+        .bottom-tab .tab-icon { font-size: 1.3rem; line-height: 1; }
         
         .page-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
             padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: var(--card-3d); margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
         }
-        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; }
+        .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.88rem; }
         
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
+        .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
         .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
         .btn-outline:hover { background: rgba(212,175,55,0.08); }
-        .btn-sm { padding: 6px 14px; font-size: 0.78rem; }
-        .btn-xs { padding: 3px 8px; font-size: 0.68rem; border-radius: 5px; }
+        .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
+        .btn-xs { padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; min-height: 30px; }
         .btn-ghost { background: transparent; color: #666; }
         .btn-ghost:hover { background: #F5F5F5; }
         .btn-danger { background: #DC2626; color: #FFF; }
         
-        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content { display: none; animation: fadeSlideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
         .tab-content.active { display: block; }
-        @keyframes fadeIn { from{opacity:0;transform:translateY(10px);} to{opacity:1;transform:translateY(0);} }
+        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         
-        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: var(--card-3d); margin-bottom: 20px; }
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; }
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
-        .card-title { font-size: 1.1rem; font-weight: 700; font-family: 'Poppins',sans-serif; }
+        .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
         
-        /* Notification List */
         .notif-list { display: flex; flex-direction: column; gap: 2px; }
         .notif-item {
             display: flex; align-items: flex-start; gap: 14px; padding: 16px 18px;
@@ -88,276 +95,192 @@
         .notif-item:hover { background: rgba(212,175,55,0.03); border-color: rgba(212,175,55,0.1); }
         .notif-item.unread { background: rgba(212,175,55,0.05); }
         .notif-item.unread::before { content: ''; position: absolute; left: 6px; top: 22px; width: 8px; height: 8px; border-radius: 50%; background: #D4AF37; }
-        .notif-icon {
-            width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center;
-            justify-content: center; font-size: 1.2rem; flex-shrink: 0;
-        }
-        .notif-icon.lead { background: #EEF2FF; }
-        .notif-icon.payment { background: #ECFDF5; }
-        .notif-icon.task { background: #FEF3C7; }
-        .notif-icon.system { background: #F5F5F5; }
+        .notif-icon { width: 42px; height: 42px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+        .notif-icon.lead { background: #EEF2FF; } .notif-icon.payment { background: #ECFDF5; }
+        .notif-icon.task { background: #FEF3C7; } .notif-icon.system { background: #F5F5F5; }
         .notif-icon.warning { background: #FEE2E2; }
         .notif-content { flex: 1; min-width: 0; }
         .notif-title { font-weight: 600; font-size: 0.92rem; color: #0A0A0A; }
         .notif-desc { font-size: 0.82rem; color: #888; margin-top: 2px; }
         .notif-time { font-size: 0.72rem; color: #999; margin-top: 4px; }
-        .notif-actions { display: flex; gap: 4px; flex-shrink: 0; }
         
-        /* Settings */
-        .setting-row {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 16px 0; border-bottom: 1px solid #F5F5F5; gap: 12px;
-        }
+        .setting-row { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid #F5F5F5; gap: 12px; }
         .setting-row:last-child { border-bottom: none; }
-        .setting-info { flex: 1; }
-        .setting-label { font-weight: 600; font-size: 0.9rem; }
-        .setting-desc { font-size: 0.78rem; color: #888; }
+        .setting-info { flex: 1; } .setting-label { font-weight: 600; font-size: 0.9rem; } .setting-desc { font-size: 0.78rem; color: #888; }
         
-        /* Toggle Switch */
         .toggle-switch { position: relative; width: 48px; height: 26px; flex-shrink: 0; }
         .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider {
-            position: absolute; cursor: pointer; inset: 0;
-            background: #E5E5E5; border-radius: 26px; transition: all 0.3s ease;
-        }
-        .toggle-slider::before {
-            content: ''; position: absolute; height: 20px; width: 20px;
-            left: 3px; bottom: 3px; background: #FFF; border-radius: 50%;
-            transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.15);
-        }
+        .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #E5E5E5; border-radius: 26px; transition: all 0.3s ease; }
+        .toggle-slider::before { content: ''; position: absolute; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFF; border-radius: 50%; transition: all 0.3s ease; box-shadow: 0 1px 3px rgba(0,0,0,0.15); }
         input:checked + .toggle-slider { background: var(--gold-gradient); }
         input:checked + .toggle-slider::before { transform: translateX(22px); }
         
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
-        .toast { background: #FFF; border-radius: 12px; padding: 14px 18px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
-        .toast-success { border-left: 4px solid #10B981; }
-        @keyframes toastIn { from{opacity:0;transform:translateX(100%);} to{opacity:1;transform:translateX(0);} }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastSlideIn 0.3s cubic-bezier(0.68,-0.55,0.265,1.55); display: flex; align-items: center; gap: 10px; }
+        .toast-success { border-left: 4px solid #10B981; } .toast-info { border-left: 4px solid #3B82F6; }
+        @keyframes toastSlideIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
         
-        .empty-state { text-align: center; padding: 50px; color: #999; }
-        .empty-icon { font-size: 3.5rem; margin-bottom: 10px; opacity: 0.5; }
+        .empty-state { text-align: center; padding: 60px 20px; color: #999; }
+        .empty-icon { font-size: 3.5rem; margin-bottom: 12px; opacity: 0.5; }
         
-        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
-        .font-semibold { font-weight: 600; }
         .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; }
         .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
-        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
+        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
+        .font-semibold { font-weight: 600; } .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
         
-        @media(max-width:768px){ .notif-container{padding:16px;padding-bottom:100px;} .page-header{padding:18px;flex-direction:column;text-align:center;} }
+        @media (max-width: 1920px) { .notif-container { max-width: 1600px; margin: 0 auto; } }
+        @media (max-width: 1440px) { .notif-container { max-width: 1300px; } }
+        @media (max-width: 1280px) { .notif-container { max-width: 100%; } }
+        @media (max-width: 1024px) { .page-header { padding: 20px; } }
+        @media (max-width: 768px) { .notif-container { padding: 12px; padding-bottom: 100px; } .page-header { padding: 16px; flex-direction: column; text-align: center; } .card { padding: 16px; } }
+        @media (max-width: 425px) { .page-header { padding: 12px; } .btn { padding: 8px 14px; font-size: 0.8rem; } }
     </style>
 </head>
 <body>
 
     <div class="notif-container">
         
-        <div class="page-header">
+        <header class="page-header" role="banner">
             <div>
                 <h1>🔔 <span class="gold">Notifications</span> Center</h1>
-                <p id="notifCount">Stay updated with real-time alerts</p>
+                <p id="notifCount" aria-live="polite">Loading...</p>
             </div>
             <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-ghost btn-sm" onclick="Notifications.markAllRead()">✅ Mark All Read</button>
-                <button class="btn btn-outline btn-sm" onclick="Notifications.clearAll()">🗑️ Clear All</button>
+                <button class="btn btn-ghost btn-sm" onclick="NotificationsModule.markAllRead()">✅ Mark All Read</button>
+                <button class="btn btn-outline btn-sm" onclick="NotificationsModule.clearAll()">🗑️ Clear All</button>
             </div>
-        </div>
+        </header>
         
-        <!-- TAB: Inbox -->
-        <div id="tab-inbox" class="tab-content active">
+        <div id="tab-inbox" class="tab-content active" role="tabpanel" aria-label="Notifications inbox">
             <div class="card" style="padding:12px;">
                 <div class="notif-list" id="notifList"></div>
-                <div class="empty-state" id="notifEmpty" style="display:none;"><div class="empty-icon">🔔</div><p>No notifications yet!</p></div>
+                <div class="empty-state" id="notifEmpty" style="display:none;"><div class="empty-icon">🔔</div><h3>No Notifications</h3></div>
             </div>
         </div>
         
-        <!-- TAB: Settings -->
-        <div id="tab-settings" class="tab-content">
+        <div id="tab-settings" class="tab-content" role="tabpanel" aria-label="Notification settings">
             <div class="card">
                 <div class="card-header"><span class="card-title">⚙️ Notification Preferences</span></div>
-                
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-label">📧 Email Notifications</div><div class="setting-desc">Receive important updates via email</div></div>
-                    <label class="toggle-switch"><input type="checkbox" id="prefEmail" checked onchange="Notifications.savePrefs()"><span class="toggle-slider"></span></label>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-label">📱 SMS Alerts</div><div class="setting-desc">Get text messages for urgent matters</div></div>
-                    <label class="toggle-switch"><input type="checkbox" id="prefSMS" onchange="Notifications.savePrefs()"><span class="toggle-slider"></span></label>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-label">🔔 Push Notifications</div><div class="setting-desc">Browser push notifications</div></div>
-                    <label class="toggle-switch"><input type="checkbox" id="prefPush" checked onchange="Notifications.savePrefs()"><span class="toggle-slider"></span></label>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-label">💬 WhatsApp Updates</div><div class="setting-desc">Receive alerts on WhatsApp</div></div>
-                    <label class="toggle-switch"><input type="checkbox" id="prefWA" onchange="Notifications.savePrefs()"><span class="toggle-slider"></span></label>
-                </div>
-                <div class="setting-row">
-                    <div class="setting-info"><div class="setting-label">🌙 Quiet Hours</div><div class="setting-desc">Mute notifications from 10PM to 8AM</div></div>
-                    <label class="toggle-switch"><input type="checkbox" id="prefQuiet" onchange="Notifications.savePrefs()"><span class="toggle-slider"></span></label>
-                </div>
-            </div>
-        </div>
-        
-        <!-- TAB: Channels -->
-        <div id="tab-channels" class="tab-content">
-            <div class="card">
-                <div class="card-header"><span class="card-title">📡 Notification Channels</span></div>
-                <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px;">
-                    <div class="card" style="text-align:center;padding:24px;">
-                        <div style="font-size:2.5rem;margin-bottom:8px;">📧</div>
-                        <div class="font-semibold">Email</div>
-                        <div class="text-xs text-muted">Configured</div>
-                        <div class="text-xs" style="color:#059669;">✅ Active</div>
-                    </div>
-                    <div class="card" style="text-align:center;padding:24px;">
-                        <div style="font-size:2.5rem;margin-bottom:8px;">📱</div>
-                        <div class="font-semibold">SMS</div>
-                        <div class="text-xs text-muted">Not configured</div>
-                        <div class="text-xs" style="color:#888;">⚙️ Setup Required</div>
-                    </div>
-                    <div class="card" style="text-align:center;padding:24px;">
-                        <div style="font-size:2.5rem;margin-bottom:8px;">🔔</div>
-                        <div class="font-semibold">Push</div>
-                        <div class="text-xs text-muted">Browser</div>
-                        <div class="text-xs" style="color:#059669;">✅ Active</div>
-                    </div>
-                    <div class="card" style="text-align:center;padding:24px;">
-                        <div style="font-size:2.5rem;margin-bottom:8px;">💬</div>
-                        <div class="font-semibold">WhatsApp</div>
-                        <div class="text-xs text-muted">CloudWA</div>
-                        <div class="text-xs" style="color:#059669;">✅ Active</div>
-                    </div>
-                </div>
+                <div class="setting-row"><div class="setting-info"><div class="setting-label">📧 Email Notifications</div><div class="setting-desc">Receive updates via email</div></div><label class="toggle-switch"><input type="checkbox" id="prefEmail" checked onchange="NotificationsModule.savePreferences()"><span class="toggle-slider"></span></label></div>
+                <div class="setting-row"><div class="setting-info"><div class="setting-label">📱 SMS Alerts</div><div class="setting-desc">Get text messages for urgent matters</div></div><label class="toggle-switch"><input type="checkbox" id="prefSMS" onchange="NotificationsModule.savePreferences()"><span class="toggle-slider"></span></label></div>
+                <div class="setting-row"><div class="setting-info"><div class="setting-label">🔔 Push Notifications</div><div class="setting-desc">Browser push notifications</div></div><label class="toggle-switch"><input type="checkbox" id="prefPush" checked onchange="NotificationsModule.savePreferences()"><span class="toggle-slider"></span></label></div>
+                <div class="setting-row"><div class="setting-info"><div class="setting-label">🌙 Quiet Hours</div><div class="setting-desc">Mute from 10PM to 8AM</div></div><label class="toggle-switch"><input type="checkbox" id="prefQuiet" onchange="NotificationsModule.savePreferences()"><span class="toggle-slider"></span></label></div>
             </div>
         </div>
         
     </div>
     
-    <!-- Bottom Submenu -->
-    <div class="bottom-submenu">
-        <div class="bottom-tab active" onclick="Notifications.currentTab='inbox';Notifications.render()"><span class="tab-icon">📥</span> Inbox</div>
-        <div class="bottom-tab" onclick="Notifications.currentTab='settings';Notifications.render()"><span class="tab-icon">⚙️</span> Settings</div>
-        <div class="bottom-tab" onclick="Notifications.currentTab='channels';Notifications.render()"><span class="tab-icon">📡</span> Channels</div>
-    </div>
+    <nav class="bottom-submenu" role="navigation" aria-label="Notifications navigation">
+        <button class="bottom-tab active" data-tab="inbox" onclick="NotificationsModule.switchTab('inbox')" aria-current="page"><span class="tab-icon">📥</span> Inbox</button>
+        <button class="bottom-tab" data-tab="settings" onclick="NotificationsModule.switchTab('settings')"><span class="tab-icon">⚙️</span> Settings</button>
+    </nav>
 
-    <div class="toast-container" id="toastContainer"></div>
+    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
 
     <script>
         'use strict';
         
-        var Notifications = {
-            currentTab: 'inbox',
+        const NotificationsModule = (function() {
             
-            init: function() {
-                this.data = JSON.parse(localStorage.getItem('crm_notifications') || '[]');
-                if (this.data.length === 0) this.seedData();
-                this.loadPrefs();
-                this.render();
-            },
+            let _notifications = [];
+            let _currentTab = 'inbox';
+            let _isLoading = false;
             
-            seedData: function() {
-                var now = new Date();
-                this.data = [
-                    { id:'N001',type:'payment',title:'Payment Received',desc:'₹50,000 received from ABC Corporation via UPI',time:new Date(now-3600000).toISOString(),read:false,icon:'💰',iconClass:'payment' },
-                    { id:'N002',type:'lead',title:'New Lead Created',desc:'Rajesh Kumar added as a new lead from Website',time:new Date(now-7200000).toISOString(),read:false,icon:'👤',iconClass:'lead' },
-                    { id:'N003',type:'task',title:'Task Due Today',desc:'Follow up with Priya Sharma - due today',time:new Date(now-10800000).toISOString(),read:true,icon:'📋',iconClass:'task' },
-                    { id:'N004',type:'system',title:'Backup Completed',desc:'Daily auto-backup completed successfully',time:new Date(now-43200000).toISOString(),read:true,icon:'💾',iconClass:'system' },
-                    { id:'N005',type:'warning',title:'Invoice Overdue',desc:'INV003 for Kumar Enterprises is 15 days overdue',time:new Date(now-86400000).toISOString(),read:false,icon:'⚠️',iconClass:'warning' },
-                    { id:'N006',type:'payment',title:'Payment Reconciled',desc:'PAY001 auto-reconciled with INV001',time:new Date(now-90000000).toISOString(),read:true,icon:'✅',iconClass:'payment' },
-                    { id:'N007',type:'lead',title:'Lead Converted',desc:'Vikram Singh - Deal won! ₹4.5L annual contract',time:new Date(now-172800000).toISOString(),read:true,icon:'🏆',iconClass:'lead' }
-                ];
-                this.save();
-            },
+            const $ = function(id) { return document.getElementById(id); };
             
-            save: function() { try { localStorage.setItem('crm_notifications', JSON.stringify(this.data)); } catch(e) {} },
+            function showToast(message, type) {
+                try { type = type || 'info'; const container = $('toastContainer') || document.body; const toast = document.createElement('div'); toast.className = 'toast toast-' + type; toast.setAttribute('role', 'alert'); toast.innerHTML = '<span>' + ({ success: '✅', info: 'ℹ️' }[type] || '') + '</span> ' + escapeHtml(message); container.appendChild(toast); setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(120%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300); }, 3500); } catch (error) {}
+            }
             
-            loadPrefs: function() {
-                var prefs = JSON.parse(localStorage.getItem('crm_notif_prefs') || '{"email":true,"sms":false,"push":true,"wa":true,"quiet":false}');
-                document.getElementById('prefEmail').checked = prefs.email !== false;
-                document.getElementById('prefSMS').checked = prefs.sms === true;
-                document.getElementById('prefPush').checked = prefs.push !== false;
-                document.getElementById('prefWA').checked = prefs.wa !== false;
-                document.getElementById('prefQuiet').checked = prefs.quiet === true;
-            },
+            function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+            function timeAgo(dateStr) { if (!dateStr) return ''; const sec = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000); if (sec < 60) return 'Now'; if (sec < 3600) return Math.floor(sec / 60) + 'm'; if (sec < 86400) return Math.floor(sec / 3600) + 'h'; if (sec < 604800) return Math.floor(sec / 86400) + 'd'; return new Date(dateStr).toLocaleDateString('en-IN'); }
             
-            savePrefs: function() {
-                var prefs = {
-                    email: document.getElementById('prefEmail').checked,
-                    sms: document.getElementById('prefSMS').checked,
-                    push: document.getElementById('prefPush').checked,
-                    wa: document.getElementById('prefWA').checked,
-                    quiet: document.getElementById('prefQuiet').checked
-                };
-                localStorage.setItem('crm_notif_prefs', JSON.stringify(prefs));
-                this.toast('✅ Preferences saved!', 'success');
-            },
+            async function checkAccess() {
+                try { if (!window.CRM_Auth || typeof window.CRM_Auth.isAuthenticated !== 'function') { showToast('Auth unavailable.', 'error'); return false; } if (!window.CRM_Auth.isAuthenticated()) { if (window.parent && window.parent.location) window.parent.location.href = '../index.html'; return false; } if (window.CRM_Tenant && typeof window.CRM_Tenant.canAccessModule === 'function' && !window.CRM_Tenant.canAccessModule('NOTIFICATIONS')) { showToast('Access denied.', 'error'); if (window.parent && window.parent.navigatePage) window.parent.navigatePage('dashboard'); return false; } return true; } catch (error) { return false; }
+            }
             
-            render: function() {
-                var tabs = ['inbox','settings','channels'];
-                document.querySelectorAll('.bottom-tab').forEach(function(tab, i) {
-                    if (i < tabs.length) tab.classList.toggle('active', tabs[i] === Notifications.currentTab);
-                });
-                
-                document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); });
-                var tabEl = document.getElementById('tab-' + this.currentTab);
-                if (tabEl) tabEl.classList.add('active');
-                
-                var unread = this.data.filter(function(n){return !n.read;}).length;
-                document.getElementById('notifCount').textContent = this.data.length + ' notifications · ' + unread + ' unread';
-                
-                if (this.currentTab === 'inbox') this.renderInbox();
-            },
+            async function loadNotifications() {
+                try { _isLoading = true; if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) { _notifications = []; render(); return; } const result = await window.CRM_Firestore.queryDocuments('notifications', { orderBy: 'createdAt', orderDir: 'desc', limit: 200 }); _notifications = result.data || []; console.log('[NotificationsModule] Loaded ' + _notifications.length + ' notifications'); render(); } catch (error) { showToast('Failed to load notifications.', 'error'); _notifications = []; render(); } finally { _isLoading = false; }
+            }
             
-            renderInbox: function() {
-                var list = document.getElementById('notifList');
-                var empty = document.getElementById('notifEmpty');
-                var self = this;
-                
-                if (this.data.length === 0) { list.innerHTML = ''; empty.style.display = 'block'; return; }
-                empty.style.display = 'none';
-                
-                list.innerHTML = this.data.sort(function(a,b){return new Date(b.time)-new Date(a.time);}).map(function(n) {
-                    return '<div class="notif-item'+(n.read?'':' unread')+'" onclick="Notifications.markRead(\''+n.id+'\')">'+
-                        '<div class="notif-icon '+n.iconClass+'">'+n.icon+'</div>'+
-                        '<div class="notif-content"><div class="notif-title">'+self.esc(n.title)+'</div><div class="notif-desc">'+self.esc(n.desc)+'</div><div class="notif-time">'+self.timeAgo(n.time)+'</div></div>'+
-                        '<div class="notif-actions"><button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();Notifications.deleteNotif(\''+n.id+'\')" title="Delete">🗑️</button></div></div>';
-                }).join('');
-            },
+            function loadPreferences() {
+                try {
+                    const stored = localStorage.getItem('crm_notif_prefs');
+                    const prefs = stored ? JSON.parse(stored) : { email: true, sms: false, push: true, quiet: false };
+                    if ($('prefEmail')) $('prefEmail').checked = prefs.email !== false;
+                    if ($('prefSMS')) $('prefSMS').checked = prefs.sms === true;
+                    if ($('prefPush')) $('prefPush').checked = prefs.push !== false;
+                    if ($('prefQuiet')) $('prefQuiet').checked = prefs.quiet === true;
+                } catch (error) {}
+            }
             
-            markRead: function(id) {
-                var n = this.data.find(function(x){return x.id===id;});
-                if (n) { n.read = true; this.save(); this.render(); }
-            },
+            function savePreferences() {
+                try {
+                    const prefs = { email: $('prefEmail') ? $('prefEmail').checked : true, sms: $('prefSMS') ? $('prefSMS').checked : false, push: $('prefPush') ? $('prefPush').checked : true, quiet: $('prefQuiet') ? $('prefQuiet').checked : false };
+                    localStorage.setItem('crm_notif_prefs', JSON.stringify(prefs));
+                    showToast('✅ Preferences saved!', 'success');
+                } catch (error) {}
+            }
             
-            markAllRead: function() {
-                this.data.forEach(function(n){ n.read = true; });
-                this.save(); this.render(); this.toast('✅ All marked as read','success');
-            },
+            function renderInbox() {
+                try {
+                    const list = $('notifList'); const empty = $('notifEmpty'); if (!list) return;
+                    if (_notifications.length === 0) { list.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
+                    if (empty) empty.style.display = 'none';
+                    list.innerHTML = _notifications.sort(function(a, b) { return new Date(b.createdAt || b.time) - new Date(a.createdAt || a.time); }).map(function(n) {
+                        const iconClass = n.type === 'payment' ? 'payment' : (n.type === 'lead' ? 'lead' : (n.type === 'task' ? 'task' : (n.type === 'warning' ? 'warning' : 'system')));
+                        const icon = n.type === 'payment' ? '💰' : (n.type === 'lead' ? '👤' : (n.type === 'task' ? '📋' : (n.type === 'warning' ? '⚠️' : '💾')));
+                        return '<div class="notif-item' + (n.read ? '' : ' unread') + '" onclick="NotificationsModule.markRead(\'' + n.id + '\')" tabindex="0" role="button">' +
+                            '<div class="notif-icon ' + iconClass + '">' + icon + '</div>' +
+                            '<div class="notif-content"><div class="notif-title">' + escapeHtml(n.title || 'Notification') + '</div><div class="notif-desc">' + escapeHtml(n.description || n.desc || '') + '</div><div class="notif-time">' + timeAgo(n.createdAt || n.time) + '</div></div>' +
+                            '<button class="btn btn-ghost btn-xs" onclick="event.stopPropagation();NotificationsModule.deleteNotification(\'' + n.id + '\')" aria-label="Delete" style="flex-shrink:0;">🗑️</button></div>';
+                    }).join('');
+                    const unread = _notifications.filter(function(n) { return !n.read; }).length;
+                    $('notifCount').textContent = _notifications.length + ' notifications · ' + unread + ' unread';
+                } catch (error) {}
+            }
             
-            deleteNotif: function(id) {
-                this.data = this.data.filter(function(n){return n.id!==id;});
-                this.save(); this.render();
-            },
+            async function markRead(notificationId) {
+                try { const n = _notifications.find(function(x) { return x.id === notificationId; }); if (!n || n.read) return; n.read = true; if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) { await window.CRM_Firestore.updateDocument('notifications', notificationId, { read: true }); } renderInbox(); } catch (error) {}
+            }
             
-            clearAll: function() {
-                if (!confirm('Clear all notifications?')) return;
-                this.data = [];
-                this.save(); this.render(); this.toast('🗑️ All cleared','info');
-            },
+            async function markAllRead() {
+                try { for (const n of _notifications) { if (!n.read) { n.read = true; if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) { await window.CRM_Firestore.updateDocument('notifications', n.id, { read: true }).catch(function() {}); } } } showToast('✅ All marked as read', 'success'); renderInbox(); } catch (error) { showToast('Failed to update.', 'error'); }
+            }
             
-            timeAgo: function(d) {
-                if (!d) return '';
-                var s = Math.floor((Date.now() - new Date(d).getTime()) / 1000);
-                if (s < 60) return 'Just now';
-                if (s < 3600) return Math.floor(s/60) + 'm ago';
-                if (s < 86400) return Math.floor(s/3600) + 'h ago';
-                if (s < 604800) return Math.floor(s/86400) + 'd ago';
-                return new Date(d).toLocaleDateString('en-IN');
-            },
+            async function deleteNotification(notificationId) {
+                try { if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) { await window.CRM_Firestore.deleteDocument('notifications', notificationId); } _notifications = _notifications.filter(function(n) { return n.id !== notificationId; }); renderInbox(); } catch (error) {}
+            }
             
-            toast: function(m,t){ t=t||'info'; var d=document.createElement('div'); d.className='toast toast-'+t; d.textContent=m; (document.getElementById('toastContainer')||document.body).appendChild(d); setTimeout(function(){ d.remove(); },3000); },
-            esc: function(s){ return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'):''; }
-        };
+            async function clearAll() {
+                try { if (!confirm('Clear all notifications?')) return; for (const n of _notifications) { if (window.CRM_Firestore && window.CRM_Firestore.isAvailable()) { await window.CRM_Firestore.deleteDocument('notifications', n.id).catch(function() {}); } } _notifications = []; showToast('🗑️ All cleared', 'info'); renderInbox(); } catch (error) { showToast('Failed to clear.', 'error'); }
+            }
+            
+            function render() { if (_currentTab === 'inbox') renderInbox(); if (_currentTab === 'settings') loadPreferences(); }
+            
+            function switchTab(tab) {
+                _currentTab = tab; document.querySelectorAll('.bottom-tab[data-tab]').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.tab === tab); if (btn.dataset.tab === tab) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current'); }); document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); }); const tabEl = $('tab-' + tab); if (tabEl) tabEl.classList.add('active'); render();
+            }
+            
+            async function init() {
+                try { console.log('[NotificationsModule] Initializing...'); const hasAccess = await checkAccess(); if (!hasAccess) return; if (window.CRM_Firestore && typeof window.CRM_Firestore.init === 'function') await window.CRM_Firestore.init(); if (window.CRM_Tenant && typeof window.CRM_Tenant.initTenantContext === 'function') await window.CRM_Tenant.initTenantContext(); await loadNotifications(); console.log('[NotificationsModule] ✅ Ready'); } catch (error) { console.error('[NotificationsModule] Init error:', error); }
+            }
+            
+            return { init, render, switchTab, markRead, markAllRead, deleteNotification, clearAll, savePreferences };
+            
+        })();
         
-        document.addEventListener('DOMContentLoaded', function() { Notifications.init(); });
+        window.NotificationsModule = NotificationsModule;
+        document.addEventListener('DOMContentLoaded', function() { NotificationsModule.init().catch(function(error) { console.error('[NotificationsModule] Auto-init failed:', error); }); });
+        console.log('[NotificationsModule] Script loaded. window.NotificationsModule available.');
     </script>
 </body>
 </html>
