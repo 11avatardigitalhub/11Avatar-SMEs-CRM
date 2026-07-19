@@ -530,7 +530,7 @@
             btn.textContent = loading ? 'Processing...' : (authMode === 'login' ? 'Sign In' : 'Create Free Account');
             btn.disabled = loading;
         }
-        function redirectToApp() { window.location.href = 'app.html'; }
+        function redirectToApp() { window.location.href = 'pages/dashboard.html'; }
 
         window.openAuth = function(mode) {
             authMode = mode || 'login';
