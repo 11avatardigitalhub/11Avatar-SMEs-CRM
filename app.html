@@ -225,7 +225,7 @@
 
     <script>
         'use strict';
-        var S = { collapsed: false, mobile: false, dark: false, currentPage: 'dashboard', pendingApproval: false };
+        var S = { collapsed: false, mobile: false, dark: false, currentPage: 'dashboard', pendingApproval: false, authChecked: false };
         function $(id) { return document.getElementById(id); }
 
         function navigatePage(page, event) {
@@ -318,75 +318,58 @@
             }
         }
 
-        async function checkAuth() {
-            // 1. Check Firebase Auth currentUser (fastest)
-            if (window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
-                console.log('✅ Auth: Firebase currentUser found');
-                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                    await window.CRM_Tenant.initTenantContext();
-                }
-                updateUserUI();
-                applyRBACFilter();
-                return;
-            }
+        function setupAuthListener() {
+            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
+                window.CRM_Auth.onAuthStateChange(async function(authState) {
+                    console.log('🔐 Auth state changed:', authState.authState);
+                    S.authChecked = true;
 
-            // 2. Check CRM_Auth module
-            if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function' && window.CRM_Auth.isAuthenticated()) {
-                console.log('✅ Auth: CRM_Auth.isAuthenticated() = true');
-                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                    await window.CRM_Tenant.initTenantContext();
-                }
-                updateUserUI();
-                applyRBACFilter();
-                return;
-            }
-
-            // 3. Check localStorage session (offline fallback)
-            try {
-                var userData = localStorage.getItem('crm_user');
-                var tokenData = localStorage.getItem('crm_auth_token');
-                if (userData && tokenData) {
-                    var user = JSON.parse(userData);
-                    if (user && user.uid) {
-                        console.log('✅ Auth: localStorage session found');
+                    if (authState.isAuthenticated && authState.authState === 'authenticated') {
+                        console.log('✅ Auth: User authenticated');
                         if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
                             await window.CRM_Tenant.initTenantContext();
                         }
                         updateUserUI();
                         applyRBACFilter();
+                    } else if (authState.authState === 'pending_approval') {
+                        console.log('⏳ Auth: Pending approval');
+                        S.pendingApproval = true;
+                        var banner = $('approvalBanner');
+                        if (banner) { banner.classList.add('show'); banner.textContent = '⏳ Your account is pending approval. Limited access until approved.'; }
+                        updateUserUI();
+                        applyRBACFilter();
+                    } else if (authState.authState === 'unauthenticated') {
+                        console.log('❌ Auth: Unauthenticated state received');
+                        try {
+                            var ud = localStorage.getItem('crm_user');
+                            if (ud && JSON.parse(ud).uid) {
+                                console.log('✅ Auth: localStorage fallback valid');
+                                updateUserUI();
+                                applyRBACFilter();
+                                return;
+                            }
+                        } catch(e) {}
+                        if (!S.authChecked || authState.authState === 'unauthenticated') {
+                            console.log('🔴 Redirecting to login');
+                            window.location.href = 'index.html';
+                        }
+                    }
+                });
+                console.log('👂 Auth listener registered');
+            } else {
+                console.warn('⚠️ CRM_Auth.onAuthStateChange not available, checking localStorage');
+                try {
+                    var ud = localStorage.getItem('crm_user');
+                    if (ud && JSON.parse(ud).uid) {
+                        console.log('✅ Auth: localStorage valid');
+                        updateUserUI();
+                        applyRBACFilter();
                         return;
                     }
-                }
-            } catch(e) {}
-
-            // 4. Wait 3 seconds for Firebase Auth to resolve (it may still be initializing)
-            console.log('⏳ Auth: Waiting for Firebase to resolve...');
-            await new Promise(function(resolve) { setTimeout(resolve, 3000); });
-
-            // 5. Check again after waiting
-            if (window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
-                console.log('✅ Auth: Firebase resolved after wait');
-                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                    await window.CRM_Tenant.initTenantContext();
-                }
-                updateUserUI();
-                applyRBACFilter();
-                return;
+                } catch(e) {}
+                console.log('🔴 No session, redirecting');
+                window.location.href = 'index.html';
             }
-
-            if (window.CRM_Auth && typeof window.CRM_Auth.isAuthenticated === 'function' && window.CRM_Auth.isAuthenticated()) {
-                console.log('✅ Auth: CRM_Auth resolved after wait');
-                if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-                    await window.CRM_Tenant.initTenantContext();
-                }
-                updateUserUI();
-                applyRBACFilter();
-                return;
-            }
-
-            // 6. Still not authenticated — redirect
-            console.log('❌ Auth: Not authenticated, redirecting to login');
-            window.location.href = 'index.html';
         }
 
         function init() {
@@ -401,7 +384,7 @@
             function checkResp() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
             window.addEventListener('resize', checkResp);
             checkResp();
-            checkAuth().catch(function(err) { console.error('Auth check failed:', err); });
+            setupAuthListener();
         }
 
         document.addEventListener('DOMContentLoaded', init);
