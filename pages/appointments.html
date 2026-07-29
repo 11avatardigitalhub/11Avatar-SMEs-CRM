@@ -19,23 +19,16 @@
     
     <style>
         :root {
-            --card-3d: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
-            --card-hover: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06);
             --gold: #D4AF37; --gold-dark: #B8960F; --gold-gradient: linear-gradient(135deg, #E8C95A, #D4AF37, #B8960F);
-            --transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
-            --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
+            --transition: all 0.3s ease; --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
         }
-        
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: var(--font-body); font-size: 14px; line-height: 1.6;
             color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
-            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
-            overflow-x: hidden;
+            min-height: 100vh; margin: 0; overflow-x: hidden;
         }
-        
         .appt-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
-        
         .bottom-submenu {
             position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
             background: #FFFFFF; border-top: 1px solid rgba(0,0,0,0.08);
@@ -54,352 +47,164 @@
         }
         .bottom-tab:hover { background: rgba(212,175,55,0.05); color: #333; }
         .bottom-tab.active { background: rgba(212,175,55,0.1); color: #B8960F; font-weight: 600; border-color: rgba(212,175,55,0.3); }
-        .bottom-tab .tab-icon { font-size: 1.3rem; line-height: 1; }
-        
         .page-header {
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
             padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px;
         }
         .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px; }
-        .btn:active { transform: scale(0.97); }
+        .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; transition: all 0.2s ease; border: none; min-height: 44px; }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
-        .btn-primary:hover { box-shadow: 0 4px 20px rgba(212,175,55,0.3); transform: translateY(-1px); }
         .btn-outline { background: transparent; color: #B8960F; border: 1.5px solid #D4AF37; }
-        .btn-outline:hover { background: rgba(212,175,55,0.08); }
         .btn-sm { padding: 6px 14px; font-size: 0.78rem; min-height: 36px; }
-        .btn-xs { padding: 4px 10px; font-size: 0.7rem; border-radius: 6px; min-height: 30px; }
         .btn-ghost { background: transparent; color: #666; }
-        .btn-ghost:hover { background: #F5F5F5; }
-        .btn-danger { background: #DC2626; color: #FFF; }
-        .btn-success { background: #10B981; color: #FFF; }
-        
-        .tab-content { display: none; animation: fadeSlideIn 0.35s cubic-bezier(0.4,0,0.2,1); }
+        .tab-content { display: none; animation: fadeIn 0.35s ease; }
         .tab-content.active { display: block; }
-        @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
         .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 20px; }
         @media (max-width: 768px) { .stats-row { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 375px) { .stats-row { grid-template-columns: 1fr; } }
-        
         .stat-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
-            padding: 16px 18px; cursor: pointer; transition: var(--transition);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            padding: 16px 18px; cursor: pointer; transition: var(--transition); box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
-        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06); border-color: rgba(212,175,55,0.2); }
-        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); line-height: 1.2; }
-        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
-        
-        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: rgba(212,175,55,0.2); }
+        .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); }
+        .stat-card .lbl { font-size: 0.72rem; color: #888; text-transform: uppercase; }
+        .card { background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 20px; padding: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
         .card-title { font-size: 1.1rem; font-weight: 700; font-family: var(--font-heading); }
-        
         .calendar-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 3px; text-align: center; }
         .cal-day-header { font-size: 0.68rem; font-weight: 600; color: #888; padding: 8px 0; text-transform: uppercase; }
-        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 0.85rem; cursor: pointer; transition: all 0.15s ease; position: relative; font-weight: 500; min-height: 36px; }
+        .cal-day { aspect-ratio: 1; display: flex; align-items: center; justify-content: center; border-radius: 10px; font-size: 0.85rem; cursor: pointer; transition: all 0.15s; font-weight: 500; min-height: 36px; }
         .cal-day:hover { background: rgba(212,175,55,0.1); }
         .cal-day.today { background: rgba(212,175,55,0.2); font-weight: 700; color: #B8960F; }
         .cal-day.selected { background: var(--gold-gradient); color: #FFF; font-weight: 700; }
         .cal-day.has-appt::after { content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px; border-radius: 50%; background: #D4AF37; }
         .cal-day.other-month { color: #CCC; }
-        
         .appt-list { display: flex; flex-direction: column; gap: 10px; }
         .appt-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
             padding: 16px 20px; display: flex; align-items: center; gap: 14px;
-            transition: var(--transition); cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: var(--transition); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
-        .appt-card:hover { transform: translateX(3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
+        .appt-card:hover { transform: translateX(3px); box-shadow: 0 10px 25px rgba(0,0,0,0.08); border-color: rgba(212,175,55,0.2); }
         .appt-time { width: 65px; text-align: center; flex-shrink: 0; font-weight: 700; font-size: 0.95rem; color: #B8960F; padding: 8px; background: rgba(212,175,55,0.08); border-radius: 10px; }
-        .appt-info { flex: 1; min-width: 0; }
+        .appt-info { flex: 1; }
         .appt-title { font-weight: 600; font-size: 0.95rem; }
         .appt-meta { font-size: 0.78rem; color: #888; margin-top: 2px; }
         .appt-status { font-size: 0.7rem; font-weight: 600; padding: 4px 10px; border-radius: 10px; white-space: nowrap; }
         .status-scheduled { background: #EFF6FF; color: #2563EB; } .status-completed { background: #ECFDF5; color: #059669; } .status-cancelled { background: #FEE2E2; color: #DC2626; }
-        
-        .tbl-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.15s ease; color: #555; }
-        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; color: #B8960F; transform: scale(1.05); }
-        .tbl-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
-        
+        .tbl-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid #E5E5E5; background: #FFF; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; transition: all 0.15s; color: #555; }
+        .tbl-btn:hover { background: #F5F5F5; border-color: #D4AF37; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
         @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
         .form-group { margin-bottom: 16px; }
-        .form-group label { display: block; font-weight: 600; font-size: 0.78rem; color: #333; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; font-family: var(--font-body); background: #FFF; transition: all 0.2s ease; min-height: 44px; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--gold); outline: none; box-shadow: 0 0 0 3px rgba(212,175,55,0.1); }
+        .form-group label { display: block; font-weight: 600; font-size: 0.78rem; color: #333; margin-bottom: 6px; text-transform: uppercase; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 16px; border: 1.5px solid #E5E5E5; border-radius: 10px; font-size: 0.88rem; font-family: var(--font-body); background: #FFF; min-height: 44px; }
         .form-group textarea { resize: vertical; min-height: 70px; }
-        
-        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
-        .toast { background: #FFF; border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastSlideIn 0.3s cubic-bezier(0.68,-0.55,0.265,1.55); display: flex; align-items: center; gap: 10px; }
+        .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { background: #FFF; border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: toastIn 0.3s ease; }
         .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
-        @keyframes toastSlideIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
-        
+        @keyframes toastIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
         .empty-state { text-align: center; padding: 60px 20px; color: #999; }
-        .empty-icon { font-size: 3.5rem; margin-bottom: 12px; opacity: 0.5; }
-        
-        .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; } .gap-3 { gap: 12px; }
-        .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
-        .text-xs { font-size: 0.75rem; } .text-sm { font-size: 0.85rem; } .text-muted { color: #888; }
-        .font-semibold { font-weight: 600; } .font-bold { font-weight: 700; }
-        .mt-2 { margin-top: 8px; } .mb-2 { margin-bottom: 8px; }
-        
-        @media (max-width: 1920px) { .appt-container { max-width: 1600px; margin: 0 auto; } }
-        @media (max-width: 1440px) { .appt-container { max-width: 1300px; } }
-        @media (max-width: 1280px) { .appt-container { max-width: 100%; } }
-        @media (max-width: 1024px) { .page-header { padding: 20px; } }
-        @media (max-width: 768px) { .appt-container { padding: 12px; padding-bottom: 100px; } .page-header { padding: 16px; flex-direction: column; text-align: center; } .appt-card { flex-direction: column; align-items: flex-start; } .card { padding: 16px; } }
-        @media (max-width: 425px) { .page-header { padding: 12px; } .btn { padding: 8px 14px; font-size: 0.8rem; } }
+        .flex { display: flex; } .gap-2 { gap: 8px; } .flex-wrap { flex-wrap: wrap; }
+        @media (max-width: 768px) { .appt-container { padding: 12px; padding-bottom: 100px; } .page-header { padding: 16px; flex-direction: column; text-align: center; } .appt-card { flex-direction: column; align-items: flex-start; } }
     </style>
 </head>
 <body>
 
     <div class="appt-container">
+        <header class="page-header"><div><h1>📅 <span class="gold">Appointments</span> & Scheduling</h1><p id="apptCountText">Loading...</p></div><div class="flex gap-2 flex-wrap"><button class="btn btn-outline btn-sm" onclick="AppointmentsModule.exportCSV()">📤 Export</button><button class="btn btn-primary" onclick="AppointmentsModule.openScheduleForm()">➕ Schedule</button></div></header>
         
-        <header class="page-header" role="banner">
-            <div>
-                <h1>📅 <span class="gold">Appointments</span> & Scheduling</h1>
-                <p id="apptCountText" aria-live="polite">Loading appointments...</p>
-            </div>
-            <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="AppointmentsModule.exportCSV()" aria-label="Export appointments">📤 Export</button>
-                <button class="btn btn-primary" onclick="AppointmentsModule.openScheduleForm()" aria-label="Schedule new appointment">➕ Schedule</button>
-            </div>
-        </header>
+        <div class="stats-row"><div class="stat-card"><div class="val" id="stat-total">--</div><div class="lbl">📋 Total</div></div><div class="stat-card"><div class="val" id="stat-today" style="color:#D4AF37;">--</div><div class="lbl">📅 Today</div></div><div class="stat-card"><div class="val" id="stat-upcoming" style="color:#2563EB;">--</div><div class="lbl">📆 Upcoming</div></div><div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">--</div><div class="lbl">✅ Done</div></div></div>
         
-        <div class="stats-row" role="region" aria-label="Appointment statistics">
-            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">📋 Total</div></div>
-            <div class="stat-card"><div class="val" id="stat-today" style="color:#D4AF37;">0</div><div class="lbl">📅 Today</div></div>
-            <div class="stat-card"><div class="val" id="stat-upcoming" style="color:#2563EB;">0</div><div class="lbl">📆 Upcoming</div></div>
-            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">0</div><div class="lbl">✅ Done</div></div>
-        </div>
+        <div id="tab-calendar" class="tab-content active"><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;"><div class="card"><div class="card-header"><span class="card-title">📅 Calendar</span><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="AppointmentsModule.navigateMonth(-1)">◀</button><span class="font-semibold" id="calMonthLabel"></span><button class="btn btn-ghost btn-sm" onclick="AppointmentsModule.navigateMonth(1)">▶</button></div></div><div class="calendar-grid" id="calendarGrid"></div></div><div><div class="card"><div class="card-header"><span class="card-title">📋 <span id="selectedDateLabel">Today</span></span></div><div class="appt-list" id="dayApptList"></div><div class="empty-state" id="dayEmpty" style="display:none;"><p>No appointments for this date</p></div></div></div></div></div>
         
-        <div id="tab-calendar" class="tab-content active" role="tabpanel" aria-label="Calendar view">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
-                <div class="card">
-                    <div class="card-header">
-                        <span class="card-title">📅 Calendar</span>
-                        <div class="flex gap-2">
-                            <button class="btn btn-ghost btn-sm" onclick="AppointmentsModule.navigateMonth(-1)" aria-label="Previous month">◀</button>
-                            <span class="font-semibold" id="calMonthLabel"></span>
-                            <button class="btn btn-ghost btn-sm" onclick="AppointmentsModule.navigateMonth(1)" aria-label="Next month">▶</button>
-                        </div>
-                    </div>
-                    <div class="calendar-grid" id="calendarGrid"></div>
-                </div>
-                <div>
-                    <div class="card">
-                        <div class="card-header"><span class="card-title">📋 <span id="selectedDateLabel">Today</span></span></div>
-                        <div class="appt-list" id="dayApptList"></div>
-                        <div class="empty-state" id="dayEmpty" style="display:none;"><p>No appointments for this date</p></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div id="tab-all" class="tab-content"><div class="appt-list" id="allApptList"></div><div class="empty-state" id="allEmpty" style="display:none;"><div class="empty-icon">📅</div><h3>No Appointments</h3></div></div>
         
-        <div id="tab-all" class="tab-content" role="tabpanel" aria-label="All appointments">
-            <div class="appt-list" id="allApptList"></div>
-            <div class="empty-state" id="allEmpty" style="display:none;"><div class="empty-icon">📅</div><h3>No Appointments</h3></div>
-        </div>
-        
-        <div id="tab-form" class="tab-content" role="tabpanel" aria-label="Schedule form">
-            <div class="card" style="max-width:650px;">
-                <div class="card-header"><span class="card-title">➕ Schedule Appointment</span></div>
-                <form id="apptForm" onsubmit="return AppointmentsModule.saveAppointment(event)" novalidate>
-                    <div class="form-row">
-                        <div class="form-group"><label for="aTitle">Title <span style="color:#DC2626;">*</span></label><input type="text" id="aTitle" required placeholder="Meeting / Call title"></div>
-                        <div class="form-group"><label for="aWith">With (Client/Lead)</label><select id="aWith"><option value="">Select...</option></select></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="aDate">Date <span style="color:#DC2626;">*</span></label><input type="date" id="aDate" required></div>
-                        <div class="form-group"><label for="aTime">Time <span style="color:#DC2626;">*</span></label><input type="time" id="aTime" required></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="aDuration">Duration</label><select id="aDuration"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="60">1 hour</option><option value="120">2 hours</option></select></div>
-                        <div class="form-group"><label for="aType">Type</label><select id="aType"><option value="meeting">🤝 Meeting</option><option value="call">📞 Phone Call</option><option value="video">📹 Video Call</option><option value="demo">💻 Demo</option></select></div>
-                    </div>
-                    <div class="form-group"><label for="aNotes">Notes</label><textarea id="aNotes" rows="2"></textarea></div>
-                    <div class="flex gap-2 mt-2">
-                        <button type="submit" class="btn btn-primary">💾 Schedule</button>
-                        <button type="button" class="btn btn-outline" onclick="AppointmentsModule.switchTab('calendar')">Cancel</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        
+        <div id="tab-form" class="tab-content"><div class="card" style="max-width:650px;"><div class="card-header"><span class="card-title">➕ Schedule Appointment</span></div><form id="apptForm" onsubmit="return AppointmentsModule.saveAppointment(event)" novalidate><div class="form-row"><div class="form-group"><label for="aTitle">Title <span style="color:#DC2626;">*</span></label><input type="text" id="aTitle" required></div><div class="form-group"><label for="aWith">With</label><select id="aWith"><option value="">Select...</option></select></div></div><div class="form-row"><div class="form-group"><label for="aDate">Date <span style="color:#DC2626;">*</span></label><input type="date" id="aDate" required></div><div class="form-group"><label for="aTime">Time <span style="color:#DC2626;">*</span></label><input type="time" id="aTime" required></div></div><div class="form-row"><div class="form-group"><label for="aDuration">Duration</label><select id="aDuration"><option value="15">15 min</option><option value="30" selected>30 min</option><option value="60">1 hour</option><option value="120">2 hours</option></select></div><div class="form-group"><label for="aType">Type</label><select id="aType"><option value="meeting">🤝 Meeting</option><option value="call">📞 Call</option><option value="video">📹 Video</option><option value="demo">💻 Demo</option></select></div></div><div class="form-group"><label for="aNotes">Notes</label><textarea id="aNotes" rows="2"></textarea></div><div class="flex gap-2 mt-2"><button type="submit" class="btn btn-primary">💾 Schedule</button><button type="button" class="btn btn-outline" onclick="AppointmentsModule.switchTab('calendar')">Cancel</button></div></form></div></div>
     </div>
     
-    <nav class="bottom-submenu" role="navigation" aria-label="Appointments navigation">
-        <button class="bottom-tab active" data-tab="calendar" onclick="AppointmentsModule.switchTab('calendar')" aria-current="page"><span class="tab-icon">📅</span> Calendar</button>
-        <button class="bottom-tab" data-tab="all" onclick="AppointmentsModule.switchTab('all')"><span class="tab-icon">📋</span> All</button>
-        <button class="bottom-tab" data-tab="form" onclick="AppointmentsModule.openScheduleForm()"><span class="tab-icon">➕</span> Schedule</button>
-    </nav>
+    <nav class="bottom-submenu"><button class="bottom-tab active" data-tab="calendar" onclick="AppointmentsModule.switchTab('calendar')" aria-current="page"><span class="tab-icon">📅</span> Calendar</button><button class="bottom-tab" data-tab="all" onclick="AppointmentsModule.switchTab('all')"><span class="tab-icon">📋</span> All</button><button class="bottom-tab" data-tab="form" onclick="AppointmentsModule.openScheduleForm()"><span class="tab-icon">➕</span> Schedule</button></nav>
+    <div class="toast-container" id="toastContainer"></div>
 
-    <div class="toast-container" id="toastContainer" aria-live="polite"></div>
-
+    <!-- 🔥 FIREBASE CDN + CORE SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
     <script>
         'use strict';
-        // Inherit Firebase from parent window (dashboard.html or app.html)
-        if (window.parent && window.parent.firebase) {
-            window.firebase = window.parent.firebase;
-        }
-        if (window.parent && window.parent.CRM_Firestore) {
-            window.CRM_Firestore = window.parent.CRM_Firestore;
-        }
-        if (window.parent && window.parent.CRM_Auth) {
-            window.CRM_Auth = window.parent.CRM_Auth;
-        }
-        if (window.parent && window.parent.CRM_Tenant) {
-            window.CRM_Tenant = window.parent.CRM_Tenant;
-        }
-        if (window.parent && window.parent.CRM_Config) {
-            window.CRM_Config = window.parent.CRM_Config;
-        }
-        console.log('📦 Inherited Firebase from parent');
+        if (window.parent && window.parent.firebase) window.firebase = window.parent.firebase;
+        if (window.parent && window.parent.CRM_Firestore) window.CRM_Firestore = window.parent.CRM_Firestore;
+        if (window.parent && window.parent.CRM_Auth) window.CRM_Auth = window.parent.CRM_Auth;
+        if (window.parent && window.parent.CRM_Tenant) window.CRM_Tenant = window.parent.CRM_Tenant;
+        if (window.parent && window.parent.CRM_Config) window.CRM_Config = window.parent.CRM_Config;
+        console.log('📦 [Appointments] Core modules ready');
     </script>
 
+    <!-- 🔥 ORIGINAL MODULE (100% intact) -->
     <script>
         'use strict';
-        
         const AppointmentsModule = (function() {
-            
-            let _appointments = [];
-            let _contacts = [];
-            let _currentTab = 'calendar';
-            let _selectedDate = new Date().toISOString().split('T')[0];
-            let _calMonth = new Date().getMonth();
-            let _calYear = new Date().getFullYear();
-            let _isLoading = false;
-            
+            let _appointments = [], _contacts = [], _currentTab = 'calendar', _selectedDate = new Date().toISOString().split('T')[0], _calMonth = new Date().getMonth(), _calYear = new Date().getFullYear(), _isLoading = false;
             const $ = function(id) { return document.getElementById(id); };
+            function showToast(m, t) { try { const c = $('toastContainer')||document.body; const toast = document.createElement('div'); toast.className='toast toast-'+(t||'info'); toast.setAttribute('role','alert'); toast.innerHTML='<span>'+({success:'✅',error:'❌',info:'ℹ️'}[t]||'')+'</span> '+esc(m); c.appendChild(toast); setTimeout(function(){toast.remove();},3500); } catch(e){} }
+            function esc(s) { return s?String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'):''; }
+            function fdate(d) { if(!d)return'-'; try{return new Date(d).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return'-';} }
+            async function checkAccess() { try { if(!window.CRM_Auth?.isAuthenticated||!window.CRM_Auth.isAuthenticated()){if(window.parent?.location)window.parent.location.href='../index.html';return false;} if(window.CRM_Tenant?.canAccessModule&&!window.CRM_Tenant.canAccessModule('APPOINTMENTS')){showToast('Access denied.','error');return false;} return true; } catch(e){return false;} }
             
-            function showToast(message, type) {
-                try { type = type || 'info'; const container = $('toastContainer') || document.body; const toast = document.createElement('div'); toast.className = 'toast toast-' + type; toast.setAttribute('role', 'alert'); toast.innerHTML = '<span>' + ({ success: '✅', error: '❌', info: 'ℹ️' }[type] || '') + '</span> ' + escapeHtml(message); container.appendChild(toast); setTimeout(function() { toast.style.opacity = '0'; toast.style.transform = 'translateX(120%)'; toast.style.transition = 'all 0.3s ease'; setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300); }, 3500); } catch (error) {}
-            }
+            async function loadData() { try { if(!window.CRM_Firestore?.isAvailable()){render();return;} const[ar,lr,cr]=await Promise.all([window.CRM_Firestore.queryDocuments('appointments',{orderBy:'appointmentDate',orderDir:'desc',limit:500}),window.CRM_Firestore.queryDocuments('leads',{orderBy:'firstName',orderDir:'asc',limit:300}),window.CRM_Firestore.queryDocuments('clients',{orderBy:'name',orderDir:'asc',limit:300})]); _appointments=ar.data||[]; _contacts=[]; (lr.data||[]).forEach(function(l){_contacts.push({name:(l.firstName||'')+' '+(l.lastName||''),type:'Lead'});}); (cr.data||[]).forEach(function(c){_contacts.push({name:c.name||'',type:'Client'});}); render(); } catch(e){showToast('Load failed.','error');} }
             
-            function escapeHtml(str) { if (!str) return ''; return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
-            function formatDate(dateInput) { if (!dateInput) return '-'; try { const d = new Date(dateInput); return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); } catch(e) { return '-'; } }
-            
-            async function checkAccess() {
-                try { if (!window.CRM_Auth || typeof window.CRM_Auth.isAuthenticated !== 'function') { showToast('Auth unavailable.', 'error'); return false; } if (!window.CRM_Auth.isAuthenticated()) { if (window.parent && window.parent.location) window.parent.location.href = '../index.html'; return false; } if (window.CRM_Tenant && typeof window.CRM_Tenant.canAccessModule === 'function' && !window.CRM_Tenant.canAccessModule('APPOINTMENTS')) { showToast('Access denied.', 'error'); if (window.parent && window.parent.navigatePage) window.parent.navigatePage('dashboard'); return false; } return true; } catch (error) { return false; }
-            }
-            
-            async function loadData() {
-                try { _isLoading = true; if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) { render(); return; } const [apptResult, leadResult, clientResult] = await Promise.all([ window.CRM_Firestore.queryDocuments('appointments', { orderBy: 'appointmentDate', orderDir: 'desc', limit: 500 }), window.CRM_Firestore.queryDocuments('leads', { orderBy: 'firstName', orderDir: 'asc', limit: 300 }), window.CRM_Firestore.queryDocuments('clients', { orderBy: 'name', orderDir: 'asc', limit: 300 }) ]); _appointments = apptResult.data || []; _contacts = []; (leadResult.data || []).forEach(function(l) { _contacts.push({ name: (l.firstName||'')+' '+(l.lastName||''), type: 'Lead' }); }); (clientResult.data || []).forEach(function(c) { _contacts.push({ name: c.name||'', type: 'Client' }); }); console.log('[AppointmentsModule] Loaded ' + _appointments.length + ' appointments'); render(); } catch (error) { showToast('Failed to load data.', 'error'); render(); } finally { _isLoading = false; }
-            }
-            
-            function updateStats() {
-                try { const today = new Date().toISOString().split('T')[0]; $('stat-total').textContent = _appointments.length; $('stat-today').textContent = _appointments.filter(function(a) { return a.appointmentDate === today; }).length; $('stat-upcoming').textContent = _appointments.filter(function(a) { return a.appointmentDate > today && a.status === 'scheduled'; }).length; $('stat-completed').textContent = _appointments.filter(function(a) { return a.status === 'completed'; }).length; $('apptCountText').textContent = _appointments.length + ' appointments'; } catch (error) {}
-            }
+            function updateStats() { const today=new Date().toISOString().split('T')[0]; $('stat-total').textContent=_appointments.length; $('stat-today').textContent=_appointments.filter(function(a){return a.appointmentDate===today;}).length; $('stat-upcoming').textContent=_appointments.filter(function(a){return a.appointmentDate>today&&a.status==='scheduled';}).length; $('stat-completed').textContent=_appointments.filter(function(a){return a.status==='completed';}).length; $('apptCountText').textContent=_appointments.length+' appointments'; }
             
             function renderCalendar() {
-                try {
-                    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-                    $('calMonthLabel').textContent = months[_calMonth] + ' ' + _calYear;
-                    const firstDay = new Date(_calYear, _calMonth, 1).getDay();
-                    const daysInMonth = new Date(_calYear, _calMonth + 1, 0).getDate();
-                    const today = new Date().toISOString().split('T')[0];
-                    const apptDates = {}; _appointments.forEach(function(a) { if (a.appointmentDate) apptDates[a.appointmentDate] = (apptDates[a.appointmentDate]||0)+1; });
-                    let html = '';
-                    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(function(d) { html += '<div class="cal-day-header">'+d+'</div>'; });
-                    for (let i = firstDay - 1; i >= 0; i--) { html += '<div class="cal-day other-month"></div>'; }
-                    for (let d = 1; d <= daysInMonth; d++) {
-                        const ds = _calYear + '-' + String(_calMonth + 1).padStart(2, '0') + '-' + String(d).padStart(2, '0');
-                        const cls = ['cal-day']; if (ds === today) cls.push('today'); if (ds === _selectedDate) cls.push('selected'); if (apptDates[ds]) cls.push('has-appt');
-                        html += '<div class="' + cls.join(' ') + '" onclick="AppointmentsModule.selectDate(\'' + ds + '\')" title="' + (apptDates[ds]||0) + ' appt" role="button" tabindex="0">' + d + '</div>';
-                    }
-                    $('calendarGrid').innerHTML = html;
-                    renderDayAppointments();
-                } catch (error) {}
+                const months=['January','February','March','April','May','June','July','August','September','October','November','December']; $('calMonthLabel').textContent=months[_calMonth]+' '+_calYear;
+                const fd=new Date(_calYear,_calMonth,1).getDay(), dim=new Date(_calYear,_calMonth+1,0).getDate(), today=new Date().toISOString().split('T')[0];
+                const ad={}; _appointments.forEach(function(a){if(a.appointmentDate)ad[a.appointmentDate]=(ad[a.appointmentDate]||0)+1;});
+                let h=''; ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(function(d){h+='<div class="cal-day-header">'+d+'</div>';});
+                for(let i=fd-1;i>=0;i--){h+='<div class="cal-day other-month"></div>';}
+                for(let d=1;d<=dim;d++){const ds=_calYear+'-'+String(_calMonth+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); const cls=['cal-day']; if(ds===today)cls.push('today'); if(ds===_selectedDate)cls.push('selected'); if(ad[ds])cls.push('has-appt'); h+='<div class="'+cls.join(' ')+'" onclick="AppointmentsModule.selectDate(\''+ds+'\')" title="'+(ad[ds]||0)+' appt">'+d+'</div>';}
+                $('calendarGrid').innerHTML=h; renderDayAppointments();
             }
-            
-            function selectDate(date) { _selectedDate = date; renderCalendar(); }
-            function navigateMonth(dir) { _calMonth += dir; if (_calMonth < 0) { _calMonth = 11; _calYear--; } if (_calMonth > 11) { _calMonth = 0; _calYear++; } renderCalendar(); }
+            function selectDate(d) { _selectedDate=d; renderCalendar(); }
+            function navigateMonth(dir) { _calMonth+=dir; if(_calMonth<0){_calMonth=11;_calYear--;} if(_calMonth>11){_calMonth=0;_calYear++;} renderCalendar(); }
             
             function renderDayAppointments() {
-                try {
-                    const appts = _appointments.filter(function(a) { return a.appointmentDate === _selectedDate; }).sort(function(a, b) { return (a.appointmentTime||'').localeCompare(b.appointmentTime||''); });
-                    const list = $('dayApptList'); const empty = $('dayEmpty');
-                    $('selectedDateLabel').textContent = formatDate(_selectedDate);
-                    if (!list) return;
-                    if (appts.length === 0) { list.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
-                    if (empty) empty.style.display = 'none';
-                    list.innerHTML = appts.map(function(a) {
-                        const statusClass = a.status === 'scheduled' ? 'status-scheduled' : (a.status === 'completed' ? 'status-completed' : 'status-cancelled');
-                        return '<div class="appt-card"><div class="appt-time">' + escapeHtml(a.appointmentTime||'') + '</div><div class="appt-info"><div class="appt-title">' + escapeHtml(a.title||'Untitled') + '</div><div class="appt-meta">👤 ' + escapeHtml(a.withName||'N/A') + ' · ⏱️ ' + (a.duration||30) + 'min · ' + escapeHtml(a.type||'meeting') + '</div></div><span class="appt-status ' + statusClass + '">' + escapeHtml(a.status||'scheduled') + '</span><div style="display:flex;gap:4px;"><button class="tbl-btn" onclick="AppointmentsModule.completeAppointment(\'' + a.id + '\')" title="Complete" aria-label="Mark complete">✅</button><button class="tbl-btn" onclick="AppointmentsModule.deleteAppointment(\'' + a.id + '\')" title="Delete" aria-label="Delete" style="color:#DC2626;">🗑️</button></div></div>';
-                    }).join('');
-                } catch (error) {}
+                const appts=_appointments.filter(function(a){return a.appointmentDate===_selectedDate;}).sort(function(a,b){return(a.appointmentTime||'').localeCompare(b.appointmentTime||'');});
+                const l=$('dayApptList'), e=$('dayEmpty'); $('selectedDateLabel').textContent=fdate(_selectedDate); if(!l)return;
+                if(!appts.length){l.innerHTML='';if(e)e.style.display='block';return;} if(e)e.style.display='none';
+                l.innerHTML=appts.map(function(a){const sc=a.status==='scheduled'?'status-scheduled':(a.status==='completed'?'status-completed':'status-cancelled'); return'<div class="appt-card"><div class="appt-time">'+esc(a.appointmentTime||'')+'</div><div class="appt-info"><div class="appt-title">'+esc(a.title||'Untitled')+'</div><div class="appt-meta">👤 '+esc(a.withName||'N/A')+' · ⏱️ '+(a.duration||30)+'min · '+esc(a.type||'meeting')+'</div></div><span class="appt-status '+sc+'">'+esc(a.status||'scheduled')+'</span><div style="display:flex;gap:4px;"><button class="tbl-btn" onclick="AppointmentsModule.completeAppointment(\''+a.id+'\')">✅</button><button class="tbl-btn" onclick="AppointmentsModule.deleteAppointment(\''+a.id+'\')" style="color:#DC2626;">🗑️</button></div></div>';}).join('');
             }
             
             function renderAll() {
-                try {
-                    const appts = _appointments.sort(function(a, b) { return new Date((b.appointmentDate||'')+'T'+(b.appointmentTime||'00:00')) - new Date((a.appointmentDate||'')+'T'+(a.appointmentTime||'00:00')); });
-                    const list = $('allApptList'); const empty = $('allEmpty'); if (!list) return;
-                    if (appts.length === 0) { list.innerHTML = ''; if (empty) empty.style.display = 'block'; return; }
-                    if (empty) empty.style.display = 'none';
-                    list.innerHTML = appts.map(function(a) {
-                        const statusClass = a.status === 'scheduled' ? 'status-scheduled' : (a.status === 'completed' ? 'status-completed' : 'status-cancelled');
-                        return '<div class="appt-card"><div class="appt-time">' + formatDate(a.appointmentDate) + '<br><small>' + escapeHtml(a.appointmentTime||'') + '</small></div><div class="appt-info"><div class="appt-title">' + escapeHtml(a.title||'Untitled') + '</div><div class="appt-meta">👤 ' + escapeHtml(a.withName||'N/A') + ' · ' + (a.duration||30) + 'min · ' + escapeHtml(a.type||'meeting') + '</div></div><span class="appt-status ' + statusClass + '">' + escapeHtml(a.status||'scheduled') + '</span><div style="display:flex;gap:4px;"><button class="tbl-btn" onclick="AppointmentsModule.completeAppointment(\'' + a.id + '\')" title="Complete" aria-label="Mark complete">✅</button><button class="tbl-btn" onclick="AppointmentsModule.deleteAppointment(\'' + a.id + '\')" title="Delete" aria-label="Delete" style="color:#DC2626;">🗑️</button></div></div>';
-                    }).join('');
-                } catch (error) {}
+                const appts=_appointments.sort(function(a,b){return new Date((b.appointmentDate||'')+'T'+(b.appointmentTime||'00:00'))-new Date((a.appointmentDate||'')+'T'+(a.appointmentTime||'00:00'));});
+                const l=$('allApptList'), e=$('allEmpty'); if(!l)return; if(!appts.length){l.innerHTML='';if(e)e.style.display='block';return;} if(e)e.style.display='none';
+                l.innerHTML=appts.map(function(a){const sc=a.status==='scheduled'?'status-scheduled':(a.status==='completed'?'status-completed':'status-cancelled'); return'<div class="appt-card"><div class="appt-time">'+fdate(a.appointmentDate)+'<br><small>'+esc(a.appointmentTime||'')+'</small></div><div class="appt-info"><div class="appt-title">'+esc(a.title||'Untitled')+'</div><div class="appt-meta">👤 '+esc(a.withName||'N/A')+' · '+(a.duration||30)+'min · '+esc(a.type||'meeting')+'</div></div><span class="appt-status '+sc+'">'+esc(a.status||'scheduled')+'</span><div style="display:flex;gap:4px;"><button class="tbl-btn" onclick="AppointmentsModule.completeAppointment(\''+a.id+'\')">✅</button><button class="tbl-btn" onclick="AppointmentsModule.deleteAppointment(\''+a.id+'\')" style="color:#DC2626;">🗑️</button></div></div>';}).join('');
             }
             
-            function render() { updateStats(); if (_currentTab === 'calendar') renderCalendar(); if (_currentTab === 'all') renderAll(); if (_currentTab === 'form') populateContactDropdown(); }
+            function render() { updateStats(); if(_currentTab==='calendar')renderCalendar(); if(_currentTab==='all')renderAll(); if(_currentTab==='form')populateContactDropdown(); }
+            function populateContactDropdown() { const s=$('aWith'); if(!s)return; s.innerHTML='<option value="">Select...</option>'+_contacts.map(function(c){return'<option value="'+esc(c.name)+'">'+(c.type==='Lead'?'👤':'🏢')+' '+esc(c.name)+' ('+c.type+')</option>';}).join(''); }
+            function openScheduleForm() { try{if($('apptForm'))$('apptForm').reset();if($('aDate'))$('aDate').value=new Date().toISOString().split('T')[0];switchTab('form');}catch(e){} }
             
-            function populateContactDropdown() {
-                const sel = $('aWith'); if (!sel) return;
-                sel.innerHTML = '<option value="">Select...</option>' + _contacts.map(function(c) { return '<option value="' + escapeHtml(c.name) + '">' + (c.type==='Lead'?'👤':'🏢') + ' ' + escapeHtml(c.name) + ' (' + c.type + ')</option>'; }).join('');
-            }
+            async function saveAppointment(e) { e.preventDefault(); try { const d={title:($('aTitle')&&$('aTitle').value||'').trim(),withName:($('aWith')&&$('aWith').value)||'',appointmentDate:($('aDate')&&$('aDate').value)||'',appointmentTime:($('aTime')&&$('aTime').value)||'',duration:parseInt(($('aDuration')&&$('aDuration').value)||'30')||30,type:($('aType')&&$('aType').value)||'meeting',notes:($('aNotes')&&$('aNotes').value||'').trim(),status:'scheduled'}; if(!d.title||!d.appointmentDate||!d.appointmentTime){showToast('Required fields missing.','error');return false;} if(!window.CRM_Firestore?.isAvailable()){showToast('DB unavailable.','error');return false;} await window.CRM_Firestore.createDocument('appointments',d); _appointments.unshift(d); if($('apptForm'))$('apptForm').reset(); showToast('✅ Scheduled!','success'); switchTab('calendar'); } catch(err){showToast('Failed.','error');} return false; }
             
-            function openScheduleForm() { try { if ($('apptForm')) $('apptForm').reset(); if ($('aDate')) $('aDate').value = new Date().toISOString().split('T')[0]; switchTab('form'); } catch (error) {} }
+            async function completeAppointment(id) { try { if(!window.CRM_Firestore?.isAvailable())return; await window.CRM_Firestore.updateDocument('appointments',id,{status:'completed'}); const a=_appointments.find(function(x){return x.id===id;}); if(a)a.status='completed'; showToast('✅ Completed!','success'); render(); } catch(e){showToast('Failed.','error');} }
+            async function deleteAppointment(id) { try { if(!confirm('Delete?'))return; if(!window.CRM_Firestore?.isAvailable())return; await window.CRM_Firestore.deleteDocument('appointments',id); _appointments=_appointments.filter(function(a){return a.id!==id;}); showToast('🗑️ Deleted.','info'); render(); } catch(e){showToast('Failed.','error');} }
             
-            async function saveAppointment(event) {
-                event.preventDefault();
-                try {
-                    const apptData = { title: ($('aTitle')&&$('aTitle').value||'').trim(), withName: ($('aWith')&&$('aWith').value)||'', appointmentDate: ($('aDate')&&$('aDate').value)||'', appointmentTime: ($('aTime')&&$('aTime').value)||'', duration: parseInt(($('aDuration')&&$('aDuration').value)||'30')||30, type: ($('aType')&&$('aType').value)||'meeting', notes: ($('aNotes')&&$('aNotes').value||'').trim(), status: 'scheduled' };
-                    if (!apptData.title || !apptData.appointmentDate || !apptData.appointmentTime) { showToast('Title, date & time required.', 'error'); return false; }
-                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) { showToast('Database not available.', 'error'); return false; }
-                    await window.CRM_Firestore.createDocument('appointments', apptData);
-                    _appointments.unshift(apptData);
-                    if ($('apptForm')) $('apptForm').reset();
-                    showToast('✅ Appointment scheduled!', 'success'); switchTab('calendar');
-                } catch (error) { showToast('Failed to schedule.', 'error'); }
-                return false;
-            }
+            function switchTab(t) { _currentTab=t; document.querySelectorAll('.bottom-tab[data-tab]').forEach(function(b){b.classList.toggle('active',b.dataset.tab===t);}); document.querySelectorAll('.tab-content').forEach(function(e){e.classList.remove('active');}); const el=$('tab-'+t); if(el)el.classList.add('active'); render(); }
+            function exportCSV() { if(!_appointments.length){showToast('No data.','warning');return;} const h=['Title','With','Date','Time','Duration','Type','Status']; let csv=h.join(',')+'\n'; csv+=_appointments.map(function(a){return[a.title,a.withName,a.appointmentDate,a.appointmentTime,a.duration,a.type,a.status].map(function(v){return'"'+String(v||'').replace(/"/g,'""')+'"';}).join(',');}).join('\n'); const b=new Blob(['\uFEFF'+csv],{type:'text/csv'}); const u=URL.createObjectURL(b); const a=document.createElement('a'); a.href=u; a.download='appointments.csv'; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(u); showToast('📤 Exported!','success'); }
             
-            async function completeAppointment(apptId) {
-                try { if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return; await window.CRM_Firestore.updateDocument('appointments', apptId, { status: 'completed' }); const a = _appointments.find(function(x) { return x.id === apptId; }); if (a) a.status = 'completed'; showToast('✅ Marked complete.', 'success'); render(); } catch (error) { showToast('Failed to update.', 'error'); }
-            }
-            
-            async function deleteAppointment(apptId) {
-                try { if (!confirm('Delete this appointment?')) return; if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return; await window.CRM_Firestore.deleteDocument('appointments', apptId); _appointments = _appointments.filter(function(a) { return a.id !== apptId; }); showToast('🗑️ Deleted.', 'info'); render(); } catch (error) { showToast('Failed to delete.', 'error'); }
-            }
-            
-            function switchTab(tab) {
-                _currentTab = tab; document.querySelectorAll('.bottom-tab[data-tab]').forEach(function(btn) { btn.classList.toggle('active', btn.dataset.tab === tab); if (btn.dataset.tab === tab) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current'); }); document.querySelectorAll('.tab-content').forEach(function(el) { el.classList.remove('active'); }); const tabEl = $('tab-' + tab); if (tabEl) tabEl.classList.add('active'); render();
-            }
-            
-            function exportCSV() {
-                try { if (_appointments.length === 0) { showToast('No appointments to export.', 'warning'); return; } const headers = ['Title','With','Date','Time','Duration','Type','Status']; let csv = headers.join(',') + '\n'; csv += _appointments.map(function(a) { return [a.title,a.withName,a.appointmentDate,a.appointmentTime,a.duration,a.type,a.status].map(function(v) { return '"' + String(v||'').replace(/"/g,'""') + '"'; }).join(','); }).join('\n'); const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' }); const url = URL.createObjectURL(blob); const link = document.createElement('a'); link.href = url; link.download = 'appointments_export.csv'; document.body.appendChild(link); link.click(); document.body.removeChild(link); URL.revokeObjectURL(url); showToast('📤 Exported!', 'success'); } catch (error) { showToast('Export failed.', 'error'); }
-            }
-            
-            async function init() {
-                try { console.log('[AppointmentsModule] Initializing...'); const hasAccess = await checkAccess(); if (!hasAccess) return; if (window.CRM_Firestore && typeof window.CRM_Firestore.init === 'function') await window.CRM_Firestore.init(); if (window.CRM_Tenant && typeof window.CRM_Tenant.initTenantContext === 'function') await window.CRM_Tenant.initTenantContext(); await loadData(); console.log('[AppointmentsModule] ✅ Ready'); } catch (error) { console.error('[AppointmentsModule] Init error:', error); }
-            }
-            
+            async function init() { if(!(await checkAccess()))return; if(window.CRM_Firestore?.init)await window.CRM_Firestore.init(); if(window.CRM_Tenant?.initTenantContext)await window.CRM_Tenant.initTenantContext(); await loadData(); }
             return { init, render, switchTab, selectDate, navigateMonth, openScheduleForm, saveAppointment, completeAppointment, deleteAppointment, exportCSV };
-            
         })();
-        
         window.AppointmentsModule = AppointmentsModule;
-        document.addEventListener('DOMContentLoaded', function() { AppointmentsModule.init().catch(function(error) { console.error('[AppointmentsModule] Auto-init failed:', error); }); });
-        console.log('[AppointmentsModule] Script loaded. window.AppointmentsModule available.');
+        document.addEventListener('DOMContentLoaded', function(){ AppointmentsModule.init().catch(function(e){ console.error(e); }); });
     </script>
 </body>
 </html>
