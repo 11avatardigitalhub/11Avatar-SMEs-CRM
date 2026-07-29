@@ -163,106 +163,77 @@
 <body>
 
     <div class="projects-container">
-        
         <header class="page-header" role="banner">
-            <div>
-                <h1>🚀 <span class="gold">Projects</span> Tracker</h1>
-                <p id="projectCountText" aria-live="polite">Loading projects...</p>
-            </div>
+            <div><h1>🚀 <span class="gold">Projects</span> Tracker</h1><p id="projectCountText" aria-live="polite">Loading projects...</p></div>
             <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="ProjectsModule.exportCSV()" aria-label="Export projects">📤 Export</button>
-                <button class="btn btn-primary" onclick="ProjectsModule.openAddForm()" aria-label="Add new project">➕ New Project</button>
+                <button class="btn btn-outline btn-sm" onclick="ProjectsModule.exportCSV()">📤 Export</button>
+                <button class="btn btn-primary" onclick="ProjectsModule.openAddForm()">➕ New Project</button>
             </div>
         </header>
         
         <div class="stats-row" role="region" aria-label="Project statistics">
-            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">📋 Total</div></div>
-            <div class="stat-card"><div class="val" id="stat-active" style="color:#D97706;">0</div><div class="lbl">🔄 Active</div></div>
-            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">0</div><div class="lbl">✅ Done</div></div>
-            <div class="stat-card"><div class="val" id="stat-budget" style="color:#D4AF37;">₹0</div><div class="lbl">💰 Budget</div></div>
+            <div class="stat-card"><div class="val" id="stat-total">--</div><div class="lbl">📋 Total</div></div>
+            <div class="stat-card"><div class="val" id="stat-active" style="color:#D97706;">--</div><div class="lbl">🔄 Active</div></div>
+            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">--</div><div class="lbl">✅ Done</div></div>
+            <div class="stat-card"><div class="val" id="stat-budget" style="color:#D4AF37;">--</div><div class="lbl">💰 Budget</div></div>
         </div>
         
-        <div id="tab-list" class="tab-content active" role="tabpanel" aria-label="Projects list">
+        <div id="tab-list" class="tab-content active" role="tabpanel">
             <div class="filter-row">
-                <input type="search" id="searchInput" placeholder="🔍 Search projects..." aria-label="Search projects" oninput="ProjectsModule.setSearch(this.value)">
-                <select id="filterStatusSelect" aria-label="Filter by status" onchange="ProjectsModule.setStatusFilter(this.value)">
+                <input type="search" id="searchInput" placeholder="🔍 Search projects..." oninput="ProjectsModule.setSearch(this.value)">
+                <select id="filterStatusSelect" onchange="ProjectsModule.setStatusFilter(this.value)">
                     <option value="">All Status</option><option value="Planning">Planning</option><option value="In Progress">In Progress</option><option value="Review">Review</option><option value="Completed">Completed</option><option value="On Hold">On Hold</option>
                 </select>
-                <button class="btn btn-ghost btn-sm" onclick="ProjectsModule.clearFilters()" aria-label="Clear filters">✕ Clear</button>
+                <button class="btn btn-ghost btn-sm" onclick="ProjectsModule.clearFilters()">✕ Clear</button>
             </div>
-            <div class="card" style="padding:0;overflow:hidden;">
-                <div class="table-wrap">
-                    <table aria-label="Projects table">
-                        <thead><tr><th>Project</th><th>Client</th><th>Service</th><th>Start</th><th>Deadline</th><th>Budget</th><th>Status</th><th>Health</th><th>Actions</th></tr></thead>
-                        <tbody id="projectTableBody"></tbody>
-                    </table>
-                </div>
-            </div>
+            <div class="card" style="padding:0;overflow:hidden;"><div class="table-wrap"><table><thead><tr><th>Project</th><th>Client</th><th>Service</th><th>Start</th><th>Deadline</th><th>Budget</th><th>Status</th><th>Health</th><th>Actions</th></tr></thead><tbody id="projectTableBody"><tr><td colspan="9"><div class="empty-state"><div class="empty-icon">🚀</div><h3>Loading projects...</h3></div></td></tr></tbody></table></div></div>
         </div>
         
-        <div id="tab-form" class="tab-content" role="tabpanel" aria-label="Project form">
-            <div class="card" style="max-width:750px;">
-                <div class="card-header"><span class="card-title" id="formTitle">➕ New Project</span></div>
+        <div id="tab-form" class="tab-content" role="tabpanel">
+            <div class="card" style="max-width:750px;"><div class="card-header"><span class="card-title" id="formTitle">➕ New Project</span></div>
                 <form id="projectForm" onsubmit="return ProjectsModule.saveProject(event)" novalidate>
                     <input type="hidden" id="editProjectId" value="">
-                    <div class="form-row">
-                        <div class="form-group"><label for="pName">Project Name <span style="color:#DC2626;">*</span></label><input type="text" id="pName" required></div>
-                        <div class="form-group"><label for="pClient">Client <span style="color:#DC2626;">*</span></label><select id="pClient" required><option value="">Select Client...</option></select></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="pService">Service Type</label><input type="text" id="pService" placeholder="e.g., Website Development, SEO"></div>
-                        <div class="form-group"><label for="pStatus">Status</label><select id="pStatus"><option value="Planning">Planning</option><option value="In Progress">In Progress</option><option value="Review">Review</option><option value="Completed">Completed</option><option value="On Hold">On Hold</option></select></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="pStartDate">Start Date</label><input type="date" id="pStartDate"></div>
-                        <div class="form-group"><label for="pDeadline">Deadline</label><input type="date" id="pDeadline"></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="pBudget">Budget (₹)</label><input type="number" id="pBudget" min="0"></div>
-                        <div class="form-group"><label for="pSpent">Spent (₹)</label><input type="number" id="pSpent" min="0"></div>
-                    </div>
+                    <div class="form-row"><div class="form-group"><label for="pName">Project Name <span style="color:#DC2626;">*</span></label><input type="text" id="pName" required></div><div class="form-group"><label for="pClient">Client <span style="color:#DC2626;">*</span></label><select id="pClient" required><option value="">Select Client...</option></select></div></div>
+                    <div class="form-row"><div class="form-group"><label for="pService">Service Type</label><input type="text" id="pService" placeholder="e.g., Website Development"></div><div class="form-group"><label for="pStatus">Status</label><select id="pStatus"><option value="Planning">Planning</option><option value="In Progress">In Progress</option><option value="Review">Review</option><option value="Completed">Completed</option><option value="On Hold">On Hold</option></select></div></div>
+                    <div class="form-row"><div class="form-group"><label for="pStartDate">Start Date</label><input type="date" id="pStartDate"></div><div class="form-group"><label for="pDeadline">Deadline</label><input type="date" id="pDeadline"></div></div>
+                    <div class="form-row"><div class="form-group"><label for="pBudget">Budget (₹)</label><input type="number" id="pBudget" min="0"></div><div class="form-group"><label for="pSpent">Spent (₹)</label><input type="number" id="pSpent" min="0"></div></div>
                     <div class="form-group"><label for="pTeam">Team Members</label><input type="text" id="pTeam" placeholder="Comma-separated names"></div>
                     <div class="form-group"><label for="pNotes">Notes</label><textarea id="pNotes" rows="3"></textarea></div>
-                    <div class="flex gap-2 mt-2">
-                        <button type="submit" class="btn btn-primary">💾 Save Project</button>
-                        <button type="button" class="btn btn-outline" onclick="ProjectsModule.switchTab('list')">Cancel</button>
-                    </div>
+                    <div class="flex gap-2 mt-2"><button type="submit" class="btn btn-primary">💾 Save Project</button><button type="button" class="btn btn-outline" onclick="ProjectsModule.switchTab('list')">Cancel</button></div>
                 </form>
             </div>
         </div>
-        
     </div>
     
     <div id="detailPanel"></div>
     
-    <nav class="bottom-submenu" role="navigation" aria-label="Projects navigation">
+    <nav class="bottom-submenu" role="navigation">
         <button class="bottom-tab active" data-tab="list" onclick="ProjectsModule.switchTab('list')" aria-current="page"><span class="tab-icon">📋</span> All</button>
         <button class="bottom-tab" data-tab="form" onclick="ProjectsModule.openAddForm()"><span class="tab-icon">➕</span> Add</button>
     </nav>
 
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
+    <!-- 🔥 FIREBASE CDN + CORE SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
     <script>
         'use strict';
-        // Inherit Firebase from parent window (dashboard.html or app.html)
-        if (window.parent && window.parent.firebase) {
-            window.firebase = window.parent.firebase;
-        }
-        if (window.parent && window.parent.CRM_Firestore) {
-            window.CRM_Firestore = window.parent.CRM_Firestore;
-        }
-        if (window.parent && window.parent.CRM_Auth) {
-            window.CRM_Auth = window.parent.CRM_Auth;
-        }
-        if (window.parent && window.parent.CRM_Tenant) {
-            window.CRM_Tenant = window.parent.CRM_Tenant;
-        }
-        if (window.parent && window.parent.CRM_Config) {
-            window.CRM_Config = window.parent.CRM_Config;
-        }
-        console.log('📦 Inherited Firebase from parent');
+        if (window.parent && window.parent.firebase) window.firebase = window.parent.firebase;
+        if (window.parent && window.parent.CRM_Firestore) window.CRM_Firestore = window.parent.CRM_Firestore;
+        if (window.parent && window.parent.CRM_Auth) window.CRM_Auth = window.parent.CRM_Auth;
+        if (window.parent && window.parent.CRM_Tenant) window.CRM_Tenant = window.parent.CRM_Tenant;
+        if (window.parent && window.parent.CRM_Config) window.CRM_Config = window.parent.CRM_Config;
+        console.log('📦 [Projects] Core modules ready');
     </script>
 
+    <!-- 🔥 PROJECTS MODULE LOGIC (Original code intact) -->
     <script>
         'use strict';
         
