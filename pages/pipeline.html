@@ -26,6 +26,19 @@
             --font-heading: 'Poppins', sans-serif; --font-body: 'Inter', sans-serif;
         }
         
+        /* Rule #8: Large fonts — 14px body, 44px touch targets */
+        /* Rule #9: Dynamic cards — Auto-grid, no overlap */
+        /* Rule #10: Page-specific sub menu — Bottom tab bar */
+        /* Rule #11: Theme — Internal=Light */
+        /* Rule #12: 8 breakpoints — 320, 375, 425, 768, 1024, 1280, 1440, 1920 */
+        /* Rule #13: No horizontal scroll */
+        /* Rule #14: WCAG accessible — labels, aria, focus states */
+        /* Rule #15: PWA ready */
+        /* Rule #16: 3D effects — card shadows, transform on hover */
+        /* Rule #17: Multi-tenant RBAC — tenantId filter, role check */
+        /* Rule #18: Firebase backend — Firestore CRUD */
+        /* Rule #19: Enterprise animations — fadeIn, slideUp, bounce */
+        
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: var(--font-body); font-size: 14px; line-height: 1.6;
@@ -68,12 +81,14 @@
         }
         .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-header p { color: #888; margin: 2px 0 0; font-size: 0.85rem; }
         
         /* Buttons */
         .btn { 
             display: inline-flex; align-items: center; gap: 6px; padding: 10px 20px; 
             border-radius: 10px; font-weight: 600; font-size: 0.88rem; cursor: pointer; 
             transition: all 0.2s ease; border: none; text-decoration: none; min-height: 44px;
+            position: relative; overflow: hidden;
         }
         .btn:active { transform: scale(0.97); }
         .btn-primary { background: var(--gold-gradient); color: #FFF; }
@@ -228,6 +243,13 @@
         .toast-warning { border-left: 4px solid #F59E0B; }
         @keyframes toastSlideIn { from { opacity: 0; transform: translateX(120%); } to { opacity: 1; transform: translateX(0); } }
         
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block; width: 20px; height: 20px; border: 2px solid #E5E5E5;
+            border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
         /* Utility */
         .flex { display: flex; } .items-center { align-items: center; } .gap-2 { gap: 8px; }
         .flex-wrap { flex-wrap: wrap; } .flex-between { justify-content: space-between; }
@@ -296,49 +318,82 @@
 
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
+    <!-- 🔥 FIREBASE CDN -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- 🔥 CORE SCRIPTS -->
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
+    <!-- 🔥 Inherit from parent -->
     <script>
         'use strict';
-        // Inherit Firebase from parent window (dashboard.html or app.html)
-        if (window.parent && window.parent.firebase) {
-            window.firebase = window.parent.firebase;
-        }
-        if (window.parent && window.parent.CRM_Firestore) {
-            window.CRM_Firestore = window.parent.CRM_Firestore;
-        }
-        if (window.parent && window.parent.CRM_Auth) {
-            window.CRM_Auth = window.parent.CRM_Auth;
-        }
-        if (window.parent && window.parent.CRM_Tenant) {
-            window.CRM_Tenant = window.parent.CRM_Tenant;
-        }
-        if (window.parent && window.parent.CRM_Config) {
-            window.CRM_Config = window.parent.CRM_Config;
-        }
-        console.log('📦 Inherited Firebase from parent');
+        if (window.parent && window.parent.firebase) window.firebase = window.parent.firebase;
+        if (window.parent && window.parent.CRM_Firestore) window.CRM_Firestore = window.parent.CRM_Firestore;
+        if (window.parent && window.parent.CRM_Auth) window.CRM_Auth = window.parent.CRM_Auth;
+        if (window.parent && window.parent.CRM_Tenant) window.CRM_Tenant = window.parent.CRM_Tenant;
+        if (window.parent && window.parent.CRM_Config) window.CRM_Config = window.parent.CRM_Config;
+        console.log('📦 [Pipeline] Core modules ready');
     </script>
 
+    <!-- 🔥 PIPELINE MODULE -->
     <script>
         'use strict';
         
+        /**
+         * @namespace PipelineModule
+         * @description Kanban pipeline with drag-drop, using 'leads' collection from Firestore
+         * Rule #17: Multi-tenant RBAC — tenantId auto-filtered by CRM_Firestore
+         * Rule #18: Firebase Backend — Full CRUD via CRM_Firestore
+         */
         const PipelineModule = (function() {
             
+            /**
+             * Pipeline stages mapped to leads 'status' field values
+             */
             const PIPELINE_STAGES = [
-                { id: 'new', name: 'New Lead', color: '#6366f1', icon: '⭐' },
-                { id: 'contacted', name: 'Contacted', color: '#8b5cf6', icon: '📞' },
-                { id: 'qualified', name: 'Qualified', color: '#3b82f6', icon: '✅' },
-                { id: 'proposal', name: 'Proposal Sent', color: '#f59e0b', icon: '📄' },
-                { id: 'negotiation', name: 'Negotiation', color: '#ef4444', icon: '🤝' },
-                { id: 'won', name: 'Closed Won', color: '#10b981', icon: '🏆' },
-                { id: 'lost', name: 'Closed Lost', color: '#6b7280', icon: '❌' }
+                { id: 'New', name: 'New Lead', color: '#6366f1', icon: '⭐' },
+                { id: 'Attempting Contact', name: 'Attempting Contact', color: '#8b5cf6', icon: '📞' },
+                { id: 'Connected', name: 'Connected', color: '#3b82f6', icon: '🔗' },
+                { id: 'Qualified', name: 'Qualified', color: '#ec4899', icon: '✅' },
+                { id: 'Proposal Sent', name: 'Proposal Sent', color: '#f59e0b', icon: '📄' },
+                { id: 'Negotiation', name: 'Negotiation', color: '#ef4444', icon: '🤝' },
+                { id: 'Won', name: 'Closed Won', color: '#10b981', icon: '🏆' },
+                { id: 'Lost', name: 'Closed Lost', color: '#6b7280', icon: '❌' }
             ];
             
-            let _deals = [];
-            let _draggedDealId = null;
-            let _selectedDealId = null;
+            /** @type {Array<Object>} All leads loaded from Firestore */
+            let _leads = [];
+            
+            /** @type {string|null} Currently dragged lead ID */
+            let _draggedLeadId = null;
+            
+            /** @type {string|null} Currently selected lead ID for detail panel */
+            let _selectedLeadId = null;
+            
+            /** @type {boolean} Loading state */
             let _isLoading = false;
             
+            // ============================================================
+            // DOM HELPERS
+            // ============================================================
+            
+            /** @param {string} id @returns {HTMLElement} */
             const $ = function(id) { return document.getElementById(id); };
             
+            // ============================================================
+            // TOAST NOTIFICATIONS — Rule #6: Error Handling
+            // ============================================================
+            
+            /**
+             * Show toast notification
+             * @param {string} message - Message to display
+             * @param {'success'|'error'|'info'|'warning'} type - Toast type
+             */
             function showToast(message, type) {
                 try {
                     type = type || 'info';
@@ -346,118 +401,245 @@
                     const toast = document.createElement('div');
                     toast.className = 'toast toast-' + type;
                     toast.setAttribute('role', 'alert');
-                    toast.innerHTML = '<span>' + ({ success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' }[type] || '') + '</span> ' + escapeHtml(message);
+                    const icons = { success: '✅', error: '❌', info: 'ℹ️', warning: '⚠️' };
+                    toast.innerHTML = '<span>' + (icons[type] || '') + '</span> ' + escapeHtml(message);
                     container.appendChild(toast);
+                    
                     setTimeout(function() {
                         toast.style.opacity = '0';
                         toast.style.transform = 'translateX(120%)';
                         toast.style.transition = 'all 0.3s ease';
-                        setTimeout(function() { if (toast.parentNode) toast.parentNode.removeChild(toast); }, 300);
+                        setTimeout(function() { 
+                            if (toast.parentNode) toast.parentNode.removeChild(toast); 
+                        }, 300);
                     }, 3500);
-                } catch (error) { console.error('[PipelineModule] Toast error:', error); }
+                } catch (error) {
+                    console.error('[PipelineModule] Toast error:', error);
+                }
             }
             
+            // ============================================================
+            // UTILITY FUNCTIONS
+            // ============================================================
+            
+            /**
+             * Escape HTML to prevent XSS
+             * @param {string} str - String to escape
+             * @returns {string} Escaped string
+             */
             function escapeHtml(str) {
                 if (!str) return '';
-                return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+                return String(str)
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;')
+                    .replace(/'/g, '&#039;');
             }
             
+            /**
+             * Format currency for display
+             * @param {number} amount - Amount to format
+             * @returns {string} Formatted currency string
+             */
             function formatCurrency(amount) {
-                try { return '₹' + parseInt(amount || 0).toLocaleString('en-IN'); } catch(e) { return '₹0'; }
+                try {
+                    return '₹' + parseInt(amount || 0).toLocaleString('en-IN');
+                } catch (error) {
+                    return '₹0';
+                }
             }
             
+            /**
+             * Format date for display
+             * @param {string|Date} dateInput - Date to format
+             * @returns {string} Formatted date string
+             */
             function formatDate(dateInput) {
                 if (!dateInput) return '';
-                try { const d = new Date(dateInput); return d.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' }); } catch(e) { return ''; }
+                try {
+                    const date = new Date(dateInput);
+                    if (isNaN(date.getTime())) return '';
+                    return date.toLocaleDateString('en-IN', {
+                        day: '2-digit',
+                        month: 'short',
+                        year: 'numeric'
+                    });
+                } catch (error) {
+                    return '';
+                }
             }
             
+            // ============================================================
+            // AUTH CHECK — Rule #17: Multi-tenant RBAC
+            // ============================================================
+            
+            /**
+             * Verify authentication and tenant access
+             * @returns {Promise<boolean>} Whether user has access
+             */
             async function checkAccess() {
                 try {
                     if (!window.CRM_Auth || typeof window.CRM_Auth.isAuthenticated !== 'function') {
                         showToast('Authentication system not available.', 'error');
                         return false;
                     }
+                    
                     if (!window.CRM_Auth.isAuthenticated()) {
-                        if (window.parent && window.parent.location) window.parent.location.href = '../index.html';
+                        if (window.parent && window.parent.location) {
+                            window.parent.location.href = '../index.html';
+                        }
                         return false;
                     }
+                    
+                    // Check module access via RBAC
                     if (window.CRM_Tenant && typeof window.CRM_Tenant.canAccessModule === 'function') {
                         if (!window.CRM_Tenant.canAccessModule('PIPELINE')) {
                             showToast('You do not have access to Pipeline module.', 'error');
-                            if (window.parent && window.parent.navigatePage) window.parent.navigatePage('dashboard');
+                            if (window.parent && window.parent.navigatePage) {
+                                window.parent.navigatePage('dashboard');
+                            }
                             return false;
                         }
                     }
+                    
                     return true;
-                } catch (error) { console.error('[PipelineModule] Access check error:', error); return false; }
+                } catch (error) {
+                    console.error('[PipelineModule] Access check error:', error);
+                    return false;
+                }
             }
             
-            async function loadDeals() {
+            // ============================================================
+            // DATA LOADING — Rule #18: Firebase Backend
+            // ============================================================
+            
+            /**
+             * Load all leads from Firestore (pipeline uses leads collection)
+             * @returns {Promise<void>}
+             */
+            async function loadLeads() {
                 try {
                     _isLoading = true;
+                    
                     if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) {
-                        _deals = [];
+                        console.warn('[PipelineModule] Firestore not available.');
+                        _leads = [];
                         render();
                         return;
                     }
-                    const result = await window.CRM_Firestore.queryDocuments('deals', {
-                        orderBy: 'createdAt', orderDir: 'desc', limit: 500
+                    
+                    const result = await window.CRM_Firestore.queryDocuments('leads', {
+                        orderBy: 'createdAt',
+                        orderDir: 'desc',
+                        limit: 500
                     });
-                    _deals = result.data || [];
-                    console.log('[PipelineModule] Loaded ' + _deals.length + ' deals from Firestore');
+                    
+                    _leads = result.data || [];
+                    console.log('[PipelineModule] Loaded ' + _leads.length + ' leads for pipeline');
+                    
                     render();
+                    
                 } catch (error) {
-                    console.error('[PipelineModule] Load deals error:', error);
-                    showToast('Failed to load deals.', 'error');
-                    _deals = [];
+                    console.error('[PipelineModule] Load leads error:', error);
+                    showToast('Failed to load pipeline data. Please try again.', 'error');
+                    _leads = [];
                     render();
-                } finally { _isLoading = false; }
+                } finally {
+                    _isLoading = false;
+                }
             }
             
+            // ============================================================
+            // STATISTICS
+            // ============================================================
+            
+            /**
+             * Calculate pipeline statistics
+             * @returns {Object} Statistics object
+             */
             function getStats() {
-                const total = _deals.length;
-                const active = _deals.filter(function(d) { return ['new','contacted','qualified'].indexOf(d.stage) !== -1; }).length;
-                const negotiating = _deals.filter(function(d) { return ['proposal','negotiation'].indexOf(d.stage) !== -1; }).length;
-                const won = _deals.filter(function(d) { return d.stage === 'won'; }).length;
-                const lost = _deals.filter(function(d) { return d.stage === 'lost'; }).length;
-                const totalValue = _deals.reduce(function(s, d) { return s + (parseInt(d.value) || 0); }, 0);
-                return { total, active, negotiating, won, lost, totalValue };
+                try {
+                    const total = _leads.length;
+                    const active = _leads.filter(function(lead) { 
+                        return ['New', 'Attempting Contact', 'Connected', 'Qualified'].indexOf(lead.status) !== -1; 
+                    }).length;
+                    const negotiating = _leads.filter(function(lead) { 
+                        return ['Proposal Sent', 'Negotiation'].indexOf(lead.status) !== -1; 
+                    }).length;
+                    const won = _leads.filter(function(lead) { return lead.status === 'Won'; }).length;
+                    const lost = _leads.filter(function(lead) { return lead.status === 'Lost'; }).length;
+                    const totalValue = _leads.reduce(function(sum, lead) { 
+                        return sum + (parseInt(lead.value) || 0); 
+                    }, 0);
+                    
+                    return { total, active, negotiating, won, lost, totalValue };
+                } catch (error) {
+                    console.error('[PipelineModule] Get stats error:', error);
+                    return { total: 0, active: 0, negotiating: 0, won: 0, lost: 0, totalValue: 0 };
+                }
             }
             
+            /**
+             * Render statistics bar
+             */
             function renderStats() {
                 try {
                     const stats = getStats();
                     const statEl = $('pipelineStats');
                     if (!statEl) return;
-                    statEl.innerHTML = [
+                    
+                    const statItems = [
                         { color: '#6366f1', num: stats.total, lbl: 'Total Deals' },
                         { color: '#3b82f6', num: stats.active, lbl: 'Active' },
                         { color: '#f59e0b', num: stats.negotiating, lbl: 'Negotiating' },
                         { color: '#10b981', num: stats.won, lbl: 'Won' },
                         { color: '#ef4444', num: stats.lost, lbl: 'Lost' },
                         { color: '#D4AF37', num: formatCurrency(stats.totalValue), lbl: 'Pipeline Value' }
-                    ].map(function(s) {
-                        return '<div class="pipe-stat" style="--s-color:' + s.color + ';" onclick="PipelineModule.filterByStage(\'' + (s.lbl === 'Total Deals' ? '' : s.lbl === 'Active' ? 'active' : s.lbl === 'Negotiating' ? 'negotiating' : s.lbl === 'Won' ? 'won' : s.lbl === 'Lost' ? 'lost' : '') + '\')" tabindex="0" role="button"><div class="num">' + s.num + '</div><div class="lbl">' + s.lbl + '</div></div>';
+                    ];
+                    
+                    statEl.innerHTML = statItems.map(function(statItem) {
+                        return '<div class="pipe-stat" style="--s-color:' + statItem.color + ';" tabindex="0" role="button">' +
+                            '<div class="num">' + statItem.num + '</div>' +
+                            '<div class="lbl">' + statItem.lbl + '</div>' +
+                        '</div>';
                     }).join('');
-                } catch (error) { console.error('[PipelineModule] Stats render error:', error); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Stats render error:', error);
+                }
             }
             
+            // ============================================================
+            // KANBAN BOARD RENDERING
+            // ============================================================
+            
+            /**
+             * Render the full kanban board
+             */
             function renderBoard() {
                 try {
                     const board = $('kanbanBoard');
                     if (!board) return;
                     
                     let html = '';
-                    const self = this;
                     
                     PIPELINE_STAGES.forEach(function(stage) {
-                        const stageDeals = _deals.filter(function(d) { return d.stage === stage.id; });
-                        html += '<div class="pipeline-col" data-stage="' + stage.id + '" style="--col-color:' + stage.color + ';">';
-                        html += '<div class="pipeline-col-header"><h6><span style="color:' + stage.color + ';">' + stage.icon + '</span> ' + stage.name + '</h6><span class="count">' + stageDeals.length + '</span></div>';
-                        html += '<div class="pipeline-cards" data-stage="' + stage.id + '">';
-                        stageDeals.forEach(function(deal) {
-                            html += renderDealCard(deal);
+                        const stageLeads = _leads.filter(function(lead) { 
+                            return (lead.status || 'New') === stage.id; 
                         });
+                        
+                        html += '<div class="pipeline-col" data-stage="' + stage.id + '" style="--col-color:' + stage.color + ';">';
+                        html += '<div class="pipeline-col-header">';
+                        html += '<h6><span style="color:' + stage.color + ';">' + stage.icon + '</span> ' + stage.name + '</h6>';
+                        html += '<span class="count">' + stageLeads.length + '</span>';
+                        html += '</div>';
+                        html += '<div class="pipeline-cards" data-stage="' + stage.id + '">';
+                        
+                        stageLeads.forEach(function(lead) {
+                            html += renderLeadCard(lead);
+                        });
+                        
                         html += '</div>';
                         html += '<button class="quick-add-btn" onclick="PipelineModule.showQuickAdd(\'' + stage.id + '\', event)" aria-label="Quick add deal to ' + stage.name + '">+ Quick Add</button>';
                         html += '</div>';
@@ -465,249 +647,602 @@
                     
                     board.innerHTML = html;
                     
+                    // Bind drag-drop events after DOM update
                     setTimeout(bindDragDropEvents, 200);
                     
-                } catch (error) { console.error('[PipelineModule] Board render error:', error); }
-            }
-            
-            function renderDealCard(deal) {
-                let badges = '';
-                if (deal.priority === 'high') badges += '<span class="card-badge priority-high">🔴 High</span>';
-                else if (deal.priority === 'medium') badges += '<span class="card-badge priority-medium">🟡 Med</span>';
-                else if (deal.priority === 'low') badges += '<span class="card-badge priority-low">🔵 Low</span>';
-                if (deal.followup) badges += '<span class="card-badge followup">📅 ' + formatDate(deal.followup) + '</span>';
-                
-                return '<div class="pipe-card" data-id="' + escapeHtml(deal.id) + '" onclick="PipelineModule.openDetail(\'' + deal.id + '\')" tabindex="0" role="button" aria-label="Deal: ' + escapeHtml(deal.name || 'Unnamed') + '">' +
-                    '<div class="card-name">' + escapeHtml(deal.name || 'Unnamed Deal') + '</div>' +
-                    '<div class="card-detail">' + escapeHtml(deal.contact || '') + (deal.company ? ' · ' + escapeHtml(deal.company) : '') + '</div>' +
-                    (deal.value ? '<div class="card-detail" style="font-weight:700;color:#059669;">' + formatCurrency(deal.value) + '</div>' : '') +
-                    (badges ? '<div class="card-badges">' + badges + '</div>' : '') +
-                '</div>';
-            }
-            
-            function bindDragDropEvents() {
-                try {
-                    document.querySelectorAll('.pipe-card').forEach(function(card) {
-                        card.setAttribute('draggable', 'true');
-                        card.addEventListener('dragstart', function(e) {
-                            _draggedDealId = this.dataset.id;
-                            this.classList.add('dragging');
-                            e.dataTransfer.effectAllowed = 'move';
-                            e.dataTransfer.setData('text/plain', this.dataset.id);
-                        });
-                        card.addEventListener('dragend', function() {
-                            this.classList.remove('dragging');
-                            document.querySelectorAll('.pipeline-cards').forEach(function(c) { c.classList.remove('drag-over'); });
-                        });
-                    });
-                    
-                    document.querySelectorAll('.pipeline-cards').forEach(function(container) {
-                        container.addEventListener('dragover', function(e) {
-                            e.preventDefault();
-                            e.dataTransfer.dropEffect = 'move';
-                            this.classList.add('drag-over');
-                        });
-                        container.addEventListener('dragleave', function(e) {
-                            if (!this.contains(e.relatedTarget)) this.classList.remove('drag-over');
-                        });
-                        container.addEventListener('drop', async function(e) {
-                            e.preventDefault();
-                            this.classList.remove('drag-over');
-                            const newStage = this.dataset.stage;
-                            const dealId = _draggedDealId;
-                            if (newStage && dealId) {
-                                await moveDeal(dealId, newStage);
-                            }
-                            _draggedDealId = null;
-                        });
-                    });
-                } catch (error) { console.error('[PipelineModule] Drag-drop bind error:', error); }
-            }
-            
-            async function moveDeal(dealId, newStage) {
-                try {
-                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
-                    await window.CRM_Firestore.updateDocument('deals', dealId, { stage: newStage, updatedAt: new Date().toISOString() });
-                    const deal = _deals.find(function(d) { return d.id === dealId; });
-                    if (deal) deal.stage = newStage;
-                    showToast('✅ Moved to ' + newStage, 'success');
-                    render();
                 } catch (error) {
-                    console.error('[PipelineModule] Move deal error:', error);
-                    showToast('Failed to move deal.', 'error');
+                    console.error('[PipelineModule] Board render error:', error);
                 }
             }
             
-            async function updateDealField(dealId, field, value) {
+            /**
+             * Render a single lead card for kanban
+             * @param {Object} lead - Lead object
+             * @returns {string} HTML string
+             */
+            function renderLeadCard(lead) {
                 try {
-                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
-                    const updates = {}; updates[field] = value; updates.updatedAt = new Date().toISOString();
-                    await window.CRM_Firestore.updateDocument('deals', dealId, updates);
-                    const deal = _deals.find(function(d) { return d.id === dealId; });
-                    if (deal) deal[field] = value;
-                    if (field === 'stage') render();
-                } catch (error) { console.error('[PipelineModule] Update field error:', error); }
+                    let badges = '';
+                    
+                    // Priority badge based on lead score
+                    const score = lead.score || 0;
+                    if (score >= 80) {
+                        badges += '<span class="card-badge priority-high">🔴 Hot</span>';
+                    } else if (score >= 50) {
+                        badges += '<span class="card-badge priority-medium">🟡 Warm</span>';
+                    } else {
+                        badges += '<span class="card-badge priority-low">🔵 Cold</span>';
+                    }
+                    
+                    // Follow-up badge
+                    if (lead.followup) {
+                        const isOverdue = new Date(lead.followup) < new Date();
+                        badges += '<span class="card-badge followup" style="' + (isOverdue ? 'background:#FEE2E2;color:#DC2626;' : '') + '">📅 ' + formatDate(lead.followup) + (isOverdue ? ' ⚠️' : '') + '</span>';
+                    }
+                    
+                    const fullName = (lead.firstName || '') + ' ' + (lead.lastName || '').trim() || 'Unnamed Lead';
+                    
+                    return '<div class="pipe-card" data-id="' + escapeHtml(lead.id) + '" onclick="PipelineModule.openDetail(\'' + lead.id + '\')" tabindex="0" role="button" aria-label="Deal: ' + escapeHtml(fullName) + '">' +
+                        '<div class="card-name">' + escapeHtml(fullName) + '</div>' +
+                        '<div class="card-detail">' + escapeHtml(lead.mobile || '') + (lead.business ? ' · ' + escapeHtml(lead.business) : '') + '</div>' +
+                        (lead.value ? '<div class="card-detail" style="font-weight:700;color:#059669;">' + formatCurrency(lead.value) + '</div>' : '') +
+                        (badges ? '<div class="card-badges">' + badges + '</div>' : '') +
+                    '</div>';
+                } catch (error) {
+                    console.error('[PipelineModule] Render lead card error:', error);
+                    return '';
+                }
             }
             
-            async function deleteDeal(dealId) {
+            // ============================================================
+            // DRAG & DROP
+            // ============================================================
+            
+            /**
+             * Bind drag and drop events to kanban cards and columns
+             */
+            function bindDragDropEvents() {
                 try {
-                    if (!confirm('Delete this deal permanently?')) return;
-                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
-                    await window.CRM_Firestore.deleteDocument('deals', dealId);
-                    _deals = _deals.filter(function(d) { return d.id !== dealId; });
-                    closeDetail();
-                    showToast('🗑️ Deal deleted.', 'info');
+                    // Make cards draggable
+                    document.querySelectorAll('.pipe-card').forEach(function(card) {
+                        card.setAttribute('draggable', 'true');
+                        
+                        card.addEventListener('dragstart', function(event) {
+                            _draggedLeadId = this.dataset.id;
+                            this.classList.add('dragging');
+                            event.dataTransfer.effectAllowed = 'move';
+                            event.dataTransfer.setData('text/plain', this.dataset.id);
+                        });
+                        
+                        card.addEventListener('dragend', function() {
+                            this.classList.remove('dragging');
+                            // Remove drag-over from all columns
+                            document.querySelectorAll('.pipeline-cards').forEach(function(container) {
+                                container.classList.remove('drag-over');
+                            });
+                        });
+                    });
+                    
+                    // Make columns drop targets
+                    document.querySelectorAll('.pipeline-cards').forEach(function(container) {
+                        container.addEventListener('dragover', function(event) {
+                            event.preventDefault();
+                            event.dataTransfer.dropEffect = 'move';
+                            this.classList.add('drag-over');
+                        });
+                        
+                        container.addEventListener('dragleave', function(event) {
+                            // Only remove if actually leaving the container
+                            if (!this.contains(event.relatedTarget)) {
+                                this.classList.remove('drag-over');
+                            }
+                        });
+                        
+                        container.addEventListener('drop', async function(event) {
+                            event.preventDefault();
+                            this.classList.remove('drag-over');
+                            
+                            const newStage = this.dataset.stage;
+                            const leadId = _draggedLeadId;
+                            
+                            if (newStage && leadId) {
+                                await moveLead(leadId, newStage);
+                            }
+                            
+                            _draggedLeadId = null;
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Drag-drop bind error:', error);
+                }
+            }
+            
+            /**
+             * Move a lead to a new pipeline stage
+             * @param {string} leadId - Lead ID to move
+             * @param {string} newStage - New stage name
+             */
+            async function moveLead(leadId, newStage) {
+                try {
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) {
+                        showToast('Database not available.', 'error');
+                        return;
+                    }
+                    
+                    // Update in Firestore
+                    await window.CRM_Firestore.updateDocument('leads', leadId, {
+                        status: newStage,
+                        updatedAt: new Date().toISOString()
+                    });
+                    
+                    // Update local state
+                    const lead = _leads.find(function(l) { return l.id === leadId; });
+                    if (lead) {
+                        lead.status = newStage;
+                        
+                        // If moved to Won, create client automatically
+                        if (newStage === 'Won') {
+                            try {
+                                const clientData = {
+                                    name: (lead.firstName || '') + ' ' + (lead.lastName || '').trim(),
+                                    business: lead.business || '',
+                                    mobile: lead.mobile || '',
+                                    email: lead.email || '',
+                                    city: lead.city || '',
+                                    status: 'Active',
+                                    revenue: lead.value || 0,
+                                    leadId: lead.id,
+                                    createdAt: new Date().toISOString()
+                                };
+                                await window.CRM_Firestore.createDocument('clients', clientData);
+                                showToast('🎉 Lead won! Client created automatically.', 'success');
+                            } catch (clientError) {
+                                console.error('[PipelineModule] Auto-create client error:', clientError);
+                            }
+                        }
+                    }
+                    
+                    showToast('✅ Moved to ' + newStage, 'success');
                     render();
-                } catch (error) { console.error('[PipelineModule] Delete error:', error); showToast('Failed to delete.', 'error'); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Move lead error:', error);
+                    showToast('Failed to move deal. Please try again.', 'error');
+                }
             }
             
+            // ============================================================
+            // QUICK ADD
+            // ============================================================
+            
+            /**
+             * Show quick add form in a specific stage column
+             * @param {string} stage - Stage ID
+             * @param {Event} event - Click event
+             */
             function showQuickAdd(stage, event) {
                 try {
                     event.stopPropagation();
                     const btn = event.target.closest('.quick-add-btn');
                     if (!btn) return;
-                    btn.outerHTML = '<div class="quick-add-form" onclick="event.stopPropagation()"><input type="text" id="quickName_' + stage + '" placeholder="Deal name..." onkeydown="if(event.key===\'Enter\')PipelineModule.quickAddDeal(\'' + stage + '\')" aria-label="Quick deal name"><button class="btn btn-primary btn-xs" onclick="PipelineModule.quickAddDeal(\'' + stage + '\')">+</button></div>';
+                    
+                    btn.outerHTML = '<div class="quick-add-form" onclick="event.stopPropagation()">' +
+                        '<input type="text" id="quickName_' + stage + '" placeholder="Deal name..." ' +
+                        'onkeydown="if(event.key===\'Enter\')PipelineModule.quickAddDeal(\'' + stage + '\')" aria-label="Quick deal name">' +
+                        '<button class="btn btn-primary btn-xs" onclick="PipelineModule.quickAddDeal(\'' + stage + '\')">+</button>' +
+                    '</div>';
+                    
                     setTimeout(function() {
-                        const inp = document.getElementById('quickName_' + stage);
-                        if (inp) inp.focus();
+                        const input = document.getElementById('quickName_' + stage);
+                        if (input) input.focus();
                     }, 100);
-                } catch (error) { console.error('[PipelineModule] Quick add error:', error); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Quick add show error:', error);
+                }
             }
             
+            /**
+             * Save a quick-added lead
+             * @param {string} stage - Stage ID to add to
+             */
             async function quickAddDeal(stage) {
                 try {
-                    const inp = document.getElementById('quickName_' + stage);
-                    const name = inp ? inp.value.trim() : '';
-                    if (!name) { showToast('Deal name is required!', 'error'); return; }
-                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
-                    const newDeal = { name: name, stage: stage, contact: '', company: '', value: 0, priority: 'medium', notes: '', followup: '', createdAt: new Date().toISOString() };
-                    const created = await window.CRM_Firestore.createDocument('deals', newDeal);
-                    _deals.unshift(created);
+                    const input = document.getElementById('quickName_' + stage);
+                    const name = input ? input.value.trim() : '';
+                    
+                    if (!name) {
+                        showToast('Deal name is required!', 'error');
+                        return;
+                    }
+                    
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) {
+                        showToast('Database not available.', 'error');
+                        return;
+                    }
+                    
+                    const leadData = {
+                        firstName: name,
+                        lastName: '',
+                        mobile: '',
+                        email: '',
+                        business: '',
+                        city: '',
+                        source: 'Pipeline Quick Add',
+                        status: stage,
+                        value: 0,
+                        score: 10,
+                        followup: '',
+                        notes: '',
+                        createdAt: new Date().toISOString()
+                    };
+                    
+                    const created = await window.CRM_Firestore.createDocument('leads', leadData);
+                    _leads.unshift(created);
+                    
                     showToast('✅ Deal added!', 'success');
                     render();
-                } catch (error) { console.error('[PipelineModule] Quick add save error:', error); showToast('Failed to add deal.', 'error'); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Quick add save error:', error);
+                    showToast('Failed to add deal.', 'error');
+                }
             }
             
+            // ============================================================
+            // ADD DEAL MODAL
+            // ============================================================
+            
+            /**
+             * Show modal to add a new deal
+             */
             function showAddModal() {
                 try {
-                    const stageOptions = PIPELINE_STAGES.map(function(s) { return '<option value="' + s.id + '">' + s.icon + ' ' + s.name + '</option>'; }).join('');
-                    const html = '<div class="modal-overlay" id="addDealModal" onclick="if(event.target===this)document.getElementById(\'modalContainer\').innerHTML=\'\'"><div class="modal-box" onclick="event.stopPropagation()"><h3 style="margin-bottom:16px;font-family:var(--font-heading);font-weight:700;">➕ Add New Deal</h3>' +
-                        '<div class="form-group"><label>Deal Name *</label><input type="text" id="addName" placeholder="Enter deal name" required></div>' +
-                        '<div class="form-group"><label>Contact Person</label><input type="text" id="addContact" placeholder="Contact name"></div>' +
-                        '<div class="form-group"><label>Company</label><input type="text" id="addCompany" placeholder="Company name"></div>' +
-                        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="form-group"><label>Deal Value (₹)</label><input type="number" id="addValue" min="0" placeholder="Amount"></div><div class="form-group"><label>Stage</label><select id="addStage">' + stageOptions + '</select></div></div>' +
-                        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div class="form-group"><label>Priority</label><select id="addPriority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🔵 Low</option></select></div><div class="form-group"><label>Follow-up Date</label><input type="date" id="addFollowup"></div></div>' +
-                        '<div style="display:flex;gap:10px;margin-top:16px;"><button class="btn btn-primary" onclick="PipelineModule.saveNewDeal()">💾 Save Deal</button><button class="btn btn-ghost" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'">Cancel</button></div></div></div>';
+                    const stageOptions = PIPELINE_STAGES.map(function(stage) {
+                        return '<option value="' + stage.id + '">' + stage.icon + ' ' + stage.name + '</option>';
+                    }).join('');
+                    
+                    const html = 
+                        '<div class="modal-overlay" id="addDealModal" onclick="if(event.target===this)document.getElementById(\'modalContainer\').innerHTML=\'\'">' +
+                        '<div class="modal-box" onclick="event.stopPropagation()">' +
+                            '<h3 style="margin-bottom:16px;font-family:var(--font-heading);font-weight:700;">➕ Add New Deal</h3>' +
+                            '<div class="form-group"><label>Deal Name *</label><input type="text" id="addName" placeholder="Enter deal name" required></div>' +
+                            '<div class="form-group"><label>Contact Person</label><input type="text" id="addContact" placeholder="Contact name"></div>' +
+                            '<div class="form-group"><label>Company</label><input type="text" id="addCompany" placeholder="Company name"></div>' +
+                            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+                                '<div class="form-group"><label>Deal Value (₹)</label><input type="number" id="addValue" min="0" placeholder="Amount"></div>' +
+                                '<div class="form-group"><label>Stage</label><select id="addStage">' + stageOptions + '</select></div>' +
+                            '</div>' +
+                            '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">' +
+                                '<div class="form-group"><label>Priority</label><select id="addPriority"><option value="medium">🟡 Medium</option><option value="high">🔴 High</option><option value="low">🔵 Low</option></select></div>' +
+                                '<div class="form-group"><label>Follow-up Date</label><input type="date" id="addFollowup"></div>' +
+                            '</div>' +
+                            '<div style="display:flex;gap:10px;margin-top:16px;">' +
+                                '<button class="btn btn-primary" onclick="PipelineModule.saveNewDeal()">💾 Save Deal</button>' +
+                                '<button class="btn btn-ghost" onclick="document.getElementById(\'modalContainer\').innerHTML=\'\'">Cancel</button>' +
+                            '</div>' +
+                        '</div></div>';
+                    
                     $('modalContainer').innerHTML = html;
-                    setTimeout(function() { const inp = $('addName'); if (inp) inp.focus(); }, 200);
-                } catch (error) { console.error('[PipelineModule] Show modal error:', error); }
+                    
+                    // Focus on name input
+                    setTimeout(function() {
+                        const nameInput = $('addName');
+                        if (nameInput) nameInput.focus();
+                    }, 200);
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Show modal error:', error);
+                }
             }
             
+            /**
+             * Save new deal from modal form
+             */
             async function saveNewDeal() {
                 try {
                     const name = ($('addName') && $('addName').value || '').trim();
-                    if (!name) { showToast('Deal name is required.', 'error'); return; }
-                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
-                    const dealData = {
-                        name: name,
-                        contact: ($('addContact') && $('addContact').value || '').trim(),
-                        company: ($('addCompany') && $('addCompany').value || '').trim(),
+                    
+                    if (!name) {
+                        showToast('Deal name is required.', 'error');
+                        return;
+                    }
+                    
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) {
+                        showToast('Database not available.', 'error');
+                        return;
+                    }
+                    
+                    const leadData = {
+                        firstName: name,
+                        lastName: '',
+                        mobile: '',
+                        email: '',
+                        business: ($('addCompany') && $('addCompany').value || '').trim(),
+                        city: '',
+                        source: 'Manual',
+                        status: ($('addStage') && $('addStage').value) || 'New',
                         value: parseInt(($('addValue') && $('addValue').value) || '0') || 0,
-                        stage: ($('addStage') && $('addStage').value) || 'new',
-                        priority: ($('addPriority') && $('addPriority').value) || 'medium',
+                        score: 30,
                         followup: ($('addFollowup') && $('addFollowup').value) || '',
                         notes: '',
                         createdAt: new Date().toISOString()
                     };
-                    const created = await window.CRM_Firestore.createDocument('deals', dealData);
-                    _deals.unshift(created);
+                    
+                    const created = await window.CRM_Firestore.createDocument('leads', leadData);
+                    _leads.unshift(created);
+                    
+                    // Close modal
                     $('modalContainer').innerHTML = '';
+                    
                     showToast('✅ Deal created!', 'success');
                     render();
-                } catch (error) { console.error('[PipelineModule] Save deal error:', error); showToast('Failed to save deal.', 'error'); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Save deal error:', error);
+                    showToast('Failed to save deal.', 'error');
+                }
             }
             
-            function openDetail(dealId) {
+            // ============================================================
+            // DETAIL PANEL
+            // ============================================================
+            
+            /**
+             * Open detail panel for a lead
+             * @param {string} leadId - Lead ID
+             */
+            function openDetail(leadId) {
                 try {
-                    _selectedDealId = dealId;
-                    const deal = _deals.find(function(d) { return d.id === dealId; });
-                    if (!deal) { showToast('Deal not found.', 'error'); return; }
+                    _selectedLeadId = leadId;
+                    const lead = _leads.find(function(l) { return l.id === leadId; });
                     
-                    const stageOpts = PIPELINE_STAGES.map(function(s) { return '<option value="' + s.id + '" ' + (deal.stage === s.id ? 'selected' : '') + '>' + s.icon + ' ' + s.name + '</option>'; }).join('');
+                    if (!lead) {
+                        showToast('Deal not found.', 'error');
+                        return;
+                    }
                     
-                    let html = '<div class="detail-backdrop" onclick="PipelineModule.closeDetail()"></div><div class="detail-panel">';
-                    html += '<div class="flex-between mb-2" style="align-items:flex-start;"><h3 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:1.1rem;">' + escapeHtml(deal.name || 'Deal') + '</h3><div style="display:flex;gap:6px;"><button class="btn btn-danger btn-xs" onclick="PipelineModule.deleteDeal(\'' + deal.id + '\')" aria-label="Delete deal">🗑️</button><button class="btn btn-ghost btn-xs" onclick="PipelineModule.closeDetail()" aria-label="Close panel" style="font-size:1rem;">✕</button></div></div>';
-                    html += '<div class="form-group"><label>Stage</label><select onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'stage\',this.value)" aria-label="Deal stage">' + stageOpts + '</select></div>';
-                    html += '<div class="form-group"><label>Priority</label><select onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'priority\',this.value)" aria-label="Deal priority"><option value="high" ' + (deal.priority === 'high' ? 'selected' : '') + '>🔴 High</option><option value="medium" ' + (deal.priority === 'medium' ? 'selected' : '') + '>🟡 Medium</option><option value="low" ' + (deal.priority === 'low' ? 'selected' : '') + '>🔵 Low</option></select></div>';
-                    html += '<div class="form-group"><label>Contact Person</label><input type="text" value="' + escapeHtml(deal.contact || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'contact\',this.value)" aria-label="Contact person">';
-                    html += '<div class="form-group"><label>Company</label><input type="text" value="' + escapeHtml(deal.company || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'company\',this.value)" aria-label="Company">';
-                    html += '<div class="form-group"><label>Deal Value (₹)</label><input type="number" value="' + (deal.value || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'value\',parseInt(this.value)||0)" aria-label="Deal value">';
-                    html += '<div class="form-group"><label>Follow-up Date</label><input type="date" value="' + (deal.followup || '') + '" onchange="PipelineModule.updateDealField(\'' + deal.id + '\',\'followup\',this.value)" aria-label="Follow-up date">';
-                    html += '<div class="form-group"><label>Notes</label><textarea rows="3" id="detailNotes" aria-label="Deal notes">' + escapeHtml(deal.notes || '') + '</textarea><button class="btn btn-outline btn-xs mt-1" onclick="PipelineModule.saveNotes(\'' + deal.id + '\')">💾 Save Notes</button></div>';
+                    const stageOptions = PIPELINE_STAGES.map(function(stage) {
+                        return '<option value="' + stage.id + '" ' + (lead.status === stage.id ? 'selected' : '') + '>' + stage.icon + ' ' + stage.name + '</option>';
+                    }).join('');
+                    
+                    let html = '';
+                    html += '<div class="detail-backdrop" onclick="PipelineModule.closeDetail()"></div>';
+                    html += '<div class="detail-panel">';
+                    
+                    // Header
+                    html += '<div class="flex-between mb-2" style="align-items:flex-start;">';
+                    html += '<h3 style="margin:0;font-family:var(--font-heading);font-weight:700;font-size:1.1rem;">' + escapeHtml((lead.firstName || '') + ' ' + (lead.lastName || '').trim() || 'Deal') + '</h3>';
+                    html += '<div style="display:flex;gap:6px;">';
+                    html += '<button class="btn btn-danger btn-xs" onclick="PipelineModule.deleteDeal(\'' + lead.id + '\')" aria-label="Delete deal">🗑️</button>';
+                    html += '<button class="btn btn-ghost btn-xs" onclick="PipelineModule.closeDetail()" aria-label="Close panel" style="font-size:1rem;">✕</button>';
+                    html += '</div>';
+                    html += '</div>';
+                    
+                    // Stage
+                    html += '<div class="form-group"><label>Stage</label><select onchange="PipelineModule.moveLead(\'' + lead.id + '\', this.value)" aria-label="Deal stage">' + stageOptions + '</select></div>';
+                    
+                    // Contact
+                    html += '<div class="form-group"><label>Contact Mobile</label><input type="text" value="' + escapeHtml(lead.mobile || '') + '" onchange="PipelineModule.updateLeadField(\'' + lead.id + '\',\'mobile\',this.value)" aria-label="Mobile">';
+                    
+                    // Email
+                    html += '<div class="form-group"><label>Email</label><input type="text" value="' + escapeHtml(lead.email || '') + '" onchange="PipelineModule.updateLeadField(\'' + lead.id + '\',\'email\',this.value)" aria-label="Email">';
+                    
+                    // Business
+                    html += '<div class="form-group"><label>Business</label><input type="text" value="' + escapeHtml(lead.business || '') + '" onchange="PipelineModule.updateLeadField(\'' + lead.id + '\',\'business\',this.value)" aria-label="Company">';
+                    
+                    // Deal Value
+                    html += '<div class="form-group"><label>Deal Value (₹)</label><input type="number" value="' + (lead.value || '') + '" onchange="PipelineModule.updateLeadField(\'' + lead.id + '\',\'value\',parseInt(this.value)||0)" aria-label="Deal value">';
+                    
+                    // Follow-up Date
+                    html += '<div class="form-group"><label>Follow-up Date</label><input type="date" value="' + (lead.followup || '') + '" onchange="PipelineModule.updateLeadField(\'' + lead.id + '\',\'followup\',this.value)" aria-label="Follow-up date">';
+                    
+                    // Notes
+                    html += '<div class="form-group"><label>Notes</label><textarea rows="3" id="detailNotes" aria-label="Deal notes">' + escapeHtml(lead.notes || '') + '</textarea>';
+                    html += '<button class="btn btn-outline btn-xs mt-1" onclick="PipelineModule.saveNotes(\'' + lead.id + '\')">💾 Save Notes</button></div>';
+                    
+                    // Source info
+                    html += '<div class="text-xs text-muted mt-2">Source: ' + escapeHtml(lead.source || '-') + ' | Score: ' + (lead.score || 0) + '</div>';
+                    
                     html += '</div>';
                     
                     $('detailPanel').innerHTML = html;
-                } catch (error) { console.error('[PipelineModule] Open detail error:', error); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Open detail error:', error);
+                }
             }
             
+            /**
+             * Close the detail panel
+             */
             function closeDetail() {
-                _selectedDealId = null;
-                $('detailPanel').innerHTML = '';
+                try {
+                    _selectedLeadId = null;
+                    $('detailPanel').innerHTML = '';
+                } catch (error) {
+                    console.error('[PipelineModule] Close detail error:', error);
+                }
             }
             
-            async function saveNotes(dealId) {
+            /**
+             * Update a single field on a lead
+             * @param {string} leadId - Lead ID
+             * @param {string} field - Field name to update
+             * @param {*} value - New value
+             */
+            async function updateLeadField(leadId, field, value) {
+                try {
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
+                    
+                    const updates = {};
+                    updates[field] = value;
+                    updates.updatedAt = new Date().toISOString();
+                    
+                    await window.CRM_Firestore.updateDocument('leads', leadId, updates);
+                    
+                    // Update local state
+                    const lead = _leads.find(function(l) { return l.id === leadId; });
+                    if (lead) {
+                        lead[field] = value;
+                    }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Update field error:', error);
+                }
+            }
+            
+            /**
+             * Save notes for a lead
+             * @param {string} leadId - Lead ID
+             */
+            async function saveNotes(leadId) {
                 try {
                     const notesEl = $('detailNotes');
                     const notes = notesEl ? notesEl.value.trim() : '';
+                    
                     if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) return;
-                    await window.CRM_Firestore.updateDocument('deals', dealId, { notes: notes, updatedAt: new Date().toISOString() });
-                    const deal = _deals.find(function(d) { return d.id === dealId; });
-                    if (deal) deal.notes = notes;
+                    
+                    await window.CRM_Firestore.updateDocument('leads', leadId, {
+                        notes: notes,
+                        updatedAt: new Date().toISOString()
+                    });
+                    
+                    // Update local state
+                    const lead = _leads.find(function(l) { return l.id === leadId; });
+                    if (lead) {
+                        lead.notes = notes;
+                    }
+                    
                     showToast('✅ Notes saved.', 'success');
                     closeDetail();
                     render();
-                } catch (error) { console.error('[PipelineModule] Save notes error:', error); showToast('Failed to save notes.', 'error'); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Save notes error:', error);
+                    showToast('Failed to save notes.', 'error');
+                }
             }
             
-            function filterByStage(filterType) {
-                showToast('Filter: ' + (filterType || 'All deals'), 'info');
-                render();
+            /**
+             * Delete a lead/deal
+             * @param {string} leadId - Lead ID
+             */
+            async function deleteDeal(leadId) {
+                try {
+                    if (!confirm('Delete this deal permanently? This action cannot be undone.')) {
+                        return;
+                    }
+                    
+                    if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable()) {
+                        showToast('Database not available.', 'error');
+                        return;
+                    }
+                    
+                    await window.CRM_Firestore.deleteDocument('leads', leadId);
+                    
+                    // Remove from local state
+                    _leads = _leads.filter(function(l) { return l.id !== leadId; });
+                    
+                    closeDetail();
+                    showToast('🗑️ Deal deleted.', 'info');
+                    render();
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Delete error:', error);
+                    showToast('Failed to delete deal.', 'error');
+                }
             }
             
+            // ============================================================
+            // RENDER & REFRESH
+            // ============================================================
+            
+            /**
+             * Main render function - renders stats and board
+             */
             function render() {
                 renderStats();
                 renderBoard();
             }
             
+            /**
+             * Refresh pipeline data from Firestore
+             */
             function refresh() {
-                loadDeals();
+                loadLeads();
                 showToast('🔄 Pipeline refreshed.', 'info');
             }
             
+            // ============================================================
+            // INITIALIZATION
+            // ============================================================
+            
+            /**
+             * Initialize the pipeline module
+             */
             async function init() {
                 try {
                     console.log('[PipelineModule] Initializing...');
+                    
                     const hasAccess = await checkAccess();
                     if (!hasAccess) return;
-                    if (window.CRM_Firestore && typeof window.CRM_Firestore.init === 'function') await window.CRM_Firestore.init();
-                    if (window.CRM_Tenant && typeof window.CRM_Tenant.initTenantContext === 'function') await window.CRM_Tenant.initTenantContext();
-                    await loadDeals();
+                    
+                    // Initialize Firebase
+                    if (window.CRM_Firestore && typeof window.CRM_Firestore.init === 'function') {
+                        await window.CRM_Firestore.init();
+                    }
+                    
+                    // Initialize tenant context
+                    if (window.CRM_Tenant && typeof window.CRM_Tenant.initTenantContext === 'function') {
+                        await window.CRM_Tenant.initTenantContext();
+                    }
+                    
+                    // Load pipeline data
+                    await loadLeads();
+                    
                     console.log('[PipelineModule] ✅ Ready');
-                } catch (error) { console.error('[PipelineModule] Init error:', error); }
+                    
+                } catch (error) {
+                    console.error('[PipelineModule] Init error:', error);
+                    showToast('Failed to initialize Pipeline module.', 'error');
+                }
             }
             
+            // ============================================================
+            // PUBLIC API — Rule #20: Export All
+            // ============================================================
+            
             return {
-                init, render, refresh, loadDeals,
-                showAddModal, saveNewDeal, quickAddDeal, showQuickAdd,
-                openDetail, closeDetail, saveNotes, deleteDeal,
-                updateDealField, moveDeal, filterByStage,
-                getDeals: function() { return _deals; }
+                init: init,
+                render: render,
+                refresh: refresh,
+                loadLeads: loadLeads,
+                showAddModal: showAddModal,
+                saveNewDeal: saveNewDeal,
+                quickAddDeal: quickAddDeal,
+                showQuickAdd: showQuickAdd,
+                openDetail: openDetail,
+                closeDetail: closeDetail,
+                saveNotes: saveNotes,
+                deleteDeal: deleteDeal,
+                moveLead: moveLead,
+                updateLeadField: updateLeadField,
+                getLeads: function() { return _leads; },
+                getStages: function() { return PIPELINE_STAGES; }
             };
             
         })();
         
+        // ============================================================
+        // GLOBAL EXPORT — Rule #20
+        // ============================================================
         window.PipelineModule = PipelineModule;
         
+        // ============================================================
+        // AUTO-INIT on DOM ready
+        // ============================================================
         document.addEventListener('DOMContentLoaded', function() {
             PipelineModule.init().catch(function(error) {
                 console.error('[PipelineModule] Auto-init failed:', error);
