@@ -81,6 +81,12 @@
         .quick-btn .q-icon { font-size: 1.8rem; }
         .quick-btn .q-label { font-size: 0.8rem; font-weight: 600; color: var(--text); }
 
+        .loading-spinner {
+            display: inline-block; width: 18px; height: 18px; border: 2px solid #E5E5E5;
+            border-top-color: var(--gold); border-radius: 50%; animation: spin 0.7s linear infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
         .toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; max-width: 380px; }
         .toast { background: var(--bg2); border-radius: 12px; padding: 14px 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.12); font-size: 0.88rem; font-weight: 500; animation: slideIn 0.3s ease; display: flex; align-items: center; gap: 10px; }
         .toast-success { border-left: 4px solid #10B981; } .toast-error { border-left: 4px solid #DC2626; } .toast-info { border-left: 4px solid #3B82F6; }
@@ -103,18 +109,30 @@
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card"><div class="val" id="stat-revenue" style="color:#059669;">₹0</div><div class="lbl">💰 Revenue (MTD)</div></div>
-            <div class="stat-card"><div class="val" id="stat-leads" style="color:#4F46E5;">0</div><div class="lbl">👥 Total Leads</div></div>
-            <div class="stat-card"><div class="val" id="stat-pipeline" style="color:#D4AF37;">₹0</div><div class="lbl">📈 Pipeline Value</div></div>
-            <div class="stat-card"><div class="val" id="stat-tasks" style="color:#F59E0B;">0</div><div class="lbl">✅ Pending Tasks</div></div>
+            <div class="stat-card">
+                <div class="val" id="stat-revenue" style="color:#059669;">--</div>
+                <div class="lbl">💰 Revenue (All Time)</div>
+            </div>
+            <div class="stat-card">
+                <div class="val" id="stat-leads" style="color:#4F46E5;">--</div>
+                <div class="lbl">👥 Total Leads</div>
+            </div>
+            <div class="stat-card">
+                <div class="val" id="stat-pipeline" style="color:#D4AF37;">--</div>
+                <div class="lbl">📈 Pipeline Value</div>
+            </div>
+            <div class="stat-card">
+                <div class="val" id="stat-clients" style="color:#10B981;">--</div>
+                <div class="lbl">🏢 Active Clients</div>
+            </div>
         </div>
 
         <div class="card">
             <div class="card-header"><span class="card-title">⚡ Quick Actions</span></div>
             <div class="quick-grid">
                 <a href="#" class="quick-btn" onclick="parentNavigate('leads');return false;"><span class="q-icon">➕</span><span class="q-label">New Lead</span></a>
-                <a href="#" class="quick-btn" onclick="parentNavigate('invoices');return false;"><span class="q-icon">🧾</span><span class="q-label">GST Invoice</span></a>
-                <a href="#" class="quick-btn" onclick="parentNavigate('payments');return false;"><span class="q-icon">💰</span><span class="q-label">Add Revenue</span></a>
+                <a href="#" class="quick-btn" onclick="parentNavigate('clients');return false;"><span class="q-icon">🏢</span><span class="q-label">Clients</span></a>
+                <a href="#" class="quick-btn" onclick="parentNavigate('pipeline');return false;"><span class="q-icon">📈</span><span class="q-label">Pipeline</span></a>
                 <a href="#" class="quick-btn" onclick="parentNavigate('whatsapp');return false;"><span class="q-icon">💬</span><span class="q-label">WhatsApp</span></a>
             </div>
         </div>
@@ -122,26 +140,29 @@
 
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
+    <!-- 🔥 FIREBASE CDN -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- 🔥 CORE SCRIPTS -->
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
+    <!-- 🔥 Inherit from parent -->
     <script>
         'use strict';
-        if (window.parent && window.parent.firebase) {
-            window.firebase = window.parent.firebase;
-        }
-        if (window.parent && window.parent.CRM_Firestore) {
-            window.CRM_Firestore = window.parent.CRM_Firestore;
-        }
-        if (window.parent && window.parent.CRM_Auth) {
-            window.CRM_Auth = window.parent.CRM_Auth;
-        }
-        if (window.parent && window.parent.CRM_Tenant) {
-            window.CRM_Tenant = window.parent.CRM_Tenant;
-        }
-        if (window.parent && window.parent.CRM_Config) {
-            window.CRM_Config = window.parent.CRM_Config;
-        }
-        console.log('📦 Inherited from parent');
+        if (window.parent && window.parent.firebase) window.firebase = window.parent.firebase;
+        if (window.parent && window.parent.CRM_Firestore) window.CRM_Firestore = window.parent.CRM_Firestore;
+        if (window.parent && window.parent.CRM_Auth) window.CRM_Auth = window.parent.CRM_Auth;
+        if (window.parent && window.parent.CRM_Tenant) window.CRM_Tenant = window.parent.CRM_Tenant;
+        if (window.parent && window.parent.CRM_Config) window.CRM_Config = window.parent.CRM_Config;
+        console.log('📦 [Dashboard] Core modules ready');
     </script>
 
+    <!-- 🔥 DASHBOARD MODULE -->
     <script>
         'use strict';
 
@@ -154,87 +175,98 @@
         }
 
         function parentNavigate(page) {
-            if (window.parent && window.parent !== window) {
-                if (typeof window.parent.navigatePage === 'function') {
-                    window.parent.navigatePage(page);
-                    return;
+            try {
+                if (window.parent && window.parent !== window) {
+                    if (typeof window.parent.navigatePage === 'function') {
+                        window.parent.navigatePage(page);
+                        return;
+                    }
+                    var frame = window.parent.document.getElementById('contentFrame');
+                    if (frame) { frame.src = page + '.html'; return; }
                 }
-                var frame = window.parent.document.getElementById('contentFrame');
-                if (frame) {
-                    frame.src = page + '.html';
-                    return;
-                }
-            }
+            } catch(e) {}
             window.location.href = page + '.html';
         }
 
         function loadUser() {
             var profile = null;
             try {
-                if (window.CRM_Firestore && window.CRM_Firestore.isAvailable && window.CRM_Firestore.isAvailable()) {
-                    if (window.firebase && window.firebase.auth && window.firebase.auth().currentUser) {
-                        window.CRM_Firestore.getDocument('users', window.firebase.auth().currentUser.uid).then(function(doc) {
-                            if (doc) {
-                                profile = doc;
-                                updateUserDisplay(profile);
-                            }
-                        }).catch(function() {});
-                    }
-                }
+                if (window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
+                if (!profile) { try { var ud = localStorage.getItem('crm_user'); if (ud) profile = JSON.parse(ud); } catch(e) {} }
             } catch(e) {}
             
-            if (window.CRM_Tenant && window.CRM_Tenant.getUserProfile) profile = window.CRM_Tenant.getUserProfile();
-            if (!profile && window.CRM_Auth && window.CRM_Auth.getUser) profile = window.CRM_Auth.getUser();
-            if (!profile) { try { var ud = localStorage.getItem('crm_user'); if (ud) profile = JSON.parse(ud); } catch(e) {} }
-            updateUserDisplay(profile);
-        }
-
-        function updateUserDisplay(profile) {
-            if (!profile) return;
-            var name = profile.displayName || profile.name || profile.email || 'User';
-            $('userName').textContent = name;
+            if (profile) {
+                var name = profile.displayName || profile.name || profile.email || 'User';
+                $('userName').textContent = name;
+            }
             var now = new Date();
             $('welcomeDate').textContent = now.toLocaleDateString('en-IN', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
         }
 
         async function loadStats() {
-            if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable || !window.CRM_Firestore.isAvailable()) return;
+            if (!window.CRM_Firestore || !window.CRM_Firestore.isAvailable || !window.CRM_Firestore.isAvailable()) {
+                console.warn('[Dashboard] Firestore not available');
+                return;
+            }
             try {
+                // Load leads count
                 var leadCount = await window.CRM_Firestore.countDocuments('leads');
-                var taskCount = await window.CRM_Firestore.countDocuments('tasks', [['status', '!=', 'completed']]);
-                $('stat-leads').textContent = leadCount;
-                $('stat-tasks').textContent = taskCount;
-                $('stat-revenue').textContent = '₹0';
-                $('stat-pipeline').textContent = '₹0';
+                $('stat-leads').textContent = leadCount || 0;
 
-                var paymentsResult = await window.CRM_Firestore.queryDocuments('payments', { limit: 500 });
-                var total = 0;
-                (paymentsResult.data || []).forEach(function(p) { total += (parseInt(p.amount) || 0); });
-                $('stat-revenue').textContent = '₹' + total.toLocaleString('en-IN');
+                // Load pipeline value from leads (dealValue * probability)
+                var leadsResult = await window.CRM_Firestore.queryDocuments('leads', { limit: 500 });
+                var pipelineVal = 0;
+                var probabilityMap = { 'New': 10, 'Attempting Contact': 25, 'Connected': 40, 'Qualified': 50, 'Proposal Sent': 70, 'Negotiation': 85, 'Won': 100, 'Lost': 0 };
+                (leadsResult.data || []).forEach(function(l) {
+                    if (l.status !== 'Won' && l.status !== 'Lost') {
+                        var prob = probabilityMap[l.status] || 10;
+                        pipelineVal += ((parseInt(l.value) || 0) * prob / 100);
+                    }
+                });
+                $('stat-pipeline').textContent = '₹' + Math.round(pipelineVal).toLocaleString('en-IN');
 
-                var dealsResult = await window.CRM_Firestore.queryDocuments('deals', { limit: 500 });
-                var pipeVal = 0;
-                (dealsResult.data || []).forEach(function(d) { if (d.stage !== 'Closed Lost') pipeVal += (parseInt(d.value) || 0); });
-                $('stat-pipeline').textContent = '₹' + pipeVal.toLocaleString('en-IN');
-            } catch(e) { console.error('Stats error:', e); }
+                // Revenue from payments collection (fallback: calculate from deals won)
+                var revTotal = 0;
+                try {
+                    var paymentsResult = await window.CRM_Firestore.queryDocuments('payments', { limit: 500 });
+                    (paymentsResult.data || []).forEach(function(p) { revTotal += (parseInt(p.amount) || 0); });
+                } catch(e) {}
+                $('stat-revenue').textContent = '₹' + revTotal.toLocaleString('en-IN');
+
+                // Active clients
+                var clientCount = await window.CRM_Firestore.countDocuments('clients');
+                $('stat-clients').textContent = clientCount || 0;
+
+            } catch(e) {
+                console.error('[Dashboard] Stats error:', e);
+            }
         }
 
         async function refreshAll() {
+            $('stat-revenue').textContent = '...';
+            $('stat-leads').textContent = '...';
+            $('stat-pipeline').textContent = '...';
+            $('stat-clients').textContent = '...';
             await loadStats();
-            showToast('✅ Refreshed', 'success');
+            showToast('✅ Dashboard refreshed', 'success');
         }
 
         (async function init() {
-            if (!window.CRM_Auth || !window.CRM_Auth.isAuthenticated || !window.CRM_Auth.isAuthenticated()) {
+            // Auth check
+            if (window.CRM_Auth && window.CRM_Auth.isAuthenticated && !window.CRM_Auth.isAuthenticated()) {
                 if (window.parent && window.parent !== window && window.parent.location) {
                     window.parent.location.href = '../index.html';
                 }
                 return;
             }
+            
+            // Init
             if (window.CRM_Firestore && window.CRM_Firestore.init) await window.CRM_Firestore.init();
             if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) await window.CRM_Tenant.initTenantContext();
+            
             loadUser();
             await loadStats();
+            console.log('[Dashboard] ✅ Initialized');
         })();
     </script>
 </body>
