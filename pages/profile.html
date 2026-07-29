@@ -181,6 +181,17 @@
 
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- 🔥 FIREBASE CDN -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <!-- 🔥 CORE SCRIPTS -->
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
     <script>
         'use strict';
         // Inherit Firebase from parent window (dashboard.html or app.html)
@@ -202,6 +213,7 @@
         console.log('📦 Inherited Firebase from parent');
     </script>
 
+    <!-- 🔥 ORIGINAL PROFILE SCRIPT (100% INTACT) -->
     <script>
         'use strict';
         var currentTab = 'edit', profile = {};
