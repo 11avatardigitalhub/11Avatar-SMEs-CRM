@@ -14,9 +14,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/crm-design-system.css" />
-    <link rel="stylesheet" href="css/app.css" />
-    <link rel="stylesheet" href="css/components.css" />
     <title>11 Avatar SMEs CRM</title>
     <style>
         :root {
@@ -101,6 +98,13 @@
         .mobile-nav { display: none; position: fixed; bottom: 0; left: 0; right: 0; background: var(--bg2); border-top: 1px solid var(--border); z-index: 200; padding: 6px 10px; padding-bottom: max(6px, env(safe-area-inset-bottom)); justify-content: space-around; align-items: center; box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
         .mobile-nav a { display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 6px 8px; border-radius: 8px; font-size: 10px; color: var(--text3); transition: all var(--transition-fast); min-width: 50px; text-decoration: none; }
         .mobile-nav a.active { color: var(--gold-dark); font-weight: 600; }
+        .toast-container { position: fixed; bottom: 80px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 8px; }
+        .toast { padding: 12px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; color: #fff; animation: toastIn 0.3s ease; max-width: 360px; }
+        .toast-success { background: var(--success); }
+        .toast-error { background: var(--error); }
+        .toast-info { background: var(--info); }
+        .toast-warning { background: var(--warning); color: #000; }
+        @keyframes toastIn { from { opacity: 0; transform: translateX(40px); } to { opacity: 1; transform: translateX(0); } }
         @media (max-width: 1024px) {
             .sb { transform: translateX(-100%); width: var(--sidebar-w); }
             .sb.mobile-open { transform: translateX(0); box-shadow: var(--shadow-lg); }
@@ -123,6 +127,7 @@
     <a href="#mainContent" class="skip-link">Skip to Main Content</a>
     <div class="sb-overlay" id="sbOverlay" onclick="closeMobile()"></div>
 
+    <!-- SIDEBAR -->
     <aside class="sb" id="sidebar">
         <div class="sb-header">
             <a href="index.html" class="sb-logo">
@@ -177,6 +182,7 @@
         </div>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <div class="main" id="main">
         <header class="main-header">
             <button class="menu-btn" id="mobileMenuBtn" onclick="openMobile()" aria-label="Menu">☰</button>
@@ -192,6 +198,7 @@
         <iframe id="contentFrame" class="content-frame" src="pages/dashboard.html" title="Module Content"></iframe>
     </div>
 
+    <!-- MOBILE NAV -->
     <nav class="mobile-nav" id="mobileNav">
         <a href="#" data-page="dashboard" onclick="navigatePage('dashboard')"><span>📊</span><span>Home</span></a>
         <a href="#" data-page="leads" onclick="navigatePage('leads')"><span>👥</span><span>Leads</span></a>
@@ -200,18 +207,13 @@
         <a href="#" data-page="settings" onclick="navigatePage('settings')"><span>⚙️</span><span>More</span></a>
     </nav>
 
+    <!-- TOAST CONTAINER -->
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
+    <!-- SCRIPTS -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-    <script>
-        'use strict';
-        if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
-            window.firebase.initializeApp({apiKey:"AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",authDomain:"avatar-wa-dual-crm.firebaseapp.com",projectId:"avatar-wa-dual-crm",storageBucket:"avatar-wa-dual-crm.firebasestorage.app",messagingSenderId:"946959261009",appId:"1:946959261009:web:175f5390d63715f1f8c770"});
-            console.log('🔥 Firebase initialized in home.html');
-        }
-    </script>
     <script src="js/core/config.js"></script>
     <script src="js/core/auth.js"></script>
     <script src="js/core/firestore.js"></script>
@@ -220,130 +222,273 @@
     <script>
         'use strict';
         
+        // ========== FIREBASE INIT ==========
+        if (window.firebase && (!window.firebase.apps || !window.firebase.apps.length)) {
+            window.firebase.initializeApp({
+                apiKey: "AIzaSyBZDaHJSt-4AV6EJYG76p8kcsIHf6LOxdU",
+                authDomain: "avatar-wa-dual-crm.firebaseapp.com",
+                projectId: "avatar-wa-dual-crm",
+                storageBucket: "avatar-wa-dual-crm.firebasestorage.app",
+                messagingSenderId: "946959261009",
+                appId: "1:946959261009:web:175f5390d63715f1f8c770"
+            });
+            console.log('🔥 Firebase initialized');
+        }
+
+        // ========== STATE ==========
         var S = {
             collapsed: false,
             mobile: false,
             dark: false,
             currentPage: 'dashboard',
-            pendingApproval: false,
             userProfile: null
         };
 
+        // ========== HELPERS ==========
         function $(id) { return document.getElementById(id); }
-        function showToast(msg, type) { var t = document.createElement('div'); t.className = 'toast toast-' + (type||'info'); t.textContent = msg; ($('toastContainer')||document.body).appendChild(t); setTimeout(function(){ t.remove(); }, 3000); }
-        function escHtml(s) { return s ? String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;') : ''; }
 
+        function showToast(msg, type) {
+            var container = $('toastContainer') || document.body;
+            var t = document.createElement('div');
+            t.className = 'toast toast-' + (type || 'info');
+            t.textContent = msg;
+            container.appendChild(t);
+            setTimeout(function() { t.remove(); }, 3000);
+        }
+
+        // ========== NAVIGATION ==========
         function navigatePage(page) {
             if (!page || page === S.currentPage) return;
             S.currentPage = page;
             $('contentFrame').src = 'pages/' + page + '.html';
-            document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.toggle('active', el.dataset.page === page); });
-            document.querySelectorAll('.mobile-nav a').forEach(function(el) { el.classList.toggle('active', el.dataset.page === page); });
+            document.querySelectorAll('.nav-item').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.page === page);
+            });
+            document.querySelectorAll('.mobile-nav a').forEach(function(el) {
+                el.classList.toggle('active', el.dataset.page === page);
+            });
             if (S.mobile) closeMobile();
             try { localStorage.setItem('crm_last_page', page); } catch(e) {}
         }
 
-        function toggleSidebar() { S.collapsed=!S.collapsed; $('sidebar').classList.toggle('collapsed',S.collapsed); $('sbCollapse').innerHTML=S.collapsed?'▶':'◀'; try{localStorage.setItem('crm_sb',S.collapsed?'1':'0');}catch(e){} }
-        function openMobile() { S.mobile=true; $('sidebar').classList.add('mobile-open'); $('sbOverlay').classList.add('show'); document.body.style.overflow='hidden'; }
-        function closeMobile() { S.mobile=false; $('sidebar').classList.remove('mobile-open'); $('sbOverlay').classList.remove('show'); document.body.style.overflow=''; }
-        function toggleTheme() { S.dark=!S.dark; document.documentElement.setAttribute('data-theme',S.dark?'dark':'light'); $('themeBtn').innerHTML=S.dark?'☀️':'🌙'; try{localStorage.setItem('crm_theme',S.dark?'dark':'light');}catch(e){} }
-        function loadTheme() { var t=localStorage.getItem('crm_theme'); S.dark=t==='dark'; document.documentElement.setAttribute('data-theme',S.dark?'dark':'light'); $('themeBtn').innerHTML=S.dark?'☀️':'🌙'; }
+        // ========== SIDEBAR ==========
+        function toggleSidebar() {
+            S.collapsed = !S.collapsed;
+            $('sidebar').classList.toggle('collapsed', S.collapsed);
+            $('sbCollapse').innerHTML = S.collapsed ? '▶' : '◀';
+            try { localStorage.setItem('crm_sb', S.collapsed ? '1' : '0'); } catch(e) {}
+        }
 
+        function openMobile() {
+            S.mobile = true;
+            $('sidebar').classList.add('mobile-open');
+            $('sbOverlay').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobile() {
+            S.mobile = false;
+            $('sidebar').classList.remove('mobile-open');
+            $('sbOverlay').classList.remove('show');
+            document.body.style.overflow = '';
+        }
+
+        // ========== THEME ==========
+        function toggleTheme() {
+            S.dark = !S.dark;
+            document.documentElement.setAttribute('data-theme', S.dark ? 'dark' : 'light');
+            $('themeBtn').innerHTML = S.dark ? '☀️' : '🌙';
+            try { localStorage.setItem('crm_theme', S.dark ? 'dark' : 'light'); } catch(e) {}
+        }
+
+        function loadTheme() {
+            var t = localStorage.getItem('crm_theme');
+            S.dark = t === 'dark';
+            document.documentElement.setAttribute('data-theme', S.dark ? 'dark' : 'light');
+            $('themeBtn').innerHTML = S.dark ? '☀️' : '🌙';
+        }
+
+        // ========== USER UI ==========
         function updateUserUI() {
             var p = S.userProfile;
-            if (!p || !p.role) { try { var ud = localStorage.getItem('crm_user'); if (ud) p = JSON.parse(ud); } catch(e) {} }
+            if (!p || !p.role) {
+                try {
+                    var ud = localStorage.getItem('crm_user');
+                    if (ud) p = JSON.parse(ud);
+                } catch(e) {}
+            }
             if (!p) return;
+
             S.userProfile = p;
             var name = p.displayName || p.name || p.email || 'User';
             var av = name.charAt(0).toUpperCase();
             var role = p.role || 'User';
+
             var elAv = $('sbAvatar'); if (elAv) elAv.textContent = av;
             var elHd = $('hdrAvatar'); if (elHd) elHd.textContent = av;
             var elNm = $('sbUserName'); if (elNm) elNm.textContent = name;
             var elRl = $('sbUserRole'); if (elRl) elRl.textContent = role;
-            if (p.approvalStatus === 'pending') { var b = $('approvalBanner'); if (b) b.classList.add('show'); }
+
+            if (p.approvalStatus === 'pending') {
+                var b = $('approvalBanner'); if (b) b.classList.add('show');
+            }
         }
 
+        // ========== RBAC FILTER ==========
         function applyRBACFilter() {
             var p = S.userProfile;
             if (!p) return;
+
             var role = p.role || 'EXECUTIVE';
             var modules = p.moduleAccess || [];
-            
+
             console.log('🔧 RBAC Filter — Role:', role, 'Modules:', modules);
-            
+
+            // Platform Owner = sab kuch visible
+            if (role === 'PLATFORM_OWNER') {
+                document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('hidden'); });
+                document.querySelectorAll('.nav-sec').forEach(function(sec) { sec.style.display = ''; });
+                console.log('✅ All modules visible (Platform Owner)');
+                return;
+            }
+
+            // Other roles = filter by moduleAccess
             document.querySelectorAll('.nav-item[data-module]').forEach(function(el) {
                 var mod = el.dataset.module;
                 if (!mod) return;
-                
-                if (role === 'PLATFORM_OWNER') { el.classList.remove('hidden'); return; }
+
                 if (mod === 'PLATFORM_ADMIN') { el.classList.add('hidden'); return; }
-                if (mod === 'TENANT_ADMIN') { el.classList.toggle('hidden', ['TENANT_ADMIN','SUB_ADMIN'].indexOf(role) === -1); return; }
+                if (mod === 'TENANT_ADMIN') {
+                    el.classList.toggle('hidden', ['TENANT_ADMIN', 'SUB_ADMIN'].indexOf(role) === -1);
+                    return;
+                }
                 el.classList.toggle('hidden', modules.indexOf(mod) === -1);
             });
-            
+
+            // Hide empty sections
             document.querySelectorAll('.nav-sec').forEach(function(sec) {
-                var v = sec.querySelectorAll('.nav-item:not(.hidden)');
-                sec.style.display = v.length === 0 ? 'none' : '';
+                var visible = sec.querySelectorAll('.nav-item:not(.hidden)');
+                sec.style.display = visible.length === 0 ? 'none' : '';
             });
         }
 
-        async function doLogout() { if (window.CRM_Auth && window.CRM_Auth.logout) { await window.CRM_Auth.logout(); } else { try { localStorage.clear(); } catch(e) {} window.location.href = 'index.html'; } }
+        // ========== AUTH ==========
+        async function doLogout() {
+            if (window.CRM_Auth && window.CRM_Auth.logout) {
+                await window.CRM_Auth.logout();
+            } else {
+                try { localStorage.clear(); } catch(e) {}
+                window.location.href = 'index.html';
+            }
+        }
 
+        // ========== INIT ==========
         async function init() {
             loadTheme();
-            try { if (localStorage.getItem('crm_sb') === '1') { S.collapsed = true; $('sidebar').classList.add('collapsed'); $('sbCollapse').innerHTML = '▶'; } } catch(e) {}
-            
+
+            // Restore sidebar state
+            try {
+                if (localStorage.getItem('crm_sb') === '1') {
+                    S.collapsed = true;
+                    $('sidebar').classList.add('collapsed');
+                    $('sbCollapse').innerHTML = '▶';
+                }
+            } catch(e) {}
+
+            // Restore last page
             var lastPage = 'dashboard';
             try { lastPage = localStorage.getItem('crm_last_page') || 'dashboard'; } catch(e) {}
             $('contentFrame').src = 'pages/' + lastPage + '.html';
             S.currentPage = lastPage;
-            
-            function cr() { var m = window.innerWidth <= 1024; $('mobileMenuBtn').style.display = m ? 'flex' : 'none'; $('mobileNav').style.display = m ? 'flex' : 'none'; }
-            window.addEventListener('resize', cr); cr();
 
-            if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
-            try { await window.CRM_Tenant.initTenantContext(); } catch(e) {}
+            // Responsive check
+            function checkResponsive() {
+                var m = window.innerWidth <= 1024;
+                $('mobileMenuBtn').style.display = m ? 'flex' : 'none';
+                $('mobileNav').style.display = m ? 'flex' : 'none';
             }
-            
-            // 🔥 PEHLE FIRESTORE SE DATA LO
-            if (fbUser && fbUser.uid && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
-                var doc = await window.CRM_Firestore.getDocument('users', fbUser.uid);
-                if (doc && doc.role) {
-                    S.userProfile = doc;
-                    console.log('👤 Firestore role:', doc.role);
-                }
-            }
-            
-            // 🔥 FIR localStorage FALLBACK
-            if (!S.userProfile || !S.userProfile.role) {
-                try {
-                    var cachedUser = localStorage.getItem('crm_user');
-                    if (cachedUser) {
-                        S.userProfile = JSON.parse(cachedUser);
-                        console.log('👤 localStorage role:', S.userProfile.role);
-                    }
-                } catch(e) {}
-            }
-            
-            // 🔥 AB updateUserUI CALL KARO — DATA READY HAI
-            updateUserUI();
-            
-            // 🔥 PLATFORM OWNER = ALL MODULES
-            if (S.userProfile && S.userProfile.role === 'PLATFORM_OWNER') {
-                document.querySelectorAll('.nav-item').forEach(function(el) { el.classList.remove('hidden'); });
-                document.querySelectorAll('.nav-sec').forEach(function(sec) { sec.style.display = ''; });
-                console.log('✅ All modules visible (Platform Owner)');
-            } else {
-                applyRBACFilter();
-            }                        
-                        var ls = $('loadingScreen'); if (ls) ls.style.display = 'none';
-                    } else if (s.authState === 'unauthenticated') {
-                        window.location.href = 'index.html';
+            window.addEventListener('resize', checkResponsive);
+            checkResponsive();
+
+            // ========== MAIN AUTH FLOW ==========
+            // Step 1: Check CRM_Auth
+            if (window.CRM_Auth && window.CRM_Auth.onAuthStateChange) {
+                window.CRM_Auth.onAuthStateChange(function(authState) {
+                    console.log('🔐 Auth state:', authState.authState);
+                    
+                    if (authState.authState === 'authenticated' && authState.isAuthenticated) {
+                        // User authenticated — get profile
+                        var user = authState.user;
+                        
+                        if (user && user.role) {
+                            S.userProfile = user;
+                        } else if (window.CRM_Auth.getUser) {
+                            S.userProfile = window.CRM_Auth.getUser();
+                        }
+                        
+                        // Fallback to Firestore if available
+                        if ((!S.userProfile || !S.userProfile.role) && window.CRM_Firestore && window.CRM_Firestore.isAvailable()) {
+                            var fbUser = window.CRM_Auth.getCurrentUser ? window.CRM_Auth.getCurrentUser() : null;
+                            if (fbUser && fbUser.uid) {
+                                window.CRM_Firestore.getDocument('users', fbUser.uid).then(function(doc) {
+                                    if (doc && doc.role) {
+                                        S.userProfile = doc;
+                                        console.log('👤 Firestore role:', doc.role);
+                                        updateUserUI();
+                                        applyRBACFilter();
+                                        $('loadingScreen').style.display = 'none';
+                                    }
+                                }).catch(function() {});
+                            }
+                        }
+                        
+                        // Fallback to localStorage
+                        if (!S.userProfile || !S.userProfile.role) {
+                            try {
+                                var cached = localStorage.getItem('crm_user');
+                                if (cached) {
+                                    S.userProfile = JSON.parse(cached);
+                                    console.log('👤 localStorage role:', S.userProfile.role);
+                                }
+                            } catch(e) {}
+                        }
+                        
+                        updateUserUI();
+                        applyRBACFilter();
+                        
+                        // Init tenant context
+                        if (window.CRM_Tenant && window.CRM_Tenant.initTenantContext) {
+                            window.CRM_Tenant.initTenantContext().catch(function() {});
+                        }
+                        
+                        $('loadingScreen').style.display = 'none';
+                        
+                    } else if (authState.authState === 'unauthenticated') {
+                        // Not logged in — redirect to index
+                        window.location.replace('index.html');
+                    } else if (authState.authState === 'pending_approval') {
+                        // Show approval banner
+                        var b = $('approvalBanner');
+                        if (b) b.classList.add('show');
+                        updateUserUI();
+                        $('loadingScreen').style.display = 'none';
+                    } else {
+                        // Loading or error — keep spinner briefly
+                        setTimeout(function() {
+                            $('loadingScreen').style.display = 'none';
+                        }, 3000);
                     }
                 });
             } else {
-                try { var ud = localStorage.getItem('crm_user'); if (ud) { S.userProfile = JSON.parse(ud); updateUserUI(); } } catch(e) {}
+                // CRM_Auth not available — try localStorage
+                try {
+                    var ud = localStorage.getItem('crm_user');
+                    if (ud) {
+                        S.userProfile = JSON.parse(ud);
+                        updateUserUI();
+                        applyRBACFilter();
+                    }
+                } catch(e) {}
                 $('loadingScreen').style.display = 'none';
             }
         }
