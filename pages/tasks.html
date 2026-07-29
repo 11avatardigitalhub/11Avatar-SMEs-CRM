@@ -30,8 +30,7 @@
         body {
             font-family: var(--font-body); font-size: 14px; line-height: 1.6;
             color: #0A0A0A; background: linear-gradient(135deg, #F8F6F0, #F3F1EB, #F0EDE5, #F5F3ED);
-            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0;
-            overflow-x: hidden;
+            min-height: 100vh; -webkit-font-smoothing: antialiased; margin: 0; overflow-x: hidden;
         }
         
         .tasks-container { max-width: 100%; margin: 0 auto; padding: 16px; padding-bottom: 100px; }
@@ -60,8 +59,7 @@
             display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
             padding: 24px 28px; background: linear-gradient(135deg, #FFF, #FFFDF7, #FFFAEE);
             border: 1px solid rgba(212,175,55,0.15); border-radius: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 10px 15px -3px rgba(0,0,0,0.05); margin-bottom: 20px;
         }
         .page-header h1 { font-size: 1.6rem; font-weight: 800; margin: 0; font-family: var(--font-heading); }
         .page-header .gold { background: linear-gradient(135deg, #D4AF37, #B8960F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
@@ -90,8 +88,7 @@
         
         .stat-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
-            padding: 16px 18px; cursor: pointer; transition: var(--transition);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+            padding: 16px 18px; cursor: pointer; transition: var(--transition); box-shadow: 0 2px 4px rgba(0,0,0,0.04);
         }
         .stat-card:hover { transform: translateY(-3px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.08), 0 20px 40px -10px rgba(0,0,0,0.06); border-color: rgba(212,175,55,0.2); }
         .stat-card .val { font-size: 1.5rem; font-weight: 800; font-family: var(--font-heading); line-height: 1.2; }
@@ -105,8 +102,7 @@
         .task-card {
             background: #FFF; border: 1px solid rgba(0,0,0,0.06); border-radius: 14px;
             padding: 16px 20px; display: flex; align-items: center; gap: 14px;
-            transition: var(--transition); cursor: pointer;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            transition: var(--transition); cursor: pointer; box-shadow: 0 1px 3px rgba(0,0,0,0.03);
         }
         .task-card:hover { transform: translateX(3px); box-shadow: var(--card-hover); border-color: rgba(212,175,55,0.2); }
         .task-card.completed { opacity: 0.6; background: #FAFAFA; }
@@ -187,85 +183,51 @@
 <body>
 
     <div class="tasks-container">
-        
         <header class="page-header" role="banner">
-            <div>
-                <h1>✅ <span class="gold">Tasks</span> Manager</h1>
-                <p id="taskCountText" aria-live="polite">Loading tasks...</p>
-            </div>
-            <div class="flex gap-2 flex-wrap">
-                <button class="btn btn-outline btn-sm" onclick="TasksModule.exportCSV()" aria-label="Export tasks">📤 Export</button>
-                <button class="btn btn-primary" onclick="TasksModule.openAddForm()" aria-label="Add new task">➕ Add Task</button>
-            </div>
+            <div><h1>✅ <span class="gold">Tasks</span> Manager</h1><p id="taskCountText" aria-live="polite">Loading tasks...</p></div>
+            <div class="flex gap-2 flex-wrap"><button class="btn btn-outline btn-sm" onclick="TasksModule.exportCSV()">📤 Export</button><button class="btn btn-primary" onclick="TasksModule.openAddForm()">➕ Add Task</button></div>
         </header>
         
-        <div class="stats-row" role="region" aria-label="Task statistics">
-            <div class="stat-card"><div class="val" id="stat-total">0</div><div class="lbl">📋 Total</div></div>
-            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">0</div><div class="lbl">✅ Done</div></div>
-            <div class="stat-card"><div class="val" id="stat-pending" style="color:#D97706;">0</div><div class="lbl">⏳ Pending</div></div>
-            <div class="stat-card"><div class="val" id="stat-overdue" style="color:#DC2626;">0</div><div class="lbl">⚠️ Overdue</div></div>
+        <div class="stats-row" role="region">
+            <div class="stat-card"><div class="val" id="stat-total">--</div><div class="lbl">📋 Total</div></div>
+            <div class="stat-card"><div class="val" id="stat-completed" style="color:#059669;">--</div><div class="lbl">✅ Done</div></div>
+            <div class="stat-card"><div class="val" id="stat-pending" style="color:#D97706;">--</div><div class="lbl">⏳ Pending</div></div>
+            <div class="stat-card"><div class="val" id="stat-overdue" style="color:#DC2626;">--</div><div class="lbl">⚠️ Overdue</div></div>
         </div>
         
-        <div id="tab-list" class="tab-content active" role="tabpanel" aria-label="Tasks list view">
+        <div id="tab-list" class="tab-content active" role="tabpanel">
             <div class="filter-row">
-                <input type="search" id="searchInput" placeholder="🔍 Search tasks..." aria-label="Search tasks" oninput="TasksModule.setSearch(this.value)">
-                <select id="filterPrioritySelect" aria-label="Filter by priority" onchange="TasksModule.setPriorityFilter(this.value)">
-                    <option value="">All Priority</option><option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🔵 Low</option>
-                </select>
-                <select id="filterStatusSelect" aria-label="Filter by status" onchange="TasksModule.setStatusFilter(this.value)">
-                    <option value="">All Status</option><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option>
-                </select>
-                <button class="btn btn-ghost btn-sm" onclick="TasksModule.clearFilters()" aria-label="Clear filters">✕ Clear</button>
+                <input type="search" id="searchInput" placeholder="🔍 Search tasks..." oninput="TasksModule.setSearch(this.value)">
+                <select id="filterPrioritySelect" onchange="TasksModule.setPriorityFilter(this.value)"><option value="">All Priority</option><option value="high">🔴 High</option><option value="medium">🟡 Medium</option><option value="low">🔵 Low</option></select>
+                <select id="filterStatusSelect" onchange="TasksModule.setStatusFilter(this.value)"><option value="">All Status</option><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option></select>
+                <button class="btn btn-ghost btn-sm" onclick="TasksModule.clearFilters()">✕ Clear</button>
             </div>
             <div class="task-list" id="taskList"></div>
             <div class="empty-state" id="emptyList" style="display:none;"><div class="empty-icon">🎉</div><h3>No tasks found!</h3></div>
         </div>
         
-        <div id="tab-kanban" class="tab-content" role="tabpanel" aria-label="Tasks kanban view">
-            <div class="kanban-board" id="kanbanBoard"></div>
+        <div id="tab-kanban" class="tab-content" role="tabpanel"><div class="kanban-board" id="kanbanBoard"></div></div>
+        
+        <div id="tab-calendar" class="tab-content" role="tabpanel">
+            <div class="card"><div class="card-header"><span class="card-title">📅 Task Calendar</span><div class="flex gap-2"><button class="btn btn-ghost btn-sm" onclick="TasksModule.navCalendar(-1)">◀</button><span class="font-semibold" id="calMonthLabel"></span><button class="btn btn-ghost btn-sm" onclick="TasksModule.navCalendar(1)">▶</button></div></div><div class="calendar-grid" id="calendarGrid"></div></div>
         </div>
         
-        <div id="tab-calendar" class="tab-content" role="tabpanel" aria-label="Tasks calendar view">
-            <div class="card">
-                <div class="card-header">
-                    <span class="card-title">📅 Task Calendar</span>
-                    <div class="flex gap-2">
-                        <button class="btn btn-ghost btn-sm" onclick="TasksModule.navCalendar(-1)" aria-label="Previous month">◀</button>
-                        <span class="font-semibold" id="calMonthLabel"></span>
-                        <button class="btn btn-ghost btn-sm" onclick="TasksModule.navCalendar(1)" aria-label="Next month">▶</button>
-                    </div>
-                </div>
-                <div class="calendar-grid" id="calendarGrid"></div>
-            </div>
-        </div>
-        
-        <div id="tab-form" class="tab-content" role="tabpanel" aria-label="Task form">
-            <div class="card" style="max-width:650px;">
-                <div class="card-header"><span class="card-title" id="formTitle">➕ Add New Task</span></div>
+        <div id="tab-form" class="tab-content" role="tabpanel">
+            <div class="card" style="max-width:650px;"><div class="card-header"><span class="card-title" id="formTitle">➕ Add New Task</span></div>
                 <form id="taskForm" onsubmit="return TasksModule.saveTask(event)" novalidate>
                     <input type="hidden" id="editTaskId" value="">
                     <div class="form-group"><label for="tTitle">Task Title <span style="color:#DC2626;">*</span></label><input type="text" id="tTitle" required placeholder="What needs to be done?"></div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="tPriority">Priority</label><select id="tPriority"><option value="high">🔴 High</option><option value="medium" selected>🟡 Medium</option><option value="low">🔵 Low</option></select></div>
-                        <div class="form-group"><label for="tStatus">Status</label><select id="tStatus"><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option></select></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label for="tDueDate">Due Date</label><input type="date" id="tDueDate"></div>
-                        <div class="form-group"><label for="tAssignee">Assigned To</label><input type="text" id="tAssignee" placeholder="Team member name"></div>
-                    </div>
+                    <div class="form-row"><div class="form-group"><label for="tPriority">Priority</label><select id="tPriority"><option value="high">🔴 High</option><option value="medium" selected>🟡 Medium</option><option value="low">🔵 Low</option></select></div><div class="form-group"><label for="tStatus">Status</label><select id="tStatus"><option value="pending">Pending</option><option value="in-progress">In Progress</option><option value="completed">Completed</option></select></div></div>
+                    <div class="form-row"><div class="form-group"><label for="tDueDate">Due Date</label><input type="date" id="tDueDate"></div><div class="form-group"><label for="tAssignee">Assigned To</label><input type="text" id="tAssignee" placeholder="Team member name"></div></div>
                     <div class="form-group"><label for="tRelated">Related To</label><select id="tRelated"><option value="">None</option></select></div>
                     <div class="form-group"><label for="tNotes">Notes</label><textarea id="tNotes" rows="2" placeholder="Additional details..."></textarea></div>
-                    <div class="flex gap-2 mt-2">
-                        <button type="submit" class="btn btn-primary">💾 Save Task</button>
-                        <button type="button" class="btn btn-outline" onclick="TasksModule.switchTab('list')">Cancel</button>
-                    </div>
+                    <div class="flex gap-2 mt-2"><button type="submit" class="btn btn-primary">💾 Save Task</button><button type="button" class="btn btn-outline" onclick="TasksModule.switchTab('list')">Cancel</button></div>
                 </form>
             </div>
         </div>
-        
     </div>
     
-    <nav class="bottom-submenu" role="navigation" aria-label="Tasks navigation">
+    <nav class="bottom-submenu" role="navigation">
         <button class="bottom-tab active" data-tab="list" onclick="TasksModule.switchTab('list')" aria-current="page"><span class="tab-icon">📋</span> List</button>
         <button class="bottom-tab" data-tab="kanban" onclick="TasksModule.switchTab('kanban')"><span class="tab-icon">📌</span> Kanban</button>
         <button class="bottom-tab" data-tab="calendar" onclick="TasksModule.switchTab('calendar')"><span class="tab-icon">📅</span> Calendar</button>
@@ -274,27 +236,26 @@
 
     <div class="toast-container" id="toastContainer" aria-live="polite"></div>
 
+    <!-- 🔥 FIREBASE CDN + CORE SCRIPTS -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <script src="../js/core/config.js"></script>
+    <script src="../js/core/auth.js"></script>
+    <script src="../js/core/firestore.js"></script>
+    <script src="../js/core/tenant.js"></script>
+
     <script>
         'use strict';
-        // Inherit Firebase from parent window (dashboard.html or app.html)
-        if (window.parent && window.parent.firebase) {
-            window.firebase = window.parent.firebase;
-        }
-        if (window.parent && window.parent.CRM_Firestore) {
-            window.CRM_Firestore = window.parent.CRM_Firestore;
-        }
-        if (window.parent && window.parent.CRM_Auth) {
-            window.CRM_Auth = window.parent.CRM_Auth;
-        }
-        if (window.parent && window.parent.CRM_Tenant) {
-            window.CRM_Tenant = window.parent.CRM_Tenant;
-        }
-        if (window.parent && window.parent.CRM_Config) {
-            window.CRM_Config = window.parent.CRM_Config;
-        }
-        console.log('📦 Inherited Firebase from parent');
+        if (window.parent && window.parent.firebase) window.firebase = window.parent.firebase;
+        if (window.parent && window.parent.CRM_Firestore) window.CRM_Firestore = window.parent.CRM_Firestore;
+        if (window.parent && window.parent.CRM_Auth) window.CRM_Auth = window.parent.CRM_Auth;
+        if (window.parent && window.parent.CRM_Tenant) window.CRM_Tenant = window.parent.CRM_Tenant;
+        if (window.parent && window.parent.CRM_Config) window.CRM_Config = window.parent.CRM_Config;
+        console.log('📦 [Tasks] Core modules ready');
     </script>
 
+    <!-- 🔥 ORIGINAL TASKS MODULE (100% intact) -->
     <script>
         'use strict';
         
@@ -441,4 +402,4 @@
         console.log('[TasksModule] Script loaded. window.TasksModule available.');
     </script>
 </body>
-</html>
+</html> 
